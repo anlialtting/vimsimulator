@@ -1,82 +1,78 @@
 /*
- * VIM Simulator
- * By An-Li Alt Ting.
- */
-/*
- * http://www.truth.sk/vim/vimbook-OPL.pdf
- */
-var cppstl={};
+http://www.truth.sk/vim/vimbook-OPL.pdf
+*/
+var cppstl={}
 cppstl.lower_bound=function(array,key){
-    var first=0,last=array.length;
+    var first=0,last=array.length
     while(first!=last){
-        var median=Math.floor((first+last)/2);
+        var median=Math.floor((first+last)/2)
         if(array[median]<key)
-            first=median+1;
+            first=median+1
         else
-            last=median;
+            last=median
     }
-    return first;
+    return first
 };
 cppstl.upper_bound=function(array,key){
-    var first=0,last=array.length;
+    var first=0,last=array.length
     while(first!=last){
-        var median=Math.floor((first+last)/2);
+        var median=Math.floor((first+last)/2)
         if(array[median]<=key)
-            first=median+1;
+            first=median+1
         else
-            last=median;
+            last=median
     }
-    return first;
-};
+    return first
+}
 cppstl.partial_sum=function(input){
-    var output=input.slice(0);
+    var output=input.slice(0)
     for(var i=1;i<output.length;i++)
-        output[i]+=output[i-1];
-    return output;
-};
+        output[i]+=output[i-1]
+    return output
+}
 String.prototype.repeat=function(num){
-    return new Array(num+1).join(this);
+    return new Array(num+1).join(this)
 }
 var start_currentLine=function(p,textarea){
     while(0<=p-1&&textarea.value[p-1]!='\n')
-        p--;
-    return p;
-};
+        p--
+    return p
+}
 var end_currentLine=function(p,textarea){
     while(p+1<textarea.value.length&&textarea.value[p]!='\n')
-        p++;
-    return p+1;
-};
+        p++
+    return p+1
+}
 var lineNumber=function(position,string){
-    return string.substring(0,position).split('\n').length-1;
-};
+    return string.substring(0,position).split('\n').length-1
+}
 function count_rows_string(string){
-    var row_currentLine=0,col_currentRow=0;
+    var row_currentLine=0,col_currentRow=0
     for(var i=0;i<string.length;i++){
         if(string[i]=='\t'){
-            width=8-col_currentRow%8;
+            width=8-col_currentRow%8
         }else if(string.charCodeAt(i)<0xff){
-            width=1;
+            width=1
         }else
-            width=2;
+            width=2
         if(col_currentRow+width>80){
-            row_currentLine++;
-            col_currentRow=0;
+            row_currentLine++
+            col_currentRow=0
         }
-        col_currentRow+=width;
+        col_currentRow+=width
     }
-    return row_currentLine+1;
+    return row_currentLine+1
 }
 function Vimsimulator(
     textarea,
     count_rows_toshow,
     count_cols_toshow
 ){
-    this.textarea=textarea;
-    this.textfile='';
-    this.count_rows_toshow=count_rows_toshow;
-    this.count_cols_toshow=count_cols_toshow;
-    this.mode=0;
+    this.textarea=textarea
+    this.textfile=''
+    this.count_rows_toshow=count_rows_toshow
+    this.count_cols_toshow=count_cols_toshow
+    this.mode=0
     /*
      * http://en.wikibooks.org/wiki/Learning_the_vi_Editor/Vim/Modes
      * 0: normal
@@ -84,54 +80,54 @@ function Vimsimulator(
      * 2: visual
      * 3: select
      */
-    this.command='';
-    this.actived=false;
-    this.lineCursor=0;
-    this.pasteBoard={};
-    this.pasteBoard.type=0;
+    this.command=''
+    this.actived=false
+    this.lineCursor=0
+    this.pasteBoard={}
+    this.pasteBoard.type=0
     /*
      * 0: string
      * 1: lines
      */
-    this.pasteBoard.content='';
-    this.environment={};
-    this.environment.list=true;
-    this.environment.number=true;
-    this.histories=[];
-    this.highlighter=true;
-    this.visualmode={};
-    this.visualmode.fixedCursor;
-    this.style={};
-    this.style.backgroundColor='rgba(0%,0%,0%,0.8)';
-    this.style.color='white';
-    this.stylesheet_eol='color:blue;';
+    this.pasteBoard.content=''
+    this.environment={}
+    this.environment.list=true
+    this.environment.number=true
+    this.histories=[]
+    this.highlighter=true
+    this.visualmode={}
+    this.visualmode.fixedCursor
+    this.style={}
+    this.style.backgroundColor='rgba(0%,0%,0%,0.8)'
+    this.style.color='white'
+    this.stylesheet_eol='color:blue;'
     this.afterinput_textarea=function(){}
     this.afterkeydown_textarea=function(){}
     this.afterkeyup_textarea=function(){}
     this.write=function(){}
     this.command_G=function(count){
         if(typeof count==='undefined')
-            count=this.textarea.value.split('\n').length-1-1;
+            count=this.textarea.value.split('\n').length-1-1
         else
-            count--;
-        var c=0;
+            count--
+        var c=0
         for(var i=0;i<count;i++)
-            c=end_currentLine(c,this.textarea);
-        this.textarea.selectionStart=this.textarea.selectionEnd=c;
+            c=end_currentLine(c,this.textarea)
+        this.textarea.selectionStart=this.textarea.selectionEnd=c
     };
     this.command_P=function(count){
-        count=count||1;
+        count=count||1
         if(this.pasteBoard.type===0){
-            var c=this.textarea.selectionStart;
+            var c=this.textarea.selectionStart
             this.textarea.value=
                 this.textarea.value.substring(0,c)
                 +this.pasteBoard.content
-                +this.textarea.value.substring(c,this.textarea.value.length);
-            this.textarea.selectionStart=c+this.pasteBoard.content.length-1;
+                +this.textarea.value.substring(c,this.textarea.value.length)
+            this.textarea.selectionStart=c+this.pasteBoard.content.length-1
         }else if(this.pasteBoard.type==1){
-            var c=this.textarea.selectionStart;
-            c=start_currentLine(c,this.textarea);
-            var s=this.textarea.value.substring(0,c);
+            var c=this.textarea.selectionStart
+            c=start_currentLine(c,this.textarea)
+            var s=this.textarea.value.substring(0,c)
             for(var i=0;i<count;i++)
                 s+=this.pasteBoard.content;
             s+=this.textarea.value.substring(c,this.textarea.value.length);
@@ -140,43 +136,44 @@ function Vimsimulator(
         }
     };
     this.command_dd=function(count){
-        count=count||1;
-        var f=this.textarea.selectionStart
-            ,l=this.textarea.selectionStart;
-        f=start_currentLine(f,this.textarea);
+        count=count||1
+        var
+            f=this.textarea.selectionStart,
+            l=this.textarea.selectionStart
+        f=start_currentLine(f,this.textarea)
         for(var i=0;i<count;i++)
-            l=end_currentLine(l,this.textarea);
-        this.yank(1,this.textarea.value.substring(f,l));
+            l=end_currentLine(l,this.textarea)
+        this.yank(1,this.textarea.value.substring(f,l))
         this.textarea.value
-    };
+    }
     this.command_h=function(count){
-        count=count||1;
+        count=count||1
         for(var i=0;i<count;i++)
-            this.cursorMovesLeft();
+            this.cursorMovesLeft()
     };
     this.command_j=function(count){
-        count=count||1;
+        count=count||1
         for(var i=0;i<count;i++)
-            this.cursorMovesDown();
+            this.cursorMovesDown()
     };
     this.command_k=function(count){
-        count=count||1;
+        count=count||1
         for(var i=0;i<count;i++)
-            this.cursorMovesUp();
+            this.cursorMovesUp()
     };
     this.command_l=function(count){
-        count=count||1;
+        count=count||1
         for(var i=0;i<count;i++)
-            this.cursorMovesRight();
+            this.cursorMovesRight()
     };
     this.command_p=function(count){
-        count=count||1;
+        count=count||1
         if(this.pasteBoard.type===0){
-            var c=this.textarea.selectionStart+1;
+            var c=this.textarea.selectionStart+1
             this.textarea.value=
                 this.textarea.value.substring(0,c)
                 +this.pasteBoard.content
-                +this.textarea.value.substring(c,this.textarea.value.length);
+                +this.textarea.value.substring(c,this.textarea.value.length)
             this.textarea.selectionStart=c+this.pasteBoard.content.length-1;
         }else if(this.pasteBoard.type===1){
             var first_nextLine=end_currentLine(this.textarea.selectionStart,this.textarea);
@@ -924,7 +921,7 @@ function Vimsimulator(
         }else
             this.vimsimulator.runCommandIfPossible();
         return value_toreturn;
-    };
+    }.bind(this.textarea)
     var textarea_onkeydown_mode_1=function(e){
         var value_toreturn;
         if(e.keyCode===9){ // tab
@@ -1001,23 +998,23 @@ function Vimsimulator(
         }
         this.vimsimulator.afterkeydown_textarea();
         this.vimsimulator.update();
-        return value_toreturn;
-    };
+        return value_toreturn
+    }
     this.textarea.onkeyup=function(){
-        this.vimsimulator.afterkeyup_textarea();
-    };
+        this.vimsimulator.afterkeyup_textarea()
+    }
     this.textarea.oninput=function(){
         this.vimsimulator.afterinput_textarea();
         this.vimsimulator.update();
     };
     this.textarea.onblur=function(){
         this.vimsimulator.update();
-    };
+    }
     this.textarea.onfocus=function(){
-        this.vimsimulator.update();
-    };
-    this.div_editor=document.createElement('pre');
-    this.div_editor.vimsimulator=this;
+        this.vimsimulator.update()
+    }
+    this.div_editor=document.createElement('pre')
+    this.div_editor.vimsimulator=this
     // centering
     this.div_editor.style.position='fixed';
     this.div_editor.style.left='50%';
