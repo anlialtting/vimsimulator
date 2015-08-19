@@ -1,7 +1,8 @@
 <!DOCTYPE html>
 <html>
 <head>
-<title>vimsimulator</title>
+<meta charset="utf-8">
+<title>Vim on the Web</title>
 <style>
 @font-face{
     font-family:monospaced_fonts;
@@ -128,14 +129,14 @@ ajlfkadlkfalkfmalkfmaslkfmlaksflkasmfllafkaflaflkslflklkllklmlfa
 </textarea>
 <script src="./vimsimulator.js"></script>
 <script>
-var vimsimulator=new Vimsimulator(
+var vim
+vim=new Vim
+vim.setup(
     document.getElementById('textarea_source')
-    ,24
-    ,80
-);
-vimsimulator.actived=true;
-vimsimulator.update();
-document.getElementById('textarea_source').focus();
+)
+vim.actived=true
+vim.update()
+document.getElementById('textarea_source').focus()
 </script>
 </body>
 </html>
