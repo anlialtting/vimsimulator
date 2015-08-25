@@ -10,7 +10,6 @@ Vim.prototype.setup=function(
     count_rows_toshow,
     count_cols_toshow
 ){
-    var vim=this
     this.textarea=textarea
     this.count_rows_toshow=count_rows_toshow||24
     this.count_cols_toshow=count_cols_toshow||80
@@ -24,7 +23,7 @@ http://en.wikibooks.org/wiki/Learning_the_vi_Editor/Vim/Modes
 */
     this.mode=0
     this.command=''
-    this.actived=false
+    this.activated=false
     this.col_cursor=
         this.textarea.selectionStart-start_currentLine(
             this.textarea.selectionStart,
@@ -33,10 +32,10 @@ http://en.wikibooks.org/wiki/Learning_the_vi_Editor/Vim/Modes
     this.lineCursor=0
     this.pasteBoard={}
     this.pasteBoard.type=0
-    /*
-     * 0: string
-     * 1: lines
-     */
+/*
+0: string
+1: lines
+*/
     this.pasteBoard.content=''
     this.environment={}
     this.environment.list=true
@@ -48,77 +47,37 @@ http://en.wikibooks.org/wiki/Learning_the_vi_Editor/Vim/Modes
     this.style={}
     this.style.backgroundColor='rgba(0%,0%,0%,0.8)'
     this.style.color='white'
-    this.stylesheet_eol='color:blue;'
+    this.stylesheet_eol='color:dodgerblue;'
     this.afterinput_textarea=function(){}
     this.afterkeydown_textarea=function(){}
     this.afterkeyup_textarea=function(){}
     this.write=function(){}
-    //this.textarea.vim=this
-    this.textarea.onclick=function(){
-        vim.update()
+    setupTextarea(this)
+    function setupTextarea(vim){
+        vim.textarea.onclick=function(){
+            vim.update()
+        }
+        vim.textarea.onkeydown=function(e){
+            var x
+            x=textarea_onkeydown(vim,e)
+            if(x===false)
+                e.preventDefault()
+            return x
+        }
+        vim.textarea.onkeyup=function(){
+            vim.afterkeyup_textarea()
+        }
+        vim.textarea.oninput=function(){
+            vim.afterinput_textarea()
+            vim.update()
+        }
+        vim.textarea.onblur=function(){
+            vim.update()
+        }
+        vim.textarea.onfocus=function(){
+            vim.update()
+        }
     }
-    this.textarea.onkeydown=function(e){
-        return textarea_onkeydown(vim,e)
-    }
-    this.textarea.onkeyup=function(){
-        vim.afterkeyup_textarea()
-    }
-    this.textarea.oninput=function(){
-        vim.afterinput_textarea()
-        vim.update()
-    }
-    this.textarea.onblur=function(){
-        vim.update()
-    }
-    this.textarea.onfocus=function(){
-        vim.update()
-    }
-    this.div_editor=document.createElement('pre')
-    this.div_editor.vim=this
-    // centering
-    this.div_editor.style.position='fixed'
-    this.div_editor.style.left='50%'
-    this.div_editor.style.marginLeft=
-        ''+-(this.count_cols_toshow*6)/2+'pt'
-    this.div_editor.style.top='50%'
-    this.div_editor.style.marginTop=
-        ''+-(this.count_rows_toshow*12)/2+'pt'
-    // end centering
-    this.div_editor.style.display='none'
-    this.div_editor.style.background=this.style.backgroundColor
-    this.div_editor.style.height=''+this.count_rows_toshow*12+'pt'
-    this.div_editor.style.width=''+this.count_cols_toshow*6+'pt'
-    document.body.appendChild(this.div_editor)
-    this.pre_editor=document.createElement('pre')
-    this.pre_editor.vim=this
-    this.pre_editor.onclick=function(){
-        vim.textarea.focus()
-        vim.update()
-    }
-    // centering
-    this.pre_editor.style.position='fixed'
-    this.pre_editor.style.left='50%'
-    this.pre_editor.style.marginLeft=
-        ''+-(this.count_cols_toshow*6)/2+'pt'
-    this.pre_editor.style.top='50%'
-    this.pre_editor.style.marginTop=
-        ''+-(this.count_rows_toshow*12)/2+'pt'
-    // end centering
-    this.pre_editor.style.display='none'
-    this.pre_editor.style.border='0px'
-    //this.pre_editor.style.backgroundColor=this.style.backgroundColor
-    this.pre_editor.style.color=this.style.color
-    this.pre_editor.style.height=''+this.count_rows_toshow*12+'pt'
-    this.pre_editor.style.width=''+this.count_cols_toshow*6+'pt'
-    this.pre_editor.style.lineHeight='12pt'
-    this.pre_editor.style.letterSpacing='0pt'
-    this.pre_editor.style.fontFamily=
-        '\'WenQuanYi Zen Hei Mono\','+
-        '\'Consolas\','+
-        '\'Courier New\','+
-        '\'Courier\','+
-        'monospace'
-    document.body.appendChild(this.pre_editor)
 }
 Vim.prototype.command_G=function(count){
     var
@@ -234,7 +193,8 @@ Vim.prototype.command_r=function(count,string){
 }
 Vim.prototype.command_u=function(){
     var c=this.textarea.selectionStart
-    this.textarea.value=this.histories[this.histories.length-1]
+    this.textarea.value=
+        this.histories[this.histories.length-1]
     while(
         0<=this.histories.length-1&&
         this.histories[this.histories.length-1]===
@@ -246,12 +206,15 @@ Vim.prototype.command_u=function(){
     this.textarea.selectionStart=c
 }
 Vim.prototype.command_dd=function(count){
-    count=count||1
     var
-        f=this.textarea.selectionStart,
-        l=this.textarea.selectionStart
+        f,
+        l,
+        i
+    count=count||1
+    f=this.textarea.selectionStart
+    l=this.textarea.selectionStart
     f=start_currentLine(f,this.textarea)
-    for(var i=0;i<count;i++)
+    for(i=0;i<count;i++)
         l=end_currentLine(l,this.textarea)
     this.yank(1,this.textarea.value.substring(f,l))
     this.textarea.value
@@ -661,7 +624,7 @@ Vim.prototype.runCommandIfPossible=function(){
     if(this.command[0]===':'){
         for(var i=1;i<this.command.length;i++){
             if(this.command[i]==='q')
-                this.actived=false
+                this.activated=false
             if(this.command[i]==='w'){
                 this.write()
             }
@@ -678,6 +641,13 @@ Vim.prototype.runCommandIfPossible=function(){
     }
 }
 Vim.prototype.update=function(){
+    var
+        countOfColsPerRow,
+        countOfColsForPaddingForLineNumber
+    countOfColsForPaddingForLineNumber=4
+    countOfColsPerRow=
+        this.count_cols_toshow-
+        countOfColsForPaddingForLineNumber
     if(
         this.histories.length===0||
         this.histories[this.histories.length-1]!==this.textarea.value
@@ -686,10 +656,21 @@ Vim.prototype.update=function(){
         if(100<this.histories.length)
             this.histories.shift()
     }
-    if(!this.actived){
-        this.div_editor.style.display='none'
-        this.pre_editor.style.display='none'
-        var a=this.textarea.value.split('\n')
+    if(this.activated){
+        if(!this.div_editor){
+            this.div_editor=create_div_editor(this)
+            document.body.appendChild(this.div_editor)
+        }
+        if(!this.pre_editor){
+            this.pre_editor=create_pre_editor(this)
+            document.body.appendChild(this.pre_editor)
+        }
+    }
+    if(!this.activated){
+        if(this.div_editor&&this.pre_editor){
+            this.div_editor.style.display='none'
+            this.pre_editor.style.display='none'
+        }
         return
     }
     this.div_editor.style.display='block'
@@ -721,26 +702,31 @@ Vim.prototype.update=function(){
             0,this.textarea.selectionStart
         ).split('\n').length-1
     // line cursor catching up
-    {
+    !function(vim){
         var partialSum_rowsCount_lines
-        !function(vim){
+        !function(){
             var i
             partialSum_rowsCount_lines=
                 vim.textarea.value.split('\n')
             for(i in partialSum_rowsCount_lines)
                 partialSum_rowsCount_lines[i]=
-                    count_rows_string(partialSum_rowsCount_lines[i])
+                    count_rows_string(countOfColsPerRow,partialSum_rowsCount_lines[i])
             for(i=1;i<partialSum_rowsCount_lines.length;i++)
                 partialSum_rowsCount_lines[i]+=partialSum_rowsCount_lines[i-1]
             partialSum_rowsCount_lines.unshift(0)
-        }(this)
+        }()
         var lower=lineNumber_select,upper=lineNumber_select
-        while(0<=lower-1&&partialSum_rowsCount_lines[lineNumber_select+1]-partialSum_rowsCount_lines[lower-1]
-                <=this.count_rows_toshow-1)
+        while(
+            0<=lower-1&&
+                partialSum_rowsCount_lines[lineNumber_select+1]-
+                    partialSum_rowsCount_lines[lower-1]
+                <=
+                vim.count_rows_toshow-1
+        )
             lower--
-        this.lineCursor=Math.max(this.lineCursor,lower)
-        this.lineCursor=Math.min(this.lineCursor,upper)
-    }
+        vim.lineCursor=Math.max(vim.lineCursor,lower)
+        vim.lineCursor=Math.min(vim.lineCursor,upper)
+    }(this)
     // end line cursor catching up
     var output=''
     var text=this.textarea.value
@@ -783,16 +769,23 @@ Vim.prototype.update=function(){
         var width_string_toshow_currentCharacter=
             string_toshow_currentCharacter===''?0:
             string_toshow_currentCharacter.charCodeAt(0)<0xff?1:2
-        if(this.count_cols_toshow
-                <(this.environment.number?8:0)+col_currentRow
-                +width_string_toshow_currentCharacter){
+        if(
+            this.count_cols_toshow<(
+                this.environment.number?
+                    countOfColsForPaddingForLineNumber
+                :
+                    0
+            )+
+            col_currentRow+
+            width_string_toshow_currentCharacter
+        ){
             currentLine+='\n'
             row_currentLine++
             col_currentRow=0
         }
         if(this.environment.number){
             if(col_currentRow===0){
-                var count_cols_lineNumber=8
+                var count_cols_lineNumber=countOfColsForPaddingForLineNumber
                 if(row_currentLine===0){
                     var s=(lineNumber+1).toString()
                     for(var j=0;j<count_cols_lineNumber-s.length-1;j++)
@@ -921,7 +914,7 @@ Vim.prototype.update=function(){
     s=(lineNumber_cursor+1)+','+(charNumber_cursor+1)
     output+=s
     col_currentRow+=s.length
-    while(col_currentRow<72){
+    while(col_currentRow<countOfColsPerRow){
         output+=' '
         col_currentRow++
     }
@@ -958,28 +951,29 @@ cppstl.upper_bound=function(array,key){
     return first
 }
 cppstl.partial_sum=function(input){
-    var output=input.slice(0)
-    for(var i=1;i<output.length;i++)
+    var output,i
+    output=input.slice(0)
+    for(i=1;i<output.length;i++)
         output[i]+=output[i-1]
     return output
 }
 String.prototype.repeat=function(num){
     return new Array(num+1).join(this)
 }
-var start_currentLine=function(p,textarea){
+function start_currentLine(p,textarea){
     while(0<=p-1&&textarea.value[p-1]!='\n')
         p--
     return p
 }
-var end_currentLine=function(p,textarea){
+function end_currentLine(p,textarea){
     while(p+1<textarea.value.length&&textarea.value[p]!='\n')
         p++
     return p+1
 }
-var lineNumber=function(position,string){
+function lineNumber(position,string){
     return string.substring(0,position).split('\n').length-1
 }
-function count_rows_string(string){
+function count_rows_string(countOfColsPerRow,string){
     var
         width,
         row_currentLine=0,
@@ -992,7 +986,7 @@ function count_rows_string(string){
             width=1
         }else
             width=2
-        if(col_currentRow+width>80){
+        if(col_currentRow+width>countOfColsPerRow){
             row_currentLine++
             col_currentRow=0
         }
@@ -1005,14 +999,14 @@ function textarea_onkeydown(vim,e){
     if(
         e.ctrlKey&&e.shiftKey&&e.keyCode===86
     ){ // ctrl+shift+v
-        vim.actived=!vim.actived
+        vim.activated=!vim.activated
         vim.col_cursor=
             vim.textarea.selectionStart-start_currentLine(
                 vim.textarea.selectionStart,
                 vim.textarea
             )
         value_toreturn=false
-    }else if(!vim.actived){
+    }else if(!vim.activated){
         value_toreturn=true
     }else if(
         e.keyCode===27||e.ctrlKey&&e.keyCode===67
@@ -1108,7 +1102,6 @@ function textarea_onkeydown_mode_0(vim,e){
                 value_toreturn=false
                 vim.command+='\\'
             }else{
-                console.log(e.keyCode)
                 value_toreturn=false
             }
         }
@@ -1270,5 +1263,57 @@ function textarea_onkeydown_mode_2(vim,e){
     }
     vim.runCommandIfPossible()
     return value_toreturn
+}
+function create_div_editor(vim){
+    var div_editor
+    div_editor=document.createElement('pre')
+    div_editor.vim=vim
+    // centering
+    div_editor.style.position='fixed'
+    div_editor.style.left='50%'
+    div_editor.style.marginLeft=
+        ''+-(vim.count_cols_toshow*6)/2+'pt'
+    div_editor.style.top='50%'
+    div_editor.style.marginTop=
+        ''+-(vim.count_rows_toshow*12)/2+'pt'
+    // end centering
+    div_editor.style.display='none'
+    div_editor.style.background=vim.style.backgroundColor
+    div_editor.style.height=''+vim.count_rows_toshow*12+'pt'
+    div_editor.style.width=''+vim.count_cols_toshow*6+'pt'
+    return div_editor
+}
+function create_pre_editor(vim){
+    var pre_editor
+    pre_editor=document.createElement('pre')
+    pre_editor.vim=vim
+    pre_editor.onclick=function(){
+        vim.textarea.focus()
+        vim.update()
+    }
+    // centering
+    pre_editor.style.position='fixed'
+    pre_editor.style.left='50%'
+    pre_editor.style.marginLeft=
+        ''+-(vim.count_cols_toshow*6)/2+'pt'
+    pre_editor.style.top='50%'
+    pre_editor.style.marginTop=
+        ''+-(vim.count_rows_toshow*12)/2+'pt'
+    // end centering
+    pre_editor.style.display='none'
+    pre_editor.style.border='0px'
+    //pre_editor.style.backgroundColor=style.backgroundColor
+    pre_editor.style.color=vim.style.color
+    pre_editor.style.height=''+vim.count_rows_toshow*12+'pt'
+    pre_editor.style.width=''+vim.count_cols_toshow*6+'pt'
+    pre_editor.style.lineHeight='12pt'
+    pre_editor.style.letterSpacing='0pt'
+    pre_editor.style.fontFamily=
+        '\'WenQuanYi Zen Hei Mono\','+
+        '\'Consolas\','+
+        '\'Courier New\','+
+        '\'Courier\','+
+        'monospace'
+    return pre_editor
 }
 }()

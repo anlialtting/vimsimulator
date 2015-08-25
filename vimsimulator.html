@@ -127,16 +127,18 @@ ajlfkadlkfalkfmalkfmaslkfmlaksflkasmfllafkaflaflkslflklkllklmlfa
 ajlfkadlkfalkfmalkfmaslkfmlaksflkasmfllafkaflaflkslflklkllklmlfa
 ajlfkadlkfalkfmalkfmaslkfmlaksflkasmfllafkaflaflkslflklkllklmlfa
 </textarea>
-<script src="./vimsimulator.js"></script>
+<script src="vimsimulator.js"></script>
 <script>
-var vim
-vim=new Vim
-vim.setup(
-    document.getElementById('textarea_source')
-)
-vim.actived=true
-vim.update()
-document.getElementById('textarea_source').focus()
+!function(){
+    var vim
+    vim=new Vim
+    vim.setup(
+        document.getElementById('textarea_source')
+    )
+    vim.activated=true
+    vim.update()
+    document.getElementById('textarea_source').focus()
+}()
 </script>
 </body>
 </html>
