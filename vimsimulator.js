@@ -2,6 +2,7 @@
 http://www.truth.sk/vim/vimbook-OPL.pdf
 */
 !function(){
+var JsonFormatter
 window.Vim=Vim
 function Vim(){
 }
@@ -10,9 +11,12 @@ Vim.prototype.setup=function(
     count_rows_toshow,
     count_cols_toshow
 ){
+    // start input
     this.textarea=textarea
     this.count_rows_toshow=count_rows_toshow||24
     this.count_cols_toshow=count_cols_toshow||80
+    // end input
+    this.password=''
     this.textfile=''
 /*
 http://en.wikibooks.org/wiki/Learning_the_vi_Editor/Vim/Modes
@@ -81,6 +85,38 @@ http://en.wikibooks.org/wiki/Learning_the_vi_Editor/Vim/Modes
         }
     }
 }
+Vim.prototype.setupPassword=function(password){
+    this.password=password
+}
+Vim.prototype.command_A=function(count){
+    var i=this.textarea.selectionStart
+    while(
+        i+1<=this.textarea.value.length&&
+        this.textarea.value[i]!=='\n'
+    )
+    i++
+    this.textarea.selectionStart=
+    this.textarea.selectionEnd=i
+    this.mode=1
+}
+Vim.prototype.command_D=function(count){
+    var selectionStart
+    selectionStart=
+        this.textarea.selectionStart
+    this.textarea.value=
+        this.textarea.value.substring(
+            0,
+            this.textarea.selectionStart
+        )+this.textarea.value.substring(
+            this.textarea.selectionStart+
+                this.textarea.value.substring(this.textarea.selectionStart).search('\n')
+        )
+    this.textarea.selectionStart=
+        0<=selectionStart-1&&this.textarea.value[selectionStart-1]!=='\n'?
+            selectionStart-1
+        :
+            selectionStart
+}
 Vim.prototype.command_G=function(count){
     var
         c,
@@ -99,7 +135,11 @@ Vim.prototype.command_G=function(count){
 Vim.prototype.command_P=function(count){
     count=count||1
     this.pasteBoard=JSON.parse(
-        localStorage.getItem('pasteBoard_vimontheweb')
+        CryptoJS.AES.decrypt(
+            localStorage.getItem('pasteBoard_vimontheweb'),
+            this.password,
+            {format:JsonFormatter}
+        ).toString(CryptoJS.enc.Utf8)
     )
     if(this.pasteBoard.type===0){
         var c=this.textarea.selectionStart
@@ -161,7 +201,11 @@ Vim.prototype.command_l=function(count){
 Vim.prototype.command_p=function(count){
     count=count||1
     this.pasteBoard=JSON.parse(
-        localStorage.getItem('pasteBoard_vimontheweb')
+        CryptoJS.AES.decrypt(
+            localStorage.getItem('pasteBoard_vimontheweb'),
+            this.password,
+            {format:JsonFormatter}
+        ).toString(CryptoJS.enc.Utf8)
     )
     if(this.pasteBoard.type===0){
         var c=this.textarea.selectionStart+1
@@ -279,29 +323,30 @@ Vim.prototype.command_yy=function(count){
     this.yank(1,this.textarea.value.substring(f,l))
 }
 Vim.prototype.command_ltlt=function(count){
+    var f
     count=count||1
-    var f=this.textarea.selectionStart
+    f=this.textarea.selectionStart
     f=start_currentLine(f,this.textarea)
-    var nextSelection=f
     this.textarea.value=
         this.textarea.value.substring(0,f)+
         this.textarea.value.substring(
             f+4,this.textarea.value.length
         )
-    this.textarea.selectionStart=nextSelection
+    this.textarea.selectionStart=
+        f+this.textarea.value.substring(f).search(/[^ ]/)
 }
 Vim.prototype.command_gtgt=function(count){
     count=count||1
     var f=this.textarea.selectionStart
     f=start_currentLine(f,this.textarea)
-    var nextSelection=f
     this.textarea.value=
         this.textarea.value.substring(0,f)+
         '    '+
         this.textarea.value.substring(
             f,this.textarea.value.length
         )
-    this.textarea.selectionStart=nextSelection
+    this.textarea.selectionStart=
+        f+this.textarea.value.substring(f).search(/[^ ]/)
 }
 Vim.prototype.command_vlt=function(count){
     count=count||1
@@ -347,9 +392,16 @@ Vim.prototype.command_vgt=function(count){
 Vim.prototype.yank=function(type,content){
     this.pasteBoard.type=type
     this.pasteBoard.content=content
-    localStorage.setItem('pasteBoard_vimontheweb',JSON.stringify(
-        this.pasteBoard
-    ))
+    localStorage.setItem(
+        'pasteBoard_vimontheweb',
+        CryptoJS.AES.encrypt(
+            JSON.stringify(
+                this.pasteBoard
+            ),
+            this.password,
+            {format:JsonFormatter}
+        )
+    )
 }
 Vim.prototype.cursorMovesLeft=function(){
     if(this.mode===0||this.mode===1){
@@ -518,6 +570,14 @@ Vim.prototype.runCommandIfPossible=function(){
         }
         cmd=cmd.substring(i,cmd.length)
     }
+    if(cmd==='A'){
+        this.command_A(argument)
+        this.command=''
+    }
+    if(cmd==='D'){
+        this.command_D(argument)
+        this.command=''
+    }
     if(cmd==='G'){
         this.command_G(argument)
         this.command=''
@@ -575,18 +635,6 @@ Vim.prototype.runCommandIfPossible=function(){
         this.command=''
     }
     //
-    if(this.command==='A'){
-        var i=this.textarea.selectionStart
-        while(
-            i+1<=this.textarea.value.length&&
-            this.textarea.value[i]!=='\n'
-        )
-        i++
-        this.textarea.selectionStart=
-        this.textarea.selectionEnd=i
-        this.mode=1
-        this.command=''
-    }
     if(this.command==='I'){
         var i=this.textarea.selectionEnd
         while(0<=i-1&&this.textarea.value[i-1]!='\n')
@@ -1054,6 +1102,33 @@ cppstl.partial_sum=function(input){
 String.prototype.repeat=function(num){
     return new Array(num+1).join(this)
 }
+JsonFormatter={
+    stringify:function(cipherParams){
+        var jsonObj={
+            ct:cipherParams.ciphertext.toString(CryptoJS.enc.Base64)
+        }
+        if(cipherParams.iv){
+            jsonObj.iv = cipherParams.iv.toString()
+        }
+        if(cipherParams.salt) {
+            jsonObj.s = cipherParams.salt.toString()
+        }
+        return JSON.stringify(jsonObj)
+    },
+    parse:function(jsonStr){
+        var jsonObj=JSON.parse(jsonStr)
+        var cipherParams=CryptoJS.lib.CipherParams.create({
+            ciphertext:CryptoJS.enc.Base64.parse(jsonObj.ct)
+        })
+        if(jsonObj.iv){
+            cipherParams.iv=CryptoJS.enc.Hex.parse(jsonObj.iv)
+        }
+        if(jsonObj.s) {
+            cipherParams.salt=CryptoJS.enc.Hex.parse(jsonObj.s)
+        }
+        return cipherParams
+    }
+}
 function start_currentLine(p,textarea){
     while(0<=p-1&&textarea.value[p-1]!='\n')
         p--
@@ -1432,10 +1507,34 @@ function create_pre_editor(vim){
     var pre_editor
     pre_editor=document.createElement('pre')
     pre_editor.vim=vim
-    pre_editor.onclick=function(){
-        vim.textarea.focus()
-        vim.update()
+    pre_editor.onmousedown=function(e){
+        e.preventDefault()
+        e.stopPropagation()
     }
+    pre_editor.onmouseup=function(e){
+        e.preventDefault()
+        e.stopPropagation()
+    }
+    pre_editor.onclick=function(e){
+        if(
+            vim.textarea!==document.activeElement
+        )
+            focusWithoutChangingSelection(vim.textarea)
+        vim.update()
+        e.preventDefault()
+        e.stopPropagation()
+        function focusWithoutChangingSelection(e){
+            var
+                selectionStart,
+                selectionEnd
+            selectionStart=e.selectionStart
+            selectionEnd=e.selectionEnd
+            e.focus()
+            e.selectionStart=selectionStart
+            e.selectionEnd=selectionEnd
+        }
+    }
+    pre_editor.style.cursor='default'
     // centering
     pre_editor.style.position='fixed'
     pre_editor.style.left='50%'
