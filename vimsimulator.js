@@ -109,7 +109,11 @@ Vim.prototype.command_D=function(count){
             this.textarea.selectionStart
         )+this.textarea.value.substring(
             this.textarea.selectionStart+
-                this.textarea.value.substring(this.textarea.selectionStart).search('\n')
+                this.textarea.value.
+                substring(
+                    this.textarea.selectionStart
+                ).
+                search('\n')
         )
     this.textarea.selectionStart=
         0<=selectionStart-1&&this.textarea.value[selectionStart-1]!=='\n'?
@@ -131,6 +135,21 @@ Vim.prototype.command_G=function(count){
         c=end_currentLine(c,this.textarea)
     this.textarea.selectionStart=
     this.textarea.selectionEnd=c
+}
+Vim.prototype.command_I=function(count){
+    var start_currentLine_textarea
+    start_currentLine_textarea=
+        start_currentLine(
+            this.textarea.selectionStart,
+            this.textarea
+        )
+    this.textarea.selectionStart=
+    this.textarea.selectionEnd=
+        start_currentLine_textarea+
+        this.textarea.value.substring(
+            start_currentLine_textarea
+        ).search(/[^ ]/)
+    this.mode=1
 }
 Vim.prototype.command_P=function(count){
     count=count||1
@@ -258,6 +277,8 @@ Vim.prototype.command_u=function(){
         this.textarea.value=this.histories[this.histories.length-1]
     this.textarea.selectionStart=c
 }
+Vim.prototype.command_dot=function(count){
+}
 Vim.prototype.command_dd=function(count){
     var
         f,
@@ -323,30 +344,70 @@ Vim.prototype.command_yy=function(count){
     this.yank(1,this.textarea.value.substring(f,l))
 }
 Vim.prototype.command_ltlt=function(count){
-    var f
+    var
+        start_currentLine_textarea,
+        lineNumber,
+        lines
     count=count||1
-    f=this.textarea.selectionStart
-    f=start_currentLine(f,this.textarea)
-    this.textarea.value=
-        this.textarea.value.substring(0,f)+
-        this.textarea.value.substring(
-            f+4,this.textarea.value.length
-        )
+    start_currentLine_textarea=
+        start_currentLine(this.textarea.selectionStart,this.textarea)
+    lineNumber=
+        lineNumberOf(this.textarea.value,this.textarea.selectionStart)
+    lines=linesOf(this.textarea.value)
+    !function(){
+        var i
+        for(i=0;i<count;i++)
+            lines[lineNumber+i]=
+                lines[lineNumber+i].substring(4)
+    }()
+    this.textarea.value=lines.join('\n')
     this.textarea.selectionStart=
-        f+this.textarea.value.substring(f).search(/[^ ]/)
+        start_currentLine_textarea+
+        this.textarea.value.substring(
+            start_currentLine_textarea
+        ).search(/[^ ]/)
+    function linesOf(text){
+        var result
+        result=text.split('\n')
+        result.pop()
+        return result
+    }
+    function lineNumberOf(text,cursor){
+        return text.substring(0,cursor).split('\n').length-1
+    }
 }
 Vim.prototype.command_gtgt=function(count){
+    var
+        start_currentLine_textarea,
+        lineNumber,
+        lines
     count=count||1
-    var f=this.textarea.selectionStart
-    f=start_currentLine(f,this.textarea)
-    this.textarea.value=
-        this.textarea.value.substring(0,f)+
-        '    '+
-        this.textarea.value.substring(
-            f,this.textarea.value.length
-        )
+    start_currentLine_textarea=
+        start_currentLine(this.textarea.selectionStart,this.textarea)
+    lineNumber=
+        lineNumberOf(this.textarea.value,this.textarea.selectionStart)
+    lines=linesOf(this.textarea.value)
+    !function(){
+        var i
+        for(i=0;i<count;i++)
+            lines[lineNumber+i]=
+                '    '+lines[lineNumber+i]
+    }()
+    this.textarea.value=lines.join('\n')
     this.textarea.selectionStart=
-        f+this.textarea.value.substring(f).search(/[^ ]/)
+        start_currentLine_textarea+
+        this.textarea.value.substring(
+            start_currentLine_textarea
+        ).search(/[^ ]/)
+    function linesOf(text){
+        var result
+        result=text.split('\n')
+        result.pop()
+        return result
+    }
+    function lineNumberOf(text,cursor){
+        return text.substring(0,cursor).split('\n').length-1
+    }
 }
 Vim.prototype.command_vlt=function(count){
     count=count||1
@@ -582,6 +643,10 @@ Vim.prototype.runCommandIfPossible=function(){
         this.command_G(argument)
         this.command=''
     }
+    if(cmd==='I'){
+        this.command_I(argument)
+        this.command=''
+    }
     if(cmd==='P'){
         this.command_P(argument)
         this.command=''
@@ -635,15 +700,6 @@ Vim.prototype.runCommandIfPossible=function(){
         this.command=''
     }
     //
-    if(this.command==='I'){
-        var i=this.textarea.selectionEnd
-        while(0<=i-1&&this.textarea.value[i-1]!='\n')
-            i--
-        this.textarea.selectionStart=
-        this.textarea.selectionEnd=i
-        this.mode=1
-        this.command=''
-    }
     if(this.command==='O'){
         this.mode=1
         var p=start_currentLine(this.textarea.selectionStart,this.textarea)
@@ -765,9 +821,14 @@ Vim.prototype.update=function(){
     if(this.mode===0){
         if(
             0<=this.textarea.selectionStart-1&&(
-                this.textarea.selectionStart===this.textarea.value.length||
-                this.textarea.value[this.textarea.selectionStart]==='\n'&&
-                this.textarea.value[this.textarea.selectionStart-1]!=='\n'
+                this.textarea.selectionStart===
+                    this.textarea.value.length||
+                this.textarea.value[
+                    this.textarea.selectionStart
+                ]==='\n'&&
+                this.textarea.value[
+                    this.textarea.selectionStart-1
+                ]!=='\n'
             )
         ){
             this.textarea.selectionStart--
@@ -798,51 +859,48 @@ Vim.prototype.update=function(){
         cursor_end-partialsum_length_lines[lineNumber_cursor_end]
     var count_rows_showed=0
     var currentLine='',row_currentLine=0,col_currentRow=0
-    do_outputAll.bind(this)()
-    function calculate_lineNumber_select(){
-        return this.textarea.value.substring(
-            0,
-            cursor(this)
-        ).split('\n').length-1
-        function cursor(vim){
-            if(vim.mode===0||vim.mode===1)
-                return vim.textarea.selectionStart
-            return vim.textarea.selectionStart<vim.visualmode.fixedCursor?
-                vim.textarea.selectionStart
-            :
-                vim.textarea.selectionEnd-1
-        }
+    var
+        currentLine,
+        row_currentLine,
+        col_currentRow
+    currentLine=''
+    row_currentLine=0
+    col_currentRow=0
+    do_outputAll(this)
+    function do_outputAll(vim){
+        output_contents(vim)
+        output_nullLines.bind(vim)()
+        output_commandLine(vim)
+        vim.pre_editor.innerHTML=output
+        vim.pre_editor.appendChild(
+            document.createTextNode(
+                calculate_s(col_currentRow)
+            )
+        )
     }
-    function do_outputAll(){
-        output_contents.bind(this)()
-        output_nullLines.bind(this)()
-        output_commandLine(this)
-        do_output(calculate_s())
-        this.pre_editor.innerHTML=output
-    }
-    function output_contents(){
+    function output_contents(vim){
         var toEndCursorSpan=false
-        var isActiveElement=this.textarea===document.activeElement
-        var lineNumber=this.lineCursor,charNumber=0
-        if(cursor<partialsum_length_lines[this.lineCursor]){
+        var isActiveElement=vim.textarea===document.activeElement
+        var lineNumber=vim.lineCursor,charNumber=0
+        if(cursor<partialsum_length_lines[vim.lineCursor]){
             currentLine+=
                 '<span style="background-color:'+
-                this.style.color+';color:'+
-                this.style.backgroundColor+';">'
+                vim.style.color+';color:'+
+                vim.style.backgroundColor+';">'
             toEndCursorSpan=true
         }
         while(lineNumber<lines.length){
             var i=partialsum_length_lines[lineNumber]+charNumber
             var string_toshow_currentCharacter=
                 text[i]==='\n'
-                    ?(this.mode===1||0<=i-1&&text[i-1]==='\n'?' ':'')
+                    ?(vim.mode===1||0<=i-1&&text[i-1]==='\n'?' ':'')
                     :text[i]
             var width_string_toshow_currentCharacter=
                 string_toshow_currentCharacter===''?0:
                 string_toshow_currentCharacter.charCodeAt(0)<0xff?1:2
             if(
-                this.count_cols_toshow<(
-                    this.environment.number?
+                vim.count_cols_toshow<(
+                    vim.environment.number?
                         countOfColsForPaddingForLineNumber
                     :
                         0
@@ -854,7 +912,7 @@ Vim.prototype.update=function(){
                 row_currentLine++
                 col_currentRow=0
             }
-            if(this.environment.number){
+            if(vim.environment.number){
                 if(col_currentRow===0){
                     var count_cols_lineNumber=countOfColsForPaddingForLineNumber
                     if(row_currentLine===0){
@@ -876,19 +934,19 @@ Vim.prototype.update=function(){
                 if(i===cursor){
                     currentLine+=
                         '<span style="background-color:'+
-                        this.style.color+';color:'+
-                        this.style.backgroundColor+';">'
+                        vim.style.color+';color:'+
+                        vim.style.backgroundColor+';">'
                     toEndCursorSpan=true
                 }
             }
             if(text[i]==='\n'){
                 if(
-                    this.environment.list||
-                    this.mode===1||
+                    vim.environment.list||
+                    vim.mode===1||
                     0<=i-1&&text[i-1]
                 ){ // eol showing
-                    currentLine+='<span style="'+this.stylesheet_eol+'">'
-                    if(this.environment.list)
+                    currentLine+='<span style="'+vim.stylesheet_eol+'">'
+                    if(vim.environment.list)
                         currentLine+='$'
                     else
                         currentLine+=' '
@@ -914,7 +972,7 @@ Vim.prototype.update=function(){
                     html_toshow=text[i]
                 }
                 if(
-                    !this.highlighter||
+                    !vim.highlighter||
                     '!@#$%^&*()-=[]{},.;<>?:\'"\\/'.indexOf(text[i])==-1
                 )
                     currentLine+=html_toshow
@@ -927,13 +985,13 @@ Vim.prototype.update=function(){
                 col_currentRow+=width_string_toshow_currentCharacter
             }
             if(isActiveElement){
-                if(this.mode===0){
+                if(vim.mode===0){
                     // normal mode
                     if(i+1===cursor_end){
                         toEndCursorSpan=false
                         currentLine+='</span>'
                     }
-                }else if(this.mode===1||this.mode===2){
+                }else if(vim.mode===1||vim.mode===2){
                     // insert mode or visual mode
                     if(cursor===cursor_end
                             ?i+1==cursor_end+1
@@ -941,7 +999,7 @@ Vim.prototype.update=function(){
                         toEndCursorSpan=false
                         currentLine+='</span>'
                     }
-                }else if(this.mode===2){
+                }else if(vim.mode===2){
                     if(i+1===cursor_end){
                         toEndCursorSpan=false
                         currentLine+='</span>'
@@ -949,8 +1007,8 @@ Vim.prototype.update=function(){
                 }
             }
             if(text[i]==='\n'){
-                if(this.lineCursor<=lineNumber){
-                    if(this.count_rows_toshow-1
+                if(vim.lineCursor<=lineNumber){
+                    if(vim.count_rows_toshow-1
                             <count_rows_showed+row_currentLine){
                         break
                     }
@@ -963,10 +1021,24 @@ Vim.prototype.update=function(){
                 col_currentRow=0
                 lineNumber++
             }
-        } // for(var lineNumber=this.lineCursor,charNumber=0;lineNumber<lines.length
+        } // for(var lineNumber=vim.lineCursor,charNumber=0;lineNumber<lines.length
         if(toEndCursorSpan){
             toEndCursorSpan=false
             output+='</span>'
+        }
+    }
+    function calculate_lineNumber_select(){
+        return this.textarea.value.substring(
+            0,
+            cursor(this)
+        ).split('\n').length-1
+        function cursor(vim){
+            if(vim.mode===0||vim.mode===1)
+                return vim.textarea.selectionStart
+            return vim.textarea.selectionStart<vim.visualmode.fixedCursor?
+                vim.textarea.selectionStart
+            :
+                vim.textarea.selectionEnd-1
         }
     }
     function output_nullLines(){
@@ -994,25 +1066,16 @@ Vim.prototype.update=function(){
             col_currentRow+='-- VISUAL --'.length
         }
     }
-    function do_output(s){
-        output+=s
-        col_currentRow+=s.length
-    }
-    function calculate_s(){
-        var s
-        while(col_currentRow<60){
-            output+=' '
-            col_currentRow++
-        }
-        s=(lineNumber_cursor+1)+','+(charNumber_cursor+1)
-        output+=s
-        col_currentRow+=s.length
-        while(col_currentRow<countOfColsPerRow){
-            output+=' '
-            col_currentRow++
-        }
-        s=Math.floor(100*lineNumber_cursor/lines.length)+'%'
-        return s
+    function calculate_s(col_currentRow){
+        var result,i
+        result=''
+        while(col_currentRow+result.length<60)
+            result+=' '
+        result+=(lineNumber_cursor+1)+','+(charNumber_cursor+1)
+        for(i=col_currentRow+result.length;i<countOfColsPerRow;i++)
+            result+=' '
+        result+=Math.floor(100*lineNumber_cursor/lines.length)+'%'
+        return result
     }
     function lineCursorCatchingUp(vim){
         var partialSum_rowsCount_lines
