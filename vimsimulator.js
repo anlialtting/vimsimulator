@@ -1,8 +1,15 @@
 /*
+    Table of Contents
+        * _commands
+        * _pureFunctions
+*/
+/*
 http://www.truth.sk/vim/vimbook-OPL.pdf
 */
 !function(){
-var JsonFormatter
+var
+    JsonFormatter,
+    cppstl
 window.Vim=Vim
 function Vim(){
 }
@@ -88,6 +95,7 @@ http://en.wikibooks.org/wiki/Learning_the_vi_Editor/Vim/Modes
 Vim.prototype.setupPassword=function(password){
     this.password=password
 }
+// start _commands
 Vim.prototype.command_A=function(count){
     var i=this.textarea.selectionStart
     while(
@@ -510,6 +518,7 @@ Vim.prototype.command_vgt=function(count){
     this.textarea.selectionStart=nextSelection
     this.textarea.selectionEnd=nextSelection+1
 }
+// end _commands
 Vim.prototype.yank=function(type,content){
     this.pasteBoard.type=type
     this.pasteBoard.content=content
@@ -682,113 +691,28 @@ Vim.prototype.runCommandIfPossible=function(){
     //
     var cmd=this.command
     var argument
-    if(48<=cmd.charCodeAt(0)&&cmd.charCodeAt(0)<58){
-        var i=0
-        argument=0
-        while(48<=cmd.charCodeAt(i)&&cmd.charCodeAt(i)<58){
-            argument=10*argument+(cmd.charCodeAt(i)-48)
-            i++
+    if(48<=cmd.charCodeAt(0)&&cmd.charCodeAt(0)<58)
+        !function(){
+            var i
+            i=0
+            argument=0
+            while(48<=cmd.charCodeAt(i)&&cmd.charCodeAt(i)<58){
+                argument=10*argument+(cmd.charCodeAt(i)-48)
+                i++
+            }
+            cmd=cmd.substring(i,cmd.length)
+        }()
+    !function(vim){
+        var result
+        result=tryCommand(vim)
+        if(result.matched){
+            if(result.changed)
+                vim.lastChangingCommand=
+                    vim.command
+            vim.command=''
         }
-        cmd=cmd.substring(i,cmd.length)
-    }
-    if(cmd==='A'){
-        this.command_A(argument)
-        this.command=''
-    }
-    if(cmd==='D'){
-        this.command_D(argument)
-        this.command=''
-    }
-    if(cmd==='G'){
-        this.command_G(argument)
-        this.command=''
-    }
-    if(cmd==='I'){
-        this.command_I(argument)
-        this.command=''
-    }
-    if(this.command==='O'){
-        this.command_O(argument)
-    }
-    if(cmd==='P'){
-        this.command_P(argument)
-        this.command=''
-    }
-    if(cmd==='h'){
-        this.command_h(argument)
-        this.command=''
-    }
-    if(cmd==='j'){
-        this.command_j(argument)
-        this.command=''
-    }
-    if(cmd==='k'){
-        this.command_k(argument)
-        this.command=''
-    }
-    if(cmd==='l'){
-        this.command_l(argument)
-        this.command=''
-    }
-    if(cmd==='o'){
-        this.command_o(argument)
-        this.command=''
-    }
-    if(cmd==='p'){
-        this.command_p(argument)
-        this.command=''
-    }
-    if(cmd[0]==='r'&&cmd.length===2){
-        this.command_r(argument,cmd[1])
-        this.command=''
-    }
-    if(cmd==='u'){
-        this.command_u(argument)
-        this.command=''
-    }
-    if(cmd==='dd'){
-        this.command_dd(argument)
-        this.command=''
-    }
-    if(cmd==='gg'){
-        this.command_gg(argument)
-        this.command=''
-    }
-    if(cmd==='yy'){
-        this.command_yy(argument)
-        this.command=''
-    }
-    if(cmd==='<<'){
-        this.command_ltlt(argument)
-        this.command=''
-    }
-    if(cmd==='>>'){
-        this.command_gtgt(argument)
-        this.command=''
-    }
+    }(this)
     //
-    if(this.command==='a'){ // a
-        var i=this.textarea.selectionStart
-        if(i+1<this.textarea.value.length)
-            i++
-        this.textarea.selectionStart=this.textarea.selectionEnd=i
-        this.mode=1
-        this.command=''
-    }
-    if(this.command==='i'){
-        this.mode=1
-        this.textarea.selectionEnd=this.textarea.selectionStart
-        this.command=''
-    }
-    if(this.command==='v'){
-        this.mode=2
-        this.visualmode.fixedCursor=this.textarea.selectionStart
-        this.command=''
-    }
-    if(this.command==='n'){
-        this.gotoNextMatch()
-        this.command=''
-    }
     if(this.command[0]===':'){
         for(var i=1;i<this.command.length;i++){
             if(this.command[i]==='q')
@@ -804,9 +728,128 @@ Vim.prototype.runCommandIfPossible=function(){
         this.gotoNextMatch()
         this.command=''
     }
+    function tryCommand(vim){
+        var result={}
+        if(cmd==='A'){
+            vim.command_A(argument)
+            result.matched=true
+        }
+        if(cmd==='D'){
+            vim.command_D(argument)
+            result.matched=true
+        }
+        if(cmd==='G'){
+            vim.command_G(argument)
+            result.matched=true
+        }
+        if(cmd==='I'){
+            vim.command_I(argument)
+            result.matched=true
+        }
+        if(cmd==='O'){
+            vim.command_O(argument)
+            result.matched=true
+            result.changed=true
+        }
+        if(cmd==='P'){
+            vim.command_P(argument)
+            result.matched=true
+            result.changed=true
+        }
+        if(cmd==='a'){
+            var i=vim.textarea.selectionStart
+            if(i+1<vim.textarea.value.length)
+                i++
+            vim.textarea.selectionStart=
+            vim.textarea.selectionEnd=i
+            vim.mode=1
+            result.matched=true
+        }
+        if(cmd==='h'){
+            vim.command_h(argument)
+            result.matched=true
+        }
+        if(cmd==='i'){
+            vim.mode=1
+            vim.textarea.selectionEnd=vim.textarea.selectionStart
+            result.matched=true
+        }
+        if(cmd==='j'){
+            vim.command_j(argument)
+            result.matched=true
+        }
+        if(cmd==='k'){
+            vim.command_k(argument)
+            result.matched=true
+        }
+        if(cmd==='l'){
+            vim.command_l(argument)
+            result.matched=true
+        }
+        if(cmd==='n'){
+            vim.gotoNextMatch()
+            result.matched=true
+        }
+        if(cmd==='o'){
+            vim.command_o(argument)
+            result.matched=true
+            result.changed=true
+        }
+        if(cmd==='p'){
+            vim.command_p(argument)
+            result.matched=true
+            result.changed=true
+        }
+        if(cmd[0]==='r'&&cmd.length===2){
+            vim.command_r(argument,cmd[1])
+            result.matched=true
+            result.changed=true
+        }
+        if(cmd==='u'){
+            vim.command_u(argument)
+            result.matched=true
+        }
+        if(cmd==='v'){
+            vim.mode=2
+            vim.visualmode.fixedCursor=vim.textarea.selectionStart
+            result.matched=true
+        }
+        if(cmd==='dd'){
+            vim.command_dd(argument)
+            result.matched=true
+            result.changed=true
+        }
+        if(cmd==='gg'){
+            vim.command_gg(argument)
+            result.matched=true
+        }
+        if(cmd==='yy'){
+            vim.command_yy(argument)
+            result.matched=true
+        }
+        if(cmd==='<<'){
+            vim.command_ltlt(argument)
+            result.matched=true
+            result.changed=true
+        }
+        if(cmd==='>>'){
+            vim.command_gtgt(argument)
+            result.matched=true
+            result.changed=true
+        }
+        if(cmd==='.'){
+            if(vim.lastChangingCommand){
+                vim.command=vim.lastChangingCommand
+                vim.runCommandIfPossible()
+            }
+            result.matched=true
+        }
+        return result
+    }
 }
 Vim.prototype.gotoNextMatch=function(){
-    var selectionEnd=this.textarea.selectionEnd
+    var selectionEnd
+    selectionEnd=this.textarea.selectionEnd
     this.textarea.selectionStart=
     this.textarea.selectionEnd=
         this.textarea.value.substring(selectionEnd).search(
@@ -817,47 +860,18 @@ Vim.prototype.update=function(){
     var
         countOfColsPerRow,
         countOfColsForPaddingForLineNumber
-    countOfColsForPaddingForLineNumber=4
-    countOfColsPerRow=
-        this.count_cols_toshow-
-        countOfColsForPaddingForLineNumber
-    if(
-        this.histories.length===0||
-        this.histories[this.histories.length-1]!==this.textarea.value
-    ){
-        this.histories.push(this.textarea.value)
-        if(100<this.histories.length)
-            this.histories.shift()
-    }
-    if(this.activated){
-        if(!this.div_editor){
-            this.div_editor=create_div_editor(this)
-            document.body.appendChild(this.div_editor)
-        }
-        if(!this.pre_editor){
-            this.pre_editor=create_pre_editor(this)
-            document.body.appendChild(this.pre_editor)
-        }
-    }
-    if(!this.activated){
-        if(this.div_editor&&this.pre_editor){
-            this.div_editor.style.display='none'
-            this.pre_editor.style.display='none'
-        }
+    setup(this)
+    if(toReject(this))
         return
-    }
-    this.div_editor.style.display='block'
-    this.pre_editor.style.display='block'
+    writeCurrentStateIntoHistory(this)
+    show(this)
     eolCorrection(this)
     selectionCorrection(this)
-    var lineNumber_select=calculate_lineNumber_select(this)
     lineCursorCatchingUp(this)
-    var output=''
-    var text=this.textarea.value
     var
         cursor=this.textarea.selectionStart,
         cursor_end=this.textarea.selectionEnd
-    var lines=linesOf(text)
+    var lines=linesOf(this.textarea.value)
     var length_lines=calculate_length_lines()
     var partialsum_length_lines=calculate_partialsum_length_lines()
     var lineNumber_cursor=
@@ -869,6 +883,46 @@ Vim.prototype.update=function(){
     var charNumber_cursor_end=
         cursor_end-partialsum_length_lines[lineNumber_cursor_end]
     do_outputAll(this)
+    function setup(vim){
+        countOfColsForPaddingForLineNumber=4
+        countOfColsPerRow=
+            vim.count_cols_toshow-
+            countOfColsForPaddingForLineNumber
+        if(vim.activated){
+            if(!vim.div_editor){
+                vim.div_editor=create_div_editor(vim)
+                document.body.appendChild(vim.div_editor)
+            }
+            if(!vim.pre_editor){
+                vim.pre_editor=create_pre_editor(vim)
+                document.body.appendChild(vim.pre_editor)
+            }
+        }
+    }
+    function toReject(vim){
+        if(!vim.activated){
+            if(vim.div_editor&&vim.pre_editor){
+                vim.div_editor.style.display='none'
+                vim.pre_editor.style.display='none'
+            }
+            return true
+        }
+        return false
+    }
+    function show(vim){
+        vim.div_editor.style.display='block'
+        vim.pre_editor.style.display='block'
+    }
+    function writeCurrentStateIntoHistory(vim){
+        if(
+            vim.histories.length===0||
+            vim.histories[vim.histories.length-1]!==vim.textarea.value
+        ){
+            vim.histories.push(vim.textarea.value)
+            if(100<vim.histories.length)
+                vim.histories.shift()
+        }
+    }
     function selectionCorrection(vim){
         if(vim.mode===0){
             if(
@@ -885,7 +939,6 @@ Vim.prototype.update=function(){
             ){
                 vim.textarea.selectionStart--
             }
-            //if(t.selectionEnd!==t.selectionStart+1)
             vim.textarea.selectionEnd=
                 vim.textarea.selectionStart+1
         }else if(vim.mode===1){ // insert mode
@@ -907,11 +960,13 @@ Vim.prototype.update=function(){
     }
     function do_outputAll(vim){
         var count_rows_showed
-        count_rows_showed=output_contents(vim)
-        output_nullLines(vim,count_rows_showed)
-        output_commandLine(vim)
+        count_rows_showed=  output_contents(vim)
+                            output_nullLines(vim,count_rows_showed)
+                            output_commandLine(vim)
     }
     function output_contents(vim){
+        var output=''
+        var text=vim.textarea.value
         var count_rows_showed=0
         var currentLine='',row_currentLine=0,col_currentRow=0
         var
@@ -1146,20 +1201,24 @@ Vim.prototype.update=function(){
                 partialSum_rowsCount_lines[i]+=partialSum_rowsCount_lines[i-1]
             partialSum_rowsCount_lines.unshift(0)
         }()
-        var lower=lineNumber_select,upper=lineNumber_select
-        while(
-            0<=lower-1&&
-                partialSum_rowsCount_lines[lineNumber_select+1]-
-                    partialSum_rowsCount_lines[lower-1]
-                <=
-                vim.count_rows_toshow-1
-        )
-            lower--
-        vim.lineCursor=Math.max(vim.lineCursor,lower)
-        vim.lineCursor=Math.min(vim.lineCursor,upper)
+        !function(){
+            var lineNumber_select=calculate_lineNumber_select(vim)
+            var lower=lineNumber_select,upper=lineNumber_select
+            while(
+                0<=lower-1&&
+                    partialSum_rowsCount_lines[lineNumber_select+1]-
+                        partialSum_rowsCount_lines[lower-1]
+                    <=
+                    vim.count_rows_toshow-1
+            )
+                lower--
+            vim.lineCursor=Math.max(vim.lineCursor,lower)
+            vim.lineCursor=Math.min(vim.lineCursor,upper)
+        }()
     }
     function linesOf(text){
-        var lines=text.split('\n')
+        var lines
+        lines=text.split('\n')
         lines.pop()
         lines.forEach(function(e,i){
             lines[i]+='\n'
@@ -1167,14 +1226,16 @@ Vim.prototype.update=function(){
         return lines
     }
     function calculate_length_lines(){
-        var length_lines=new Array(lines.length)
+        var length_lines
+        length_lines=new Array(lines.length)
         lines.forEach(function(e,i){
             length_lines[i]=lines[i].length
         })
         return length_lines
     }
     function calculate_partialsum_length_lines(){
-        var partialsum_length_lines=[0]
+        var partialsum_length_lines
+        partialsum_length_lines=[0]
         partialsum_length_lines.push.apply(
             partialsum_length_lines,
             cppstl.partial_sum(length_lines)
@@ -1183,10 +1244,12 @@ Vim.prototype.update=function(){
     }
 }
 Vim.prototype.update_pre_editor=function(){
-    this.pre_editor.style.backgroundColor=this.style.backgroundColor
-    this.pre_editor.style.color=this.style.color
+    this.pre_editor.style.backgroundColor=
+        this.style.backgroundColor
+    this.pre_editor.style.color=
+        this.style.color
 }
-var cppstl={}
+cppstl={}
 cppstl.lower_bound=function(array,key){
     var first=0,last=array.length
     while(first!=last){
@@ -1246,6 +1309,7 @@ JsonFormatter={
         return cipherParams
     }
 }
+// start _pureFunctions
 // start 2015-09-06
 function getLineStartByCursor(text,cursor){
     return text.substring(0,cursor).lastIndexOf('\n')+1
@@ -1513,7 +1577,7 @@ function textarea_onkeydown_mode_0(vim,e){
                 )
             vim.textarea.selectionStart=p
             vim.textarea.selectionEnd=p+1
-        }else if(48<=e.keyCode&&e.keyCode<58){
+        }else if(48<=e.keyCode&&e.keyCode<58){ // 0-9
             value_toreturn=false
             vim.command+=
                 String.fromCharCode(e.keyCode)
@@ -1528,6 +1592,9 @@ function textarea_onkeydown_mode_0(vim,e){
             value_toreturn=false
             vim.command+=
                 String.fromCharCode(e.keyCode+32)
+        }else if(e.keyCode===190){ // .
+            value_toreturn=false
+            vim.command+='.'
         }else if(e.keyCode===191){ // /
             value_toreturn=false
             vim.command+='/'
@@ -1721,4 +1788,5 @@ function create_input_commandline(){
     input=document.createElement('input')
     return input
 }
+// end _pureFunctions
 }()
