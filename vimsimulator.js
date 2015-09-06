@@ -18,7 +18,7 @@ Vim.prototype.setup=function(
     count_rows_toshow,
     count_cols_toshow
 ){
-    // start input
+    // begin input
     this.textarea=textarea
     this.count_rows_toshow=count_rows_toshow||24
     this.count_cols_toshow=count_cols_toshow||80
@@ -478,6 +478,7 @@ Vim.prototype.command_gtgt=function(count){
     }
 }
 Vim.prototype.command_vlt=function(count){
+    this.mode=0
     count=count||1
     var f=this.textarea.selectionStart,
         l=this.textarea.selectionEnd
@@ -499,6 +500,7 @@ Vim.prototype.command_vlt=function(count){
     this.textarea.selectionEnd=nextSelection+1
 }
 Vim.prototype.command_vgt=function(count){
+    this.mode=0
     count=count||1
     var f=this.textarea.selectionStart,
         l=this.textarea.selectionEnd
@@ -883,6 +885,11 @@ Vim.prototype.update=function(){
     var charNumber_cursor_end=
         cursor_end-partialsum_length_lines[lineNumber_cursor_end]
     do_outputAll(this)
+    updateInputPosition(this)
+    function updateInputPosition(vim){
+        vim.input_commandline.style.left=
+            6*vim.command.length+'pt'
+    }
     function setup(vim){
         countOfColsForPaddingForLineNumber=4
         countOfColsPerRow=
@@ -966,25 +973,33 @@ Vim.prototype.update=function(){
     }
     function output_contents(vim){
         var output=''
-        var text=vim.textarea.value
-        var count_rows_showed=0
-        var currentLine='',row_currentLine=0,col_currentRow=0
-        var
+        var text=vim.textarea.value,
+            count_rows_showed=0,
+            currentLine='',
+            row_currentLine=0,
+            col_currentRow=0,
             currentLine,
             row_currentLine,
             col_currentRow
         currentLine=''
         row_currentLine=0
         col_currentRow=0
-        var toEndCursorSpan=false
+        /*
+            selectionShowingState:
+                0: Cursor has not been reached or it is ended.
+                1: Cursor span is started.
+                2: Cursor span will start next row.
+        */
+        var
+            selectionShowingState=0
         var isActiveElement=vim.textarea===document.activeElement
         var lineNumber=vim.lineCursor,charNumber=0
         if(cursor<partialsum_length_lines[vim.lineCursor]){
-            currentLine+=
+            /*currentLine+=
                 '<span style="background-color:'+
                 vim.style.color+';color:'+
-                vim.style.backgroundColor+';">'
-            toEndCursorSpan=true
+                vim.style.backgroundColor+';">'*/
+            selectionShowingState=2
         }
         while(lineNumber<lines.length){
             var i=partialsum_length_lines[lineNumber]+charNumber
@@ -1005,16 +1020,28 @@ Vim.prototype.update=function(){
                 col_currentRow+
                 width_string_toshow_currentCharacter
             ){
+                if(isActiveElement){
+                    if(vim.environment.number){
+                        if(selectionShowingState===1){
+                            pauseSelectionShowing()
+                        }
+                    }
+                }
                 currentLine+='\n'
                 row_currentLine++
                 col_currentRow=0
             }
             if(vim.environment.number){
                 if(col_currentRow===0){
-                    var count_cols_lineNumber=countOfColsForPaddingForLineNumber
+                    var count_cols_lineNumber=
+                        countOfColsForPaddingForLineNumber
                     if(row_currentLine===0){
                         var s=(lineNumber+1).toString()
-                        for(var j=0;j<count_cols_lineNumber-s.length-1;j++)
+                        for(
+                            var j=0;
+                            j<count_cols_lineNumber-s.length-1;
+                            j++
+                        )
                             currentLine+=' '
                         currentLine+=
                             '<span style="color:lawngreen;">'+
@@ -1025,17 +1052,16 @@ Vim.prototype.update=function(){
                         for(var j=0;j<count_cols_lineNumber;j++)
                             currentLine+=' '
                     }
+                    if(isActiveElement)
+                        if(selectionShowingState===2)
+                            startSelectionShowing()
                 }
             }
-            if(isActiveElement){
-                if(i===cursor){
-                    currentLine+=
-                        '<span style="background-color:'+
-                        vim.style.color+';color:'+
-                        vim.style.backgroundColor+';">'
-                    toEndCursorSpan=true
-                }
-            }
+            if(isActiveElement)
+                if(
+                    selectionShowingState===0&&i===cursor
+                )
+                    startSelectionShowing()
             if(text[i]==='\n'){
                 if(
                     vim.environment.list||
@@ -1048,6 +1074,13 @@ Vim.prototype.update=function(){
                     else
                         currentLine+=' '
                     currentLine+='</span>'
+                }
+                if(isActiveElement){
+                    if(vim.environment.number){
+                        if(selectionShowingState===1){
+                            pauseSelectionShowing()
+                        }
+                    }
                 }
                 currentLine+='\n'
                 row_currentLine++
@@ -1086,7 +1119,7 @@ Vim.prototype.update=function(){
                 if(vim.mode===0){
                     // normal mode
                     if(i+1===cursor_end){
-                        toEndCursorSpan=false
+                        selectionShowingState=0
                         currentLine+='</span>'
                     }
                 }else if(vim.mode===1||vim.mode===2){
@@ -1094,12 +1127,12 @@ Vim.prototype.update=function(){
                     if(cursor===cursor_end
                             ?i+1===cursor_end+1
                             :i+1===cursor_end){
-                        toEndCursorSpan=false
+                        selectionShowingState=0
                         currentLine+='</span>'
                     }
                 }else if(vim.mode===2){
                     if(i+1===cursor_end){
-                        toEndCursorSpan=false
+                        selectionShowingState=0
                         currentLine+='</span>'
                     }
                 }
@@ -1120,12 +1153,25 @@ Vim.prototype.update=function(){
                 lineNumber++
             }
         } // for(var lineNumber=vim.lineCursor,charNumber=0;lineNumber<lines.length
-        if(toEndCursorSpan){
-            toEndCursorSpan=false
-            output+='</span>'
-        }
+        if(selectionShowingState)
+            stopSelectionShowing()
         vim.pre_editor.innerHTML=output
         return count_rows_showed
+        function startSelectionShowing(){
+            selectionShowingState=1
+            currentLine+=
+                '<span style="background-color:'+
+                vim.style.color+';color:'+
+                vim.style.backgroundColor+';">'
+        }
+        function pauseSelectionShowing(){
+            selectionShowingState=2
+            currentLine+='</span>'
+        }
+        function stopSelectionShowing(){
+            selectionShowingState=0
+            output+='</span>'
+        }
     }
     function calculate_lineNumber_select(vim){
         return vim.textarea.value.substring(
@@ -1288,10 +1334,12 @@ JsonFormatter={
             ct:cipherParams.ciphertext.toString(CryptoJS.enc.Base64)
         }
         if(cipherParams.iv){
-            jsonObj.iv = cipherParams.iv.toString()
+            jsonObj.iv=
+                cipherParams.iv.toString()
         }
         if(cipherParams.salt) {
-            jsonObj.s = cipherParams.salt.toString()
+            jsonObj.s=
+                cipherParams.salt.toString()
         }
         return JSON.stringify(jsonObj)
     },
@@ -1301,16 +1349,18 @@ JsonFormatter={
             ciphertext:CryptoJS.enc.Base64.parse(jsonObj.ct)
         })
         if(jsonObj.iv){
-            cipherParams.iv=CryptoJS.enc.Hex.parse(jsonObj.iv)
+            cipherParams.iv=
+                CryptoJS.enc.Hex.parse(jsonObj.iv)
         }
-        if(jsonObj.s) {
-            cipherParams.salt=CryptoJS.enc.Hex.parse(jsonObj.s)
+        if(jsonObj.s){
+            cipherParams.salt=
+                CryptoJS.enc.Hex.parse(jsonObj.s)
         }
         return cipherParams
     }
 }
-// start _pureFunctions
-// start 2015-09-06
+// begin _pureFunctions
+// begin 2015-09-06
 function getLineStartByCursor(text,cursor){
     return text.substring(0,cursor).lastIndexOf('\n')+1
 }
@@ -1399,127 +1449,38 @@ function textarea_onkeydown(vim,e){
     return value_toreturn
 }
 function textarea_onkeydown_mode_0(vim,e){
-    var value_toreturn
-    if(
-        0<vim.command.length&&(
+    var
+        value_toreturn
+    if(isLongCommand())
+        if(!e.shiftKey)
+            longCommand()
+        else
+            longCommandShift()
+    else
+        if(!e.shiftKey)
+            shortCommand()
+        else
+            shortCommandShift()
+    if(isLongCommand()){
+        // testing funciton 2015-09-06
+        /*setTimeout(function(){
+            vim.input_commandline.focus()
+        },0)*/
+    }else
+        vim.runCommandIfPossible()
+    if(value_toreturn===false){
+        e.preventDefault()
+        e.stopPropagation()
+    }
+    return value_toreturn
+    function isLongCommand(){
+        return 0<vim.command.length&&(
             vim.command[0]===':'||
-            vim.command[0]==='/'
+            vim.command[0]==='/'||
+            vim.command[0]==='!'
         )
-    ){
-        if(e.shiftKey){
-            if(e.keyCode===48){ // )
-                value_toreturn=false
-                vim.command+=')'
-            }else if(e.keyCode===49){ // !
-                value_toreturn=false
-                vim.command+='!'
-            }else if(e.keyCode===50){ // @
-                value_toreturn=false
-                vim.command+='@'
-            }else if(e.keyCode===51){ // #
-                value_toreturn=false
-                vim.command+='#'
-            }else if(e.keyCode===52){ // $
-                value_toreturn=false
-                vim.command+='$'
-            }else if(e.keyCode===53){ // %
-                value_toreturn=false
-                vim.command+='%'
-            }else if(e.keyCode===54){ // ^
-                value_toreturn=false
-                vim.command+='^'
-            }else if(e.keyCode===55){ // &
-                value_toreturn=false
-                vim.command+='&'
-            }else if(e.keyCode===56){ // *
-                value_toreturn=false
-                vim.command+='*'
-            }else if(e.keyCode===57){ // (
-                value_toreturn=false
-                vim.command+='('
-            }else if(65<=e.keyCode&&e.keyCode<91){ // A-Z
-                value_toreturn=false
-                vim.command+=
-                    String.fromCharCode(e.keyCode)
-            }else if(e.keyCode===188){ // <
-                value_toreturn=false
-                vim.command+='<'
-            }
-        }else{
-            if(e.keyCode===8){ // backspace
-                value_toreturn=false
-                vim.command
-                    =vim.command.substring(
-                        0,
-                        vim.command.length-1
-                    )
-            }else if(e.keyCode===13){ // enter
-                value_toreturn=false
-                vim.runCommandIfPossible()
-            }else if(48<=e.keyCode&&e.keyCode<58){ // 0-9
-                value_toreturn=false
-                vim.command+=
-                    String.fromCharCode(e.keyCode)
-            }else if(65<=e.keyCode&&e.keyCode<91){ // a-z
-                value_toreturn=false
-                vim.command+=
-                    String.fromCharCode(e.keyCode+32)
-            }else if(e.keyCode===190){ // .
-                value_toreturn=false
-                vim.command+='.'
-            }else if(e.keyCode===191){ // /
-                value_toreturn=false
-                vim.command+='/'
-            }else if(e.keyCode===220){ // \
-                value_toreturn=false
-                vim.command+='\\'
-            }else{
-                value_toreturn=false
-            }
-        }
-    }else if(e.shiftKey){
-        if(e.keyCode===49){ // !
-            value_toreturn=false
-            vim.command+='!'
-        }else if(e.keyCode===52){ // $
-            value_toreturn=false
-            vim.textarea.selectionStart=
-                end_currentLine(
-                    vim.textarea.selectionStart,vim.textarea
-                )-1
-            vim.textarea.selectionEnd=vim.textarea.selectionStart+1
-        }else if(e.keyCode===54){ // ^
-            value_toreturn=false
-            !function(){
-                var lineHead
-                lineHead=getLineHeadByCursor(
-                    vim.textarea.value,
-                    vim.textarea.selectionStart
-                )
-                vim.textarea.selectionStart=lineHead
-                vim.textarea.selectionEnd=lineHead+1
-            }()
-        }else if(e.keyCode===59||e.keyCode===186){
-            /*
-             * 59: ':' for firefox and opera
-             * 186: ':' for chrome and safari
-             */
-            value_toreturn=false
-            vim.command+=':'
-        }else if(65<=e.keyCode&&e.keyCode<91){ // A-Z
-            value_toreturn=false
-            vim.command+=
-                String.fromCharCode(e.keyCode)
-        }else if(e.keyCode===188){ // <
-            value_toreturn=false
-            vim.command+='<'
-        }else if(e.keyCode===190){ // >
-            value_toreturn=false
-            vim.command+='>'
-        }else{
-            value_toreturn=true
-        }
-    }else{
+    }
+    function shortCommand(){
         if(e.keyCode===8){ // backspace
             value_toreturn=false
             vim.textarea.selectionStart=vim.textarea.selectionEnd=
@@ -1602,15 +1563,140 @@ function textarea_onkeydown_mode_0(vim,e){
             value_toreturn=true
         }
     }
-    if(0<vim.command.length&&(
-            vim.command[0]===':'||
-            vim.command[0]==='/'
-        )
-    ){
-    }else{
-        vim.runCommandIfPossible()
+    function shortCommandShift(){
+        if(e.keyCode===49){ // !
+            value_toreturn=false
+            vim.command+='!'
+        }else if(e.keyCode===52){ // $
+            value_toreturn=false
+            vim.textarea.selectionStart=
+                end_currentLine(
+                    vim.textarea.selectionStart,vim.textarea
+                )-1
+            vim.textarea.selectionEnd=vim.textarea.selectionStart+1
+        }else if(e.keyCode===54){ // ^
+            value_toreturn=false
+            !function(){
+                var lineHead
+                lineHead=getLineHeadByCursor(
+                    vim.textarea.value,
+                    vim.textarea.selectionStart
+                )
+                vim.textarea.selectionStart=lineHead
+                vim.textarea.selectionEnd=lineHead+1
+            }()
+        }else if(e.keyCode===59||e.keyCode===186){
+            /*
+             * 59: ':' for firefox and opera
+             * 186: ':' for chrome and safari
+             */
+            value_toreturn=false
+            vim.command+=':'
+        }else if(65<=e.keyCode&&e.keyCode<91){ // A-Z
+            value_toreturn=false
+            vim.command+=
+                String.fromCharCode(e.keyCode)
+        }else if(e.keyCode===188){ // <
+            value_toreturn=false
+            vim.command+='<'
+        }else if(e.keyCode===190){ // >
+            value_toreturn=false
+            vim.command+='>'
+        }else{
+            value_toreturn=true
+        }
     }
-    return value_toreturn
+    function longCommand(){
+        if(e.keyCode===8){ // backspace
+            value_toreturn=false
+            vim.command
+                =vim.command.substring(
+                    0,
+                    vim.command.length-1
+                )
+        }else if(e.keyCode===13){ // enter
+            value_toreturn=false
+            vim.runCommandIfPossible()
+        }else if(e.keyCode===32){ // space
+            value_toreturn=false
+            vim.command+=' '
+        }else if(48<=e.keyCode&&e.keyCode<58){ // 0-9
+            value_toreturn=false
+            vim.command+=
+                String.fromCharCode(e.keyCode)
+        }else if(65<=e.keyCode&&e.keyCode<91){ // a-z
+            value_toreturn=false
+            vim.command+=
+                String.fromCharCode(e.keyCode+32)
+        }else if(96<=e.keyCode&&e.keyCode<106){ // 0-9
+            value_toreturn=false
+            vim.command+=
+                String.fromCharCode(e.keyCode-48)
+        }else if(e.keyCode===186){ // ;
+            value_toreturn=false
+            vim.command+=';'
+        }else if(e.keyCode===187){ // =
+            value_toreturn=false
+            vim.command+='='
+        }else if(e.keyCode===188){ // ,
+            value_toreturn=false
+            vim.command+=','
+        }else if(e.keyCode===189){ // -
+            value_toreturn=false
+            vim.command+='-'
+        }else if(e.keyCode===190){ // .
+            value_toreturn=false
+            vim.command+='.'
+        }else if(e.keyCode===191){ // /
+            value_toreturn=false
+            vim.command+='/'
+        }else if(e.keyCode===220){ // \
+            value_toreturn=false
+            vim.command+='\\'
+        }else{
+            value_toreturn=false
+        }
+    }
+    function longCommandShift(){
+        if(e.keyCode===48){ // )
+            value_toreturn=false
+            vim.command+=')'
+        }else if(e.keyCode===49){ // !
+            value_toreturn=false
+            vim.command+='!'
+        }else if(e.keyCode===50){ // @
+            value_toreturn=false
+            vim.command+='@'
+        }else if(e.keyCode===51){ // #
+            value_toreturn=false
+            vim.command+='#'
+        }else if(e.keyCode===52){ // $
+            value_toreturn=false
+            vim.command+='$'
+        }else if(e.keyCode===53){ // %
+            value_toreturn=false
+            vim.command+='%'
+        }else if(e.keyCode===54){ // ^
+            value_toreturn=false
+            vim.command+='^'
+        }else if(e.keyCode===55){ // &
+            value_toreturn=false
+            vim.command+='&'
+        }else if(e.keyCode===56){ // *
+            value_toreturn=false
+            vim.command+='*'
+        }else if(e.keyCode===57){ // (
+            value_toreturn=false
+            vim.command+='('
+        }else if(65<=e.keyCode&&e.keyCode<91){ // A-Z
+            value_toreturn=false
+            vim.command+=
+                String.fromCharCode(e.keyCode)
+        }else if(e.keyCode===188){ // <
+            value_toreturn=false
+            vim.command+='<'
+        }
+    }
 }
 function textarea_onkeydown_mode_1(vim,e){
     var value_toreturn
@@ -1704,6 +1790,10 @@ function create_div_editor(vim){
     div_editor.style.background=vim.style.backgroundColor
     div_editor.style.height=''+vim.count_rows_toshow*12+'pt'
     div_editor.style.width=''+vim.count_cols_toshow*6+'pt'
+    vim.input_commandline=create_input_commandline(vim)
+    div_editor.appendChild(
+        vim.input_commandline
+    )
     return div_editor
 }
 function create_pre_editor(vim){
@@ -1783,9 +1873,26 @@ function create_pre_editor(vim){
         'monospace'
     return pre_editor
 }
-function create_input_commandline(){
+function create_input_commandline(vim){
     var input
     input=document.createElement('input')
+    input.id='test'
+    input.style.position='relative'
+    input.style.top=vim.count_rows_toshow*12+'pt'
+    input.oninput=function(e){
+        if(
+            0<this.value.length&&
+            this.selectionStart===this.selectionEnd
+        ){
+            vim.command+=this.value
+            this.value=''
+            vim.update()
+            setTimeout(function(){
+                input.select()
+            },0)
+        }
+        e.stopPropagation()
+    }
     return input
 }
 // end _pureFunctions
