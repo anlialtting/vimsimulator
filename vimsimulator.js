@@ -1027,7 +1027,9 @@ Vim.prototype.update=function(){
             selectionShowingState=2
         vim.pre_editor.innerHTML=''
         range=calculateShowingRange(vim)
-        while(lineNumber<lines.length&&lineNumber<range.upper){
+        while(
+            lineNumber<range.upper
+        ){
             i=partialsum_length_lines[lineNumber]+charNumber
             string_toshow_currentCharacter=
                 text[i]==='\n'
@@ -1064,7 +1066,7 @@ Vim.prototype.update=function(){
         } // for(var lineNumber=vim.lineCursor,charNumber=0;lineNumber<lines.length
         if(selectionShowingState)
             stopSelectionShowingOnOutput()
-        output_nullLines(vim,count_rows_showed)
+        outputNullLines(vim,count_rows_showed,range.upper===lines.length)
         return count_rows_showed
         function shouldStopCurrentRow(){
             return vim.count_cols_toshow<(
@@ -1178,6 +1180,17 @@ Vim.prototype.update=function(){
             selectionShowingState=0
             vim.pre_editor.innerHTML+='</span>'
         }
+        function outputNullLines(
+            vim,
+            count_rows_showed,
+            isEofReached
+        ){
+            var i
+            for(i=0;i<vim.count_rows_toshow-count_rows_showed-1;i++)
+                vim.pre_editor.appendChild(
+                    document.createTextNode((isEofReached?'~':'@')+'\n')
+                )
+        }
     }
     function calculate_lineNumber_select(vim){
         return vim.textarea.value.substring(
@@ -1192,13 +1205,6 @@ Vim.prototype.update=function(){
             :
                 vim.textarea.selectionEnd-1
         }
-    }
-    function output_nullLines(vim,count_rows_showed){
-        var i
-        for(i=0;i<vim.count_rows_toshow-count_rows_showed-1;i++)
-            vim.pre_editor.appendChild(
-                document.createTextNode('~\n')
-            )
     }
     function output_commandLine(vim){
         var s,length,span
@@ -1244,6 +1250,7 @@ Vim.prototype.update=function(){
             var i
             partialSum_rowsCount_lines=
                 vim.textarea.value.split('\n')
+            partialSum_rowsCount_lines.pop()
             for(i in partialSum_rowsCount_lines)
                 partialSum_rowsCount_lines[i]=
                     count_rows_string(
@@ -1258,11 +1265,10 @@ Vim.prototype.update=function(){
                 lower=vim.lineCursor,
                 upper=vim.lineCursor
             while(
-                upper+1&&
-                    partialSum_rowsCount_lines[upper+1]-
-                        partialSum_rowsCount_lines[lower]
-                    <=
-                    vim.count_rows_toshow-1
+                partialSum_rowsCount_lines[upper+1]-
+                    partialSum_rowsCount_lines[lower]
+                <=
+                vim.count_rows_toshow-1
             )
                 upper++
             result={
@@ -1270,6 +1276,8 @@ Vim.prototype.update=function(){
                 upper:upper,
             }
         }()
+        if(result.lower===result.upper)
+            result.upper++
         return result
     }
     function calculateLowerAndUpper(vim){
