@@ -1050,7 +1050,12 @@ Vim.prototype.update=function(){
                     startSelectionShowing()
                 if(
                     vim.mode===0&&i===cursor_end||
-                    vim.mode===1&&i-1===cursor_end||
+                    vim.mode===1&&(
+                        cursor===cursor_end?
+                            i===cursor_end+1
+                        :
+                            i===cursor_end
+                    )||
                     vim.mode===2&&i===cursor_end
                 )
                     stopSelectionShowing()
