@@ -912,11 +912,9 @@ Vim.prototype.update=function(){
         if(vim.activated){
             if(!vim.div_editor){
                 vim.div_editor=create_div_editor(vim)
-                document.body.appendChild(vim.div_editor)
-            }
-            if(!vim.pre_editor){
                 vim.pre_editor=create_pre_editor(vim)
-                document.body.appendChild(vim.pre_editor)
+                vim.div_editor.appendChild(vim.pre_editor)
+                document.body.appendChild(vim.div_editor)
             }
         }
     }
@@ -1854,18 +1852,15 @@ function textarea_onkeydown_mode_2(vim,e){
 }
 function create_div_editor(vim){
     var div_editor
-    div_editor=document.createElement('pre')
+    div_editor=document.createElement('div')
+    div_editor.className='vimontheweb_div_editor'
     div_editor.vim=vim
     // centering
-    div_editor.style.position='fixed'
-    div_editor.style.left='50%'
     div_editor.style.marginLeft=
         ''+-(vim.count_cols_toshow*6)/2+'pt'
-    div_editor.style.top='50%'
     div_editor.style.marginTop=
         ''+-(vim.count_rows_toshow*12)/2+'pt'
     // end centering
-    div_editor.style.display='none'
     div_editor.style.background=vim.style.backgroundColor
     div_editor.style.height=''+vim.count_rows_toshow*12+'pt'
     div_editor.style.width=''+vim.count_cols_toshow*6+'pt'
@@ -1873,11 +1868,24 @@ function create_div_editor(vim){
     div_editor.appendChild(
         vim.input_commandline
     )
+    document.body.appendChild(style())
     return div_editor
+    function style(){
+        var result
+        result=document.createElement('style')
+        result.textContent='.vimontheweb_div_editor{'+
+            'display:none;'+
+            'position:fixed;'+
+            'left:50%;'+
+            'top:50%;'+
+        '}'
+        return result
+    }
 }
 function create_pre_editor(vim){
     var pre_editor
     pre_editor=document.createElement('pre')
+    pre_editor.className='vimontheweb_pre_editor'
     pre_editor.vim=vim
     pre_editor.onmousedown=function(e){
         e.preventDefault()
@@ -1928,16 +1936,11 @@ function create_pre_editor(vim){
     }
     pre_editor.style.cursor='default'
     // centering
-    pre_editor.style.position='fixed'
-    pre_editor.style.left='50%'
     pre_editor.style.marginLeft=
         ''+-(vim.count_cols_toshow*6)/2+'pt'
-    pre_editor.style.top='50%'
     pre_editor.style.marginTop=
         ''+-(vim.count_rows_toshow*12)/2+'pt'
     // end centering
-    pre_editor.style.display='none'
-    pre_editor.style.border='0px'
     //pre_editor.style.backgroundColor=style.backgroundColor
     pre_editor.style.color=vim.style.color
     pre_editor.style.height=vim.count_rows_toshow*12+'pt'
@@ -1950,12 +1953,24 @@ function create_pre_editor(vim){
         '\'Courier New\','+
         '\'Courier\','+
         'monospace'
+    document.body.appendChild(style())
     return pre_editor
+    function style(){
+        var result
+        result=document.createElement('style')
+        result.textContent='.vimontheweb_pre_editor{'+
+            'display:none;'+
+            'border:0px;'+
+            'position:fixed;'+
+            'left:50%;'+
+            'top:50%;'+
+        '}'
+        return result
+    }
 }
 function create_input_commandline(vim){
     var input
     input=document.createElement('input')
-    input.id='test'
     input.style.position='relative'
     input.style.top=vim.count_rows_toshow*12+'pt'
     input.oninput=function(e){
