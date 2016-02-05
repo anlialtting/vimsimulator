@@ -1,29 +1,20 @@
 /*
     Table of Contents
         * _pureFunctions
+        * _requireJsScript
 */
 /*
 http://www.truth.sk/vim/vimbook-OPL.pdf
 */
 !function(){
 var
-    path
+    pathToThisScript
 window.Vim=Vim
 pathToThisScript=document.getElementsByTagName('script')
 pathToThisScript=pathToThisScript[pathToThisScript.length-1].src
+requireJsScripts(['Vim.commands.js','cppstl.js'])
 function Vim(){
 }
-Vim.prototype.require=function(path){
-    var script=document.createElement('script')
-    script.src=
-        pathToThisScript.substring(
-            0,
-            pathToThisScript.lastIndexOf('/')+1
-        )+path
-    document.body.appendChild(script)
-}
-Vim.prototype.require('Vim.commands.js')
-Vim.prototype.require('cppstl.js')
 Vim.prototype.setup=function(
     textarea,
     count_rows_toshow,
@@ -1520,6 +1511,32 @@ function create_input_commandline(vim){
     return input
 }
 // end _pureFunctions
+// start _requireJsScript
+function requireJsScript(path,callback){
+    var script=document.createElement('script')
+    script.src=
+        pathToThisScript.substring(
+            0,
+            pathToThisScript.lastIndexOf('/')+1
+        )+path
+    if(callback)
+        script.onload=function(){
+            callback(null)
+        }
+    document.body.appendChild(script)
+}
+function requireJsScripts(paths,callback){
+    var countdownToCallback
+    countdownToCallback=paths.length
+    paths.forEach(function(path){
+        requireJsScript(path,function(){
+            if(--countdownToCallback)
+                return
+            callback&&callback(null)
+        })
+    })
+}
+// end _requireJsScript
 }()
 var JsonFormatter={
     stringify:function(cipherParams){
