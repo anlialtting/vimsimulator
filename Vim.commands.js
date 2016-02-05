@@ -9,7 +9,7 @@ Vim.prototype.command_A=function(count){
     this.textarea.selectionEnd=i
     this.mode=1
 }
-/*Vim.prototype.command_D=function(count){
+Vim.prototype.command_D=function(count){
     var selectionStart
     selectionStart=
         this.textarea.selectionStart
@@ -373,4 +373,4 @@ Vim.prototype.command_vgt=function(count){
         getLineHeadByCursor(this.textarea.value,selectionStart)
     this.textarea.selectionStart=lineHead
     this.textarea.selectionEnd=lineHead+1
-}*/
+}
