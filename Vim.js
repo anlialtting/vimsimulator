@@ -7,11 +7,7 @@
 http://www.truth.sk/vim/vimbook-OPL.pdf
 */
 !function(){
-var
-    pathToThisScript
 window.Vim=Vim
-pathToThisScript=document.getElementsByTagName('script')
-pathToThisScript=pathToThisScript[pathToThisScript.length-1].src
 requireJsScripts(['Vim.commands.js','cppstl.js'])
 function Vim(){
 }
@@ -1514,16 +1510,20 @@ function create_input_commandline(vim){
 // start _requireJsScript
 function requireJsScript(path,callback){
     var script=document.createElement('script')
-    script.src=
-        pathToThisScript.substring(
-            0,
-            pathToThisScript.lastIndexOf('/')+1
-        )+path
+    script.src=directory()+path
     if(callback)
         script.onload=function(){
             callback(null)
         }
     document.body.appendChild(script)
+    function directory(){
+        var
+            scripts=document.getElementsByTagName('script'),
+            i
+        for(i=0;i<scripts.length;i++)
+            if(scripts[i].src.match('Vim.js'))
+                return scripts[i].src.replace('Vim.js','')
+    }
 }
 function requireJsScripts(paths,callback){
     var countdownToCallback
