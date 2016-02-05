@@ -9,10 +9,23 @@ http://www.truth.sk/vim/vimbook-OPL.pdf
 !function(){
 var
     JsonFormatter,
-    cppstl
+    path
 window.Vim=Vim
+pathToThisScript=document.getElementsByTagName('script')
+pathToThisScript=pathToThisScript[pathToThisScript.length-1].src
 function Vim(){
 }
+Vim.prototype.require=function(path){
+    var script=document.createElement('script')
+    script.src=
+        pathToThisScript.substring(
+            0,
+            pathToThisScript.lastIndexOf('/')+1
+        )+path
+    document.body.appendChild(script)
+}
+//Vim.prototype.require('Vim.commands.js')
+Vim.prototype.require('cppstl.js')
 Vim.prototype.setup=function(
     textarea,
     count_rows_toshow,
@@ -1356,36 +1369,6 @@ Vim.prototype.update_pre_editor=function(){
         this.style.backgroundColor
     this.pre_editor.style.color=
         this.style.color
-}
-cppstl={}
-cppstl.lower_bound=function(array,key){
-    var first=0,last=array.length
-    while(first!=last){
-        var median=Math.floor((first+last)/2)
-        if(array[median]<key)
-            first=median+1
-        else
-            last=median
-    }
-    return first
-}
-cppstl.upper_bound=function(array,key){
-    var first=0,last=array.length,median
-    while(first!=last){
-        median=Math.floor((first+last)/2)
-        if(array[median]<=key)
-            first=median+1
-        else
-            last=median
-    }
-    return first
-}
-cppstl.partial_sum=function(input){
-    var output,i
-    output=input.slice(0)
-    for(i=1;i<output.length;i++)
-        output[i]+=output[i-1]
-    return output
 }
 String.prototype.repeat=function(num){
     return new Array(num+1).join(this)
