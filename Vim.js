@@ -217,7 +217,7 @@ Vim.prototype.cursorMovesUp=function(){
             return
         var p=this.textarea.selectionStart
         var start=getLineStartByCursor(this.textarea.value,p)
-        var end=getLineEndByCursor(this.textarea,value,p)
+        var end=getLineEndByCursor(this.textarea.value,p)
         var preEnd=start
         var preStart=getLineStartByCursor(this.textarea.value,preEnd-1)
         this.textarea.selectionStart=
@@ -266,7 +266,7 @@ Vim.prototype.cursorMovesDown=function(){
         var start=getLineStartByCursor(this.textarea.value,p)
         var end=getLineEndByCursor(this.textarea.value,p)
         var nxtStart=end
-        var nxtEnd=getLineEndByCursor(this.textarea,nxtStart)
+        var nxtEnd=getLineEndByCursor(this.textarea.value,nxtStart)
         this.textarea.selectionStart=
             this.textarea.selectionEnd=nxtStart+Math.min(
                 nxtEnd-1-nxtStart,
