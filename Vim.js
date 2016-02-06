@@ -37,9 +37,9 @@ References:
     this.command=''
     this.activated=false
     this.col_cursor=
-        this.textarea.selectionStart-start_currentLine(
-            this.textarea.selectionStart,
-            this.textarea
+        this.textarea.selectionStart-getLineStartByCursor(
+            this.textarea.value,
+            this.textarea.selectionStart
         )
     this.lineCursor=0
     this.pasteBoard={
@@ -165,7 +165,7 @@ Vim.prototype.yank=function(type,content){
 Vim.prototype.cursorMovesLeft=function(){
     if(this.mode===0||this.mode===1){
         var p=this.textarea.selectionStart
-        var start=start_currentLine(p,this.textarea)
+        var start=getLineStartByCursor(this.textarea.value,p)
         if(0<=p-1&&this.textarea.value[p-1]!='\n')
             this.textarea.selectionStart=
                 this.textarea.selectionEnd=p-1
@@ -183,7 +183,7 @@ Vim.prototype.cursorMovesLeft=function(){
 Vim.prototype.cursorMovesRight=function(){
     if(this.mode===0||this.mode===1){
         var p=this.textarea.selectionStart
-        var start=start_currentLine(p,this.textarea)
+        var start=getLineStartByCursor(this.textarea.value,p)
         if(
             p+1<this.textarea.value.length&&(this.mode===0
                 ?this.textarea.value[p+1]!=='\n'
@@ -216,10 +216,10 @@ Vim.prototype.cursorMovesUp=function(){
         )
             return
         var p=this.textarea.selectionStart
-        var start=start_currentLine(p,this.textarea)
-        var end=end_currentLine(p,this.textarea)
+        var start=getLineStartByCursor(this.textarea.value,p)
+        var end=getLineEndByCursor(this.textarea,value,p)
         var preEnd=start
-        var preStart=start_currentLine(preEnd-1,this.textarea)
+        var preStart=getLineStartByCursor(this.textarea.value,preEnd-1)
         this.textarea.selectionStart=
             this.textarea.selectionEnd=
                 preStart+Math.min(
@@ -235,8 +235,8 @@ Vim.prototype.cursorMovesUp=function(){
             p=this.textarea.selectionStart
         else
             p=this.textarea.selectionEnd
-        var preEnd=start_currentLine(p,this.textarea)
-        var preStart=start_currentLine(preEnd-1,this.textarea)
+        var preEnd=getLineStartByCursor(this.textarea.value,p)
+        var preStart=getLineStartByCursor(this.textarea.value,preEnd-1)
         p=preStart+Math.min(
             preEnd-1-preStart,
             this.col_cursor
@@ -263,10 +263,10 @@ Vim.prototype.cursorMovesDown=function(){
         )
             return
         var p=this.textarea.selectionStart
-        var start=start_currentLine(p,this.textarea)
-        var end=end_currentLine(p,this.textarea)
+        var start=getLineStartByCursor(this.textarea.value,p)
+        var end=getLineEndByCursor(this.textarea.value,p)
         var nxtStart=end
-        var nxtEnd=end_currentLine(nxtStart,this.textarea)
+        var nxtEnd=getLineEndByCursor(this.textarea,nxtStart)
         this.textarea.selectionStart=
             this.textarea.selectionEnd=nxtStart+Math.min(
                 nxtEnd-1-nxtStart,
@@ -280,8 +280,8 @@ Vim.prototype.cursorMovesDown=function(){
             var p=this.textarea.selectionStart
         else
             var p=this.textarea.selectionEnd
-        var nxtStart=end_currentLine(p,this.textarea)
-        var nxtEnd=end_currentLine(nxtStart,this.textarea)
+        var nxtStart=getLineEndByCursor(this.textarea.value,p)
+        var nxtEnd=getLineEndByCursor(this.textarea.value,nxtStart)
         p=nxtStart+Math.min(
             nxtEnd-1-nxtStart,
             this.col_cursor
@@ -1018,9 +1018,9 @@ function textarea_onkeydown(vim,e){
     ){ // ctrl+shift+v
         vim.activated=!vim.activated
         vim.col_cursor=
-            vim.textarea.selectionStart-start_currentLine(
-                vim.textarea.selectionStart,
-                vim.textarea
+            vim.textarea.selectionStart-getLineStartByCursor(
+                vim.textarea.value,
+                vim.textarea.selectionStart
             )
         value_toreturn=false
     }else if(!vim.activated){
@@ -1100,8 +1100,9 @@ function textarea_onkeydown_mode_0(vim,e){
                     !=vim.textarea.value.split('\n').length-1-1
             ){
                 vim.textarea.selectionStart=
-                vim.textarea.selectionEnd=end_currentLine(
-                    vim.textarea.selectionStart,vim.textarea
+                vim.textarea.selectionEnd=getLineEndByCursor(
+                    vim.textarea.value,
+                    vim.textarea.selectionStart
                 )
             }
         }else if(e.keyCode===32){ // space for chrome and safari
@@ -1110,14 +1111,16 @@ function textarea_onkeydown_mode_0(vim,e){
         }else if(e.keyCode===35){ // end
             value_toreturn=false
             vim.textarea.selectionStart=
-                end_currentLine(
-                    vim.textarea.selectionStart,vim.textarea
+                getLineEndByCursor(
+                    vim.textarea.value,
+                    vim.textarea.selectionStart
                 )-1
             vim.textarea.selectionEnd=vim.textarea.selectionStart+1
         }else if(e.keyCode===36){ // home
             value_toreturn=false
-            vim.textarea.selectionStart=start_currentLine(
-                vim.textarea.selectionStart,vim.textarea
+            vim.textarea.selectionStart=getLineStartByCursor(
+                vim.textarea.value,
+                vim.textarea.selectionStart
             )
             vim.textarea.selectionEnd=vim.textarea.selectionStart+1
         }else if(e.keyCode===37){ // left arrow
@@ -1173,8 +1176,9 @@ function textarea_onkeydown_mode_0(vim,e){
         }else if(e.keyCode===52){ // $
             value_toreturn=false
             vim.textarea.selectionStart=
-                end_currentLine(
-                    vim.textarea.selectionStart,vim.textarea
+                getLineEndByCursor(
+                    vim.textarea.value,
+                    vim.textarea.selectionStart
                 )-1
             vim.textarea.selectionEnd=vim.textarea.selectionStart+1
         }else if(e.keyCode===54){ // ^
@@ -1322,15 +1326,16 @@ function textarea_onkeydown_mode_1(vim,e){
     }else if(e.keyCode===35){ // end
         value_toreturn=false
         vim.textarea.selectionStart=
-            end_currentLine(
-                vim.textarea.selectionStart,vim.textarea
+            getLineEndByCursor(
+                vim.textarea.value,
+                vim.textarea.selectionStart
             )-1
         vim.textarea.selectionEnd=vim.textarea.selectionStart
     }else if(e.keyCode===36){ // home
         value_toreturn=false
-        vim.textarea.selectionStart=start_currentLine(
-            vim.textarea.selectionStart,
-            vim.textarea
+        vim.textarea.selectionStart=getLineStartByCursor(
+            vim.textarea.value,
+            vim.textarea.selectionStart
         )
         vim.textarea.selectionEnd=vim.textarea.selectionStart
     }else if(e.keyCode===37){ // left arrow
@@ -1597,9 +1602,3 @@ function getLineHeadByCursor(text,cursor){
     return lineStart+text.substring(lineStart).search(/[^ ]/)
 }
 // end 2015-09-06
-function start_currentLine(p,textarea){
-    return getLineStartByCursor(textarea.value,p)
-}
-function end_currentLine(p,textarea){
-    return getLineEndByCursor(textarea.value,p)
-}

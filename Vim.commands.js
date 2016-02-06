@@ -43,16 +43,16 @@ Vim.prototype.command_G=function(count){
         count--
     c=0
     for(i=0;i<count;i++)
-        c=end_currentLine(c,this.textarea)
+        c=getLineEndByCursor(this.textarea.value,c)
     this.textarea.selectionStart=
     this.textarea.selectionEnd=c
 }
 Vim.prototype.command_I=function(count){
     var start_currentLine_textarea
     start_currentLine_textarea=
-        start_currentLine(
-            this.textarea.selectionStart,
-            this.textarea
+        getLineStartByCursor(
+            this.textarea.value,
+            this.textarea.selectionStart
         )
     this.textarea.selectionStart=
     this.textarea.selectionEnd=
@@ -66,9 +66,9 @@ Vim.prototype.command_O=function(count){
     var
         prefixingWhitespaces,
         startOfCurrentLine
-    startOfCurrentLine=start_currentLine(
-        this.textarea.selectionStart,
-        this.textarea
+    startOfCurrentLine=getLineStartByCursor(
+        this.textarea.value,
+        this.textarea.selectionStart
     )
     prefixingWhitespaces=
         function(result){
@@ -106,7 +106,7 @@ Vim.prototype.command_P=function(count){
             c+this.pasteBoard.content.length-1
     }else if(this.pasteBoard.type===1){
         var c=this.textarea.selectionStart
-        c=start_currentLine(c,this.textarea)
+        c=getLineStartByCursor(this.textarea.value,c)
         var s=this.textarea.value.substring(0,c)
         for(var i=0;i<count;i++)
             s+=this.pasteBoard.content
@@ -135,9 +135,9 @@ Vim.prototype.command_dd=function(count){
         f=this.textarea.selectionStart,
         l=this.textarea.selectionStart,
         i
-    f=start_currentLine(f,this.textarea)
+    f=getLineStartByCursor(this.textarea.value,f)
     for(i=0;i<count;i++)
-        l=end_currentLine(l,this.textarea)
+        l=getLineEndByCursor(this.textarea.value,l)
     this.yank(1,this.textarea.value.substring(f,l))
     this.textarea.value
 }
@@ -169,17 +169,17 @@ Vim.prototype.command_o=function(count){
         function(vim){
             var result
             result=vim.textarea.value.substring(
-                start_currentLine(
-                    vim.textarea.selectionStart,
-                    vim.textarea
+                getLineStartByCursor(
+                    vim.textarea.value,
+                    vim.textarea.selectionStart
                 )
             )
             result=result.substring(0,result.search(/[^ ]/))
             return result
         }(this)
-    endOfCurrentLine=end_currentLine(
-        this.textarea.selectionStart,
-        this.textarea
+    endOfCurrentLine=getLineEndByCursor(
+        this.textarea.value,
+        this.textarea.selectionStart
     )
     this.textarea.value=
         this.textarea.value.substring(0,endOfCurrentLine)+
@@ -212,8 +212,9 @@ Vim.prototype.command_p=function(count){
         this.textarea.selectionStart=
             c+this.pasteBoard.content.length-1
     }else if(this.pasteBoard.type===1){
-        var first_nextLine=end_currentLine(
-            this.textarea.selectionStart,this.textarea
+        var first_nextLine=getLineEndByCursor(
+            this.textarea.value,
+            this.textarea.selectionStart
         )
         var s=this.textarea.value.substring(0,first_nextLine)
         while(count--)
@@ -272,9 +273,9 @@ Vim.prototype.command_dd=function(count){
     count=count||1
     f=this.textarea.selectionStart
     l=this.textarea.selectionStart
-    f=start_currentLine(f,this.textarea)
+    f=getLineStartByCursor(this.textarea.value,f)
     for(i=0;i<count;i++)
-        l=end_currentLine(l,this.textarea)
+        l=getLineEndByCursor(this.textarea.value,l)
     this.yank(1,this.textarea.value.substring(f,l))
     this.textarea.value
         =this.textarea.value.substring(0,f)
@@ -285,9 +286,9 @@ Vim.prototype.command_dd=function(count){
         this.textarea.selectionStart=this.textarea.selectionEnd=f
     else{
         this.textarea.selectionStart=this.textarea.selectionEnd=
-            start_currentLine(
-                this.textarea.value.length-1,
-                this.textarea
+            getLineStartByCursor(
+                this.textarea.value,
+                this.textarea.value.length-1
             )
     }
 }
@@ -296,7 +297,7 @@ Vim.prototype.command_gg=function(count){
         c=0
     count=count===undefined?0:count-1
     while(count--)
-        c=end_currentLine(c,this.textarea)
+        c=getLineEndByCursor(this.textarea.value,c)
     this.textarea.selectionStart=
         this.textarea.selectionEnd=c
 }
@@ -323,9 +324,9 @@ Vim.prototype.command_yy=function(count){
     count=count||1
     var f=this.textarea.selectionStart,
         l=this.textarea.selectionStart
-    f=start_currentLine(f,this.textarea)
+    f=getLineStartByCursor(this.textarea.value,f)
     for(var i=0;i<count;i++)
-        l=end_currentLine(l,this.textarea)
+        l=getLineEndByCursor(this.textarea.value,l)
     this.yank(1,this.textarea.value.substring(f,l))
 }
 Vim.prototype.command_ltlt=function(count){
@@ -345,8 +346,10 @@ Vim.prototype.command_gtgt=function(count){
         lineNumber,
         lines
     count=count||1
-    start_currentLine_textarea=
-        start_currentLine(this.textarea.selectionStart,this.textarea)
+    start_currentLine_textarea=getLineStartByCursor(
+        this.textarea.value,
+        this.textarea.selectionStart
+    )
     lineNumber=
         lineNumberOf(this.textarea.value,this.textarea.selectionStart)
     lines=linesOf(this.textarea.value)
