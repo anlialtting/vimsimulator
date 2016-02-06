@@ -382,6 +382,11 @@ Vim.prototype.runCommandIfPossible=function(){
             result.matched=true
             result.changed=true
         }
+        if(cmd==='X'){
+            vim.command_X(argument)
+            result.matched=true
+            result.changed=true
+        }
         if(cmd==='a'){
             var i=vim.textarea.selectionStart
             if(i+1<vim.textarea.value.length)
@@ -439,6 +444,11 @@ Vim.prototype.runCommandIfPossible=function(){
             vim.mode=2
             vim.visualmode.fixedCursor=vim.textarea.selectionStart
             result.matched=true
+        }
+        if(cmd==='x'){
+            vim.command_x(argument)
+            result.matched=true
+            result.changed=true
         }
         if(cmd==='dd'){
             vim.command_dd(argument)
@@ -978,9 +988,6 @@ Vim.prototype.update_pre_editor=function(){
         this.style.backgroundColor
     this.pre_editor.style.color=
         this.style.color
-}
-String.prototype.repeat=function(num){
-    return new Array(num+1).join(this)
 }
 // begin _pureFunctions
 function count_rows_string(countOfColsPerRow,string){

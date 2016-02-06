@@ -119,6 +119,16 @@ Vim.prototype.command_P=function(count){
         this.textarea.selectionEnd=c
     }
 }
+Vim.prototype.command_X=function(count){
+    var selectionStart=this.textarea.selectionStart
+    count=count||1
+    this.textarea.value=this.textarea.value.substring(
+        0,this.textarea.selectionStart-count
+    )+this.textarea.value.substring(
+        this.textarea.selectionStart
+    )
+    this.textarea.selectionStart=selectionStart-count
+}
 Vim.prototype.command_dd=function(count){
     count=count||1
     var
@@ -221,9 +231,9 @@ Vim.prototype.command_r=function(count,string){
     var c=this.textarea.selectionStart
     count=count||1
     this.textarea.value=
-        this.textarea.value.substring(0,c)
-        +string.repeat(count)
-        +this.textarea.value.substring(
+        this.textarea.value.substring(0,c)+
+        Array(count+1).join(string)+
+        this.textarea.value.substring(
             c+count,this.textarea.value.length
         )
     this.textarea.selectionStart=c+count-1
@@ -241,6 +251,16 @@ Vim.prototype.command_u=function(){
     if(0<=this.histories.length-1)
         this.textarea.value=this.histories[this.histories.length-1]
     this.textarea.selectionStart=c
+}
+Vim.prototype.command_x=function(count){
+    var selectionStart=this.textarea.selectionStart
+    count=count||1
+    this.textarea.value=this.textarea.value.substring(
+        0,this.textarea.selectionStart
+    )+this.textarea.value.substring(
+        this.textarea.selectionStart+count
+    )
+    this.textarea.selectionStart=selectionStart
 }
 Vim.prototype.command_dot=function(count){
 }
