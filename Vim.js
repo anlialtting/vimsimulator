@@ -62,16 +62,16 @@ References:
     this.style.backgroundColor='rgba(0%,0%,0%,0.8)'
     this.style.color='white'
     this.stylesheet_eol='color:dodgerblue;'
-    this.afterinput_textarea=function(){}
-    this.afterkeydown_textarea=function(){}
-    this.afterkeyup_textarea=function(){}
-    this.write=function(){}
+    this.afterinput_textarea=()=>{}
+    this.afterkeydown_textarea=()=>{}
+    this.afterkeyup_textarea=()=>{}
+    this.write=()=>{}
     setupTextarea(this)
     function setupTextarea(vim){
-        vim.textarea.onclick=function(){
+        vim.textarea.onclick=()=>{
             vim.update()
         }
-        vim.textarea.onkeydown=function(e){
+        vim.textarea.onkeydown=e=>{
             if(
                 textarea_onkeydown(vim,e)===false
             ){
@@ -79,17 +79,17 @@ References:
                 e.stopPropagation()
             }
         }
-        vim.textarea.onkeyup=function(){
+        vim.textarea.onkeyup=()=>{
             vim.afterkeyup_textarea()
         }
-        vim.textarea.oninput=function(){
+        vim.textarea.oninput=()=>{
             vim.afterinput_textarea()
             vim.update()
         }
-        vim.textarea.onblur=function(){
+        vim.textarea.onblur=()=>{
             vim.update()
         }
-        vim.textarea.onfocus=function(){
+        vim.textarea.onfocus=()=>{
             vim.update()
         }
     }
