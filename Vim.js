@@ -1,16 +1,16 @@
 /*
     Table of Contents
         * _pureFunctions
-        * _requireJsScript
+        * _evalScript
 */
 /*
 http://www.truth.sk/vim/vimbook-OPL.pdf
 */
-!function(){
-var directoryOfThisScript
+(()=>{
 window.Vim=Vim
-directoryOfThisScript=document.currentScript.src.replace(/[^\/]*$/,'')
-requireJsScripts(['Vim.commands.js','cppstl.js'])
+evalScript.directoryOfThisScript=
+    document.currentScript.src.replace(/[^\/]*$/,'')
+evalScripts(['Vim.commands.js','cppstl.js'])
 function Vim(){
 }
 Vim.prototype.setup=function(
@@ -1521,29 +1521,31 @@ function create_input_commandline(vim){
     return input
 }
 // end _pureFunctions
-// start _requireJsScript
-function requireJsScript(path,callback){
-    var script=document.createElement('script')
-    script.src=directoryOfThisScript+path
-    if(callback)
-        script.onload=function(){
-            callback(null)
+// start _evalScript
+function evalScript(path,callback){
+    var request=new XMLHttpRequest
+    request.onreadystatechange=()=>{
+        if(request.readyState===4&&request.status===200){
+            eval(request.responseText)
+            callback&&callback(null)
         }
-    document.body.appendChild(script)
+    }
+    request.open('GET',evalScript.directoryOfThisScript+path)
+    request.send()
 }
-function requireJsScripts(paths,callback){
+function evalScripts(paths,callback){
     var countdownToCallback
     countdownToCallback=paths.length
-    paths.forEach(function(path){
-        requireJsScript(path,function(){
+    paths.forEach(path=>{
+        evalScript(path,()=>{
             if(--countdownToCallback)
                 return
             callback&&callback(null)
         })
     })
 }
-// end _requireJsScript
-}()
+// end _evalScript
+})()
 var JsonFormatter={
     stringify:function(cipherParams){
         var jsonObj={
