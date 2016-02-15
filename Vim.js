@@ -7,6 +7,12 @@
 http://www.truth.sk/vim/vimbook-OPL.pdf
 */
 (()=>{
+var monospaceFonts=
+    '\'WenQuanYi Zen Hei Mono\','+
+    '\'Consolas\','+
+    '\'Courier New\','+
+    '\'Courier\','+
+    'monospace'
 window.Vim=Vim
 evalScript.directoryOfThisScript=
     document.currentScript.src.replace(/[^\/]*$/,'')
@@ -140,8 +146,8 @@ Vim.prototype.indent=function(beginLine,endLine){
         currentLine!=endLine;
         currentLine++
     ){
-        lines[currentLine]
-            =indent(lines[currentLine])
+        lines[currentLine]=
+            indent(lines[currentLine])
     }
     this.textarea.value=lines.join('\n')
     function indent(s){
@@ -1394,11 +1400,18 @@ function create_div_editor(vim){
     // end centering
     div_editor.style.background=vim.style.backgroundColor
     div_editor.style.height=''+vim.count_rows_toshow*12+'pt'
-    div_editor.style.width=''+vim.count_cols_toshow*6+'pt'
     vim.input_commandline=create_input_commandline(vim)
     div_editor.appendChild(
         vim.input_commandline
     )
+    div_editor.appendChild((()=>{
+        var div=document.createElement('div')
+        div.textContent='.'.repeat(vim.count_cols_toshow)
+        div.style.visibility='hidden'
+        div.style.fontSize='12pt'
+        div.style.fontFamily=monospaceFonts
+        return div
+    })())
     document.body.appendChild(style())
     return div_editor
     function style(){
@@ -1478,12 +1491,7 @@ function create_pre_editor(vim){
     pre_editor.style.width=vim.count_cols_toshow*6+'pt'
     pre_editor.style.lineHeight='12pt'
     pre_editor.style.letterSpacing='0pt'
-    pre_editor.style.fontFamily=
-        '\'WenQuanYi Zen Hei Mono\','+
-        '\'Consolas\','+
-        '\'Courier New\','+
-        '\'Courier\','+
-        'monospace'
+    pre_editor.style.fontFamily=monospaceFonts
     document.body.appendChild(style())
     return pre_editor
     function style(){
