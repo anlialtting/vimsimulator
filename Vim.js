@@ -1553,7 +1553,6 @@ function evalScripts(paths,callback){
     })
 }
 // end _evalScript
-})()
 var JsonFormatter={
     stringify:function(cipherParams){
         var jsonObj={
@@ -1612,3 +1611,4 @@ function getLineHeadByCursor(text,cursor){
     return lineStart+text.substring(lineStart).search(/[^ ]/)
 }
 // end 2015-09-06
+})()

@@ -397,3 +397,61 @@ Vim.prototype.command_vgt=function(count){
     this.textarea.selectionStart=lineHead
     this.textarea.selectionEnd=lineHead+1
 }
+var JsonFormatter={
+    stringify:function(cipherParams){
+        var jsonObj={
+            ct:cipherParams.ciphertext.toString(CryptoJS.enc.Base64)
+        }
+        if(cipherParams.iv){
+            jsonObj.iv=
+                cipherParams.iv.toString()
+        }
+        if(cipherParams.salt) {
+            jsonObj.s=
+                cipherParams.salt.toString()
+        }
+        return JSON.stringify(jsonObj)
+    },
+    parse:function(jsonStr){
+        var jsonObj=JSON.parse(jsonStr)
+        var cipherParams=CryptoJS.lib.CipherParams.create({
+            ciphertext:CryptoJS.enc.Base64.parse(jsonObj.ct)
+        })
+        if(jsonObj.iv){
+            cipherParams.iv=
+                CryptoJS.enc.Hex.parse(jsonObj.iv)
+        }
+        if(jsonObj.s){
+            cipherParams.salt=
+                CryptoJS.enc.Hex.parse(jsonObj.s)
+        }
+        return cipherParams
+    }
+}
+// begin 2015-09-07
+function linesOf(text){
+/*
+    A line should not include EOL,
+    since it has already been seperated from the others.
+*/
+    var result
+    result=text.split('\n')
+    result.pop()
+    return result
+}
+function lineNumberOf(text,cursor){
+    return text.substring(0,cursor).split('\n').length-1
+}
+// end 2015-09-07
+// begin 2015-09-06
+function getLineStartByCursor(text,cursor){
+    return text.substring(0,cursor).lastIndexOf('\n')+1
+}
+function getLineEndByCursor(text,cursor){
+    return text.indexOf('\n',cursor)+1
+}
+function getLineHeadByCursor(text,cursor){
+    var lineStart=getLineStartByCursor(text,cursor)
+    return lineStart+text.substring(lineStart).search(/[^ ]/)
+}
+// end 2015-09-06
