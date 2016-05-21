@@ -1,22 +1,7 @@
 <!doctype html>
-<html>
-<head>
 <meta charset=utf-8>
 <title>Vim on the Web</title>
-<style>
-@font-face{
-    font-family:monospaced_fonts;
-    src:local(Monospace);
-    font-size:12pt;
-}
-@font-face{
-    font-family:monospaced_fonts;
-    unicode-range:U+00-024F;
-    src:local(Monospace);
-}
-</style>
-</head>
-<body>
+<link rel=stylesheet href=vim.css>
 <textarea id=textarea_source rows=24 cols=80>
 Ctrl+Shift+V to enable/disable vim simulator.
 
@@ -128,12 +113,6 @@ ajlfkadlkfalkfmalkfmaslkfmlaksflkasmfllafkaflaflkslflklkllklmlfa
 ajlfkadlkfalkfmalkfmaslkfmlaksflkasmfllafkaflaflkslflklkllklmlfa
 ajlfkadlkfalkfmalkfmaslkfmlaksflkasmfllafkaflaflkslflklkllklmlfa
 </textarea>
-<script src=Vim.js></script>
-<script src=https://cdn.rawgit.com/sytelus/CryptoJS/7fbfbbee0d005b31746bc5858c70c359e98308e5/rollups/aes.js></script>
-<script>
-(new Vim).setup(
-    document.getElementById('textarea_source')
-)
-</script>
+<script src=https://cdn.rawgit.com/anliting/require/6561e1d840d8fad9180ecb571b87fa894e8249ca/require.js async data-main=vim></script>
 </body>
 </html>

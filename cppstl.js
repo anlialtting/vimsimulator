@@ -1,6 +1,6 @@
 window.cppstl={}
-cppstl.lower_bound=function(array,key){
-    var first=0,last=array.length
+cppstl.lower_bound=(array,key)=>{
+    let first=0,last=array.length
     while(first!=last){
         var median=Math.floor((first+last)/2)
         if(array[median]<key)
@@ -10,8 +10,8 @@ cppstl.lower_bound=function(array,key){
     }
     return first
 }
-cppstl.upper_bound=function(array,key){
-    var first=0,last=array.length,median
+cppstl.upper_bound=(array,key)=>{
+    let first=0,last=array.length,median
     while(first!=last){
         median=Math.floor((first+last)/2)
         if(array[median]<=key)
@@ -21,10 +21,9 @@ cppstl.upper_bound=function(array,key){
     }
     return first
 }
-cppstl.partial_sum=function(input){
-    var output,i
-    output=input.slice(0)
-    for(i=1;i<output.length;i++)
+cppstl.partial_sum=input=>{
+    let output=input.slice(0)
+    for(let i=1;i<output.length;i++)
         output[i]+=output[i-1]
     return output
 }
