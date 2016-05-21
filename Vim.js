@@ -179,7 +179,8 @@ Vim.prototype.cursorMovesLeft=function(){
     }else if(this.mode===2){
         if(this.visualmode.fixedCursor+1===this.textarea.selectionEnd){
             if(this.textarea.value[this.textarea.selectionStart-1]!=='\n')
-                this.textarea.selectionStart=this.textarea.selectionStart-1
+                this.textarea.selectionStart=
+                    this.textarea.selectionStart-1
         }else{
             if(this.textarea.value[this.textarea.selectionEnd-2]!=='\n')
                 this.textarea.selectionEnd=this.textarea.selectionEnd-1
@@ -202,7 +203,8 @@ Vim.prototype.cursorMovesRight=function(){
     }else if(this.mode===2){
         if(this.textarea.selectionStart<this.visualmode.fixedCursor){
             if(this.textarea.value[this.textarea.selectionStart]!=='\n')
-                this.textarea.selectionStart=this.textarea.selectionStart+1
+                this.textarea.selectionStart=
+                    this.textarea.selectionStart+1
         }else{
             if(this.textarea.value[this.textarea.selectionEnd-1]!=='\n')
                 this.textarea.selectionEnd=this.textarea.selectionEnd+1
@@ -703,7 +705,7 @@ Vim.prototype.update=function(){
                 showCurrentCharacter()
             if(text[i]==='\n')
                 stopCurrentLine()
-        } // for(var lineNumber=vim.lineCursor,charNumber=0;lineNumber<lines.length
+        }
         if(selectionShowingState)
             stopSelectionShowingOnOutput()
         outputNullLines(vim,count_rows_showed,range.upper===lines.length)
@@ -774,7 +776,8 @@ Vim.prototype.update=function(){
         function showLineNumber(){
             if(row_currentLine===0){
                 var s=(lineNumber+1).toString()
-                currentLine+=spaces(countOfColsForPaddingForLineNumber-s.length-1)
+                currentLine+=
+                    spaces(countOfColsForPaddingForLineNumber-s.length-1)
                 currentLine+=
                     '<span style="color:lawngreen;">'+
                         s+
@@ -930,7 +933,8 @@ Vim.prototype.update=function(){
                         countOfColsPerRow,partialSum_rowsCount_lines[i]
                     )
             for(let i=1;i<partialSum_rowsCount_lines.length;i++)
-                partialSum_rowsCount_lines[i]+=partialSum_rowsCount_lines[i-1]
+                partialSum_rowsCount_lines[i]+=
+                    partialSum_rowsCount_lines[i-1]
             partialSum_rowsCount_lines.unshift(0)
         })()
         ;(()=>{
@@ -960,10 +964,9 @@ Vim.prototype.update=function(){
         vim.lineCursor=Math.min(vim.lineCursor,range.upper-1)
     }
     function linesOf(text){
-        var lines
-        lines=text.split('\n')
+        let lines=text.split('\n')
         lines.pop()
-        lines.forEach(function(e,i){
+        lines.forEach((e,i)=>{
             lines[i]+='\n'
         })
         return lines
@@ -971,7 +974,7 @@ Vim.prototype.update=function(){
     function calculate_length_lines(){
         var length_lines
         length_lines=new Array(lines.length)
-        lines.forEach(function(e,i){
+        lines.forEach((e,i)=>{
             length_lines[i]=lines[i].length
         })
         return length_lines
