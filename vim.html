@@ -1,7 +1,7 @@
 <!doctype html>
 <html>
 <head>
-<meta charset="utf-8">
+<meta charset=utf-8>
 <title>Vim on the Web</title>
 <style>
 @font-face{
@@ -17,7 +17,7 @@
 </style>
 </head>
 <body>
-<textarea id="textarea_source" rows="24" cols="80">
+<textarea id=textarea_source rows=24 cols=80>
 Ctrl+Shift+V to enable/disable vim simulator.
 
 #include&lt;stdio.h&gt;
@@ -128,16 +128,12 @@ ajlfkadlkfalkfmalkfmaslkfmlaksflkasmfllafkaflaflkslflklkllklmlfa
 ajlfkadlkfalkfmalkfmaslkfmlaksflkasmfllafkaflaflkslflklkllklmlfa
 ajlfkadlkfalkfmalkfmaslkfmlaksflkasmfllafkaflaflkslflklkllklmlfa
 </textarea>
-<script src="Vim.js"></script>
-<script src="https://crypto-js.googlecode.com/svn/tags/3.1.2/build/rollups/aes.js"></script>
+<script src=Vim.js></script>
+<script src=https://cdn.rawgit.com/sytelus/CryptoJS/7fbfbbee0d005b31746bc5858c70c359e98308e5/rollups/aes.js></script>
 <script>
-!function(){
-    var vim
-    vim=new Vim
-    vim.setup(
-        document.getElementById('textarea_source')
-    )
-}()
+(new Vim).setup(
+    document.getElementById('textarea_source')
+)
 </script>
 </body>
 </html>

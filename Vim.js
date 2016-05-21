@@ -113,11 +113,11 @@ Vim.prototype.unindent=function(beginLine,endLine){
         currentLine!=endLine;
         currentLine++
     ){
-        lines[currentLine]
-            =unindent(lines[currentLine])
+        lines[currentLine]=
+            unindent(lines[currentLine])
     }
     this.textarea.value=lines.join('\n')
-    !function(vim){
+    (vim=>{
         var sum,i,lineHead
         sum=0
         for(i=0;i<beginLine;i++)
@@ -126,7 +126,7 @@ Vim.prototype.unindent=function(beginLine,endLine){
             getLineHeadByCursor(vim.textarea.value,sum)
         vim.textarea.selectionStart=lineHead
         vim.textarea.selectionEnd=lineHead+1
-    }(this)
+    })(this)
     function unindent(s){
         return s.substring(
             Math.min(
@@ -324,7 +324,7 @@ Vim.prototype.runCommandIfPossible=function(){
     var cmd=this.command
     var argument
     if(48<=cmd.charCodeAt(0)&&cmd.charCodeAt(0)<58)
-        !function(){
+        (()=>{
             var i
             i=0
             argument=0
@@ -333,20 +333,19 @@ Vim.prototype.runCommandIfPossible=function(){
                 i++
             }
             cmd=cmd.substring(i,cmd.length)
-        }()
-    !function(vim){
-        var result
-        result=tryCommand(vim)
+        })()
+    ;(vim=>{
+        let result=tryCommand(vim)
         if(result.matched){
             if(result.changed)
                 vim.lastChangingCommand=
                     vim.command
             vim.command=''
         }
-    }(this)
+    })(this)
     //
     if(this.command[0]===':'){
-        for(var i=1;i<this.command.length;i++){
+        for(let i=1;i<this.command.length;i++){
             if(this.command[i]==='q')
                 this.activated=false
             if(this.command[i]==='w'){
@@ -784,8 +783,7 @@ Vim.prototype.update=function(){
             }else
                 currentLine+=spaces(countOfColsForPaddingForLineNumber)
             function spaces(n){
-                var result
-                result=''
+                let result=''
                 while(result.length<n)
                     result+=' '
                 return result
@@ -826,8 +824,7 @@ Vim.prototype.update=function(){
             count_rows_showed,
             isEofReached
         ){
-            var i
-            for(i=0;i<vim.count_rows_toshow-count_rows_showed-1;i++)
+            for(let i=0;i<vim.count_rows_toshow-count_rows_showed-1;i++)
                 vim.pre_editor.appendChild(
                     document.createTextNode((isEofReached?'~':'@')+'\n')
                 )
@@ -887,22 +884,23 @@ Vim.prototype.update=function(){
     }
     function calculateShowingRange(vim){
         var result,partialSum_rowsCount_lines
-        !function(){
-            var i
+        (()=>{
             partialSum_rowsCount_lines=
                 vim.textarea.value.split('\n')
             partialSum_rowsCount_lines.pop()
-            for(i in partialSum_rowsCount_lines)
+            for(let i in partialSum_rowsCount_lines)
                 partialSum_rowsCount_lines[i]=
                     count_rows_string(
-                        countOfColsPerRow,partialSum_rowsCount_lines[i]
+                        countOfColsPerRow,
+                        partialSum_rowsCount_lines[i]
                     )
-            for(i=1;i<partialSum_rowsCount_lines.length;i++)
-                partialSum_rowsCount_lines[i]+=partialSum_rowsCount_lines[i-1]
+            for(let i=1;i<partialSum_rowsCount_lines.length;i++)
+                partialSum_rowsCount_lines[i]+=
+                    partialSum_rowsCount_lines[i-1]
             partialSum_rowsCount_lines.unshift(0)
-        }()
-        !function(){
-            var
+        })()
+        ;(()=>{
+            let
                 lower=vim.lineCursor,
                 upper=vim.lineCursor
             while(
@@ -916,29 +914,28 @@ Vim.prototype.update=function(){
                 lower:lower,
                 upper:upper,
             }
-        }()
+        })()
         if(result.lower===result.upper)
             result.upper++
         return result
     }
     function calculateLowerAndUpper(vim){
         var result,partialSum_rowsCount_lines
-        !function(){
-            var i
+        (()=>{
             partialSum_rowsCount_lines=
                 vim.textarea.value.split('\n')
-            for(i in partialSum_rowsCount_lines)
+            for(let i in partialSum_rowsCount_lines)
                 partialSum_rowsCount_lines[i]=
                     count_rows_string(
                         countOfColsPerRow,partialSum_rowsCount_lines[i]
                     )
-            for(i=1;i<partialSum_rowsCount_lines.length;i++)
+            for(let i=1;i<partialSum_rowsCount_lines.length;i++)
                 partialSum_rowsCount_lines[i]+=partialSum_rowsCount_lines[i-1]
             partialSum_rowsCount_lines.unshift(0)
-        }()
-        !function(){
-            var lineNumber_select=calculate_lineNumber_select(vim)
-            var
+        })()
+        ;(()=>{
+            let
+                lineNumber_select=calculate_lineNumber_select(vim),
                 lower=lineNumber_select,
                 upper=lineNumber_select
             while(
@@ -953,7 +950,7 @@ Vim.prototype.update=function(){
                 lower:lower,
                 upper:upper+1,
             }
-        }()
+        })()
         return result
     }
     function lineCursorCatchingUp(vim){
