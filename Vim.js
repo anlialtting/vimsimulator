@@ -170,8 +170,9 @@ Vim.prototype.yank=function(type,content){
 }
 Vim.prototype.cursorMovesLeft=function(){
     if(this.mode===0||this.mode===1){
-        var p=this.textarea.selectionStart
-        var start=getLineStartByCursor(this.textarea.value,p)
+        let
+            p=this.textarea.selectionStart,
+            start=getLineStartByCursor(this.textarea.value,p)
         if(0<=p-1&&this.textarea.value[p-1]!='\n')
             this.textarea.selectionStart=
                 this.textarea.selectionEnd=p-1
@@ -189,12 +190,16 @@ Vim.prototype.cursorMovesLeft=function(){
 }
 Vim.prototype.cursorMovesRight=function(){
     if(this.mode===0||this.mode===1){
-        var p=this.textarea.selectionStart
-        var start=getLineStartByCursor(this.textarea.value,p)
+        let
+            p=this.textarea.selectionStart,
+            start=getLineStartByCursor(this.textarea.value,p)
         if(
-            p+1<this.textarea.value.length&&(this.mode===0
-                ?this.textarea.value[p+1]!=='\n'
-                :this.textarea.value[p]!=='\n')
+            p+1<this.textarea.value.length&&(
+                this.mode===0?
+                    this.textarea.value[p+1]!=='\n'
+                :
+                    this.textarea.value[p]!=='\n'
+            )
         )
             this.textarea.selectionStart=
                 this.textarea.selectionEnd=
@@ -235,7 +240,7 @@ Vim.prototype.cursorMovesUp=function(){
                     this.col_cursor
                 )
     }else if(this.mode===2){
-        var p
+        let p
         if(
             this.visualmode.fixedCursor!==
             this.textarea.selectionStart
@@ -243,8 +248,9 @@ Vim.prototype.cursorMovesUp=function(){
             p=this.textarea.selectionStart
         else
             p=this.textarea.selectionEnd
-        var preEnd=getLineStartByCursor(this.textarea.value,p)
-        var preStart=getLineStartByCursor(this.textarea.value,preEnd-1)
+        let
+            preEnd=getLineStartByCursor(this.textarea.value,p),
+            preStart=getLineStartByCursor(this.textarea.value,preEnd-1)
         p=preStart+Math.min(
             preEnd-1-preStart,
             this.col_cursor
@@ -270,11 +276,12 @@ Vim.prototype.cursorMovesDown=function(){
             ).length-1-1
         )
             return
-        var p=this.textarea.selectionStart
-        var start=getLineStartByCursor(this.textarea.value,p)
-        var end=getLineEndByCursor(this.textarea.value,p)
-        var nxtStart=end
-        var nxtEnd=getLineEndByCursor(this.textarea.value,nxtStart)
+        let
+            p=this.textarea.selectionStart,
+            start=getLineStartByCursor(this.textarea.value,p),
+            end=getLineEndByCursor(this.textarea.value,p),
+            nxtStart=end,
+            nxtEnd=getLineEndByCursor(this.textarea.value,nxtStart)
         this.textarea.selectionStart=
             this.textarea.selectionEnd=nxtStart+Math.min(
                 nxtEnd-1-nxtStart,
