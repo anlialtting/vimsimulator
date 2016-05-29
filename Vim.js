@@ -1,7 +1,6 @@
 /*
     Table of Contents
         * _pureFunctions
-        * _evalScript
 */
 /*
 http://www.truth.sk/vim/vimbook-OPL.pdf
