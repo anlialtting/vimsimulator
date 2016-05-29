@@ -6,17 +6,20 @@
 /*
 http://www.truth.sk/vim/vimbook-OPL.pdf
 */
-(()=>{
-var monospaceFonts=
-    '\'WenQuanYi Zen Hei Mono\','+
-    '\'Consolas\','+
-    '\'Courier New\','+
-    '\'Courier\','+
-    'monospace'
-window.Vim=Vim
-evalScript.directoryOfThisScript=
-    document.currentScript.src.replace(/[^\/]*$/,'')
-evalScripts(['Vim.commands.js','cppstl.js'])
+Promise.all([
+    module.importRelative('cppstl.js'),
+    module.extractByName('CryptoJS'),
+]).then(modules=>{
+let
+    cppstl=modules[0],
+    monospaceFonts=
+        '\'WenQuanYi Zen Hei Mono\','+
+        '\'Consolas\','+
+        '\'Courier New\','+
+        '\'Courier\','+
+        'monospace'
+window.CryptoJS=modules[1]
+evalScript('Vim.commands.js')
 function Vim(){
 }
 Vim.prototype.setup=function(
@@ -104,7 +107,7 @@ Vim.prototype.setupPassword=function(password){
     this.password=password
 }
 Vim.prototype.unindent=function(beginLine,endLine){
-    var
+    let
         lines,
         currentLine
     lines=linesOf(this.textarea.value)
@@ -117,12 +120,11 @@ Vim.prototype.unindent=function(beginLine,endLine){
             unindent(lines[currentLine])
     }
     this.textarea.value=lines.join('\n')
-    (vim=>{
-        var sum,i,lineHead
-        sum=0
-        for(i=0;i<beginLine;i++)
+    ;(vim=>{
+        let sum=0
+        for(let i=0;i<beginLine;i++)
             sum+=lines[i].length+1
-        lineHead=
+        let lineHead=
             getLineHeadByCursor(vim.textarea.value,sum)
         vim.textarea.selectionStart=lineHead
         vim.textarea.selectionEnd=lineHead+1
@@ -137,7 +139,7 @@ Vim.prototype.unindent=function(beginLine,endLine){
     }
 }
 Vim.prototype.indent=function(beginLine,endLine){
-    var
+    let
         lines,
         currentLine
     lines=linesOf(this.textarea.value)
@@ -228,11 +230,12 @@ Vim.prototype.cursorMovesUp=function(){
             ).split('\n').length-1===0
         )
             return
-        var p=this.textarea.selectionStart
-        var start=getLineStartByCursor(this.textarea.value,p)
-        var end=getLineEndByCursor(this.textarea.value,p)
-        var preEnd=start
-        var preStart=getLineStartByCursor(this.textarea.value,preEnd-1)
+        let
+            p=this.textarea.selectionStart,
+            start=getLineStartByCursor(this.textarea.value,p),
+            end=getLineEndByCursor(this.textarea.value,p),
+            preEnd=start,
+            preStart=getLineStartByCursor(this.textarea.value,preEnd-1)
         this.textarea.selectionStart=
             this.textarea.selectionEnd=
                 preStart+Math.min(
@@ -1545,9 +1548,10 @@ function evalScript(path,callback){
             callback&&callback(null)
         }
     }
-    request.open('GET',evalScript.directoryOfThisScript+path)
+    request.open('GET',module.pathPrefix+path)
     request.send()
 }
+/* deprecated
 function evalScripts(paths,callback){
     var countdownToCallback
     countdownToCallback=paths.length
@@ -1558,10 +1562,10 @@ function evalScripts(paths,callback){
             callback&&callback(null)
         })
     })
-}
+}*/
 // end _evalScript
 var JsonFormatter={
-    stringify:function(cipherParams){
+    stringify(cipherParams){
         var jsonObj={
             ct:cipherParams.ciphertext.toString(CryptoJS.enc.Base64)
         }
@@ -1575,7 +1579,7 @@ var JsonFormatter={
         }
         return JSON.stringify(jsonObj)
     },
-    parse:function(jsonStr){
+    parse(jsonStr){
         var jsonObj=JSON.parse(jsonStr)
         var cipherParams=CryptoJS.lib.CipherParams.create({
             ciphertext:CryptoJS.enc.Base64.parse(jsonObj.ct)
@@ -1597,8 +1601,7 @@ function linesOf(text){
     A line should not include EOL,
     since it has already been seperated from the others.
 */
-    var result
-    result=text.split('\n')
+    let result=text.split('\n')
     result.pop()
     return result
 }
@@ -1614,8 +1617,9 @@ function getLineEndByCursor(text,cursor){
     return text.indexOf('\n',cursor)+1
 }
 function getLineHeadByCursor(text,cursor){
-    var lineStart=getLineStartByCursor(text,cursor)
+    let lineStart=getLineStartByCursor(text,cursor)
     return lineStart+text.substring(lineStart).search(/[^ ]/)
 }
 // end 2015-09-06
-})()
+module.export=Vim
+})

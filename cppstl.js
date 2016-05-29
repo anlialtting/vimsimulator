@@ -1,4 +1,4 @@
-window.cppstl={}
+let cppstl={}
 cppstl.lower_bound=(array,key)=>{
     let first=0,last=array.length
     while(first!=last){
@@ -27,3 +27,4 @@ cppstl.partial_sum=input=>{
         output[i]+=output[i-1]
     return output
 }
+module.export=cppstl
