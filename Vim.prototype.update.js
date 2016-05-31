@@ -1,4 +1,4 @@
-module.importRelative('cppstl.js').then(cppstl=>{
+module.import('cppstl.js').then(cppstl=>{
 let
     monospaceFonts=
         '\'WenQuanYi Zen Hei Mono\','+

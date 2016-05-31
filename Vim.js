@@ -6,18 +6,15 @@
 http://www.truth.sk/vim/vimbook-OPL.pdf
 */
 Promise.all([
-    module.importRelative('cppstl.js'),
-    module.importRelative('JsonFormatter.js'),
-    module.extractByName('CryptoJS'),
-    module.importRelative('Vim.prototype.update.js'),
-    module.importRelative('commands.js')
+    module.import('cppstl.js'),
+    module.import('JsonFormatter.js',{CryptoJS}),
+    module.import('commands.js',{CryptoJS}),
+    module.import('Vim.prototype.update.js'),
 ]).then(modules=>{
 let
     cppstl=modules[0],
     JsonFormatter=modules[1],
-    CryptoJS=modules[2],
-    commands=modules[4]
-window.CryptoJS=CryptoJS
+    commands=modules[2]
 commands(Vim)
 function Vim(){
 }
