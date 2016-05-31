@@ -5,10 +5,11 @@
 /*
 http://www.truth.sk/vim/vimbook-OPL.pdf
 */
+CryptoJS().then(CryptoJS=>{
 Promise.all([
     module.import('cppstl.js'),
-    module.import('JsonFormatter.js',{CryptoJS}),
-    module.import('commands.js',{CryptoJS}),
+    module.import('JsonFormatter.js'),
+    module.import('commands.js'),
     module.import('Vim.prototype.update.js'),
 ]).then(modules=>{
 let
@@ -932,4 +933,5 @@ function getLineHeadByCursor(text,cursor){
 }
 // end 2015-09-06
 module.export=Vim
+})
 })

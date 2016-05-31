@@ -1,8 +1,10 @@
 Promise.all([
-    module.import('JsonFormatter.js',{CryptoJS}),
+    CryptoJS(),
+    module.import('JsonFormatter.js'),
 ]).then(modules=>{
 let
-    JsonFormatter=modules[0]
+    CryptoJS=modules[0],
+    JsonFormatter=modules[1]
 module.export=function(Vim){
     Vim.prototype.command_A=function(count){
         let i=this.textarea.selectionStart
