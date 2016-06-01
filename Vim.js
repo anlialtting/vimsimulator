@@ -5,17 +5,20 @@
 /*
 http://www.truth.sk/vim/vimbook-OPL.pdf
 */
-CryptoJS().then(CryptoJS=>{
+let CryptoJS=module.arguments.CryptoJS||(()=>module.extract('https://cdn.rawgit.com/sytelus/CryptoJS/7fbfbbee0d005b31746bc5858c70c359e98308e5/rollups/aes.js','CryptoJS'))
+module=module.share({CryptoJS})
 Promise.all([
-    module.import('cppstl.js'),
-    module.import('JsonFormatter.js'),
-    module.import('commands.js'),
-    module.import('Vim.prototype.update.js'),
+    module.shareImport('cppstl.js'),
+    module.shareImport('JsonFormatter.js'),
+    module.shareImport('commands.js'),
+    module.shareImport('Vim.prototype.update.js'),
+    CryptoJS(),
 ]).then(modules=>{
 let
     cppstl=modules[0],
     JsonFormatter=modules[1],
-    commands=modules[2]
+    commands=modules[2],
+    CryptoJS=modules[4]
 commands(Vim)
 function Vim(){
 }
@@ -933,5 +936,4 @@ function getLineHeadByCursor(text,cursor){
 }
 // end 2015-09-06
 module.export=Vim
-})
 })
