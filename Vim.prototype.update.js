@@ -1,11 +1,14 @@
-module.shareImport('cppstl.js').then(cppstl=>{
+Promise.all([
+    module.shareImport('cppstl.js'),
+    module.shareImport('create_pre_editor.js'),
+    module.shareImport('monospaceFonts.js'),
+    module.shareImport('create_div_editor.js'),
+]).then(modules=>{
 let
-    monospaceFonts=
-        '\'WenQuanYi Zen Hei Mono\','+
-        '\'Consolas\','+
-        '\'Courier New\','+
-        '\'Courier\','+
-        'monospace'
+    cppstl=modules[0],
+    create_pre_editor=modules[1],
+    monospaceFonts=modules[2],
+    create_div_editor=modules[3]
 module.export=function(){
     var
         countOfColsPerRow,
@@ -128,16 +131,12 @@ module.export=function(){
         output_commandLine(vim)
     }
     function output_contents(vim){
-        var
+        let
             text=vim.textarea.value,
             count_rows_showed=0,
-            currentLine='',
             row_currentLine=0,
             col_currentRow=0,
-            currentLine,
             currentLineSpan,
-            row_currentLine,
-            col_currentRow,
             selectionShowingState,
             isActiveElement,
             lineNumber,
@@ -152,7 +151,7 @@ module.export=function(){
             vim.textarea.selectionEnd=i+1
             vim.update()
         }
-        currentLine=''
+        let currentLine=''
         currentLineSpan=document.createElement('span')
         row_currentLine=0
         col_currentRow=0
@@ -355,7 +354,7 @@ module.export=function(){
         }
     }
     function output_commandLine(vim){
-        var s,length,span
+        let s,length
         if(vim.mode===0){
             s=vim.command
             if(50<s.length)
@@ -370,7 +369,7 @@ module.export=function(){
             s='-- VISUAL --'
             length=s.length
         }
-        span=document.createElement('span')
+        let span=document.createElement('span')
         span.innerHTML=s
         vim.pre_editor.appendChild(
             span
@@ -382,19 +381,18 @@ module.export=function(){
         )
     }
     function calculate_s(col_currentRow){
-        var result,i
-        result=''
+        let result=''
         while(col_currentRow+result.length<60)
             result+=' '
         result+=(lineNumber_cursor+1)+','+(charNumber_cursor+1)
-        for(i=col_currentRow+result.length;i<countOfColsPerRow;i++)
+        for(let i=col_currentRow+result.length;i<countOfColsPerRow;i++)
             result+=' '
         result+=Math.floor(100*lineNumber_cursor/lines.length)+'%'
         return result
     }
     function calculateShowingRange(vim){
         var result,partialSum_rowsCount_lines
-        (()=>{
+        {
             partialSum_rowsCount_lines=
                 vim.textarea.value.split('\n')
             partialSum_rowsCount_lines.pop()
@@ -408,8 +406,7 @@ module.export=function(){
                 partialSum_rowsCount_lines[i]+=
                     partialSum_rowsCount_lines[i-1]
             partialSum_rowsCount_lines.unshift(0)
-        })()
-        ;(()=>{
+        }{
             let
                 lower=vim.lineCursor,
                 upper=vim.lineCursor
@@ -424,14 +421,14 @@ module.export=function(){
                 lower:lower,
                 upper:upper,
             }
-        })()
+        }
         if(result.lower===result.upper)
             result.upper++
         return result
     }
     function calculateLowerAndUpper(vim){
         var result,partialSum_rowsCount_lines
-        (()=>{
+        {
             partialSum_rowsCount_lines=
                 vim.textarea.value.split('\n')
             for(let i in partialSum_rowsCount_lines)
@@ -443,8 +440,7 @@ module.export=function(){
                 partialSum_rowsCount_lines[i]+=
                     partialSum_rowsCount_lines[i-1]
             partialSum_rowsCount_lines.unshift(0)
-        })()
-        ;(()=>{
+        }{
             let
                 lineNumber_select=calculate_lineNumber_select(vim),
                 lower=lineNumber_select,
@@ -461,12 +457,11 @@ module.export=function(){
                 lower:lower,
                 upper:upper+1,
             }
-        })()
+        }
         return result
     }
     function lineCursorCatchingUp(vim){
-        var range
-        range=calculateLowerAndUpper(vim)
+        let range=calculateLowerAndUpper(vim)
         vim.lineCursor=Math.max(vim.lineCursor,range.lower)
         vim.lineCursor=Math.min(vim.lineCursor,range.upper-1)
     }
@@ -494,180 +489,8 @@ module.export=function(){
         return partialsum_length_lines
     }
 }
-function create_div_editor(vim){
-    var div_editor
-    div_editor=document.createElement('div')
-    div_editor.className='vimontheweb_div_editor'
-    div_editor.vim=vim
-    // centering
-    div_editor.style.marginLeft=
-        ''+-(vim.count_cols_toshow*6)/2+'pt'
-    div_editor.style.marginTop=
-        ''+-(vim.count_rows_toshow*12)/2+'pt'
-    // end centering
-    div_editor.style.background=vim.style.backgroundColor
-    div_editor.style.height=''+vim.count_rows_toshow*12+'pt'
-    vim.input_commandline=create_input_commandline(vim)
-    div_editor.appendChild(
-        vim.input_commandline
-    )
-    div_editor.appendChild((()=>{
-        let div=document.createElement('div')
-        div.textContent='.'.repeat(vim.count_cols_toshow)
-        div.style.visibility='hidden'
-        div.style.fontSize='12pt'
-        div.style.fontFamily=monospaceFonts
-        return div
-    })())
-    document.body.appendChild(style())
-    return div_editor
-    function style(){
-        var result
-        result=document.createElement('style')
-        result.textContent='.vimontheweb_div_editor{'+
-            'display:none;'+
-            'position:fixed;'+
-            'left:50%;'+
-            'top:50%;'+
-        '}'
-        return result
-    }
-}
-function create_div_editor(vim){
-    let div_editor=document.createElement('div')
-    div_editor.className='vimontheweb_div_editor'
-    div_editor.vim=vim
-    // centering
-    div_editor.style.marginLeft=
-        ''+-(vim.count_cols_toshow*6)/2+'pt'
-    div_editor.style.marginTop=
-        ''+-(vim.count_rows_toshow*12)/2+'pt'
-    // end centering
-    div_editor.style.background=vim.style.backgroundColor
-    div_editor.style.height=''+vim.count_rows_toshow*12+'pt'
-    vim.input_commandline=create_input_commandline(vim)
-    div_editor.appendChild(
-        vim.input_commandline
-    )
-    div_editor.appendChild((()=>{
-        let div=document.createElement('div')
-        div.textContent='.'.repeat(vim.count_cols_toshow)
-        div.style.visibility='hidden'
-        div.style.fontSize='12pt'
-        div.style.fontFamily=monospaceFonts
-        return div
-    })())
-    document.body.appendChild(style())
-    return div_editor
-    function style(){
-        let result=document.createElement('style')
-        result.textContent='.vimontheweb_div_editor{'+
-            'display:none;'+
-            'position:fixed;'+
-            'left:50%;'+
-            'top:50%;'+
-        '}'
-        return result
-    }
-}
-function create_pre_editor(vim){
-    var pre_editor
-    pre_editor=document.createElement('pre')
-    pre_editor.className='vimontheweb_pre_editor'
-    pre_editor.vim=vim
-    pre_editor.onmousedown=function(e){
-        e.preventDefault()
-        e.stopPropagation()
-    }
-    pre_editor.onmouseup=function(e){
-        e.preventDefault()
-        e.stopPropagation()
-    }
-    pre_editor.onclick=function(e){
-        if(
-            vim.textarea!==document.activeElement
-        )
-            focusWithoutChangingSelection(vim.textarea)
-        vim.update()
-        e.preventDefault()
-        e.stopPropagation()
-        function focusWithoutChangingSelection(e){
-            let
-                selectionStart=e.selectionStart,
-                selectionEnd=e.selectionEnd
-            e.focus()
-            e.selectionStart=selectionStart
-            e.selectionEnd=selectionEnd
-        }
-    }
-    pre_editor.onwheel=function(e){
-        if(e.deltaX<0)
-            vim.cursorMovesLeft()
-        else if(0<e.deltaX)
-            vim.cursorMovesRight()
-        if(e.deltaY<0){
-            let step=Math.max(1,Math.floor(-e.deltaY/48))
-            for(let i=0;i<step;i++)
-                vim.cursorMovesUp()
-        }else if(0<e.deltaY){
-            let step=Math.max(1,Math.floor(e.deltaY/48))
-            for(let i=0;i<step;i++)
-                vim.cursorMovesDown()
-        }
-        vim.update()
-        e.preventDefault()
-        e.stopPropagation()
-    }
-    pre_editor.style.cursor='default'
-    // centering
-    pre_editor.style.marginLeft=
-        ''+-(vim.count_cols_toshow*6)/2+'pt'
-    pre_editor.style.marginTop=
-        ''+-(vim.count_rows_toshow*12)/2+'pt'
-    // end centering
-    //pre_editor.style.backgroundColor=style.backgroundColor
-    pre_editor.style.color=vim.style.color
-    pre_editor.style.height=vim.count_rows_toshow*12+'pt'
-    pre_editor.style.width=vim.count_cols_toshow*6+'pt'
-    pre_editor.style.lineHeight='12pt'
-    pre_editor.style.letterSpacing='0pt'
-    pre_editor.style.fontFamily=monospaceFonts
-    document.body.appendChild(style())
-    return pre_editor
-    function style(){
-        let result=document.createElement('style')
-        result.textContent='.vimontheweb_pre_editor{'+
-            'display:none;'+
-            'border:0px;'+
-            'position:fixed;'+
-            'left:50%;'+
-            'top:50%;'+
-        '}'
-        return result
-    }
-}
-function create_input_commandline(vim){
-    let input=document.createElement('input')
-    input.style.position='relative'
-    input.style.top=vim.count_rows_toshow*12+'pt'
-    input.oninput=function(e){
-        if(
-            0<this.value.length&&
-            this.selectionStart===this.selectionEnd
-        ){
-            vim.command+=this.value
-            this.value=''
-            vim.update()
-            setTimeout(function(){
-                input.select()
-            },0)
-        }
-        e.stopPropagation()
-    }
-    return input
-}
 function count_rows_string(countOfColsPerRow,string){
-    var
+    let
         row_currentLine=0,
         col_currentRow=0
     for(let i=0;i<string.length;i++){
