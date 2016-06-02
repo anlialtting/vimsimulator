@@ -479,16 +479,14 @@ module.export=function(){
         return lines
     }
     function calculate_length_lines(){
-        var length_lines
-        length_lines=new Array(lines.length)
+        let length_lines=Array(lines.length)
         lines.forEach((e,i)=>{
             length_lines[i]=lines[i].length
         })
         return length_lines
     }
     function calculate_partialsum_length_lines(){
-        var partialsum_length_lines
-        partialsum_length_lines=[0]
+        let partialsum_length_lines=[0]
         partialsum_length_lines.push.apply(
             partialsum_length_lines,
             cppstl.partial_sum(length_lines)
@@ -514,7 +512,7 @@ function create_div_editor(vim){
         vim.input_commandline
     )
     div_editor.appendChild((()=>{
-        var div=document.createElement('div')
+        let div=document.createElement('div')
         div.textContent='.'.repeat(vim.count_cols_toshow)
         div.style.visibility='hidden'
         div.style.fontSize='12pt'
@@ -536,8 +534,7 @@ function create_div_editor(vim){
     }
 }
 function create_div_editor(vim){
-    var div_editor
-    div_editor=document.createElement('div')
+    let div_editor=document.createElement('div')
     div_editor.className='vimontheweb_div_editor'
     div_editor.vim=vim
     // centering
@@ -553,7 +550,7 @@ function create_div_editor(vim){
         vim.input_commandline
     )
     div_editor.appendChild((()=>{
-        var div=document.createElement('div')
+        let div=document.createElement('div')
         div.textContent='.'.repeat(vim.count_cols_toshow)
         div.style.visibility='hidden'
         div.style.fontSize='12pt'
@@ -563,8 +560,7 @@ function create_div_editor(vim){
     document.body.appendChild(style())
     return div_editor
     function style(){
-        var result
-        result=document.createElement('style')
+        let result=document.createElement('style')
         result.textContent='.vimontheweb_div_editor{'+
             'display:none;'+
             'position:fixed;'+
@@ -596,30 +592,26 @@ function create_pre_editor(vim){
         e.preventDefault()
         e.stopPropagation()
         function focusWithoutChangingSelection(e){
-            var
-                selectionStart,
-                selectionEnd
-            selectionStart=e.selectionStart
-            selectionEnd=e.selectionEnd
+            let
+                selectionStart=e.selectionStart,
+                selectionEnd=e.selectionEnd
             e.focus()
             e.selectionStart=selectionStart
             e.selectionEnd=selectionEnd
         }
     }
     pre_editor.onwheel=function(e){
-        var i,step
-        if(e.deltaX<0){
+        if(e.deltaX<0)
             vim.cursorMovesLeft()
-        }else if(0<e.deltaX){
+        else if(0<e.deltaX)
             vim.cursorMovesRight()
-        }
         if(e.deltaY<0){
-            step=Math.max(1,Math.floor(-e.deltaY/48))
-            for(i=0;i<step;i++)
+            let step=Math.max(1,Math.floor(-e.deltaY/48))
+            for(let i=0;i<step;i++)
                 vim.cursorMovesUp()
         }else if(0<e.deltaY){
-            step=Math.max(1,Math.floor(e.deltaY/48))
-            for(i=0;i<step;i++)
+            let step=Math.max(1,Math.floor(e.deltaY/48))
+            for(let i=0;i<step;i++)
                 vim.cursorMovesDown()
         }
         vim.update()
@@ -643,8 +635,7 @@ function create_pre_editor(vim){
     document.body.appendChild(style())
     return pre_editor
     function style(){
-        var result
-        result=document.createElement('style')
+        let result=document.createElement('style')
         result.textContent='.vimontheweb_pre_editor{'+
             'display:none;'+
             'border:0px;'+
@@ -656,8 +647,7 @@ function create_pre_editor(vim){
     }
 }
 function create_input_commandline(vim){
-    var input
-    input=document.createElement('input')
+    let input=document.createElement('input')
     input.style.position='relative'
     input.style.top=vim.count_rows_toshow*12+'pt'
     input.oninput=function(e){
@@ -678,11 +668,10 @@ function create_input_commandline(vim){
 }
 function count_rows_string(countOfColsPerRow,string){
     var
-        width,
         row_currentLine=0,
-        col_currentRow=0,
-        i
-    for(i=0;i<string.length;i++){
+        col_currentRow=0
+    for(let i=0;i<string.length;i++){
+        let width
         if(string[i]==='\t'){
             width=8-col_currentRow%8
         }else if(string.charCodeAt(i)<0xff){
