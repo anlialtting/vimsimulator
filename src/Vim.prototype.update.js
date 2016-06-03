@@ -10,7 +10,7 @@ let
     monospaceFonts=modules[2],
     create_div_editor=modules[3]
 module.export=function(){
-    var
+    let
         countOfColsPerRow,
         countOfColsForPaddingForLineNumber,
         lines
@@ -22,7 +22,7 @@ module.export=function(){
     writeCurrentStateIntoHistory(this)
     show(this)
     lineCursorCatchingUp(this)
-    var
+    let
         cursor=
             this.textarea.selectionStart,
         cursor_end=

@@ -1,5 +1,5 @@
 Promise.all([
-    CryptoJS(),
+    CryptoJS,
     module.shareImport('JsonFormatter.js'),
 ]).then(modules=>{
 let

@@ -1,4 +1,4 @@
-CryptoJS().then(CryptoJS=>{
+CryptoJS.then(CryptoJS=>{
 module.export={
     stringify(cipherParams){
         let jsonObj={
