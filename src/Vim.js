@@ -5,7 +5,6 @@
 /*
 http://www.truth.sk/vim/vimbook-OPL.pdf
 */
-//let CryptoJS=module.arguments.CryptoJS||(()=>module.extract('https://cdn.rawgit.com/sytelus/CryptoJS/7fbfbbee0d005b31746bc5858c70c359e98308e5/rollups/aes.js','CryptoJS'))
 let CryptoJS=module.arguments.CryptoJS||module.extract('https://cdn.rawgit.com/sytelus/CryptoJS/7fbfbbee0d005b31746bc5858c70c359e98308e5/rollups/aes.js','CryptoJS',{lazy:true})
 module=module.share({CryptoJS})
 Promise.all([
