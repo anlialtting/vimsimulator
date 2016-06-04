@@ -14,7 +14,7 @@ module.export=function(Vim){
         )
             i++
         this.textarea.selectionStart=
-        this.textarea.selectionEnd=i
+            this.textarea.selectionEnd=i
         this.mode=1
     }
     Vim.prototype.command_D=function(count){
@@ -67,7 +67,7 @@ module.export=function(Vim){
         this.mode=1
     }
     Vim.prototype.command_O=function(count){
-        var
+        let
             prefixingWhitespaces,
             startOfCurrentLine
         startOfCurrentLine=getLineStartByCursor(
@@ -419,8 +419,7 @@ module.export=function(Vim){
         A line should not include EOL,
         since it has already been seperated from the others.
     */
-        var result
-        result=text.split('\n')
+        let result=text.split('\n')
         result.pop()
         return result
     }
