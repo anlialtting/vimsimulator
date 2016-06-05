@@ -1,20 +1,20 @@
 Promise.all([
     CryptoJS,
     module.shareImport('JsonFormatter.js'),
-    module.shareImport('capitalCommands.js'),
+    module.shareImport('uppercaseCommands.js'),
 ]).then(modules=>{
 let
     CryptoJS=modules[0],
     JsonFormatter=modules[1],
-    capitalCommands=modules[2]
+    uppercaseCommands=modules[2]
 module.export=function(Vim){
-    Vim.prototype.command_A=capitalCommands.A
-    Vim.prototype.command_D=capitalCommands.D
-    Vim.prototype.command_G=capitalCommands.G
-    Vim.prototype.command_I=capitalCommands.I
-    Vim.prototype.command_O=capitalCommands.O
-    Vim.prototype.command_P=capitalCommands.P
-    Vim.prototype.command_X=capitalCommands.X
+    Vim.prototype.command_A=uppercaseCommands.A
+    Vim.prototype.command_D=uppercaseCommands.D
+    Vim.prototype.command_G=uppercaseCommands.G
+    Vim.prototype.command_I=uppercaseCommands.I
+    Vim.prototype.command_O=uppercaseCommands.O
+    Vim.prototype.command_P=uppercaseCommands.P
+    Vim.prototype.command_X=uppercaseCommands.X
     Vim.prototype.command_dd=function(count){
         count=count||1
         let
@@ -50,18 +50,16 @@ module.export=function(Vim){
         var
             prefixingWhitespaces,
             endOfCurrentLine
-        prefixingWhitespaces=
-            function(vim){
-                var result
-                result=vim.textarea.value.substring(
-                    getLineStartByCursor(
-                        vim.textarea.value,
-                        vim.textarea.selectionStart
-                    )
+        prefixingWhitespaces=(vim=>{
+            let result=vim.textarea.value.substring(
+                getLineStartByCursor(
+                    vim.textarea.value,
+                    vim.textarea.selectionStart
                 )
-                result=result.substring(0,result.search(/[^ ]/))
-                return result
-            }(this)
+            )
+            result=result.substring(0,result.search(/[^ ]/))
+            return result
+        })(this)
         endOfCurrentLine=getLineEndByCursor(
             this.textarea.value,
             this.textarea.selectionStart
