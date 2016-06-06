@@ -4,23 +4,21 @@ http://www.truth.sk/vim/vimbook-OPL.pdf
 let CryptoJS=module.arguments.CryptoJS||module.extract('https://cdn.rawgit.com/sytelus/CryptoJS/7fbfbbee0d005b31746bc5858c70c359e98308e5/rollups/aes.js','CryptoJS',{lazy:true})
 module=module.share({CryptoJS})
 Promise.all([
-    module.shareImport('cppstl.js'),
+    module.shareImport('cursorMoves.js'),
     module.shareImport('JsonFormatter.js'),
     module.shareImport('commands.js'),
     module.shareImport('Vim.prototype.update.js'),
     CryptoJS,
     module.shareImport('textarea_onkeydown.js'),
     module.shareImport('runCommandIfPossible.js'),
-    module.shareImport('cursorMoves.js'),
 ]).then(modules=>{
 let
-    cppstl=modules[0],
+    cursorMoves=modules[0],
     JsonFormatter=modules[1],
     commands=modules[2],
     CryptoJS=modules[4],
     textarea_onkeydown=modules[5],
-    runCommandIfPossible=modules[6],
-    cursorMoves=modules[7]
+    runCommandIfPossible=modules[6]
 commands(Vim)
 function Vim(){
 }
@@ -35,7 +33,7 @@ Vim.prototype.setup=function(
     this.count_cols_toshow=count_cols_toshow||80
     // end input
     this.password=''
-    this.textfile=''
+    this._text=''
 /*
 0: normal
 1: insert
@@ -105,6 +103,14 @@ References:
         }
     }
 }
+Object.defineProperty(Vim.prototype,'text',{
+    set(val){
+        this._text=val
+    },
+    get(){
+        return this._text
+    }
+})
 Vim.prototype.setupPassword=function(password){
     this.password=password
 }
@@ -141,12 +147,9 @@ Vim.prototype.unindent=function(beginLine,endLine){
     }
 }
 Vim.prototype.indent=function(beginLine,endLine){
-    let
-        lines,
-        currentLine
-    lines=linesOf(this.textarea.value)
+    let lines=linesOf(this.textarea.value)
     for(
-        currentLine=beginLine;
+        let currentLine=beginLine;
         currentLine!=endLine;
         currentLine++
     ){

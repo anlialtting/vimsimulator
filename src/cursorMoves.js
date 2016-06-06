@@ -148,3 +148,13 @@ function down(){
         }
     }
 }
+function getLineStartByCursor(text,cursor){
+    return text.substring(0,cursor).lastIndexOf('\n')+1
+}
+function getLineEndByCursor(text,cursor){
+    return text.indexOf('\n',cursor)+1
+}
+function getLineHeadByCursor(text,cursor){
+    let lineStart=getLineStartByCursor(text,cursor)
+    return lineStart+text.substring(lineStart).search(/[^ ]/)
+}
