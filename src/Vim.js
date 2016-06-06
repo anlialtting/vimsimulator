@@ -11,6 +11,7 @@ Promise.all([
     CryptoJS,
     module.shareImport('textarea_onkeydown.js'),
     module.shareImport('runCommandIfPossible.js'),
+    module.shareImport('cursorMoves.js'),
 ]).then(modules=>{
 let
     cppstl=modules[0],
@@ -18,7 +19,8 @@ let
     commands=modules[2],
     CryptoJS=modules[4],
     textarea_onkeydown=modules[5],
-    runCommandIfPossible=modules[6]
+    runCommandIfPossible=modules[6],
+    cursorMoves=modules[7]
 commands(Vim)
 function Vim(){
 }
@@ -170,150 +172,10 @@ Vim.prototype.yank=function(type,content){
         )
     )
 }
-Vim.prototype.cursorMovesLeft=function(){
-    if(this.mode===0||this.mode===1){
-        let
-            p=this.textarea.selectionStart,
-            start=getLineStartByCursor(this.textarea.value,p)
-        if(0<=p-1&&this.textarea.value[p-1]!='\n')
-            this.textarea.selectionStart=
-                this.textarea.selectionEnd=p-1
-        this.col_cursor=this.textarea.selectionStart-start
-    }else if(this.mode===2){
-        if(this.visualmode.fixedCursor+1===this.textarea.selectionEnd){
-            if(this.textarea.value[this.textarea.selectionStart-1]!=='\n')
-                this.textarea.selectionStart=
-                    this.textarea.selectionStart-1
-        }else{
-            if(this.textarea.value[this.textarea.selectionEnd-2]!=='\n')
-                this.textarea.selectionEnd=this.textarea.selectionEnd-1
-        }
-    }
-}
-Vim.prototype.cursorMovesRight=function(){
-    if(this.mode===0||this.mode===1){
-        let
-            p=this.textarea.selectionStart,
-            start=getLineStartByCursor(this.textarea.value,p)
-        if(
-            p+1<this.textarea.value.length&&(
-                this.mode===0?
-                    this.textarea.value[p+1]!=='\n'
-                :
-                    this.textarea.value[p]!=='\n'
-            )
-        )
-            this.textarea.selectionStart=
-                this.textarea.selectionEnd=
-                this.textarea.selectionStart+1
-        this.col_cursor=this.textarea.selectionStart-start
-    }else if(this.mode===2){
-        if(this.textarea.selectionStart<this.visualmode.fixedCursor){
-            if(this.textarea.value[this.textarea.selectionStart]!=='\n')
-                this.textarea.selectionStart=
-                    this.textarea.selectionStart+1
-        }else{
-            if(this.textarea.value[this.textarea.selectionEnd-1]!=='\n')
-                this.textarea.selectionEnd=this.textarea.selectionEnd+1
-        }
-    }
-}
-Vim.prototype.cursorMovesUp=function(){
-    if(
-        this.mode===0||
-        this.mode===1
-    ){
-        // do nothing if current line is the first line
-        if(
-            this.textarea.value.substring(
-                0,this.textarea.selectionStart
-            ).split('\n').length-1===0
-        )
-            return
-        let
-            p=this.textarea.selectionStart,
-            start=getLineStartByCursor(this.textarea.value,p),
-            end=getLineEndByCursor(this.textarea.value,p),
-            preEnd=start,
-            preStart=getLineStartByCursor(this.textarea.value,preEnd-1)
-        this.textarea.selectionStart=
-            this.textarea.selectionEnd=
-                preStart+Math.min(
-                    preEnd-1-preStart,
-                    this.col_cursor
-                )
-    }else if(this.mode===2){
-        let p
-        if(
-            this.visualmode.fixedCursor!==
-            this.textarea.selectionStart
-        )
-            p=this.textarea.selectionStart
-        else
-            p=this.textarea.selectionEnd
-        let
-            preEnd=getLineStartByCursor(this.textarea.value,p),
-            preStart=getLineStartByCursor(this.textarea.value,preEnd-1)
-        p=preStart+Math.min(
-            preEnd-1-preStart,
-            this.col_cursor
-        )
-        if(p<this.visualmode.fixedCursor+1){
-            this.textarea.selectionStart=p
-            this.textarea.selectionEnd=this.visualmode.fixedCursor+1
-        }else{
-            this.textarea.selectionStart=this.visualmode.fixedCursor
-            this.textarea.selectionEnd=p
-        }
-    }
-}
-Vim.prototype.cursorMovesDown=function(){
-    if(this.mode===0||this.mode===1){
-        // do nothing if current line is the last line
-        if(
-            this.textarea.value.substring(
-                0,this.textarea.selectionStart
-            ).split('\n').length-1==
-            this.textarea.value.split(
-                '\n'
-            ).length-1-1
-        )
-            return
-        let
-            p=this.textarea.selectionStart,
-            start=getLineStartByCursor(this.textarea.value,p),
-            end=getLineEndByCursor(this.textarea.value,p),
-            nxtStart=end,
-            nxtEnd=getLineEndByCursor(this.textarea.value,nxtStart)
-        this.textarea.selectionStart=
-            this.textarea.selectionEnd=nxtStart+Math.min(
-                nxtEnd-1-nxtStart,
-                this.col_cursor
-            )
-    }else if(this.mode===2){
-        if(
-            this.visualmode.fixedCursor!==
-            this.textarea.selectionStart
-        )
-            var p=this.textarea.selectionStart
-        else
-            var p=this.textarea.selectionEnd
-        let
-            nxtStart=getLineEndByCursor(this.textarea.value,p),
-            nxtEnd=getLineEndByCursor(this.textarea.value,nxtStart)
-        p=nxtStart+Math.min(
-            nxtEnd-1-nxtStart,
-            this.col_cursor
-        )
-        if(p<this.visualmode.fixedCursor+1){
-            this.textarea.selectionStart=p
-            this.textarea.selectionEnd=this.visualmode.fixedCursor+1
-        }else{
-            this.textarea.selectionStart=this.visualmode.fixedCursor
-            this.textarea.selectionEnd=p
-        }
-    }
-}
+Vim.prototype.cursorMovesLeft=cursorMoves.left
+Vim.prototype.cursorMovesRight=cursorMoves.right
+Vim.prototype.cursorMovesUp=cursorMoves.up
+Vim.prototype.cursorMovesDown=cursorMoves.down
 Vim.prototype.runCommandIfPossibleForMode2=
     runCommandIfPossible.runCommandIfPossibleForMode2
 Vim.prototype.runCommandIfPossible=

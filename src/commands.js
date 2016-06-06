@@ -2,11 +2,13 @@ Promise.all([
     CryptoJS,
     module.shareImport('JsonFormatter.js'),
     module.shareImport('uppercaseCommands.js'),
+    module.shareImport('lowercaseCommands.js'),
 ]).then(modules=>{
 let
     CryptoJS=modules[0],
     JsonFormatter=modules[1],
-    uppercaseCommands=modules[2]
+    uppercaseCommands=modules[2],
+    lowercaseCommands=modules[3]
 module.export=function(Vim){
     Vim.prototype.command_A=uppercaseCommands.A
     Vim.prototype.command_D=uppercaseCommands.D
@@ -15,171 +17,18 @@ module.export=function(Vim){
     Vim.prototype.command_O=uppercaseCommands.O
     Vim.prototype.command_P=uppercaseCommands.P
     Vim.prototype.command_X=uppercaseCommands.X
-    Vim.prototype.command_dd=function(count){
-        count=count||1
-        let
-            f=this.textarea.selectionStart,
-            l=this.textarea.selectionStart
-        f=getLineStartByCursor(this.textarea.value,f)
-        for(let i=0;i<count;i++)
-            l=getLineEndByCursor(this.textarea.value,l)
-        this.yank(1,this.textarea.value.substring(f,l))
-        this.textarea.value
-    }
-    Vim.prototype.command_h=function(count){
-        count=count||1
-        while(count--)
-            this.cursorMovesLeft()
-    }
-    Vim.prototype.command_j=function(count){
-        count=count||1
-        while(count--)
-            this.cursorMovesDown()
-    }
-    Vim.prototype.command_k=function(count){
-        count=count||1
-        while(count--)
-            this.cursorMovesUp()
-    }
-    Vim.prototype.command_l=function(count){
-        count=count||1
-        while(count--)
-            this.cursorMovesRight()
-    }
-    Vim.prototype.command_o=function(count){
-        var
-            prefixingWhitespaces,
-            endOfCurrentLine
-        prefixingWhitespaces=(vim=>{
-            let result=vim.textarea.value.substring(
-                getLineStartByCursor(
-                    vim.textarea.value,
-                    vim.textarea.selectionStart
-                )
-            )
-            result=result.substring(0,result.search(/[^ ]/))
-            return result
-        })(this)
-        endOfCurrentLine=getLineEndByCursor(
-            this.textarea.value,
-            this.textarea.selectionStart
-        )
-        this.textarea.value=
-            this.textarea.value.substring(0,endOfCurrentLine)+
-            prefixingWhitespaces+'\n'+
-            this.textarea.value.substring(
-                endOfCurrentLine
-            )
-        this.textarea.selectionStart=
-        this.textarea.selectionEnd=
-            endOfCurrentLine+prefixingWhitespaces.length
-        this.mode=1
-    }
-    Vim.prototype.command_p=function(count){
-        count=count||1
-        this.pasteBoard=JSON.parse(
-            CryptoJS.AES.decrypt(
-                localStorage.getItem('pasteBoard_vimontheweb'),
-                this.password,
-                {format:JsonFormatter}
-            ).toString(CryptoJS.enc.Utf8)
-        )
-        if(this.pasteBoard.type===0){
-            var c=this.textarea.selectionStart+1
-            this.textarea.value=
-                this.textarea.value.substring(0,c)
-                +this.pasteBoard.content
-                +this.textarea.value.substring(
-                    c,this.textarea.value.length
-                )
-            this.textarea.selectionStart=
-                c+this.pasteBoard.content.length-1
-        }else if(this.pasteBoard.type===1){
-            var first_nextLine=getLineEndByCursor(
-                this.textarea.value,
-                this.textarea.selectionStart
-            )
-            var s=this.textarea.value.substring(0,first_nextLine)
-            while(count--)
-                s+=this.pasteBoard.content
-            s+=this.textarea.value.substring(
-                first_nextLine,this.textarea.value.length
-            )
-            this.textarea.value=s
-            this.textarea.selectionStart=
-                this.textarea.selectionEnd=
-                first_nextLine
-        }
-    }
-    Vim.prototype.command_r=function(count,string){
-        var c=this.textarea.selectionStart
-        count=count||1
-        this.textarea.value=
-            this.textarea.value.substring(0,c)+
-            Array(count+1).join(string)+
-            this.textarea.value.substring(
-                c+count,this.textarea.value.length
-            )
-        this.textarea.selectionStart=c+count-1
-    }
-    Vim.prototype.command_u=function(){
-        var c=this.textarea.selectionStart
-        this.textarea.value=
-            this.histories[this.histories.length-1]
-        while(
-            0<=this.histories.length-1&&
-            this.histories[this.histories.length-1]===
-            this.textarea.value
-        )
-            this.histories.pop()
-        if(0<=this.histories.length-1)
-            this.textarea.value=this.histories[this.histories.length-1]
-        this.textarea.selectionStart=c
-    }
-    Vim.prototype.command_x=function(count){
-        var selectionStart=this.textarea.selectionStart
-        count=count||1
-        this.textarea.value=this.textarea.value.substring(
-            0,this.textarea.selectionStart
-        )+this.textarea.value.substring(
-            this.textarea.selectionStart+count
-        )
-        this.textarea.selectionStart=selectionStart
-    }
-    Vim.prototype.command_dot=function(count){
-    }
-    Vim.prototype.command_dd=function(count){
-        count=count||1
-        let f=this.textarea.selectionStart
-        let l=this.textarea.selectionStart
-        f=getLineStartByCursor(this.textarea.value,f)
-        for(let i=0;i<count;i++)
-            l=getLineEndByCursor(this.textarea.value,l)
-        this.yank(1,this.textarea.value.substring(f,l))
-        this.textarea.value
-            =this.textarea.value.substring(0,f)
-            +this.textarea.value.substring(
-                l,this.textarea.value.length
-            )
-        if(f<this.textarea.value.length)
-            this.textarea.selectionStart=this.textarea.selectionEnd=f
-        else{
-            this.textarea.selectionStart=this.textarea.selectionEnd=
-                getLineStartByCursor(
-                    this.textarea.value,
-                    this.textarea.value.length-1
-                )
-        }
-    }
-    Vim.prototype.command_gg=function(count){
-        let
-            c=0
-        count=count===undefined?0:count-1
-        while(count--)
-            c=getLineEndByCursor(this.textarea.value,c)
-        this.textarea.selectionStart=
-            this.textarea.selectionEnd=c
-    }
+    Vim.prototype.command_h=lowercaseCommands.h
+    Vim.prototype.command_j=lowercaseCommands.j
+    Vim.prototype.command_k=lowercaseCommands.k
+    Vim.prototype.command_l=lowercaseCommands.l
+    Vim.prototype.command_o=lowercaseCommands.o
+    Vim.prototype.command_p=lowercaseCommands.p
+    Vim.prototype.command_r=lowercaseCommands.r
+    Vim.prototype.command_u=lowercaseCommands.u
+    Vim.prototype.command_x=lowercaseCommands.x
+    Vim.prototype.command_dot=lowercaseCommands.dot
+    Vim.prototype.command_dd=lowercaseCommands.dd
+    Vim.prototype.command_gg=lowercaseCommands.gg
     Vim.prototype.command_vy=function(){
         var f=this.textarea.selectionStart,
             l=this.textarea.selectionEnd
