@@ -1,7 +1,9 @@
+// Existence precedes essence.
 /*
 http://www.truth.sk/vim/vimbook-OPL.pdf
 */
 let CryptoJS=module.arguments.CryptoJS||module.extract('https://cdn.rawgit.com/sytelus/CryptoJS/7fbfbbee0d005b31746bc5858c70c359e98308e5/rollups/aes.js','CryptoJS',{lazy:true})
+let events=module.arguments.events||module.importByPath('https://rawgit.com/anliting/module/ba2cb12b7f16bf066fc82d2ebd24200d6c857856/node/events.js')
 module=module.share({CryptoJS})
 Promise.all([
     module.shareImport('cursorMoves.js'),
@@ -9,103 +11,28 @@ Promise.all([
     module.shareImport('commands.js'),
     module.shareImport('Vim.prototype.update.js'),
     CryptoJS,
-    module.shareImport('textarea_onkeydown.js'),
+    module.shareImport('setup.js'),
     module.shareImport('runCommandIfPossible.js'),
+    events,
 ]).then(modules=>{
 let
-    cursorMoves=modules[0],
-    JsonFormatter=modules[1],
-    commands=modules[2],
-    CryptoJS=modules[4],
-    textarea_onkeydown=modules[5],
-    runCommandIfPossible=modules[6]
-commands(Vim)
+    cursorMoves=            modules[0],
+    JsonFormatter=          modules[1],
+    commands=               modules[2],
+    CryptoJS=               modules[4],
+    setup=                  modules[5],
+    runCommandIfPossible=   modules[6],
+    events=                 modules[7]
 function Vim(){
+    events.call(this)
 }
-Vim.prototype.setup=function(
-    textarea,
-    count_rows_toshow,
-    count_cols_toshow
-){
-    // begin input
-    this.textarea=textarea
-    this.count_rows_toshow=count_rows_toshow||24
-    this.count_cols_toshow=count_cols_toshow||80
-    // end input
-    this.password=''
-    this._text=''
-/*
-0: normal
-1: insert
-2: visual
-3: select
-References:
-    http://en.wikibooks.org/wiki/Learning_the_vi_Editor/Vim/Modes
-*/
-    this.mode=0
-    this.command=''
-    this.activated=false
-    this.col_cursor=
-        this.textarea.selectionStart-getLineStartByCursor(
-            this.textarea.value,
-            this.textarea.selectionStart
-        )
-    this.lineCursor=0
-    this.pasteBoard={
-/*
-0: string
-1: lines
-*/
-        type:0,
-        content:''
-    }
-    this.environment={
-        list:true,
-        number:true,
-    }
-    this.histories=[]
-    this.highlighter=true
-    this.visualmode={}
-    this.visualmode.fixedCursor
-    this.style={}
-    this.style.backgroundColor='rgba(0%,0%,0%,0.8)'
-    this.style.color='white'
-    this.stylesheet_eol='color:dodgerblue;'
-    this.afterinput_textarea=()=>{}
-    this.afterkeydown_textarea=()=>{}
-    this.afterkeyup_textarea=()=>{}
-    this.write=()=>{}
-    setupTextarea(this)
-    function setupTextarea(vim){
-        vim.textarea.onclick=()=>{
-            vim.update()
-        }
-        vim.textarea.onkeydown=e=>{
-            if(
-                textarea_onkeydown(vim,e)===false
-            ){
-                e.preventDefault()
-                e.stopPropagation()
-            }
-        }
-        vim.textarea.onkeyup=()=>{
-            vim.afterkeyup_textarea()
-        }
-        vim.textarea.oninput=()=>{
-            vim.afterinput_textarea()
-            vim.update()
-        }
-        vim.textarea.onblur=()=>{
-            vim.update()
-        }
-        vim.textarea.onfocus=()=>{
-            vim.update()
-        }
-    }
-}
+Vim.prototype=Object.create(events.prototype)
+commands(Vim)
+Vim.prototype.setup=setup
 Object.defineProperty(Vim.prototype,'text',{
     set(val){
         this._text=val
+        this.emit('textchange')
     },
     get(){
         return this._text
@@ -115,12 +42,9 @@ Vim.prototype.setupPassword=function(password){
     this.password=password
 }
 Vim.prototype.unindent=function(beginLine,endLine){
-    let
-        lines,
-        currentLine
-    lines=linesOf(this.textarea.value)
+    let lines=linesOf(this.textarea.value)
     for(
-        currentLine=beginLine;
+        let currentLine=beginLine;
         currentLine!=endLine;
         currentLine++
     ){
@@ -164,16 +88,11 @@ Vim.prototype.indent=function(beginLine,endLine){
 Vim.prototype.yank=function(type,content){
     this.pasteBoard.type=type
     this.pasteBoard.content=content
-    localStorage.setItem(
-        'pasteBoard_vimontheweb',
-        CryptoJS.AES.encrypt(
-            JSON.stringify(
-                this.pasteBoard
-            ),
-            this.password,
-            {format:JsonFormatter}
-        )
-    )
+    localStorage.setItem('pasteBoard_vimontheweb',CryptoJS.AES.encrypt(
+        JSON.stringify(this.pasteBoard),
+        this.password,
+        {format:JsonFormatter}
+    ))
 }
 Vim.prototype.cursorMovesLeft=cursorMoves.left
 Vim.prototype.cursorMovesRight=cursorMoves.right

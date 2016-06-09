@@ -15,7 +15,7 @@ function textarea_onkeydown_mode_0(vim,e){
     if(isLongCommand()){
         // testing funciton 2015-09-06
         /*setTimeout(function(){
-            vim.input_commandline.focus()
+            vim.input.focus()
         },0)*/
     }else
         vim.runCommandIfPossible()

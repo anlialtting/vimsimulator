@@ -1,8 +1,7 @@
 module.shareImport('monospaceFonts.js').then(monospaceFonts=>{
 module.export=create_pre_editor
 function create_pre_editor(vim){
-    var pre_editor
-    pre_editor=document.createElement('pre')
+    let pre_editor=document.createElement('pre')
     pre_editor.className='vimontheweb_pre_editor'
     pre_editor.vim=vim
     pre_editor.onmousedown=function(e){
@@ -14,19 +13,19 @@ function create_pre_editor(vim){
         e.stopPropagation()
     }
     pre_editor.onclick=function(e){
-        if(vim.textarea!==document.activeElement)
-            focusWithoutChangingSelection(vim.textarea)
-        vim.update()
         e.preventDefault()
         e.stopPropagation()
-        function focusWithoutChangingSelection(e){
+        if(vim.textarea!==document.activeElement)
+            vim.input.focus()
+        //vim.update()
+        /*function focusWithoutChangingSelection(e){
             let
                 selectionStart=e.selectionStart,
                 selectionEnd=e.selectionEnd
             e.focus()
             e.selectionStart=selectionStart
             e.selectionEnd=selectionEnd
-        }
+        }*/
     }
     pre_editor.onwheel=function(e){
         if(e.deltaX<0)

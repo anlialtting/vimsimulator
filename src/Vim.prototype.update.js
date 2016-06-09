@@ -46,7 +46,7 @@ module.export=function(){
     do_outputAll(this)
     updateInputPosition(this)
     function updateInputPosition(vim){
-        vim.input_commandline.style.left=
+        vim.input.style.left=
             6*vim.command.length+'pt'
     }
     function setup(vim){

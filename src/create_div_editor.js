@@ -12,9 +12,9 @@ function create_div_editor(vim){
     // end centering
     div_editor.style.background=vim.style.backgroundColor
     div_editor.style.height=''+vim.count_rows_toshow*12+'pt'
-    vim.input_commandline=create_input_commandline(vim)
+    //vim.input=createInput(vim)
     div_editor.appendChild(
-        vim.input_commandline
+        vim.input
     )
     div_editor.appendChild((()=>{
         let div=document.createElement('div')
@@ -36,25 +36,5 @@ function create_div_editor(vim){
         '}'
         return result
     }
-}
-function create_input_commandline(vim){
-    let input=document.createElement('input')
-    input.style.position='relative'
-    input.style.top=vim.count_rows_toshow*12+'pt'
-    input.oninput=function(e){
-        if(
-            0<this.value.length&&
-            this.selectionStart===this.selectionEnd
-        ){
-            vim.command+=this.value
-            this.value=''
-            vim.update()
-            setTimeout(function(){
-                input.select()
-            },0)
-        }
-        e.stopPropagation()
-    }
-    return input
 }
 })
