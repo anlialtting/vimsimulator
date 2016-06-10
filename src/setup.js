@@ -16,7 +16,7 @@ function setup(
     // end input
     this.password=''
     this._text=''
-    this.input=createInput(this)
+    this.input.style.top=this.count_rows_toshow*12+'pt'
 /*
 0: normal
 1: insert
@@ -59,50 +59,31 @@ References:
     this.afterkeyup_textarea=()=>{}
     this.write=()=>{}
     setupTextarea(this)
-    function setupTextarea(vim){
-        vim.textarea.onclick=()=>{
-            vim.update()
-        }
-        vim.textarea.onkeydown=e=>{
-            if(
-                textarea_onkeydown(vim,e)===false
-            ){
-                e.preventDefault()
-                e.stopPropagation()
-            }
-        }
-        vim.textarea.onkeyup=()=>{
-            vim.afterkeyup_textarea()
-        }
-        vim.textarea.oninput=()=>{
-            vim.afterinput_textarea()
-            vim.update()
-        }
-        vim.textarea.onblur=()=>{
-            vim.update()
-        }
-        vim.textarea.onfocus=()=>{
-            vim.update()
+}
+function setupTextarea(vim){
+    vim.textarea.onclick=()=>{
+        vim.update()
+    }
+    vim.textarea.onkeydown=e=>{
+        if(
+            textarea_onkeydown(vim,e)===false
+        ){
+            e.preventDefault()
+            e.stopPropagation()
         }
     }
-    function createInput(vim){
-        let input=document.createElement('input')
-        input.style.position='relative'
-        input.style.top=vim.count_rows_toshow*12+'pt'
-        input.oninput=function(e){
-            if(
-                0<this.value.length&&
-                this.selectionStart===this.selectionEnd
-            ){
-                vim.command+=this.value
-                this.value=''
-                vim.update()
-                setTimeout(()=>{
-                    input.select()
-                },0)
-            }
-        }
-        return input
+    vim.textarea.onkeyup=()=>{
+        vim.afterkeyup_textarea()
+    }
+    vim.textarea.oninput=()=>{
+        vim.afterinput_textarea()
+        vim.update()
+    }
+    vim.textarea.onblur=()=>{
+        vim.update()
+    }
+    vim.textarea.onfocus=()=>{
+        vim.update()
     }
 }
 // begin 2015-09-06

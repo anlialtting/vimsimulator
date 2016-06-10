@@ -2,8 +2,9 @@
 /*
 http://www.truth.sk/vim/vimbook-OPL.pdf
 */
-let CryptoJS=module.arguments.CryptoJS||module.extract('https://cdn.rawgit.com/sytelus/CryptoJS/7fbfbbee0d005b31746bc5858c70c359e98308e5/rollups/aes.js','CryptoJS',{lazy:true})
-let events=module.arguments.events||module.importByPath('https://rawgit.com/anliting/module/ba2cb12b7f16bf066fc82d2ebd24200d6c857856/node/events.js')
+let
+    CryptoJS=module.arguments.CryptoJS||module.extract('https://cdn.rawgit.com/sytelus/CryptoJS/7fbfbbee0d005b31746bc5858c70c359e98308e5/rollups/aes.js','CryptoJS',{lazy:true}),
+    events=module.arguments.events||module.importByPath('https://cdn.rawgit.com/anliting/module/ba2cb12b7f16bf066fc82d2ebd24200d6c857856/node/events.js')
 module=module.share({CryptoJS})
 Promise.all([
     module.shareImport('cursorMoves.js'),
@@ -25,6 +26,7 @@ let
     events=                 modules[7]
 function Vim(){
     events.call(this)
+    this.input=createInput(this)
 }
 Vim.prototype=Object.create(events.prototype)
 commands(Vim)
@@ -116,6 +118,24 @@ Vim.prototype.update_pre_editor=function(){
         this.style.backgroundColor
     this.pre_editor.style.color=
         this.style.color
+}
+function createInput(vim){
+    let input=document.createElement('input')
+    input.style.position='relative'
+    input.oninput=function(e){
+        if(
+            0<this.value.length&&
+            this.selectionStart===this.selectionEnd
+        ){
+            vim.command+=this.value
+            this.value=''
+            vim.update()
+            setTimeout(()=>{
+                input.select()
+            },0)
+        }
+    }
+    return input
 }
 // begin 2015-09-07
 function linesOf(text){
