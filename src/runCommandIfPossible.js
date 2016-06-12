@@ -2,49 +2,30 @@ module.export={
     runCommandIfPossible,
     runCommandIfPossibleForMode2,
 }
-function runCommandIfPossibleForMode2(){
-    if(this.command==='d'){
-        this.command_vd()
-        this.command=''
-    }else if(this.command==='y'){
-        this.command_vy()
-        this.command=''
-    }else if(this.command==='<'){
-        this.command_vlt()
-        this.command=''
-    }else if(this.command==='>'){
-        this.command_vgt()
-        this.command=''
-    }
-}
 function runCommandIfPossible(){
-    if(this.mode===2){
-        this.runCommandIfPossibleForMode2()
+    if(this.mode===2)
+        return this.runCommandIfPossibleForMode2()
+    let
+        cmd=this.command,
+        argument
+    if(48<=cmd.charCodeAt(0)&&cmd.charCodeAt(0)<58){
+        let i=0
+        argument=0
+        while(48<=cmd.charCodeAt(i)&&cmd.charCodeAt(i)<58){
+            argument=10*argument+(cmd.charCodeAt(i)-48)
+            i++
+        }
+        cmd=cmd.substring(i,cmd.length)
     }
-    //
-    var cmd=this.command
-    var argument
-    if(48<=cmd.charCodeAt(0)&&cmd.charCodeAt(0)<58)
-        (()=>{
-            var i
-            i=0
-            argument=0
-            while(48<=cmd.charCodeAt(i)&&cmd.charCodeAt(i)<58){
-                argument=10*argument+(cmd.charCodeAt(i)-48)
-                i++
-            }
-            cmd=cmd.substring(i,cmd.length)
-        })()
-    ;(vim=>{
-        let result=tryCommand(vim)
+    {
+        let result=tryCommand(this)
         if(result.matched){
             if(result.changed)
-                vim.lastChangingCommand=
-                    vim.command
-            vim.command=''
+                this.lastChangingCommand=
+                    this.command
+            this.command=''
         }
-    })(this)
-    //
+    }
     if(this.command[0]===':'){
         for(let i=1;i<this.command.length;i++){
             if(this.command[i]==='q')
@@ -94,11 +75,11 @@ function runCommandIfPossible(){
             result.changed=true
         }
         if(cmd==='a'){
-            var i=vim.textarea.selectionStart
-            if(i+1<vim.textarea.value.length)
+            let i=vim.selectionStart
+            if(i+1<vim.text.length)
                 i++
-            vim.textarea.selectionStart=
-            vim.textarea.selectionEnd=i
+            vim.selectionStart=
+                vim.selectionEnd=i
             vim.mode=1
             result.matched=true
         }
@@ -108,7 +89,7 @@ function runCommandIfPossible(){
         }
         if(cmd==='i'){
             vim.mode=1
-            vim.textarea.selectionEnd=vim.textarea.selectionStart
+            vim.selectionEnd=vim.selectionStart
             result.matched=true
         }
         if(cmd==='j'){
@@ -148,7 +129,7 @@ function runCommandIfPossible(){
         }
         if(cmd==='v'){
             vim.mode=2
-            vim.visualmode.fixedCursor=vim.textarea.selectionStart
+            vim.visualmode.fixedCursor=vim.selectionStart
             result.matched=true
         }
         if(cmd==='x'){
@@ -187,5 +168,20 @@ function runCommandIfPossible(){
             result.matched=true
         }
         return result
+    }
+}
+function runCommandIfPossibleForMode2(){
+    if(this.command==='d'){
+        this.command_vd()
+        this.command=''
+    }else if(this.command==='y'){
+        this.command_vy()
+        this.command=''
+    }else if(this.command==='<'){
+        this.command_vlt()
+        this.command=''
+    }else if(this.command==='>'){
+        this.command_vgt()
+        this.command=''
     }
 }

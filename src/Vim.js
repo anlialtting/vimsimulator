@@ -15,6 +15,7 @@ Promise.all([
     module.shareImport('setup.js'),
     module.shareImport('runCommandIfPossible.js'),
     events,
+    module.shareImport('htmlEntities.js'),
 ]).then(modules=>{
 let
     cursorMoves=            modules[0],
@@ -23,46 +24,88 @@ let
     CryptoJS=               modules[4],
     setup=                  modules[5],
     runCommandIfPossible=   modules[6],
-    events=                 modules[7]
+    events=                 modules[7],
+    htmlEntities=           modules[8]
 function Vim(){
     events.call(this)
+    this._text=''
+    this._selectionStart=0
+    this._selectionEnd=0
+    this._command=''
+    this.viewChanged=[]
     this.input=createInput(this)
+    this.mode=0
+    this.on('commandChange',()=>{
+        this.runCommandIfPossible()
+        this.view()
+    })
 }
 Vim.prototype=Object.create(events.prototype)
-commands(Vim)
-Vim.prototype.setup=setup
 Object.defineProperty(Vim.prototype,'text',{
     set(val){
         this._text=val
-        this.emit('textchange')
+        this.viewChanged.text=true
     },
     get(){
         return this._text
     }
 })
+Object.defineProperty(Vim.prototype,'selectionStart',{
+    set(val){
+        this._selectionStart=val
+        this.viewChanged.selectionStart=true
+    },
+    get(){
+        return this._selectionStart
+    }
+})
+Object.defineProperty(Vim.prototype,'selectionEnd',{
+    set(val){
+        this._selectionEnd=val
+        this.viewChanged.selectionEnd=true
+    },
+    get(){
+        return this._selectionEnd
+    }
+})
+Object.defineProperty(Vim.prototype,'command',{
+    set(val){
+        this._command=val
+        this.viewChanged.command=true
+        if(this._command)
+            this.emit('commandChange')
+    },
+    get(){
+        return this._command
+    }
+})
+Vim.prototype.view=function(){
+    this.emit('view',Object.keys(this.viewChanged))
+    this.viewChanged={}
+}
+commands(Vim)
+Vim.prototype.setup=setup
 Vim.prototype.setupPassword=function(password){
     this.password=password
 }
 Vim.prototype.unindent=function(beginLine,endLine){
-    let lines=linesOf(this.textarea.value)
+    let lines=linesOf(this.text)
     for(
         let currentLine=beginLine;
         currentLine!=endLine;
         currentLine++
-    ){
+    )
         lines[currentLine]=
             unindent(lines[currentLine])
-    }
-    this.textarea.value=lines.join('\n')
-    ;(vim=>{
-        let sum=0
-        for(let i=0;i<beginLine;i++)
-            sum+=lines[i].length+1
-        let lineHead=
-            getLineHeadByCursor(vim.textarea.value,sum)
-        vim.textarea.selectionStart=lineHead
-        vim.textarea.selectionEnd=lineHead+1
-    })(this)
+    this.text=lines.join('\n')
+    let vim=this
+    let sum=0
+    for(let i=0;i<beginLine;i++)
+        sum+=lines[i].length+1
+    let lineHead=
+        getLineHeadByCursor(vim.textarea.value,sum)
+    vim.selectionStart=lineHead
+    vim.selectionEnd=lineHead+1
     function unindent(s){
         return s.substring(
             Math.min(
@@ -78,10 +121,9 @@ Vim.prototype.indent=function(beginLine,endLine){
         let currentLine=beginLine;
         currentLine!=endLine;
         currentLine++
-    ){
+    )
         lines[currentLine]=
             indent(lines[currentLine])
-    }
     this.textarea.value=lines.join('\n')
     function indent(s){
         return'    '+s
@@ -119,20 +161,41 @@ Vim.prototype.update_pre_editor=function(){
     this.pre_editor.style.color=
         this.style.color
 }
+Vim.prototype.createViewDiv=function(){
+    let div=document.createElement('div')
+    div.style.fontFamily='monospace'
+    div.style.border='1px solid black'
+    div.style.whiteSpace='pre'
+    this.on('view',changed=>{
+        console.log(changed)
+        console.log(this)
+        if(this.mode==0){
+            div.innerHTML=
+                htmlEntities.encode(
+                    this.text.substring(0,this.selectionStart)
+                )+
+                '<span style=background-color:black;color:white;>'+
+                htmlEntities.encode(
+                    this.text.substring(this.selectionStart,this.selectionStart+1)
+                )+
+                '</span>'+
+                htmlEntities.encode(
+                    this.text.substring(this.selectionStart+1)
+                )
+        }
+    })
+    return div
+}
 function createInput(vim){
     let input=document.createElement('input')
     input.style.position='relative'
-    input.oninput=function(e){
+    input.oninput=()=>{
         if(
-            0<this.value.length&&
-            this.selectionStart===this.selectionEnd
+            input.value.length&&
+            input.selectionStart==input.selectionEnd
         ){
-            vim.command+=this.value
-            this.value=''
-            vim.update()
-            setTimeout(()=>{
-                input.select()
-            },0)
+            vim.command+=input.value
+            input.value=''
         }
     }
     return input

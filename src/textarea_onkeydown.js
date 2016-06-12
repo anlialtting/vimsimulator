@@ -7,9 +7,9 @@ function textarea_onkeydown(vim,e){
     ){ // ctrl+shift+v
         vim.activated=!vim.activated
         vim.col_cursor=
-            vim.textarea.selectionStart-getLineStartByCursor(
-                vim.textarea.value,
-                vim.textarea.selectionStart
+            vim.selectionStart-getLineStartByCursor(
+                vim.text,
+                vim.selectionStart
             )
         value_toreturn=false
     }else if(!vim.activated){
@@ -44,16 +44,16 @@ function textarea_onkeydown_mode_1(vim,e){
     var value_toreturn
     if(e.keyCode===9){ // tab
         var
-            f=vim.textarea.selectionStart,
-            l=vim.textarea.selectionEnd,
+            f=vim.selectionStart,
+            l=vim.selectionEnd,
             stringToInsert
         stringToInsert=
 // It should be tab '\t' by Vim default.
                 '    '
-        vim.textarea.value=
-            vim.textarea.value.substring(0,f)+
+        vim.text=
+            vim.text.substring(0,f)+
             stringToInsert+
-            vim.textarea.value.substring(l,vim.textarea.value.length)
+            vim.text.substring(l,vim.text.length)
         vim.textarea.selectionStart=
         vim.textarea.selectionEnd=
             f+stringToInsert.length
@@ -113,7 +113,7 @@ function textarea_onkeydown_mode_2(vim,e){
         value_toreturn=false
         vim.command+='>'
     }
-    vim.runCommandIfPossible()
+    //vim.runCommandIfPossible()
     return value_toreturn
 }
 })

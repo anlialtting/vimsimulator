@@ -18,7 +18,7 @@ function textarea_onkeydown_mode_0(vim,e){
             vim.input.focus()
         },0)*/
     }else
-        vim.runCommandIfPossible()
+        ;//vim.runCommandIfPossible()
     if(value_toreturn===false){
         e.preventDefault()
         e.stopPropagation()
@@ -171,7 +171,7 @@ function textarea_onkeydown_mode_0(vim,e){
                 )
         }else if(e.keyCode===13){ // enter
             value_toreturn=false
-            vim.runCommandIfPossible()
+            //vim.runCommandIfPossible()
         }else if(e.keyCode===32){ // space
             value_toreturn=false
             vim.command+=' '

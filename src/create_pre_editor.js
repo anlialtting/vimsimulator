@@ -12,20 +12,10 @@ function create_pre_editor(vim){
         e.preventDefault()
         e.stopPropagation()
     }
-    pre_editor.onclick=function(e){
+    pre_editor.onclick=e=>{
         e.preventDefault()
         e.stopPropagation()
-        if(vim.textarea!==document.activeElement)
-            vim.input.focus()
-        //vim.update()
-        /*function focusWithoutChangingSelection(e){
-            let
-                selectionStart=e.selectionStart,
-                selectionEnd=e.selectionEnd
-            e.focus()
-            e.selectionStart=selectionStart
-            e.selectionEnd=selectionEnd
-        }*/
+        vim.input.focus()
     }
     pre_editor.onwheel=function(e){
         if(e.deltaX<0)
