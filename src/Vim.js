@@ -171,6 +171,9 @@ Vim.prototype.update_pre_editor=function(){
     this.pre_editor.style.color=
         this.style.color
 }
+Vim.prototype.focus=function(){
+    this.input.focus()
+}
 Vim.prototype.createViewDiv=function(){
     let
         div=document.createElement('div')
@@ -181,12 +184,18 @@ Vim.prototype.createViewDiv=function(){
         let
             div=document.createElement('div')
         div.style.fontFamily='monospace'
-        div.style.border='1px solid gray'
         div.style.whiteSpace='pre'
-        div.addEventListener('click',()=>{
-            vim.input.focus()
+        div.addEventListener('dblclick',()=>{
+            vim.focus()
         })
         vim.on('view',changed=>{
+            if(vim.mode==0&&document.activeElement!=vim.input){
+                div.innerHTML=
+                    htmlEntities.encode(
+                        vim.text
+                    )
+                return
+            }
             if(vim.mode==0){
                 let
                     lines=linesOf(vim.text).map(s=>s+'\n'),
@@ -208,6 +217,7 @@ Vim.prototype.createViewDiv=function(){
                         lines[r].substring(c+1)+
                         lines.slice(r+1).join('')
                     )
+                return
             }
         })
         return div
@@ -219,7 +229,7 @@ function createInput(vim){
     input.style.border=0
     input.style.padding=0
     input.style.width=0
-    input.oninput=()=>{
+    input.addEventListener('input',()=>{
         if(
             input.value.length&&
             input.selectionStart==input.selectionEnd
@@ -227,7 +237,13 @@ function createInput(vim){
             vim.command+=input.value
             input.value=''
         }
-    }
+    })
+    input.addEventListener('focus',()=>{
+        vim.view()
+    })
+    input.addEventListener('blur',()=>{
+        vim.view()
+    })
     return input
 }
 // begin 2015-09-07
