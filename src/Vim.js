@@ -44,7 +44,6 @@ function Vim(){
     this.on('textChange',()=>{
         this.view()
     })
-    document.body.appendChild(this.input)
 }
 Vim.prototype=Object.create(events.prototype)
 Object.defineProperty(Vim.prototype,'text',{
@@ -173,42 +172,53 @@ Vim.prototype.update_pre_editor=function(){
         this.style.color
 }
 Vim.prototype.createViewDiv=function(){
-    let div=document.createElement('div')
-    div.style.fontFamily='monospace'
-    div.style.border='1px solid black'
-    div.style.whiteSpace='pre'
-    div.addEventListener('click',()=>{
-        this.input.focus()
-    })
-    this.on('view',changed=>{
-        if(this.mode==0){
-            let
-                lines=linesOf(this.text).map(s=>s+'\n'),
-                r=this._cursor.r,
-                c=this._cursor.c
-            div.innerHTML=
-                htmlEntities.encode(
-                    lines.slice(0,r).join('')+
-                    lines[r].substring(0,c)
-                )+
-                '<span style=background-color:black;color:white;>'+
-                htmlEntities.encode(
-                    lines[r].substring(c,
-                        c+1
-                    )
-                )+
-                '</span>'+
-                htmlEntities.encode(
-                    lines[r].substring(c+1)+
-                    lines.slice(r+1).join('')
-                )
-        }
-    })
+    let
+        div=document.createElement('div')
+    div.appendChild(createTextDiv(this))
+    div.appendChild(this.input)
     return div
+    function createTextDiv(vim){
+        let
+            div=document.createElement('div')
+        div.style.fontFamily='monospace'
+        div.style.border='1px solid gray'
+        div.style.whiteSpace='pre'
+        div.addEventListener('click',()=>{
+            vim.input.focus()
+        })
+        vim.on('view',changed=>{
+            if(vim.mode==0){
+                let
+                    lines=linesOf(vim.text).map(s=>s+'\n'),
+                    r=vim._cursor.r,
+                    c=vim._cursor.c
+                div.innerHTML=
+                    htmlEntities.encode(
+                        lines.slice(0,r).join('')+
+                        lines[r].substring(0,c)
+                    )+
+                    '<span style=background-color:black;color:white;>'+
+                    htmlEntities.encode(
+                        lines[r].substring(c,
+                            c+1
+                        )
+                    )+
+                    '</span>'+
+                    htmlEntities.encode(
+                        lines[r].substring(c+1)+
+                        lines.slice(r+1).join('')
+                    )
+            }
+        })
+        return div
+    }
 }
 function createInput(vim){
     let input=document.createElement('input')
-    input.style.position='relative'
+    //input.style.position='relative'
+    input.style.border=0
+    input.style.padding=0
+    input.style.width=0
     input.oninput=()=>{
         if(
             input.value.length&&
