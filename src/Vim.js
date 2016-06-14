@@ -1,4 +1,3 @@
-// Existence precedes essence.
 /*
 http://www.truth.sk/vim/vimbook-OPL.pdf
 */
@@ -16,6 +15,7 @@ Promise.all([
     module.shareImport('runCommandIfPossible.js'),
     events,
     module.shareImport('htmlEntities.js'),
+    module.shareImport('Cursor.js'),
 ]).then(modules=>{
 let
     cursorMoves=            modules[0],
@@ -25,7 +25,8 @@ let
     setup=                  modules[5],
     runCommandIfPossible=   modules[6],
     events=                 modules[7],
-    htmlEntities=           modules[8]
+    htmlEntities=           modules[8],
+    Cursor=                 modules[9]
 function Vim(){
     events.call(this)
     this._text=''
@@ -35,16 +36,22 @@ function Vim(){
     this.viewChanged=[]
     this.input=createInput(this)
     this.mode=0
+    this._cursor=new Cursor(this)
     this.on('commandChange',()=>{
         this.runCommandIfPossible()
         this.view()
     })
+    this.on('textChange',()=>{
+        this.view()
+    })
+    document.body.appendChild(this.input)
 }
 Vim.prototype=Object.create(events.prototype)
 Object.defineProperty(Vim.prototype,'text',{
     set(val){
         this._text=val
         this.viewChanged.text=true
+        this.emit('textChange')
     },
     get(){
         return this._text
@@ -84,6 +91,10 @@ Vim.prototype.view=function(){
     this.viewChanged={}
 }
 commands(Vim)
+Vim.prototype.setText=function(text){
+    this.text=text
+    this.view()
+}
 Vim.prototype.setup=setup
 Vim.prototype.setupPassword=function(password){
     this.password=password
@@ -166,21 +177,30 @@ Vim.prototype.createViewDiv=function(){
     div.style.fontFamily='monospace'
     div.style.border='1px solid black'
     div.style.whiteSpace='pre'
+    div.addEventListener('click',()=>{
+        this.input.focus()
+    })
     this.on('view',changed=>{
-        console.log(changed)
-        console.log(this)
         if(this.mode==0){
+            let
+                lines=linesOf(this.text).map(s=>s+'\n'),
+                r=this._cursor.r,
+                c=this._cursor.c
             div.innerHTML=
                 htmlEntities.encode(
-                    this.text.substring(0,this.selectionStart)
+                    lines.slice(0,r).join('')+
+                    lines[r].substring(0,c)
                 )+
                 '<span style=background-color:black;color:white;>'+
                 htmlEntities.encode(
-                    this.text.substring(this.selectionStart,this.selectionStart+1)
+                    lines[r].substring(c,
+                        c+1
+                    )
                 )+
                 '</span>'+
                 htmlEntities.encode(
-                    this.text.substring(this.selectionStart+1)
+                    lines[r].substring(c+1)+
+                    lines.slice(r+1).join('')
                 )
         }
     })

@@ -1,3 +1,4 @@
+module.import('line.js').then(line=>{
 module.export={
     left,
     right,
@@ -5,13 +6,14 @@ module.export={
     down,
 }
 function left(){
-    if(this.mode==0){
+    this._cursor.moveLeft()
+    /*if(this.mode==0){
         if(
             0<=this.selectionStart-1&&
             this.text[this.selectionStart-1]!='\n'
         )
             this.selectionStart--
-    }else if(this.mode==1){
+    }*//*else if(this.mode==1){
         let
             p=this.selectionStart,
             start=getLineStartByCursor(this.text,p)
@@ -28,10 +30,17 @@ function left(){
             if(this.textarea.value[this.textarea.selectionEnd-2]!=='\n')
                 this.textarea.selectionEnd=this.textarea.selectionEnd-1
         }
-    }
+    }*/
 }
 function right(){
-    if(this.mode==0||this.mode==1){
+    this._cursor.moveRight()
+    /*if(this.mode==0){
+        if(
+            this.selectionStart+1<this.text.length&&
+            this.text[this.selectionStart+1]!='\n'
+        )
+            this.selectionStart++
+    }*//*else if(this.mode==1){
         let
             p=this.selectionStart,
             start=getLineStartByCursor(this.text,p)
@@ -56,11 +65,13 @@ function right(){
             if(this.textarea.value[this.textarea.selectionEnd-1]!=='\n')
                 this.textarea.selectionEnd=this.textarea.selectionEnd+1
         }
-    }
+    }*/
 }
 function up(){
-    if(
-        this.mode===0||
+    this._cursor.moveUp()
+    /*if(this.mode==0){
+    }*/
+    /*else if(
         this.mode===1
     ){
         // do nothing if current line is the first line
@@ -105,10 +116,13 @@ function up(){
             this.textarea.selectionStart=this.visualmode.fixedCursor
             this.textarea.selectionEnd=p
         }
-    }
+    }*/
 }
 function down(){
-    if(this.mode===0||this.mode===1){
+    this._cursor.moveDown()
+    /*if(this.mode===0){
+    }*/
+    /*this.mode===1){
         // do nothing if current line is the last line
         if(
             this.text.substring(
@@ -152,15 +166,6 @@ function down(){
             this.textarea.selectionStart=this.visualmode.fixedCursor
             this.textarea.selectionEnd=p
         }
-    }
+    }*/
 }
-function getLineStartByCursor(text,cursor){
-    return text.substring(0,cursor).lastIndexOf('\n')+1
-}
-function getLineEndByCursor(text,cursor){
-    return text.indexOf('\n',cursor)+1
-}
-function getLineHeadByCursor(text,cursor){
-    let lineStart=getLineStartByCursor(text,cursor)
-    return lineStart+text.substring(lineStart).search(/[^ ]/)
-}
+})
