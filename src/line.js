@@ -1,7 +1,21 @@
 module.export={
+    lines,
+    lineNumber,
     getStartByCursor,
     getEndByCursor,
     getHeadByCursor,
+}
+function lines(text){
+/*
+    A line should not include EOL,
+    since it has already been seperated from the others.
+*/
+    let result=text.split('\n')
+    result.pop()
+    return result
+}
+function lineNumber(text,cursor){
+    return text.substring(0,cursor).split('\n').length-1
 }
 function getStartByCursor(text,cursor){
     return text.substring(0,cursor).lastIndexOf('\n')+1

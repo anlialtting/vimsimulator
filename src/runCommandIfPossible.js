@@ -3,7 +3,7 @@ module.export={
     runCommandIfPossibleForMode2,
 }
 function runCommandIfPossible(){
-    if(this.mode===2)
+    if(this.mode==2)
         return this.runCommandIfPossibleForMode2()
     let
         cmd=this.command,

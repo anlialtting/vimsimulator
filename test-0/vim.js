@@ -4,6 +4,12 @@ module.import('../src/Vim.js').then(Vim=>{
     document.body.appendChild(vim.createViewDiv())
     vim.text=`hello, world
 <html>
+    <head>
+        <title>Title</title>
+    </head>
+    <body>
+    </body>
 </html>
 `
+    vim.focus()
 })

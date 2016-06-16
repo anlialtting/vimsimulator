@@ -14,8 +14,8 @@ Promise.all([
     module.shareImport('setup.js'),
     module.shareImport('runCommandIfPossible.js'),
     events,
-    module.shareImport('htmlEntities.js'),
     module.shareImport('Cursor.js'),
+    module.shareImport('createViewDiv.js'),
 ]).then(modules=>{
 let
     cursorMoves=            modules[0],
@@ -25,8 +25,8 @@ let
     setup=                  modules[5],
     runCommandIfPossible=   modules[6],
     events=                 modules[7],
-    htmlEntities=           modules[8],
-    Cursor=                 modules[9]
+    Cursor=                 modules[8],
+    createViewDiv=          modules[9]
 function Vim(){
     events.call(this)
     this._text=''
@@ -34,7 +34,7 @@ function Vim(){
     this._selectionEnd=0
     this._command=''
     this.viewChanged=[]
-    this.input=createInput(this)
+    this.inputTag=createInput(this)
     this.mode=0
     this._cursor=new Cursor(this)
     this.on('commandChange',()=>{
@@ -172,70 +172,37 @@ Vim.prototype.update_pre_editor=function(){
         this.style.color
 }
 Vim.prototype.focus=function(){
-    this.input.focus()
+    this.inputTag.focus()
 }
-Vim.prototype.createViewDiv=function(){
-    let
-        div=document.createElement('div')
-    div.appendChild(createTextDiv(this))
-    div.appendChild(this.input)
-    return div
-    function createTextDiv(vim){
-        let
-            div=document.createElement('div')
-        div.style.fontFamily='monospace'
-        div.style.whiteSpace='pre'
-        div.addEventListener('dblclick',()=>{
-            vim.focus()
-        })
-        vim.on('view',changed=>{
-            if(vim.mode==0&&document.activeElement!=vim.input){
-                div.innerHTML=
-                    htmlEntities.encode(
-                        vim.text
-                    )
-                return
-            }
-            if(vim.mode==0){
-                let
-                    lines=linesOf(vim.text).map(s=>s+'\n'),
-                    r=vim._cursor.r,
-                    c=vim._cursor.c
-                div.innerHTML=
-                    htmlEntities.encode(
-                        lines.slice(0,r).join('')+
-                        lines[r].substring(0,c)
-                    )+
-                    '<span style=background-color:black;color:white;>'+
-                    htmlEntities.encode(
-                        lines[r].substring(c,
-                            c+1
-                        )
-                    )+
-                    '</span>'+
-                    htmlEntities.encode(
-                        lines[r].substring(c+1)+
-                        lines.slice(r+1).join('')
-                    )
-                return
-            }
-        })
-        return div
-    }
-}
+Vim.prototype.createViewDiv=createViewDiv
 function createInput(vim){
     let input=document.createElement('input')
-    //input.style.position='relative'
+    input.style.position='absolute'
+    input.style.fontFamily='monospace'
     input.style.border=0
     input.style.padding=0
-    input.style.width=0
+    input.style.fontSize='13px'
+    input.style.backgroundColor='rgba(0,0,0,0)'
+    //input.style.height=0
     input.addEventListener('input',()=>{
-        if(
-            input.value.length&&
-            input.selectionStart==input.selectionEnd
-        ){
-            vim.command+=input.value
-            input.value=''
+        if(vim.mode==0){
+            if(
+                input.value.length&&
+                input.selectionStart==input.selectionEnd
+            ){
+                vim.command+=input.value
+                input.value=''
+            }
+        }else if(vim.mode==1){
+            if(input.value.length){
+                if(input.selectionStart==input.selectionEnd){
+                    vim.input=input.value
+                    vim.imInput=''
+                    input.value=''
+                }else
+                    vim.imInput=input.value
+                vim.view()
+            }
         }
     })
     input.addEventListener('focus',()=>{
