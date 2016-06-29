@@ -35,7 +35,7 @@ function Vim(){
     this._command=''
     this.viewChanged=[]
     this.inputTag=createInput(this)
-    this.mode=0
+    this._mode=0
     this._cursor=new Cursor(this)
     this.on('commandChange',()=>{
         this.runCommandIfPossible()
@@ -46,6 +46,15 @@ function Vim(){
     })
 }
 Vim.prototype=Object.create(events.prototype)
+Object.defineProperty(Vim.prototype,'mode',{
+    set(val){
+        this._mode=val
+        this.viewChanged.mode=true
+    },
+    get(){
+        return this._mode
+    }
+})
 Object.defineProperty(Vim.prototype,'text',{
     set(val){
         this._text=val

@@ -8,13 +8,37 @@ let
 module.export=createViewDiv
 function createViewDiv(){
     let
-        div=document.createElement('div')
+        div=document.createElement('div'),
+        commandDiv=createCommandDiv(this)
     div.style.position='relative'
     div.appendChild(createTextDiv(this))
+    div.appendChild(commandDiv)
     div.appendChild(this.inputTag)
     this.on('view',changed=>{
-        this.inputTag.style.top=`${this._cursor.r*13-1.25}px`
+        //this.inputTag.style.top=`${this._cursor.r*13}px`
+        console.log(changed)
+        changed.forEach(key=>{
+            if(key=='mode'){
+                if(this.mode==0)
+                    commandDiv.textContent=''
+                else if(this.mode==1)
+                    commandDiv.textContent='-- INSERT --'
+                else if(this.mode==2)
+                    commandDiv.textContent='-- VISUAL --'
+                else if(this.mode==3)
+                    commandDiv.textContent='-- VISUAL BLOCK --'
+            }
+        })
     })
+    return div
+}
+function createCommandDiv(vim){
+    let
+        div=document.createElement('div')
+    div.style.fontFamily='monospace'
+    div.style.fontSize='13px'
+    div.style.lineHeight='1'
+    div.style.whiteSpace='pre'
     return div
 }
 function createTextDiv(vim){
@@ -39,9 +63,9 @@ function mode0(vim,div){
     if(document.activeElement!=vim.inputTag)
         return div.innerHTML=htmlEntities.encode(vim.text)
     let
-        lines=line.lines(vim.text).map(s=>s+'\n'),
-        r=vim._cursor.r,
-        c=vim._cursor.c
+        lines=  line.lines(vim.text).map(s=>s+'\n'),
+        r=      vim._cursor.r,
+        c=      vim._cursor.c
     div.innerHTML=
         htmlEntities.encode(
             lines.slice(0,r).join('')+
@@ -49,9 +73,7 @@ function mode0(vim,div){
         )+
         '<span style=background-color:black;color:white;>'+
         htmlEntities.encode(
-            lines[r].substring(c,
-                c+1
-            )
+            lines[r].substring(c,c+1)
         )+
         '</span>'+
         htmlEntities.encode(
@@ -61,9 +83,9 @@ function mode0(vim,div){
 }
 function mode1(vim,div){
     let
-        lines=line.lines(vim.text).map(s=>s+'\n'),
-        r=vim._cursor.r,
-        c=vim._cursor.c
+        lines=  line.lines(vim.text).map(s=>s+'\n'),
+        r=      vim._cursor.r,
+        c=      vim._cursor.c
     if(vim.imInput)
         div.innerHTML=
             htmlEntities.encode(
@@ -76,12 +98,7 @@ function mode1(vim,div){
             )+
             '</span>'+
             htmlEntities.encode(
-                lines[r].substring(c,
-                    c+1
-                )
-            )+
-            htmlEntities.encode(
-                lines[r].substring(c+1)+
+                lines[r].substring(c)+
                 lines.slice(r+1).join('')
             )
     else
