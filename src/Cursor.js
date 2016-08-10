@@ -28,3 +28,8 @@ Object.defineProperty(Cursor.prototype,'r',{get(){
 Object.defineProperty(Cursor.prototype,'c',{get(){
     return Math.min(this._countOfCols-1,Math.max(0,this._x))
 }})
+Object.defineProperty(Cursor.prototype,'abs',{get(){
+    return this._vim.text.split('\n').slice(0,this.r).join('').length+
+        this.r+
+        this.c
+}})

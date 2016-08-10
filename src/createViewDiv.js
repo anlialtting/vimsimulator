@@ -16,7 +16,8 @@ function createViewDiv(){
     div.appendChild(this.inputTag)
     this.on('view',changed=>{
         //this.inputTag.style.top=`${this._cursor.r*13}px`
-        console.log(changed)
+        //console.log(changed)
+        console.log(this._cursor.abs)
         changed.forEach(key=>{
             if(key=='mode'){
                 if(this.mode==0)

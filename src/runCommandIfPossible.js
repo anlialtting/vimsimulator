@@ -3,6 +3,8 @@ module.export={
     runCommandIfPossibleForMode2,
 }
 function runCommandIfPossible(){
+    if(this.mode==1)
+        return runCommandIfPossibleForMode1(this)
     if(this.mode==2)
         return this.runCommandIfPossibleForMode2()
     let
@@ -169,6 +171,17 @@ function runCommandIfPossible(){
         }
         return result
     }
+}
+function runCommandIfPossibleForMode1(vim){
+    if(vim.command=='')
+        return
+    if(vim.command==String.fromCharCode(27)){
+        vim.mode=0
+        vim.command=''
+        return
+    }
+    vim.text=vim.text.substring(0,vim._cursor.abs)+vim.command+vim.text.substring(vim._cursor.abs)
+    vim.command=''
 }
 function runCommandIfPossibleForMode2(){
     if(this.command==='d'){

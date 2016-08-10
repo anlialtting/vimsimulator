@@ -205,13 +205,20 @@ function createInput(vim){
         }else if(vim.mode==1){
             if(input.value.length){
                 if(input.selectionStart==input.selectionEnd){
-                    vim.input=input.value
+                    vim.command+=input.value
                     vim.imInput=''
                     input.value=''
                 }else
                     vim.imInput=input.value
                 vim.view()
             }
+        }
+    })
+    input.addEventListener('keydown',e=>{
+        if(e.keyCode==27){
+            e.preventDefault()
+            e.stopPropagation()
+            vim.command+=String.fromCharCode(27)
         }
     })
     input.addEventListener('focus',()=>{
