@@ -9,7 +9,7 @@ let
     JsonFormatter=modules[1],
     uppercaseCommands=modules[2],
     lowercaseCommands=modules[3]
-module.export=function(Vim){
+return function(Vim){
     Vim.prototype.command_A=uppercaseCommands.A
     Vim.prototype.command_D=uppercaseCommands.D
     Vim.prototype.command_G=uppercaseCommands.G

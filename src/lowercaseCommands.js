@@ -5,7 +5,7 @@ Promise.all([
 let
     CryptoJS=modules[0],
     JsonFormatter=modules[1]
-module.export={dd,h,j,k,l,o,p,r,u,x,dot,gg}
+return {dd,h,j,k,l,o,p,r,u,x,dot,gg}
 function dd(count){
     count=count||1
     let f=this.textarea.selectionStart

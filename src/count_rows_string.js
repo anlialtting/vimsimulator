@@ -1,4 +1,3 @@
-module.export=count_rows_string
 function count_rows_string(countOfColsPerRow,string){
     let
         row_currentLine=0,
@@ -19,3 +18,4 @@ function count_rows_string(countOfColsPerRow,string){
     }
     return row_currentLine+1
 }
+count_rows_string

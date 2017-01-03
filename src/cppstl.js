@@ -27,4 +27,4 @@ cppstl.partial_sum=input=>{
         output[i]+=output[i-1]
     return output
 }
-module.export=cppstl
+cppstl

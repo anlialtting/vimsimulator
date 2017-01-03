@@ -1,5 +1,5 @@
 module.shareImport('monospaceFonts.js').then(monospaceFonts=>{
-module.export=create_div_editor
+return create_div_editor
 function create_div_editor(vim){
     let div_editor=document.createElement('div')
     div_editor.className='vimontheweb_div_editor'

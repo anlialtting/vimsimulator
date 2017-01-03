@@ -2,8 +2,8 @@
 http://www.truth.sk/vim/vimbook-OPL.pdf
 */
 let
-    CryptoJS=module.arguments.CryptoJS||module.extract('https://cdn.rawgit.com/sytelus/CryptoJS/7fbfbbee0d005b31746bc5858c70c359e98308e5/rollups/aes.js','CryptoJS',{lazy:true}),
-    events=module.arguments.events||module.importByPath('https://cdn.rawgit.com/anliting/module/ba2cb12b7f16bf066fc82d2ebd24200d6c857856/node/events.js')
+    CryptoJS=module.arguments.CryptoJS||module.extractByPath('https://cdn.rawgit.com/sytelus/CryptoJS/7fbfbbee0d005b31746bc5858c70c359e98308e5/rollups/aes.js','CryptoJS',{lazy:true}),
+    events=module.arguments.events||module.importByPath('https://cdn.rawgit.com/anliting/module/5ddc4f02188066d00a698eea63f983ab1e5b7d4f/node/events.js')
 module=module.share({CryptoJS})
 Promise.all([
     module.shareImport('cursorMoves.js'),
@@ -255,5 +255,5 @@ function getLineHeadByCursor(text,cursor){
     return lineStart+text.substring(lineStart).search(/[^ ]/)
 }
 // end 2015-09-06
-module.export=Vim
+return Vim
 })

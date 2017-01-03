@@ -1,5 +1,5 @@
 module.import('line.js').then(line=>{
-module.export={
+return {
     left,
     right,
     up,

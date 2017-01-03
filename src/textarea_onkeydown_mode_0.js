@@ -1,4 +1,3 @@
-module.export=textarea_onkeydown_mode_0
 function textarea_onkeydown_mode_0(vim,e){
     var
         value_toreturn
@@ -253,3 +252,4 @@ function textarea_onkeydown_mode_0(vim,e){
         }
     }
 }
+textarea_onkeydown_mode_0

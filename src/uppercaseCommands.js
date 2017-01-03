@@ -5,7 +5,7 @@ Promise.all([
 let
     CryptoJS=modules[0],
     JsonFormatter=modules[1]
-module.export={A,D,G,I,O,P,X}
+return {A,D,G,I,O,P,X}
 function A(count){
     let i=this.textarea.selectionStart
     while(

@@ -1,4 +1,4 @@
-module.export={
+({
     encode(s){
         let e=document.createElement('div')
         e.textContent=s
@@ -9,4 +9,4 @@ module.export={
         e.innerHTML=s
         return e.textContent
     }
-}
+})

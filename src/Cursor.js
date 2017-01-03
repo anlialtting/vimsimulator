@@ -1,4 +1,3 @@
-module.export=Cursor
 function Cursor(vim){
     this._vim=vim
     this._x=0
@@ -33,3 +32,4 @@ Object.defineProperty(Cursor.prototype,'abs',{get(){
         this.r+
         this.c
 }})
+Cursor

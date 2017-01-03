@@ -1,10 +1,3 @@
-module.export={
-    lines,
-    lineNumber,
-    getStartByCursor,
-    getEndByCursor,
-    getHeadByCursor,
-}
 function lines(text){
 /*
     A line should not include EOL,
@@ -27,3 +20,10 @@ function getHeadByCursor(text,cursor){
     let lineStart=getStartByCursor(text,cursor)
     return lineStart+text.substring(lineStart).search(/[^ ]/)
 }
+;({
+    lines,
+    lineNumber,
+    getStartByCursor,
+    getEndByCursor,
+    getHeadByCursor,
+})

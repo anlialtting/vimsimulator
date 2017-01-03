@@ -1,7 +1,3 @@
-module.export={
-    runCommandIfPossible,
-    runCommandIfPossibleForMode2,
-}
 function runCommandIfPossible(){
     if(this.mode==1)
         return runCommandIfPossibleForMode1(this)
@@ -198,3 +194,7 @@ function runCommandIfPossibleForMode2(){
         this.command=''
     }
 }
+;({
+    runCommandIfPossible,
+    runCommandIfPossibleForMode2,
+})

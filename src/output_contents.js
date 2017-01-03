@@ -1,5 +1,5 @@
 module.shareImport('count_rows_string.js').then(count_rows_string=>{
-module.export=output_contents
+return output_contents
 function output_contents(
     vim,
     cursor,

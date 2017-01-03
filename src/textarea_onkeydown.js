@@ -1,5 +1,5 @@
 module.import('textarea_onkeydown_mode_0.js').then(textarea_onkeydown_mode_0=>{
-module.export=textarea_onkeydown
+return textarea_onkeydown
 function textarea_onkeydown(vim,e){
     var value_toreturn
     if(

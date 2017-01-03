@@ -5,4 +5,4 @@ let
         '\'Courier New\','+
         '\'Courier\','+
         'monospace'
-module.export=monospaceFonts
+monospaceFonts

@@ -5,7 +5,7 @@ Promise.all([
 let
     htmlEntities=modules[0],
     line=modules[1]
-module.export=createViewDiv
+return createViewDiv
 function createViewDiv(){
     let
         div=document.createElement('div'),
