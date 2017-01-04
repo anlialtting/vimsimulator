@@ -24,11 +24,11 @@ let
     CryptoJS=               modules[4],
     setup=                  modules[5],
     runCommandIfPossible=   modules[6],
-    events=                 modules[7],
+    EventEmmiter=           modules[7],
     Cursor=                 modules[8],
     createViewDiv=          modules[9]
 function Vim(){
-    events.call(this)
+    EventEmmiter.call(this)
     this._text=''
     this._selectionStart=0
     this._selectionEnd=0
@@ -45,7 +45,7 @@ function Vim(){
         this.view()
     })
 }
-Vim.prototype=Object.create(events.prototype)
+Object.setPrototypeOf(Vim.prototype,EventEmmiter.prototype)
 Object.defineProperty(Vim.prototype,'mode',{
     set(val){
         this._mode=val

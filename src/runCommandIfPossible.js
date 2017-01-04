@@ -176,7 +176,13 @@ function runCommandIfPossibleForMode1(vim){
         vim.command=''
         return
     }
-    vim.text=vim.text.substring(0,vim._cursor.abs)+vim.command+vim.text.substring(vim._cursor.abs)
+    vim.text=
+        vim.text.substring(0,vim._cursor.abs)+
+        vim.command+
+        vim.text.substring(vim._cursor.abs)
+    vim._cursor.moveTo(
+        vim._cursor.abs+vim.command.length
+    )
     vim.command=''
 }
 function runCommandIfPossibleForMode2(){

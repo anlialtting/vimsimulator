@@ -3,6 +3,13 @@ function Cursor(vim){
     this._x=0
     this._y=0
 }
+Cursor.prototype.moveTo=function(n){
+    this._y=this._vim.text.substring(0,n).split('\n').length-1
+    this._x=n-(
+        this._vim.text.split('\n').slice(0,this.r).join('').length+
+        this.r
+    )
+}
 Cursor.prototype.moveLeft=function(){
     this._x=Math.max(0,this.c-1)
 }
