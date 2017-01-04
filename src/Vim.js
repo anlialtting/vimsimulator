@@ -34,6 +34,7 @@ Promise.all([
         this._selectionEnd=0
         this._command=''
         this.viewChanged=[]
+        this.lineHeightInPx=13
         this.inputTag=createInput(this)
         this._mode=0
         this._cursor=new Cursor(this)
@@ -186,8 +187,7 @@ Promise.all([
     Vim.prototype.createViewDiv=createViewDiv
     function createInput(vim){
         let
-            input=document.createElement('input'),
-            composing=false
+            input=document.createElement('input')
         input.style.position='absolute'
         input.style.fontFamily='monospace'
         input.style.border=0
@@ -195,33 +195,32 @@ Promise.all([
         input.style.fontSize='13px'
         input.style.backgroundColor='rgba(0,0,0,0)'
         //input.style.height=0
+        let
+            composing=false
+        input.addEventListener('blur',()=>{
+            vim.view()
+        })
         input.addEventListener('compositionstart',e=>{
             composing=true
         })
         input.addEventListener('compositionend',e=>{
             composing=false
+            vim.imInput=''
         })
-        input.addEventListener('input',e=>{
-            if(vim.mode==0){
-                if(
-                    input.value.length&&
-                    input.selectionStart==input.selectionEnd
-                ){
+        input.addEventListener('focus',()=>{
+            vim.view()
+        })
+        input.addEventListener('input',()=>{
+            if(composing)
+                vim.imInput=input.value
+            else{
+                if(input.value.length){
                     vim.command+=input.value
                     input.value=''
                 }
-            }else if(vim.mode==1){
-                if(input.value.length){
-                    if(!composing){
-                        vim.command+=input.value
-                        vim.imInput=''
-                        input.value=''
-                    }else{
-                        vim.imInput=input.value
-                    }
-                    vim.view()
-                }
             }
+            if(vim.mode==1)
+                vim.view()
         })
         input.addEventListener('keydown',e=>{
             if(
@@ -229,16 +228,19 @@ Promise.all([
                 e.ctrlKey&&e.key=='c'||
                 e.ctrlKey&&e.key=='['
             ){
-                e.preventDefault()
-                e.stopPropagation()
+                pdsp()
                 vim.command+=String.fromCharCode(27)
             }
-        })
-        input.addEventListener('focus',()=>{
-            vim.view()
-        })
-        input.addEventListener('blur',()=>{
-            vim.view()
+            if(
+                e.key=='Backspace'
+            ){
+                pdsp()
+                vim.command+=String.fromCharCode(8)
+            }
+            function pdsp(){
+                e.preventDefault()
+                e.stopPropagation()
+            }
         })
         return input
     }

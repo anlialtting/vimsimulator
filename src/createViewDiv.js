@@ -15,9 +15,11 @@ Promise.all([
         div.appendChild(commandDiv)
         div.appendChild(this.inputTag)
         this.on('view',changed=>{
-            //this.inputTag.style.top=`${this._cursor.r*13}px`
-            //console.log(changed)
-            //console.log(this._cursor.abs)
+            this.inputTag.style.top=`${
+                this._cursor.r*this.lineHeightInPx
+            }px`
+            this.inputTag.style.outline='none'
+            this.inputTag.style.color='rgba(0,0,0,0)'
             changed.forEach(key=>{
                 if(key=='mode'){
                     if(this.mode==0)
