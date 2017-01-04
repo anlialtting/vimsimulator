@@ -12,6 +12,8 @@ Promise.all([
             commandDiv=createCommandDiv(this)
         this.inputTag.style.outline='none'
         this.inputTag.style.width='100%'
+        this.inputTag.style.color='white'
+        this.inputTag.style.backgroundColor='black'
         div.style.position='relative'
         div.appendChild(createTextDiv(this))
         div.appendChild(commandDiv)
@@ -65,8 +67,6 @@ Promise.all([
     function mode0(vim,div){
         if(document.activeElement!=vim.inputTag)
             return div.innerHTML=htmlEntities.encode(vim.text)
-        vim.inputTag.style.color=''
-        vim.inputTag.style.backgroundColor=''
         let
             lines=  line.lines(vim.text).map(s=>s+'\n'),
             r=      vim._cursor.r,
@@ -87,8 +87,6 @@ Promise.all([
             )
     }
     function mode1(vim,div){
-        vim.inputTag.style.color='white'
-        vim.inputTag.style.backgroundColor='black'
         let
             lines=  line.lines(vim.text).map(s=>s+'\n'),
             r=      vim._cursor.r,
