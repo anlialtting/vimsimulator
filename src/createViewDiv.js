@@ -11,16 +11,15 @@ Promise.all([
             div=document.createElement('div'),
             commandDiv=createCommandDiv(this)
         this.inputTag.style.outline='none'
-        this.inputTag.style.color='white'
         this.inputTag.style.width='100%'
         div.style.position='relative'
         div.appendChild(createTextDiv(this))
         div.appendChild(commandDiv)
         div.appendChild(this.inputTag)
         this.on('view',changed=>{
-            this.inputTag.style.top=`${
+            /*this.inputTag.style.top=`${
                 this._cursor.r*this.lineHeightInPx
-            }px`
+            }px`*/
             changed.forEach(key=>{
                 if(key=='mode'){
                     if(this.mode==0)
@@ -66,6 +65,8 @@ Promise.all([
     function mode0(vim,div){
         if(document.activeElement!=vim.inputTag)
             return div.innerHTML=htmlEntities.encode(vim.text)
+        vim.inputTag.style.color=''
+        vim.inputTag.style.backgroundColor=''
         let
             lines=  line.lines(vim.text).map(s=>s+'\n'),
             r=      vim._cursor.r,
@@ -86,18 +87,19 @@ Promise.all([
             )
     }
     function mode1(vim,div){
+        vim.inputTag.style.color='white'
+        vim.inputTag.style.backgroundColor='black'
         let
             lines=  line.lines(vim.text).map(s=>s+'\n'),
             r=      vim._cursor.r,
             c=      vim._cursor.c
-        //this.inputTag.style.backgroundColor='black'
         if(vim.imInput)
             div.innerHTML=
                 htmlEntities.encode(
                     lines.slice(0,r).join('')+
                     lines[r].substring(0,c)
                 )+
-                '<span style=background-color:black>'+
+                '<span style=background-color:black;color:white;>'+
                 htmlEntities.encode(
                     vim.imInput
                 )+
