@@ -197,11 +197,9 @@ Promise.all([
         //input.style.height=0
         input.addEventListener('compositionstart',e=>{
             composing=true
-            console.log(composing)
         })
         input.addEventListener('compositionend',e=>{
             composing=false
-            console.log(composing)
         })
         input.addEventListener('input',e=>{
             if(vim.mode==0){
@@ -218,8 +216,9 @@ Promise.all([
                         vim.command+=input.value
                         vim.imInput=''
                         input.value=''
-                    }else
+                    }else{
                         vim.imInput=input.value
+                    }
                     vim.view()
                 }
             }
