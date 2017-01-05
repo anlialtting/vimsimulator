@@ -5,50 +5,7 @@ Promise.all([
     let
         CryptoJS=modules[0],
         JsonFormatter=modules[1]
-    return {dd,h,j,k,l,p,r,u,x,dot,gg}
-    function dd(count){
-        count=count||1
-        let f=this.textarea.selectionStart
-        let l=this.textarea.selectionStart
-        f=getLineStartByCursor(this.textarea.value,f)
-        for(let i=0;i<count;i++)
-            l=getLineEndByCursor(this.textarea.value,l)
-        this.yank(1,this.textarea.value.substring(f,l))
-        this.textarea.value
-            =this.textarea.value.substring(0,f)
-            +this.textarea.value.substring(
-                l,this.textarea.value.length
-            )
-        if(f<this.textarea.value.length)
-            this.textarea.selectionStart=this.textarea.selectionEnd=f
-        else{
-            this.textarea.selectionStart=this.textarea.selectionEnd=
-                getLineStartByCursor(
-                    this.textarea.value,
-                    this.textarea.value.length-1
-                )
-        }
-    }
-    function h(count){
-        count=count||1
-        while(count--)
-            this._cursor.moveLeft()
-    }
-    function j(count){
-        count=count||1
-        while(count--)
-            this._cursor.moveDown()
-    }
-    function k(count){
-        count=count||1
-        while(count--)
-            this._cursor.moveUp()
-    }
-    function l(count){
-        count=count||1
-        while(count--)
-            this._cursor.moveRight()
-    }
+    return {p,r,u,x,dot}
     function p(count){
         count=count||1
         this.pasteBoard=JSON.parse(
@@ -121,15 +78,6 @@ Promise.all([
         this.textarea.selectionStart=selectionStart
     }
     function dot(count){
-    }
-    function gg(count){
-        let
-            c=0
-        count=count===undefined?0:count-1
-        while(count--)
-            c=getLineEndByCursor(this.textarea.value,c)
-        this.textarea.selectionStart=
-            this.textarea.selectionEnd=c
     }
     function getLineStartByCursor(text,cursor){
         return text.substring(0,cursor).lastIndexOf('\n')+1

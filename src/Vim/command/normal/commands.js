@@ -27,7 +27,9 @@ Promise.all([
         }
     }
     function G(vim,cmd,arg){
-        uppercaseCommands.G.call(vim,arg)
+        arg=arg||vim._cursor._countOfRows
+        arg=Math.min(vim._cursor._countOfRows,arg)
+        vim._cursor.moveTo(vim._cursor.line(arg-1))
         return{
             acceptable:true,
             complete:true,
@@ -44,10 +46,8 @@ Promise.all([
     function O(vim,cmd,arg){
         vim.mode='insert'
         vim._cursor.moveTo(vim._cursor.lineStart)
-        vim.text=
-            vim.text.substring(0,vim._cursor.abs)+
-            '\n'+
-            vim.text.substring(vim._cursor.abs)
+        let c=vim._cursor.abs
+        vim.text=vim.text.substring(0,c)+'\n'+vim.text.substring(c)
         return{
             acceptable:true,
             complete:true,
@@ -82,7 +82,10 @@ Promise.all([
         if(cmd=='')
             return{acceptable:true}
         if(cmd=='d'){
-            lowercaseCommands.dd.call(vim,arg)
+            vim.text=
+                vim.text.substring(0,vim._cursor.line(vim._cursor.r))+
+                vim.text.substring(vim._cursor.line(vim._cursor.r+1))
+            vim._cursor.moveTo(vim._cursor.lineStart)
             return{
                 acceptable:true,
                 complete:true,
@@ -90,11 +93,38 @@ Promise.all([
             }
         }
     }
+/*
+    function dd(count){
+        count=count||1
+        let f=this.textarea.selectionStart
+        let l=this.textarea.selectionStart
+        f=getLineStartByCursor(this.textarea.value,f)
+        for(let i=0;i<count;i++)
+            l=getLineEndByCursor(this.textarea.value,l)
+        this.yank(1,this.textarea.value.substring(f,l))
+        this.textarea.value
+            =this.textarea.value.substring(0,f)
+            +this.textarea.value.substring(
+                l,this.textarea.value.length
+            )
+        if(f<this.textarea.value.length)
+            this.textarea.selectionStart=this.textarea.selectionEnd=f
+        else{
+            this.textarea.selectionStart=this.textarea.selectionEnd=
+                getLineStartByCursor(
+                    this.textarea.value,
+                    this.textarea.value.length-1
+                )
+        }
+    }
+*/
     function g(vim,cmd,arg){
         if(cmd=='')
             return{acceptable:true}
         if(cmd=='g'){
-            lowercaseCommands.gg.call(vim,arg)
+            arg=arg||1
+            arg=Math.min(vim._cursor._countOfRows,arg)
+            vim._cursor.moveTo(vim._cursor.line(arg-1))
             return{
                 acceptable:true,
                 complete:true,
@@ -102,7 +132,9 @@ Promise.all([
         }
     }
     function h(vim,cmd,arg){
-        lowercaseCommands.h.call(vim,arg)
+        arg=arg||1
+        while(arg--)
+            vim._cursor.moveLeft()
         return{
             acceptable:true,
             complete:true,
@@ -116,21 +148,27 @@ Promise.all([
         }
     }
     function j(vim,cmd,arg){
-        lowercaseCommands.j.call(vim,arg)
+        arg=arg||1
+        while(arg--)
+            vim._cursor.moveDown()
         return{
             acceptable:true,
             complete:true,
         }
     }
     function k(vim,cmd,arg){
-        lowercaseCommands.k.call(vim,arg)
+        arg=arg||1
+        while(arg--)
+            vim._cursor.moveUp()
         return{
             acceptable:true,
             complete:true,
         }
     }
     function l(vim,cmd,arg){
-        lowercaseCommands.l.call(vim,arg)
+        arg=arg||1
+        while(arg--)
+            vim._cursor.moveRight()
         return{
             acceptable:true,
             complete:true,
@@ -146,10 +184,8 @@ Promise.all([
     function o(vim,cmd,arg){
         vim.mode='insert'
         vim._cursor.moveTo(vim._cursor.lineEnd)
-        vim.text=
-            vim.text.substring(0,vim._cursor.abs)+
-            '\n'+
-            vim.text.substring(vim._cursor.abs)
+        let c=vim._cursor.abs
+        vim.text=vim.text.substring(0,c)+'\n'+vim.text.substring(c)
         return{
             acceptable:true,
             complete:true,

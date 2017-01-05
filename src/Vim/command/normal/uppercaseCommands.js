@@ -5,7 +5,7 @@ Promise.all([
     let
         CryptoJS=modules[0],
         JsonFormatter=modules[1]
-    return {D,G,P,X}
+    return {D,P,X}
     function D(count){
         let selectionStart=
             this.textarea.selectionStart
@@ -27,18 +27,6 @@ Promise.all([
                 selectionStart-1
             :
                 selectionStart
-    }
-    function G(count){
-        if(count===undefined)
-            count=
-                this.textarea.value.split('\n').length-1-1
-        else
-            count--
-        let c=0
-        for(let i=0;i<count;i++)
-            c=getLineEndByCursor(this.textarea.value,c)
-        this.textarea.selectionStart=
-        this.textarea.selectionEnd=c
     }
     function P(count){
         count=count||1

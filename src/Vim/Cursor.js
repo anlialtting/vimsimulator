@@ -22,6 +22,9 @@ function availableCols(c){
     if(c._vim.mode=='insert')
         return c._countOfCols+1
 }
+Cursor.prototype.line=function(n){
+    return this._vim.text.split('\n').slice(0,n).join('').length+n
+}
 // end 0
 // start 1
 Cursor.prototype.moveLeft=function(){
