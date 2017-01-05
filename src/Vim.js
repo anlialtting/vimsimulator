@@ -3,19 +3,20 @@ http://www.truth.sk/vim/vimbook-OPL.pdf
 */
 let
     CryptoJS=module.arguments.CryptoJS||module.extractByPath('https://cdn.rawgit.com/sytelus/CryptoJS/7fbfbbee0d005b31746bc5858c70c359e98308e5/rollups/aes.js','CryptoJS',{lazy:true}),
-    events=module.arguments.events||module.importByPath('https://cdn.rawgit.com/anliting/module/5ddc4f02188066d00a698eea63f983ab1e5b7d4f/node/events.js')
+    EventEmmiter=module.arguments.events||module.importByPath('https://cdn.rawgit.com/anliting/module/5ddc4f02188066d00a698eea63f983ab1e5b7d4f/node/events.js')
 module=module.share({CryptoJS})
 Promise.all([
-    module.shareImport('cursorMoves.js'),
-    module.shareImport('JsonFormatter.js'),
-    module.shareImport('commands.js'),
-    module.shareImport('Vim.prototype.update.js'),
+    module.shareImport('Vim/cursorMoves.js'),
+    module.shareImport('Vim/JsonFormatter.js'),
+    module.shareImport('Vim/commands.js'),
+    module.shareImport('Vim/prototype.update.js'),
     CryptoJS,
-    module.shareImport('setup.js'),
-    module.shareImport('runCommandIfPossible.js'),
-    events,
-    module.shareImport('Cursor.js'),
-    module.shareImport('createViewDiv.js'),
+    module.shareImport('Vim/setup.js'),
+    module.shareImport('Vim/runCommandIfPossible.js'),
+    EventEmmiter,
+    module.shareImport('Vim/Cursor.js'),
+    module.shareImport('Vim/createViewDiv.js'),
+    module.shareImport('Vim/createInput.js'),
 ]).then(modules=>{
     let
         cursorMoves=            modules[0],
@@ -26,7 +27,8 @@ Promise.all([
         runCommandIfPossible=   modules[6],
         EventEmmiter=           modules[7],
         Cursor=                 modules[8],
-        createViewDiv=          modules[9]
+        createViewDiv=          modules[9],
+        createInput=            modules[10]
     function Vim(){
         EventEmmiter.call(this)
         this._text=''
@@ -38,13 +40,6 @@ Promise.all([
         this.inputTag=createInput(this)
         this._mode=0
         this._cursor=new Cursor(this)
-        this.on('commandChange',()=>{
-            this.runCommandIfPossible()
-            this.view()
-        })
-        this.on('textChange',()=>{
-            this.view()
-        })
     }
     Object.setPrototypeOf(Vim.prototype,EventEmmiter.prototype)
     Object.defineProperty(Vim.prototype,'mode',{
@@ -60,6 +55,7 @@ Promise.all([
         set(val){
             this._text=val
             this.viewChanged.text=true
+            this.view()
             this.emit('textChange')
         },
         get(){
@@ -88,8 +84,11 @@ Promise.all([
         set(val){
             this._command=val
             this.viewChanged.command=true
-            if(this._command)
-                this.emit('commandChange')
+            if(this._command){
+                this.runCommandIfPossible()
+                this.view()
+            }
+            this.emit('commandChange')
         },
         get(){
             return this._command
@@ -185,65 +184,6 @@ Promise.all([
         this.inputTag.focus()
     }
     Vim.prototype.createViewDiv=createViewDiv
-    function createInput(vim){
-        let
-            input=document.createElement('input')
-        input.style.position='absolute'
-        input.style.fontFamily='monospace'
-        input.style.border=0
-        input.style.padding=0
-        input.style.fontSize='13px'
-        input.style.backgroundColor='rgba(0,0,0,0)'
-        //input.style.height=0
-        let
-            composing=false
-        input.addEventListener('blur',()=>{
-            vim.view()
-        })
-        input.addEventListener('compositionstart',e=>{
-            composing=true
-        })
-        input.addEventListener('compositionend',e=>{
-            composing=false
-            vim.imInput=''
-        })
-        input.addEventListener('focus',()=>{
-            vim.view()
-        })
-        input.addEventListener('input',()=>{
-            if(composing)
-                vim.imInput=input.value
-            else{
-                if(input.value.length){
-                    vim.command+=input.value
-                    input.value=''
-                }
-            }
-            if(vim.mode==1)
-                vim.view()
-        })
-        input.addEventListener('keydown',e=>{
-            if(
-                e.key=='Escape'||
-                e.ctrlKey&&e.key=='c'||
-                e.ctrlKey&&e.key=='['
-            ){
-                pdsp()
-                vim.command+=String.fromCharCode(27)
-            }
-            if(
-                e.key=='Backspace'
-            ){
-                pdsp()
-                vim.command+=String.fromCharCode(8)
-            }
-            function pdsp(){
-                e.preventDefault()
-                e.stopPropagation()
-            }
-        })
-        return input
-    }
     // begin 2015-09-07
     function linesOf(text){
     /*

@@ -150,10 +150,11 @@ Promise.all([
             function cursor(vim){
                 if(vim.mode===0||vim.mode===1)
                     return vim.textarea.selectionStart
-                return vim.textarea.selectionStart<vim.visualmode.fixedCursor?
-                    vim.textarea.selectionStart
-                :
-                    vim.textarea.selectionEnd-1
+                return vim.textarea.selectionStart<
+                    vim.visualmode.fixedCursor?
+                        vim.textarea.selectionStart
+                    :
+                        vim.textarea.selectionEnd-1
             }
         }
         function output_commandLine(vim){
