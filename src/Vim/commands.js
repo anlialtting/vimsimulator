@@ -1,34 +1,11 @@
 Promise.all([
     CryptoJS,
     module.shareImport('JsonFormatter.js'),
-    module.shareImport('commands/uppercaseCommands.js'),
-    module.shareImport('commands/lowercaseCommands.js'),
 ]).then(modules=>{
     let
         CryptoJS=modules[0],
-        JsonFormatter=modules[1],
-        uppercaseCommands=modules[2],
-        lowercaseCommands=modules[3]
+        JsonFormatter=modules[1]
     return function(Vim){
-        Vim.prototype.command_A=uppercaseCommands.A
-        Vim.prototype.command_D=uppercaseCommands.D
-        Vim.prototype.command_G=uppercaseCommands.G
-        Vim.prototype.command_I=uppercaseCommands.I
-        Vim.prototype.command_O=uppercaseCommands.O
-        Vim.prototype.command_P=uppercaseCommands.P
-        Vim.prototype.command_X=uppercaseCommands.X
-        Vim.prototype.command_h=lowercaseCommands.h
-        Vim.prototype.command_j=lowercaseCommands.j
-        Vim.prototype.command_k=lowercaseCommands.k
-        Vim.prototype.command_l=lowercaseCommands.l
-        Vim.prototype.command_o=lowercaseCommands.o
-        Vim.prototype.command_p=lowercaseCommands.p
-        Vim.prototype.command_r=lowercaseCommands.r
-        Vim.prototype.command_u=lowercaseCommands.u
-        Vim.prototype.command_x=lowercaseCommands.x
-        Vim.prototype.command_dot=lowercaseCommands.dot
-        Vim.prototype.command_dd=lowercaseCommands.dd
-        Vim.prototype.command_gg=lowercaseCommands.gg
         Vim.prototype.command_vy=function(){
             var f=this.textarea.selectionStart,
                 l=this.textarea.selectionEnd
