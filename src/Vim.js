@@ -6,28 +6,24 @@ let
     EventEmmiter=module.arguments.events||module.importByPath('https://cdn.rawgit.com/anliting/module/5ddc4f02188066d00a698eea63f983ab1e5b7d4f/node/events.js')
 module=module.share({CryptoJS})
 Promise.all([
-    module.shareImport('Vim/cursorMoves.js'),
+    module.shareImport('Vim/createViewDiv.js'),
     module.shareImport('Vim/JsonFormatter.js'),
     module.shareImport('Vim/commands.js'),
     module.shareImport('Vim/createInput.js'),
     CryptoJS,
-    module.shareImport('Vim/setup.js'),
+    module.shareImport('Vim/Cursor.js'),
     module.shareImport('Vim/command.js'),
     EventEmmiter,
-    module.shareImport('Vim/Cursor.js'),
-    module.shareImport('Vim/createViewDiv.js'),
 ]).then(modules=>{
     let
-        cursorMoves=            modules[0],
+        createViewDiv=          modules[0],
         JsonFormatter=          modules[1],
         commands=               modules[2],
         createInput=            modules[3],
         CryptoJS=               modules[4],
-        setup=                  modules[5],
+        Cursor=                 modules[5],
         command=                modules[6],
-        EventEmmiter=           modules[7],
-        Cursor=                 modules[8],
-        createViewDiv=          modules[9]
+        EventEmmiter=           modules[7]
     function Vim(){
         EventEmmiter.call(this)
         this._text=''
@@ -102,7 +98,6 @@ Promise.all([
         this.text=text
         this.view()
     }
-    Vim.prototype.setup=setup
     Vim.prototype.setupPassword=function(password){
         this.password=password
     }
@@ -156,10 +151,6 @@ Promise.all([
             {format:JsonFormatter}
         ))
     }
-    Vim.prototype.cursorMovesLeft=cursorMoves.left
-    Vim.prototype.cursorMovesRight=cursorMoves.right
-    Vim.prototype.cursorMovesUp=cursorMoves.up
-    Vim.prototype.cursorMovesDown=cursorMoves.down
     Vim.prototype.gotoNextMatch=function(){
         let selectionEnd=this.textarea.selectionEnd
         this.textarea.selectionStart=
