@@ -30,28 +30,26 @@
             vim.command+=input.value
             input.value=''
         }
-        if(vim.mode==1)
+        if(vim.mode=='insert')
             vim.view()
     })
     input.addEventListener('keydown',e=>{
-        if(
+        if(e.key=='Backspace')
+            vim.command+=String.fromCharCode(8)
+        else if(e.key=='Enter')
+            vim.command+=String.fromCharCode(13)
+        else if(
             e.key=='Escape'||
             e.ctrlKey&&e.key=='c'||
             e.ctrlKey&&e.key=='['
-        ){
-            pdsp()
+        )
             vim.command+=String.fromCharCode(27)
-        }
-        if(
-            e.key=='Backspace'
-        ){
-            pdsp()
-            vim.command+=String.fromCharCode(8)
-        }
-        function pdsp(){
-            e.preventDefault()
-            e.stopPropagation()
-        }
+        else if(e.key=='Delete')
+            vim.command+=String.fromCharCode(127)
+        else
+            return
+        e.preventDefault()
+        e.stopPropagation()
     })
     return input
 })

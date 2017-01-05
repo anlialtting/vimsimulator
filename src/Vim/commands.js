@@ -36,7 +36,7 @@ Promise.all([
                 0,
                 this.textarea.value.substring(f,l)
             )
-            this.mode=0
+            this.mode='normal'
         }
         Vim.prototype.command_vd=function(){
             let
@@ -47,7 +47,7 @@ Promise.all([
                 this.textarea.value.substring(0,f)
                 +this.textarea.value.substring(l,this.textarea.length)
             this.textarea.selectionStart=f
-            this.mode=0
+            this.mode='normal'
         }
         Vim.prototype.command_yy=function(count){
             count=count||1
@@ -96,7 +96,7 @@ Promise.all([
             }
         }
         Vim.prototype.command_vlt=function(){
-            this.mode=0
+            this.mode='normal'
             this.unindent(
                 lineNumberOf(
                     this.textarea.value,
@@ -110,7 +110,7 @@ Promise.all([
         }
         Vim.prototype.command_vgt=function(count){
             let selectionStart=this.textarea.selectionStart
-            this.mode=0
+            this.mode='normal'
             this.indent(
                 lineNumberOf(
                     this.textarea.value,

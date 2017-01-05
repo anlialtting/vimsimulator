@@ -41,7 +41,7 @@ module.shareImport('count_rows_string.js').then(count_rows_string=>{
         */
         selectionShowingState=0
         isActiveElement=
-            vim.textarea===document.activeElement
+            vim.textarea==document.activeElement
         lineNumber=vim.lineCursor
         charNumber=0
         if(cursor<partialsum_length_lines[vim.lineCursor])
@@ -56,46 +56,46 @@ module.shareImport('count_rows_string.js').then(count_rows_string=>{
         ){
             i=partialsum_length_lines[lineNumber]+charNumber
             string_toshow_currentCharacter=
-                text[i]==='\n'
-                    ?(vim.mode===1||0<=i-1&&text[i-1]==='\n'?' ':'')
+                text[i]=='\n'
+                    ?(vim.mode=='insert'||0<=i-1&&text[i-1]=='\n'?' ':'')
                     :text[i]
             width_string_toshow_currentCharacter=
-                string_toshow_currentCharacter===''?0:
+                string_toshow_currentCharacter==''?0:
                 string_toshow_currentCharacter.charCodeAt(0)<0xff?1:2
             shouldStopCurrentRow()&&
                 stopCurrentRow()
-            col_currentRow===0&&vim.environment.number&&
+            col_currentRow==0&&vim.environment.number&&
                 showLineNumber()
             if(isActiveElement){
                 if(
-                    selectionShowingState===0&&i===cursor||
-                    selectionShowingState===2
+                    selectionShowingState==0&&i==cursor||
+                    selectionShowingState==2
                 )
                     startSelectionShowing()
                 if(
-                    vim.mode===0&&i===cursor_end||
-                    vim.mode===1&&(
-                        cursor===cursor_end?
-                            i===cursor_end+1
+                    vim.mode=='normal'&&i==cursor_end||
+                    vim.mode=='insert'&&(
+                        cursor==cursor_end?
+                            i==cursor_end+1
                         :
-                            i===cursor_end
+                            i==cursor_end
                     )||
-                    vim.mode===2&&i===cursor_end
+                    vim.mode=='visual'&&i==cursor_end
                 )
                     stopSelectionShowing()
             }
-            if(text[i]==='\n')
+            if(text[i]=='\n')
                 meetEol()
-            else if(text[i]==='\t')
+            else if(text[i]=='\t')
                 meetTab()
             else
                 showCurrentCharacter()
-            if(text[i]==='\n')
+            if(text[i]=='\n')
                 stopCurrentLine()
         }
         if(selectionShowingState)
             stopSelectionShowingOnOutput()
-        outputNullLines(vim,count_rows_showed,range.upper===lines.length)
+        outputNullLines(vim,count_rows_showed,range.upper==lines.length)
         return count_rows_showed
         function shouldStopCurrentRow(){
             return vim.count_cols_toshow<(
@@ -116,7 +116,7 @@ module.shareImport('count_rows_string.js').then(count_rows_string=>{
         function meetEol(){
             if(
                 vim.environment.list||
-                vim.mode===1||
+                vim.mode=='insert'||
                 0<=i-1&&text[i-1]
             ){ // eol showing
                 currentLine+='<span style="'+vim.stylesheet_eol+'">'
@@ -128,7 +128,7 @@ module.shareImport('count_rows_string.js').then(count_rows_string=>{
             }
         }
         function stopCurrentRow(){
-            if(isActiveElement&&selectionShowingState===1)
+            if(isActiveElement&&selectionShowingState==1)
                 pauseSelectionShowing()
             currentLine+='\n'
             row_currentLine++
@@ -136,11 +136,11 @@ module.shareImport('count_rows_string.js').then(count_rows_string=>{
         }
         function showCurrentCharacter(){
             var html_toshow
-            if(text[i]==='<'){
+            if(text[i]=='<'){
                 html_toshow='&lt;'
-            }else if(text[i]==='>'){
+            }else if(text[i]=='>'){
                 html_toshow='&gt;'
-            }else if(text[i]==='&'){
+            }else if(text[i]=='&'){
                 html_toshow='&amp;'
             }else{
                 html_toshow=text[i]
@@ -149,7 +149,7 @@ module.shareImport('count_rows_string.js').then(count_rows_string=>{
                 //'<span onmousedown="javascript:VimPatch.goto('+i+')">'+(
                     !vim.highlighter||
                         '!@#$%^&*()-=[]{},.;<>?:\'"\\/'.
-                        indexOf(text[i])===-1
+                        indexOf(text[i])==-1
                     ?
                         html_toshow
                     :
@@ -161,7 +161,7 @@ module.shareImport('count_rows_string.js').then(count_rows_string=>{
             col_currentRow+=width_string_toshow_currentCharacter
         }
         function showLineNumber(){
-            if(row_currentLine===0){
+            if(row_currentLine==0){
                 var s=(lineNumber+1).toString()
                 currentLine+=
                     spaces(countOfColsForPaddingForLineNumber-s.length-1)
@@ -255,7 +255,7 @@ module.shareImport('count_rows_string.js').then(count_rows_string=>{
                 upper:upper,
             }
         }
-        if(result.lower===result.upper)
+        if(result.lower==result.upper)
             result.upper++
         return result
     }

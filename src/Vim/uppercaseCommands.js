@@ -15,7 +15,7 @@ Promise.all([
             i++
         this.textarea.selectionStart=
             this.textarea.selectionEnd=i
-        this.mode=1
+        this.mode='insert'
     }
     function D(count){
         let selectionStart=
@@ -64,7 +64,7 @@ Promise.all([
                 this.textarea.value,
                 this.textarea.selectionStart
             )
-        this.mode=1
+        this.mode='insert'
     }
     function O(count){
         let
@@ -87,7 +87,7 @@ Promise.all([
         this.textarea.selectionStart=
         this.textarea.selectionEnd=
             startOfCurrentLine+prefixingWhitespaces.length
-        this.mode=1
+        this.mode='insert'
     }
     function P(count){
         count=count||1

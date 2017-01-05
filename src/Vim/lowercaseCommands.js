@@ -76,7 +76,7 @@ Promise.all([
         this.textarea.selectionStart=
         this.textarea.selectionEnd=
             endOfCurrentLine+prefixingWhitespaces.length
-        this.mode=1
+        this.mode='visual'
     }
     function p(count){
         count=count||1

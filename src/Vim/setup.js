@@ -25,7 +25,7 @@ Promise.all([
         References:
             http://en.wikibooks.org/wiki/Learning_the_vi_Editor/Vim/Modes
         */
-            this.mode=0
+            this.mode='normal'
             this.command=''
             this.activated=false
             this.col_cursor=

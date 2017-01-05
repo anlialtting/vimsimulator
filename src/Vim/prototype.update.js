@@ -87,7 +87,7 @@ Promise.all([
         }
         function writeCurrentStateIntoHistory(vim){
             if(
-                vim.histories.length===0||
+                vim.histories.length==0||
                 vim.histories[vim.histories.length-1]!==vim.textarea.value
             ){
                 vim.histories.push(vim.textarea.value)
@@ -96,7 +96,7 @@ Promise.all([
             }
         }
         function selectionCorrection(vim){
-            if(vim.mode===0){
+            if(vim.mode=='normal'){
                 if(
                     0<=vim.textarea.selectionStart-1&&(
                         vim.textarea.selectionStart===
@@ -113,7 +113,7 @@ Promise.all([
                 }
                 vim.textarea.selectionEnd=
                     vim.textarea.selectionStart+1
-            }else if(vim.mode===1){ // insert mode
+            }else if(vim.mode=='insert'){
             }
         }
         function eolCorrection(vim){
@@ -148,7 +148,7 @@ Promise.all([
                 cursor(vim)
             ).split('\n').length-1
             function cursor(vim){
-                if(vim.mode===0||vim.mode===1)
+                if(vim.mode=='normal'||vim.mode=='visual')
                     return vim.textarea.selectionStart
                 return vim.textarea.selectionStart<
                     vim.visualmode.fixedCursor?
@@ -159,17 +159,17 @@ Promise.all([
         }
         function output_commandLine(vim){
             let s,length
-            if(vim.mode===0){
+            if(vim.mode=='normal'){
                 s=vim.command
                 if(50<s.length)
                     s=s.substring(s.length-50,s.length)
                 length=s.length
                 if(vim.command[0]!==':'&&vim.command[0]!=='/')
                     s='<span style="color:gray;">'+s+'</span>'
-            }else if(vim.mode===1){
+            }else if(vim.mode=='insert'){
                 s='-- INSERT --'
                 length=s.length
-            }else if(vim.mode===2){
+            }else if(vim.mode=='visual'){
                 s='-- VISUAL --'
                 length=s.length
             }

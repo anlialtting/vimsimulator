@@ -24,13 +24,13 @@ Promise.all([
             }px`*/
             changed.forEach(key=>{
                 if(key=='mode'){
-                    if(this.mode==0)
+                    if(this.mode=='normal')
                         commandDiv.textContent=''
-                    else if(this.mode==1)
+                    else if(this.mode=='insert')
                         commandDiv.textContent='-- INSERT --'
-                    else if(this.mode==2)
+                    else if(this.mode=='visual')
                         commandDiv.textContent='-- VISUAL --'
-                    else if(this.mode==3)
+                    else if(this.mode=='visual-block')
                         commandDiv.textContent='-- VISUAL BLOCK --'
                 }
             })
@@ -57,9 +57,9 @@ Promise.all([
             vim.focus()
         })
         vim.on('view',changed=>{
-            if(vim.mode==0)
+            if(vim.mode=='normal')
                 mode0(vim,div)
-            if(vim.mode==1)
+            else if(vim.mode=='insert')
                 mode1(vim,div)
         })
         return div

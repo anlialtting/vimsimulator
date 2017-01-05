@@ -7,13 +7,13 @@ module.import('line.js').then(line=>{
     }
     function left(){
         this._cursor.moveLeft()
-        /*if(this.mode==0){
+        /*if(this.mode=='normal'){
             if(
                 0<=this.selectionStart-1&&
                 this.text[this.selectionStart-1]!='\n'
             )
                 this.selectionStart--
-        }*//*else if(this.mode==1){
+        }*//*else if(this.mode=='insert'){
             let
                 p=this.selectionStart,
                 start=getLineStartByCursor(this.text,p)
@@ -21,8 +21,8 @@ module.import('line.js').then(line=>{
                 this.selectionStart=
                     this.selectionEnd=p-1
             this.col_cursor=this.selectionStart-start
-        }else if(this.mode===2){
-            if(this.visualmode.fixedCursor+1===this.textarea.selectionEnd){
+        }else if(this.mode=='visual'){
+            if(this.visualmode.fixedCursor+1==this.textarea.selectionEnd){
                 if(this.textarea.value[this.textarea.selectionStart-1]!=='\n')
                     this.textarea.selectionStart=
                         this.textarea.selectionStart-1
@@ -34,19 +34,19 @@ module.import('line.js').then(line=>{
     }
     function right(){
         this._cursor.moveRight()
-        /*if(this.mode==0){
+        /*if(this.mode=='normal'){
             if(
                 this.selectionStart+1<this.text.length&&
                 this.text[this.selectionStart+1]!='\n'
             )
                 this.selectionStart++
-        }*//*else if(this.mode==1){
+        }*//*else if(this.mode=='insert'){
             let
                 p=this.selectionStart,
                 start=getLineStartByCursor(this.text,p)
             if(
                 p+1<this.text.length&&(
-                    this.mode===0?
+                    this.mode=='normal'?
                         this.text[p+1]!=='\n'
                     :
                         this.text[p]!=='\n'
@@ -56,7 +56,7 @@ module.import('line.js').then(line=>{
                     this.selectionEnd=
                     this.selectionStart+1
             //this.col_cursor=this.selectionStart-start
-        }else if(this.mode===2){
+        }else if(this.mode=='visual'){
             if(this.textarea.selectionStart<this.visualmode.fixedCursor){
                 if(this.textarea.value[this.textarea.selectionStart]!=='\n')
                     this.textarea.selectionStart=
@@ -69,16 +69,16 @@ module.import('line.js').then(line=>{
     }
     function up(){
         this._cursor.moveUp()
-        /*if(this.mode==0){
+        /*if(this.mode=='normal'){
         }*/
         /*else if(
-            this.mode===1
+            this.mode=='insert'
         ){
             // do nothing if current line is the first line
             if(
                 this.textarea.value.substring(
                     0,this.textarea.selectionStart
-                ).split('\n').length-1===0
+                ).split('\n').length-1==0
             )
                 return
             let
@@ -93,7 +93,7 @@ module.import('line.js').then(line=>{
                         preEnd-1-preStart,
                         this.col_cursor
                     )
-        }else if(this.mode===2){
+        }else if(this.mode=='visual'){
             let p
             if(
                 this.visualmode.fixedCursor!==
@@ -120,9 +120,9 @@ module.import('line.js').then(line=>{
     }
     function down(){
         this._cursor.moveDown()
-        /*if(this.mode===0){
+        /*if(this.mode=='normal'){
         }*/
-        /*this.mode===1){
+        /*this.mode=='insert'){
             // do nothing if current line is the last line
             if(
                 this.text.substring(
@@ -144,7 +144,7 @@ module.import('line.js').then(line=>{
                     nxtEnd-1-nxtStart,
                     this.col_cursor
                 )
-        }else if(this.mode===2){
+        }else if(this.mode=='visual'){
             if(
                 this.visualmode.fixedCursor!==
                 this.textarea.selectionStart
