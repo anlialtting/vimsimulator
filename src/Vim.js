@@ -9,26 +9,25 @@ Promise.all([
     module.shareImport('Vim/cursorMoves.js'),
     module.shareImport('Vim/JsonFormatter.js'),
     module.shareImport('Vim/commands.js'),
-    module.shareImport('Vim/prototype.update.js'),
+    module.shareImport('Vim/createInput.js'),
     CryptoJS,
     module.shareImport('Vim/setup.js'),
     module.shareImport('Vim/command.js'),
     EventEmmiter,
     module.shareImport('Vim/Cursor.js'),
     module.shareImport('Vim/createViewDiv.js'),
-    module.shareImport('Vim/createInput.js'),
 ]).then(modules=>{
     let
         cursorMoves=            modules[0],
         JsonFormatter=          modules[1],
         commands=               modules[2],
+        createInput=            modules[3],
         CryptoJS=               modules[4],
         setup=                  modules[5],
         command=                modules[6],
         EventEmmiter=           modules[7],
         Cursor=                 modules[8],
-        createViewDiv=          modules[9],
-        createInput=            modules[10]
+        createViewDiv=          modules[9]
     function Vim(){
         EventEmmiter.call(this)
         this._text=''
@@ -169,13 +168,6 @@ Promise.all([
                 new RegExp(this.searchPattern)
             )+selectionEnd
     }
-    Vim.prototype.update=modules[3]
-    Vim.prototype.update_pre_editor=function(){
-        this.pre_editor.style.backgroundColor=
-            this.style.backgroundColor
-        this.pre_editor.style.color=
-            this.style.color
-    }
     Vim.prototype.focus=function(){
         this.inputTag.focus()
     }
@@ -190,16 +182,10 @@ Promise.all([
         result.pop()
         return result
     }
-    function lineNumberOf(text,cursor){
-        return text.substring(0,cursor).split('\n').length-1
-    }
     // end 2015-09-07
     // begin 2015-09-06
     function getLineStartByCursor(text,cursor){
         return text.substring(0,cursor).lastIndexOf('\n')+1
-    }
-    function getLineEndByCursor(text,cursor){
-        return text.indexOf('\n',cursor)+1
     }
     function getLineHeadByCursor(text,cursor){
         let lineStart=getLineStartByCursor(text,cursor)

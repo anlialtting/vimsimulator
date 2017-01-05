@@ -1,6 +1,6 @@
 (function insert(vim){
-    if(vim.command=='')
-        return
+    /*if(vim.command=='')
+        return*/
     if(vim.command==String.fromCharCode(8)){
         let
             text=
@@ -27,10 +27,8 @@
     }
     vim.text=
         vim.text.substring(0,vim._cursor.abs)+
-        vim.command+
+        vim.command.replace(/\r/,'\n')+
         vim.text.substring(vim._cursor.abs)
-    vim._cursor.moveTo(
-        vim._cursor.abs+vim.command.length
-    )
+    vim._cursor.moveTo(vim._cursor.abs+vim.command.length)
     vim.command=''
 })
