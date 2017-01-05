@@ -1,6 +1,6 @@
 Promise.all([
     module.shareImport('createViewDiv/htmlEntities.js'),
-    module.shareImport('line.js'),
+    module.shareImport('createViewDiv/line.js'),
 ]).then(modules=>{
     let
         htmlEntities=modules[0],

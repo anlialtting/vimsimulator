@@ -31,23 +31,24 @@ Promise.all([
     }
     function h(count){
         count=count||1
-        while(count--)
-            this.cursorMovesLeft()
+        while(count--){
+            this._cursor.moveLeft()
+        }
     }
     function j(count){
         count=count||1
         while(count--)
-            this.cursorMovesDown()
+            this._cursor.moveDown()
     }
     function k(count){
         count=count||1
         while(count--)
-            this.cursorMovesUp()
+            this._cursor.moveUp()
     }
     function l(count){
         count=count||1
         while(count--)
-            this.cursorMovesRight()
+            this._cursor.moveRight()
     }
     function o(count){
         var
