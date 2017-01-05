@@ -1,19 +1,16 @@
 Promise.all([
-    module.shareImport('runCommandIfPossible/runCommandIfPossibleForNormalMode.js'),
-    module.shareImport('runCommandIfPossible/runCommandIfPossibleForVisualMode.js'),
-    module.shareImport('runCommandIfPossible/runCommandIfPossibleForInsertMode.js'),
+    module.shareImport('runCommandIfPossible/normal.js'),
+    module.shareImport('runCommandIfPossible/insert.js'),
+    module.shareImport('runCommandIfPossible/visual.js'),
 ]).then(modules=>{
     let
-        runCommandIfPossibleForNormalMode=modules[0],
-        runCommandIfPossibleForVisualMode=modules[1],
-        runCommandIfPossibleForInsertMode=modules[2]
-    function runCommandIfPossible(){
-        if(this.mode=='normal')
-            return runCommandIfPossibleForNormalMode.call(this)
-        if(this.mode=='insert')
-            return runCommandIfPossibleForInsertMode(this)
-        if(this.mode=='visual')
-            return runCommandIfPossibleForMode2(this)
+        modes={
+            normal:modules[0],
+            insert:modules[1],
+            visual:modules[2],
+        }
+    return function(){
+        if(this.mode in modes)
+            return modes[this.mode](this)
     }
-    return runCommandIfPossible
 })

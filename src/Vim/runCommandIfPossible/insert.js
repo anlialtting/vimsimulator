@@ -1,4 +1,4 @@
-(function runCommandIfPossibleForInsertMode(vim){
+(function insert(vim){
     if(vim.command=='')
         return
     if(vim.command==String.fromCharCode(8)){

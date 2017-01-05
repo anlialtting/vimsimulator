@@ -58,35 +58,38 @@ Promise.all([
         })
         vim.on('view',changed=>{
             if(vim.mode=='normal')
-                mode0(vim,div)
+                normal(vim,div)
             else if(vim.mode=='insert')
-                mode1(vim,div)
+                insert(vim,div)
         })
         return div
     }
-    function mode0(vim,div){
+    function normal(vim,div){
         if(document.activeElement!=vim.inputTag)
             return div.innerHTML=htmlEntities.encode(vim.text)
         let
             lines=  line.lines(vim.text).map(s=>s+'\n'),
             r=      vim._cursor.r,
             c=      vim._cursor.c
-        div.innerHTML=
+        let
+            chr=lines[r].substring(c,c+1)
+        if(chr=='\n')
+            chr=' \n'
+        div.innerHTML=`${
             htmlEntities.encode(
                 lines.slice(0,r).join('')+
                 lines[r].substring(0,c)
-            )+
-            '<span style=background-color:black;color:white;>'+
-            htmlEntities.encode(
-                lines[r].substring(c,c+1)
-            )+
-            '</span>'+
+            )
+        }<span style=background-color:black;color:white;>${
+            htmlEntities.encode(chr)
+        }</span>${
             htmlEntities.encode(
                 lines[r].substring(c+1)+
                 lines.slice(r+1).join('')
             )
+        }`
     }
-    function mode1(vim,div){
+    function insert(vim,div){
         let
             lines=  line.lines(vim.text).map(s=>s+'\n'),
             r=      vim._cursor.r,
@@ -106,22 +109,26 @@ Promise.all([
                     lines[r].substring(c)+
                     lines.slice(r+1).join('')
                 )
-        else
-            div.innerHTML=
+        else{
+            let
+                chr=lines[r].substring(c,
+                    c+1
+                )
+            if(chr=='\n')
+                chr=' \n'
+            div.innerHTML=`${
                 htmlEntities.encode(
                     lines.slice(0,r).join('')+
                     lines[r].substring(0,c)
-                )+
-                '<span style=background-color:black;color:white;>'+
-                htmlEntities.encode(
-                    lines[r].substring(c,
-                        c+1
-                    )
-                )+
-                '</span>'+
+                )
+            }<span style=background-color:black;color:white;>${
+                htmlEntities.encode(chr)
+            }</span>${
                 htmlEntities.encode(
                     lines[r].substring(c+1)+
                     lines.slice(r+1).join('')
                 )
+            }`
+        }
     }
 })

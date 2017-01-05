@@ -5,18 +5,7 @@ Promise.all([
     let
         CryptoJS=modules[0],
         JsonFormatter=modules[1]
-    return {A,D,G,I,O,P,X}
-    function A(count){
-        let i=this.textarea.selectionStart
-        while(
-            i+1<=this.textarea.value.length&&
-            this.textarea.value[i]!=='\n'
-        )
-            i++
-        this.textarea.selectionStart=
-            this.textarea.selectionEnd=i
-        this.mode='insert'
-    }
+    return {D,G,O,P,X}
     function D(count){
         let selectionStart=
             this.textarea.selectionStart
@@ -50,21 +39,6 @@ Promise.all([
             c=getLineEndByCursor(this.textarea.value,c)
         this.textarea.selectionStart=
         this.textarea.selectionEnd=c
-    }
-    function I(count){
-        var start_currentLine_textarea
-        start_currentLine_textarea=
-            getLineStartByCursor(
-                this.textarea.value,
-                this.textarea.selectionStart
-            )
-        this.textarea.selectionStart=
-        this.textarea.selectionEnd=
-            getLineHeadByCursor(
-                this.textarea.value,
-                this.textarea.selectionStart
-            )
-        this.mode='insert'
     }
     function O(count){
         let

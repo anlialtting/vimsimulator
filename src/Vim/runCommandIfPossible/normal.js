@@ -1,6 +1,6 @@
-(function(){
+(function(vim){
     let
-        cmd=this.command,
+        cmd=vim.command,
         argument
     if(48<=cmd.charCodeAt(0)&&cmd.charCodeAt(0)<58){
         let i=0
@@ -12,33 +12,19 @@
         cmd=cmd.substring(i,cmd.length)
     }
     {
-        let result=tryCommand(this)
+        let result=tryCommand(vim)
         if(result.matched){
             if(result.changed)
-                this.lastChangingCommand=
-                    this.command
-            this.command=''
+                vim.lastChangingCommand=
+                    vim.command
+            vim.command=''
         }
-    }
-    if(this.command[0]==':'){
-        for(let i=1;i<this.command.length;i++){
-            if(this.command[i]=='q')
-                this.activated=false
-            if(this.command[i]=='w'){
-                this.write()
-            }
-        }
-        this.command=''
-    }
-    if(this.command[0]=='/'){
-        this.searchPattern=this.command.substring(1)
-        this.gotoNextMatch()
-        this.command=''
     }
     function tryCommand(vim){
         var result={}
         if(cmd=='A'){
-            vim.command_A(argument)
+            vim._cursor.moveToEOL()
+            vim.mode='insert'
             result.matched=true
         }
         if(cmd=='D'){
@@ -50,7 +36,8 @@
             result.matched=true
         }
         if(cmd=='I'){
-            vim.command_I(argument)
+            vim._cursor.moveToSOL()
+            vim.mode='insert'
             result.matched=true
         }
         if(cmd=='O'){
@@ -69,12 +56,8 @@
             result.changed=true
         }
         if(cmd=='a'){
-            let i=vim.selectionStart
-            if(i+1<vim.text.length)
-                i++
-            vim.selectionStart=
-                vim.selectionEnd=i
             vim.mode='insert'
+            vim._cursor.moveRight()
             result.matched=true
         }
         if(cmd=='h'){
@@ -83,7 +66,6 @@
         }
         if(cmd=='i'){
             vim.mode='insert'
-            vim.selectionEnd=vim.selectionStart
             result.matched=true
         }
         if(cmd=='j'){
