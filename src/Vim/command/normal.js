@@ -20,10 +20,14 @@ Promise.all([
         }
         {
             let result=tryCommand(vim)
-            if(result.matched){
-                if(result.changed)
-                    vim.lastChangingCommand=
-                        vim.command
+            if(result.acceptable){
+                if(result.complete){
+                    if(result.changed)
+                        vim.lastChangingCommand=
+                            vim.command
+                    vim.command=''
+                }
+            }else{
                 vim.command=''
             }
         }
@@ -32,123 +36,147 @@ Promise.all([
             if(cmd=='A'){
                 vim._cursor.moveToEOL()
                 vim.mode='insert'
-                result.matched=true
+                result.acceptable=true
+                result.complete=true
             }
             if(cmd=='D'){
                 uppercaseCommands.D.call(vim,argument)
-                result.matched=true
+                result.acceptable=true
+                result.complete=true
             }
             if(cmd=='G'){
                 uppercaseCommands.G.call(vim,argument)
-                result.matched=true
+                result.acceptable=true
+                result.complete=true
             }
             if(cmd=='I'){
                 vim._cursor.moveToSOL()
                 vim.mode='insert'
-                result.matched=true
+                result.acceptable=true
+                result.complete=true
             }
             if(cmd=='O'){
                 uppercaseCommands.O.call(vim,argument)
-                result.matched=true
+                result.acceptable=true
+                result.complete=true
                 result.changed=true
             }
             if(cmd=='P'){
                 uppercaseCommands.P.call(vim,argument)
-                result.matched=true
+                result.acceptable=true
+                result.complete=true
                 result.changed=true
             }
             if(cmd=='X'){
                 uppercaseCommands.X.call(vim,argument)
-                result.matched=true
+                result.acceptable=true
+                result.complete=true
                 result.changed=true
             }
             if(cmd=='a'){
                 vim.mode='insert'
                 vim._cursor.moveRight()
-                result.matched=true
+                result.acceptable=true
+                result.complete=true
             }
             if(cmd=='h'){
                 lowercaseCommands.h.call(vim,argument)
-                result.matched=true
+                result.acceptable=true
+                result.complete=true
             }
             if(cmd=='i'){
                 vim.mode='insert'
-                result.matched=true
+                result.acceptable=true
+                result.complete=true
             }
             if(cmd=='j'){
                 lowercaseCommands.j.call(vim,argument)
-                result.matched=true
+                result.acceptable=true
+                result.complete=true
             }
             if(cmd=='k'){
                 lowercaseCommands.k.call(vim,argument)
-                result.matched=true
+                result.acceptable=true
+                result.complete=true
             }
             if(cmd=='l'){
                 lowercaseCommands.l.call(vim,argument)
-                result.matched=true
+                result.acceptable=true
+                result.complete=true
             }
             if(cmd=='n'){
                 vim.gotoNextMatch()
-                result.matched=true
+                result.acceptable=true
+                result.complete=true
             }
             if(cmd=='o'){
                 lowercaseCommands.o.call(vim,argument)
-                result.matched=true
+                result.acceptable=true
+                result.complete=true
                 result.changed=true
             }
             if(cmd=='p'){
                 lowercaseCommands.p.call(vim,argument)
-                result.matched=true
+                result.acceptable=true
+                result.complete=true
                 result.changed=true
             }
             if(cmd[0]=='r'&&cmd.length==2){
                 lowercaseCommands.r.call(vim,argument)
-                result.matched=true
+                result.acceptable=true
+                result.complete=true
                 result.changed=true
             }
             if(cmd=='u'){
                 lowercaseCommands.u.call(vim,argument)
-                result.matched=true
+                result.acceptable=true
+                result.complete=true
             }
             if(cmd=='v'){
                 vim.mode='visual'
                 vim.visualmode.fixedCursor=vim.selectionStart
-                result.matched=true
+                result.acceptable=true
+                result.complete=true
             }
             if(cmd=='x'){
                 lowercaseCommands.x.call(vim,argument)
-                result.matched=true
+                result.acceptable=true
+                result.complete=true
                 result.changed=true
             }
             if(cmd=='dd'){
                 lowercaseCommands.dd.call(vim,argument)
-                result.matched=true
+                result.acceptable=true
+                result.complete=true
                 result.changed=true
             }
             if(cmd=='gg'){
                 lowercaseCommands.gg.call(vim,argument)
-                result.matched=true
+                result.acceptable=true
+                result.complete=true
             }
             if(cmd=='yy'){
                 vim.command_yy(argument)
-                result.matched=true
+                result.acceptable=true
+                result.complete=true
             }
             if(cmd=='<<'){
                 vim.command_ltlt(argument)
-                result.matched=true
+                result.acceptable=true
+                result.complete=true
                 result.changed=true
             }
             if(cmd=='>>'){
                 vim.command_gtgt(argument)
-                result.matched=true
+                result.acceptable=true
+                result.complete=true
                 result.changed=true
             }
             if(cmd=='.'){
-                if(vim.lastChangingCommand){
+                if(vim.lastChangingCommand)
                     vim.command=vim.lastChangingCommand
-                    vim.runCommandIfPossible()
-                }
-                result.matched=true
+                result.acceptable=true
+                result.complete=true
             }
             return result
         }

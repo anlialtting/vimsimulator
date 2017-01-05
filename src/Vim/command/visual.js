@@ -1,4 +1,4 @@
-(function runCommandIfPossibleForVisualMode(vim){
+(function(vim){
     if(vim.command==='d'){
         vim.command_vd()
         vim.command=''

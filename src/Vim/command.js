@@ -1,7 +1,7 @@
 Promise.all([
-    module.shareImport('runCommandIfPossible/normal.js'),
-    module.shareImport('runCommandIfPossible/insert.js'),
-    module.shareImport('runCommandIfPossible/visual.js'),
+    module.shareImport('command/normal.js'),
+    module.shareImport('command/insert.js'),
+    module.shareImport('command/visual.js'),
 ]).then(modules=>{
     let
         modes={
