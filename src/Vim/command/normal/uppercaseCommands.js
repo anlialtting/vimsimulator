@@ -5,7 +5,7 @@ Promise.all([
     let
         CryptoJS=modules[0],
         JsonFormatter=modules[1]
-    return {D,G,O,P,X}
+    return {D,G,P,X}
     function D(count){
         let selectionStart=
             this.textarea.selectionStart
@@ -39,29 +39,6 @@ Promise.all([
             c=getLineEndByCursor(this.textarea.value,c)
         this.textarea.selectionStart=
         this.textarea.selectionEnd=c
-    }
-    function O(count){
-        let
-            prefixingWhitespaces,
-            startOfCurrentLine
-        startOfCurrentLine=getLineStartByCursor(
-            this.textarea.value,
-            this.textarea.selectionStart
-        )
-        prefixingWhitespaces=
-            function(result){
-                result=result.substring(startOfCurrentLine)
-                result=result.substring(0,result.search(/[^ ]/))
-                return result
-            }(this.textarea.value)
-        this.textarea.value=
-            this.textarea.value.substring(0,startOfCurrentLine)+
-            prefixingWhitespaces+'\n'+
-            this.textarea.value.substring(startOfCurrentLine)
-        this.textarea.selectionStart=
-        this.textarea.selectionEnd=
-            startOfCurrentLine+prefixingWhitespaces.length
-        this.mode='insert'
     }
     function P(count){
         count=count||1

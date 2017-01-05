@@ -5,7 +5,7 @@ Promise.all([
     let
         CryptoJS=modules[0],
         JsonFormatter=modules[1]
-    return {dd,h,j,k,l,o,p,r,u,x,dot,gg}
+    return {dd,h,j,k,l,p,r,u,x,dot,gg}
     function dd(count){
         count=count||1
         let f=this.textarea.selectionStart
@@ -31,9 +31,8 @@ Promise.all([
     }
     function h(count){
         count=count||1
-        while(count--){
+        while(count--)
             this._cursor.moveLeft()
-        }
     }
     function j(count){
         count=count||1
@@ -49,35 +48,6 @@ Promise.all([
         count=count||1
         while(count--)
             this._cursor.moveRight()
-    }
-    function o(count){
-        var
-            prefixingWhitespaces,
-            endOfCurrentLine
-        prefixingWhitespaces=(vim=>{
-            let result=vim.textarea.value.substring(
-                getLineStartByCursor(
-                    vim.textarea.value,
-                    vim.textarea.selectionStart
-                )
-            )
-            result=result.substring(0,result.search(/[^ ]/))
-            return result
-        })(this)
-        endOfCurrentLine=getLineEndByCursor(
-            this.textarea.value,
-            this.textarea.selectionStart
-        )
-        this.textarea.value=
-            this.textarea.value.substring(0,endOfCurrentLine)+
-            prefixingWhitespaces+'\n'+
-            this.textarea.value.substring(
-                endOfCurrentLine
-            )
-        this.textarea.selectionStart=
-        this.textarea.selectionEnd=
-            endOfCurrentLine+prefixingWhitespaces.length
-        this.mode='visual'
     }
     function p(count){
         count=count||1
