@@ -7,6 +7,7 @@ module.shareImport('../Vim.js').then(Vim=>{
     <head>
         <title>Title</title>
     </head>
+
     <body>
         <!-- this is a comment -->
     </body>
