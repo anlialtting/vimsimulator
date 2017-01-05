@@ -38,7 +38,7 @@ Promise.all([
         this.viewChanged=[]
         this.lineHeightInPx=13
         this.inputTag=createInput(this)
-        this._mode=0
+        this._mode='normal'
         this._cursor=new Cursor(this)
     }
     Object.setPrototypeOf(Vim.prototype,EventEmmiter.prototype)
@@ -161,10 +161,7 @@ Promise.all([
     Vim.prototype.cursorMovesRight=cursorMoves.right
     Vim.prototype.cursorMovesUp=cursorMoves.up
     Vim.prototype.cursorMovesDown=cursorMoves.down
-    Vim.prototype.runCommandIfPossibleForMode2=
-        runCommandIfPossible.runCommandIfPossibleForMode2
-    Vim.prototype.runCommandIfPossible=
-        runCommandIfPossible.runCommandIfPossible
+    Vim.prototype.runCommandIfPossible=runCommandIfPossible
     Vim.prototype.gotoNextMatch=function(){
         let selectionEnd=this.textarea.selectionEnd
         this.textarea.selectionStart=
