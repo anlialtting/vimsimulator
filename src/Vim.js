@@ -12,7 +12,7 @@ Promise.all([
     module.shareImport('Vim/prototype.update.js'),
     CryptoJS,
     module.shareImport('Vim/setup.js'),
-    module.shareImport('Vim/runCommandIfPossible.js'),
+    module.shareImport('Vim/command.js'),
     EventEmmiter,
     module.shareImport('Vim/Cursor.js'),
     module.shareImport('Vim/createViewDiv.js'),
@@ -24,7 +24,7 @@ Promise.all([
         commands=               modules[2],
         CryptoJS=               modules[4],
         setup=                  modules[5],
-        runCommandIfPossible=   modules[6],
+        command=                modules[6],
         EventEmmiter=           modules[7],
         Cursor=                 modules[8],
         createViewDiv=          modules[9],
@@ -85,7 +85,7 @@ Promise.all([
             this._command=val
             this.viewChanged.command=true
             if(this._command){
-                this.runCommandIfPossible()
+                command.call(this)
                 this.view()
             }
             this.emit('commandChange')
@@ -161,7 +161,6 @@ Promise.all([
     Vim.prototype.cursorMovesRight=cursorMoves.right
     Vim.prototype.cursorMovesUp=cursorMoves.up
     Vim.prototype.cursorMovesDown=cursorMoves.down
-    Vim.prototype.runCommandIfPossible=runCommandIfPossible
     Vim.prototype.gotoNextMatch=function(){
         let selectionEnd=this.textarea.selectionEnd
         this.textarea.selectionStart=
