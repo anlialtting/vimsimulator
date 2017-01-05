@@ -1,10 +1,10 @@
 Promise.all([
-    module.shareImport('cppstl.js'),
-    module.shareImport('create_pre_editor.js'),
-    module.shareImport('monospaceFonts.js'),
-    module.shareImport('create_div_editor.js'),
-    module.shareImport('count_rows_string.js'),
-    module.shareImport('output_contents.js'),
+    module.shareImport('prototype.update/cppstl.js'),
+    module.shareImport('prototype.update/create_pre_editor.js'),
+    module.shareImport('prototype.update/monospaceFonts.js'),
+    module.shareImport('prototype.update/create_div_editor.js'),
+    module.shareImport('prototype.update/count_rows_string.js'),
+    module.shareImport('prototype.update/output_contents.js'),
 ]).then(modules=>{
     let
         cppstl=modules[0],

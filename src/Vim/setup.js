@@ -1,5 +1,5 @@
 Promise.all([
-    module.shareImport('textarea_onkeydown.js'),
+    module.shareImport('setup/textarea_onkeydown.js'),
 ]).then(modules=>{
     let
         textarea_onkeydown=modules[0]
