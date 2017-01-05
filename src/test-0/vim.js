@@ -1,3 +1,4 @@
+module.styleByPath('vim.css')
 module.debug=true
 module.shareImport('../Vim.js').then(Vim=>{
     let vim=new Vim
