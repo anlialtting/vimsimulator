@@ -11,7 +11,7 @@ Promise.all([
             div=document.createElement('div'),
             commandDiv=createCommandDiv(this)
         this.inputTag.style.outline='none'
-        this.inputTag.style.width='100%'
+        this.inputTag.style.width='0'
         this.inputTag.style.color='white'
         this.inputTag.style.backgroundColor='black'
         div.style.position='relative'
@@ -41,7 +41,7 @@ Promise.all([
         let
             div=document.createElement('div')
         div.style.fontFamily='monospace'
-        div.style.fontSize='13px'
+        div.style.fontSize=`${vim.lineHeightInPx}px`
         div.style.lineHeight='1'
         div.style.whiteSpace='pre'
         return div
@@ -50,7 +50,7 @@ Promise.all([
         let
             div=document.createElement('div')
         div.style.fontFamily='monospace'
-        div.style.fontSize='13px'
+        div.style.fontSize=`${vim.lineHeightInPx}px`
         div.style.lineHeight='1'
         div.style.whiteSpace='pre'
         div.addEventListener('dblclick',()=>{

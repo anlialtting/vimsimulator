@@ -32,6 +32,7 @@
         }
         if(vim.mode=='insert')
             vim.view()
+        input.style.width=`${mesureWidth(input.value)}px`
     })
     input.addEventListener('keydown',e=>{
         if(e.key=='Backspace')
@@ -52,4 +53,14 @@
         e.stopPropagation()
     })
     return input
+    function mesureWidth(s){
+        let span=document.createElement('span')
+        span.style.display='inline-block'
+        span.style.fontSize=`${vim.lineHeightInPx}px`
+        span.textContent=s
+        document.body.appendChild(span)
+        let res=span.clientWidth
+        document.body.removeChild(span)
+        return res
+    }
 })

@@ -1,8 +1,8 @@
 Promise.all([
     CryptoJS,
     module.shareImport('JsonFormatter.js'),
-    module.shareImport('uppercaseCommands.js'),
-    module.shareImport('lowercaseCommands.js'),
+    module.shareImport('commands/uppercaseCommands.js'),
+    module.shareImport('commands/lowercaseCommands.js'),
 ]).then(modules=>{
     let
         CryptoJS=modules[0],

@@ -20,55 +20,55 @@
             this.command=''
         }
     }
-    if(this.command[0]===':'){
+    if(this.command[0]==':'){
         for(let i=1;i<this.command.length;i++){
-            if(this.command[i]==='q')
+            if(this.command[i]=='q')
                 this.activated=false
-            if(this.command[i]==='w'){
+            if(this.command[i]=='w'){
                 this.write()
             }
         }
         this.command=''
     }
-    if(this.command[0]==='/'){
+    if(this.command[0]=='/'){
         this.searchPattern=this.command.substring(1)
         this.gotoNextMatch()
         this.command=''
     }
     function tryCommand(vim){
         var result={}
-        if(cmd==='A'){
+        if(cmd=='A'){
             vim.command_A(argument)
             result.matched=true
         }
-        if(cmd==='D'){
+        if(cmd=='D'){
             vim.command_D(argument)
             result.matched=true
         }
-        if(cmd==='G'){
+        if(cmd=='G'){
             vim.command_G(argument)
             result.matched=true
         }
-        if(cmd==='I'){
+        if(cmd=='I'){
             vim.command_I(argument)
             result.matched=true
         }
-        if(cmd==='O'){
+        if(cmd=='O'){
             vim.command_O(argument)
             result.matched=true
             result.changed=true
         }
-        if(cmd==='P'){
+        if(cmd=='P'){
             vim.command_P(argument)
             result.matched=true
             result.changed=true
         }
-        if(cmd==='X'){
+        if(cmd=='X'){
             vim.command_X(argument)
             result.matched=true
             result.changed=true
         }
-        if(cmd==='a'){
+        if(cmd=='a'){
             let i=vim.selectionStart
             if(i+1<vim.text.length)
                 i++
@@ -77,84 +77,84 @@
             vim.mode='insert'
             result.matched=true
         }
-        if(cmd==='h'){
+        if(cmd=='h'){
             vim.command_h(argument)
             result.matched=true
         }
-        if(cmd==='i'){
+        if(cmd=='i'){
             vim.mode='insert'
             vim.selectionEnd=vim.selectionStart
             result.matched=true
         }
-        if(cmd==='j'){
+        if(cmd=='j'){
             vim.command_j(argument)
             result.matched=true
         }
-        if(cmd==='k'){
+        if(cmd=='k'){
             vim.command_k(argument)
             result.matched=true
         }
-        if(cmd==='l'){
+        if(cmd=='l'){
             vim.command_l(argument)
             result.matched=true
         }
-        if(cmd==='n'){
+        if(cmd=='n'){
             vim.gotoNextMatch()
             result.matched=true
         }
-        if(cmd==='o'){
+        if(cmd=='o'){
             vim.command_o(argument)
             result.matched=true
             result.changed=true
         }
-        if(cmd==='p'){
+        if(cmd=='p'){
             vim.command_p(argument)
             result.matched=true
             result.changed=true
         }
-        if(cmd[0]==='r'&&cmd.length===2){
+        if(cmd[0]=='r'&&cmd.length==2){
             vim.command_r(argument,cmd[1])
             result.matched=true
             result.changed=true
         }
-        if(cmd==='u'){
+        if(cmd=='u'){
             vim.command_u(argument)
             result.matched=true
         }
-        if(cmd==='v'){
+        if(cmd=='v'){
             vim.mode='visual'
             vim.visualmode.fixedCursor=vim.selectionStart
             result.matched=true
         }
-        if(cmd==='x'){
+        if(cmd=='x'){
             vim.command_x(argument)
             result.matched=true
             result.changed=true
         }
-        if(cmd==='dd'){
+        if(cmd=='dd'){
             vim.command_dd(argument)
             result.matched=true
             result.changed=true
         }
-        if(cmd==='gg'){
+        if(cmd=='gg'){
             vim.command_gg(argument)
             result.matched=true
         }
-        if(cmd==='yy'){
+        if(cmd=='yy'){
             vim.command_yy(argument)
             result.matched=true
         }
-        if(cmd==='<<'){
+        if(cmd=='<<'){
             vim.command_ltlt(argument)
             result.matched=true
             result.changed=true
         }
-        if(cmd==='>>'){
+        if(cmd=='>>'){
             vim.command_gtgt(argument)
             result.matched=true
             result.changed=true
         }
-        if(cmd==='.'){
+        if(cmd=='.'){
             if(vim.lastChangingCommand){
                 vim.command=vim.lastChangingCommand
                 vim.runCommandIfPossible()
