@@ -21,9 +21,9 @@ Promise.all([
         div.appendChild(commandDiv)
         div.appendChild(this.inputTag)
         this.on('view',changed=>{
-            /*this.inputTag.style.top=`${
-                this._cursor.r*this.lineHeightInPx
-            }px`*/
+            this.inputTag.style.top=`${
+                (this._cursor.r+1)*this.lineHeightInPx
+            }px`
             changed.forEach(key=>{
                 if(key=='mode'){
                     if(this.mode=='normal')

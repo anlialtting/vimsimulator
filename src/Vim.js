@@ -27,8 +27,6 @@ Promise.all([
     function Vim(){
         EventEmmiter.call(this)
         this._text=''
-        this._selectionStart=0
-        this._selectionEnd=0
         this._command=''
         this.viewChanged=[]
         this.lineHeightInPx=13
@@ -57,24 +55,6 @@ Promise.all([
             return this._text
         }
     })
-    Object.defineProperty(Vim.prototype,'selectionStart',{
-        set(val){
-            this._selectionStart=val
-            this.viewChanged.selectionStart=true
-        },
-        get(){
-            return this._selectionStart
-        }
-    })
-    Object.defineProperty(Vim.prototype,'selectionEnd',{
-        set(val){
-            this._selectionEnd=val
-            this.viewChanged.selectionEnd=true
-        },
-        get(){
-            return this._selectionEnd
-        }
-    })
     Object.defineProperty(Vim.prototype,'command',{
         set(val){
             this._command=val
@@ -101,7 +81,7 @@ Promise.all([
     Vim.prototype.setupPassword=function(password){
         this.password=password
     }
-    Vim.prototype.unindent=function(beginLine,endLine){
+    /*Vim.prototype.unindent=function(beginLine,endLine){
         let lines=linesOf(this.text)
         for(
             let currentLine=beginLine;
@@ -158,7 +138,7 @@ Promise.all([
             this.textarea.value.substring(selectionEnd).search(
                 new RegExp(this.searchPattern)
             )+selectionEnd
-    }
+    }*/
     Vim.prototype.focus=function(){
         this.inputTag.focus()
     }
@@ -166,7 +146,7 @@ Promise.all([
     // begin 2015-09-07
     function linesOf(text){
     /*
-        A line should not include EOL,
+        An independent line should not include EOL,
         since it has already been seperated from the others.
     */
         let result=text.split('\n')
