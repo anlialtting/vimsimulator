@@ -1,6 +1,5 @@
-(function createInput(vim){
-    let
-        input=document.createElement('input')
+(vim=>{
+    let input=document.createElement('input')
     input.style.position='absolute'
     input.style.fontFamily='monospace'
     input.style.border=0
@@ -8,8 +7,7 @@
     input.style.fontSize=`${vim.lineHeightInPx}px`
     input.style.backgroundColor='rgba(0,0,0,0)'
     //input.style.height=0
-    let
-        composing=false
+    let composing=false
     input.addEventListener('blur',()=>{
         vim.view()
     })
@@ -19,19 +17,13 @@
     input.addEventListener('compositionend',e=>{
         vim.imInput=''
         composing=false
+        f()
     })
     input.addEventListener('focus',()=>{
         vim.view()
     })
     input.addEventListener('input',()=>{
-        if(composing){
-            vim.imInput=input.value
-            vim.view()
-        }else{
-            vim.command+=input.value
-            input.value=''
-        }
-        input.style.width=`${mesureWidth(input.value)}px`
+        f()
     })
     input.addEventListener('keydown',e=>{
         if(composing)
@@ -54,6 +46,16 @@
         e.stopPropagation()
     })
     return input
+    function f(){
+        if(composing){
+            vim.imInput=input.value
+            vim.view()
+        }else{
+            vim.command+=input.value
+            input.value=''
+        }
+        input.style.width=`${mesureWidth(input.value)}px`
+    }
     function mesureWidth(s){
         let span=document.createElement('span')
         span.style.display='inline-block'
