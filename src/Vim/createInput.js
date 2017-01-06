@@ -24,9 +24,10 @@
         vim.view()
     })
     input.addEventListener('input',()=>{
-        if(composing)
+        if(composing){
             vim.imInput=input.value
-        else{
+            vim.view()
+        }else{
             vim.command+=input.value
             input.value=''
         }

@@ -24,6 +24,8 @@ module.shareImport('../Vim.js').then(Vim=>{
     </head>
     <body>
         <!-- this is a comment -->
+        <p>
+            存在先於本質
     </body>
 </html>
 `
@@ -35,13 +37,15 @@ module.shareImport('../Vim.js').then(Vim=>{
         textarea.style.height=`${13*24}px`
         vim.on('view',()=>{
             textarea.value=vim.text
-            let c=vim._cursor.abs
-            if(vim.mode=='normal'){
-                textarea.selectionStart=c
-                textarea.selectionEnd=c+1
-            }else if(vim.mode=='insert'){
-                textarea.selectionStart=c
-                textarea.selectionEnd=c
+            if(vim.text){
+                let c=vim._cursor.abs
+                if(vim.mode=='normal'){
+                    textarea.selectionStart=c
+                    textarea.selectionEnd=c+1
+                }else if(vim.mode=='insert'){
+                    textarea.selectionStart=c
+                    textarea.selectionEnd=c
+                }
             }
         })
         return textarea

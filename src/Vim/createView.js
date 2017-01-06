@@ -1,15 +1,13 @@
 Promise.all([
     module.shareImport('createView/htmlEntities.js'),
     module.shareImport('createView/line.js'),
-    module.shareImport('createView/createViewVim.js'),
 ]).then(modules=>{
     let
         htmlEntities=modules[0],
-        line=modules[1],
-        createViewVim=modules[2]
+        line=modules[1]
     function View(vim){
         this._vim=vim
-        this.div=createViewDiv.call(vim)
+        createViewDiv(this)
     }
     Object.defineProperty(View.prototype,'width',{set(val){
         this._width=val
@@ -23,24 +21,26 @@ Promise.all([
     },get(){
         return this._height
     }})
-    function createViewDiv(){
+    function createViewDiv(view){
         let
+            vim=view._vim,
             div=document.createElement('div'),
-            commandDiv=createCommandDiv(this)
-        this.inputTag.style.outline='none'
-        this.inputTag.style.width='0'
-        this.inputTag.style.color='white'
-        this.inputTag.style.backgroundColor='black'
+            commandDiv=createCommandDiv(vim)
+        vim.inputTag.style.outline='none'
+        vim.inputTag.style.width='0'
+        vim.inputTag.style.color='white'
+        vim.inputTag.style.backgroundColor='black'
         div.style.position='relative'
-        div.appendChild(createTextDiv(this))
+        div.appendChild(createTextDiv(vim))
         div.appendChild(commandDiv)
-        div.appendChild(this.inputTag)
-        this.on('view',changed=>{
-            this.inputTag.style.top=`${
-                (this._cursor.r+1)*this.lineHeightInPx
+        div.appendChild(vim.inputTag)
+        vim.on('view',changed=>{
+            let r=vim.text?vim._cursor.r:0
+            vim.inputTag.style.top=`${
+                (r+1)*vim.lineHeightInPx
             }px`
         })
-        return div
+        view.div=div
     }
     function createCommandDiv(vim){
         let
@@ -76,7 +76,6 @@ Promise.all([
         return div
     }
     function createTextDiv(vim){
-        vim=createViewVim(vim)
         let
             div=document.createElement('div')
         div.style.fontFamily='monospace'
@@ -91,16 +90,25 @@ Promise.all([
                 normal(vim,div)
             else if(vim.mode=='insert')
                 insert(vim,div)
+            else if(vim.mode=='cmdline')
+                cmdline(vim,div)
         })
         return div
     }
     function normal(vim,div){
-        if(document.activeElement!=vim.inputTag)
-            return div.innerHTML=htmlEntities.encode(vim.text)
-        let
-            lines=  line.lines(vim.text).map(s=>s+'\n'),
-            r=      vim._cursor.r,
+        let text,lines,r,c
+        if(vim.text){
+            text=   vim.text
+            lines=  line.lines(vim.text).map(s=>s+'\n')
+            r=      vim._cursor.r
             c=      vim._cursor.c
+        }else{
+            text='\n'
+            lines=['\n']
+            r=c=0
+        }
+        if(document.activeElement!=vim.inputTag)
+            return div.textContent=text
         let
             chr=lines[r].substring(c,c+1)
         if(chr=='\n')
@@ -120,10 +128,15 @@ Promise.all([
         }`
     }
     function insert(vim,div){
-        let
-            lines=  line.lines(vim.text).map(s=>s+'\n'),
-            r=      vim._cursor.r,
+        let lines,r,c
+        if(vim.text){
+            lines=  line.lines(vim.text).map(s=>s+'\n')
+            r=      vim._cursor.r
             c=      vim._cursor.c
+        }else{
+            lines=['\n']
+            r=c=0
+        }
         if(vim.imInput)
             div.innerHTML=
                 htmlEntities.encode(
@@ -160,6 +173,9 @@ Promise.all([
                 )
             }`
         }
+    }
+    function cmdline(vim,div){
+        div.textContent=vim.text||'\n'
     }
     return function(){
         return new View(this)
