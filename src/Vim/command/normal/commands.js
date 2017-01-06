@@ -356,3 +356,51 @@ function colon(vim){
     '.':dot,
     ':':colon,
 })
+/*
+Vim.prototype.command_yy=function(count){
+    count=count||1
+    let
+        f=this.textarea.selectionStart,
+        l=this.textarea.selectionStart
+    f=getLineStartByCursor(this.textarea.value,f)
+    for(var i=0;i<count;i++)
+        l=getLineEndByCursor(this.textarea.value,l)
+    this.yank(1,this.textarea.value.substring(f,l))
+}
+Vim.prototype.command_ltlt=function(count){
+    count=count||1
+    let lineNumber=
+        lineNumberOf(
+            this.textarea.value,
+            this.textarea.selectionStart
+        )
+    this.unindent(lineNumber,lineNumber+count)
+}
+Vim.prototype.command_gtgt=function(count){
+    count=count||1
+    let start_currentLine_textarea=getLineStartByCursor(
+        this.textarea.value,
+        this.textarea.selectionStart
+    )
+    let lineNumber=
+        lineNumberOf(this.textarea.value,this.textarea.selectionStart)
+    let lines=linesOf(this.textarea.value)
+    for(let i=0;i<count;i++)
+        lines[lineNumber+i]=
+            '    '+lines[lineNumber+i]
+    this.textarea.value=lines.join('\n')
+    this.textarea.selectionStart=
+        start_currentLine_textarea+
+        this.textarea.value.substring(
+            start_currentLine_textarea
+        ).search(/[^ ]/)
+    function linesOf(text){
+        let result=text.split('\n')
+        result.pop()
+        return result
+    }
+    function lineNumberOf(text,cursor){
+        return text.substring(0,cursor).split('\n').length-1
+    }
+}
+*/
