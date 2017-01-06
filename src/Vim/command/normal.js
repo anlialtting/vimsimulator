@@ -11,7 +11,7 @@ Promise.all([
             arg=parseInt(cmd,10)
             cmd=cmd.substring(arg.toString().length)
         }
-        let res=tryCommand(vim,cmd,arg)
+        let res=tryCommand(vim,cmd,arg)||{}
         if(res.acceptable){
             if(res.complete){
                 if(res.changed)

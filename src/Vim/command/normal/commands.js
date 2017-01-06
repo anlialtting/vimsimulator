@@ -20,7 +20,16 @@ Promise.all([
         }
     }
     function D(vim,cmd,arg){
-        uppercaseCommands.D.call(vim,arg)
+        let
+            a=vim._cursor.abs,
+            b=vim._cursor.lineEnd-1
+        vim.register={
+            mode:'string',
+            string:vim.text.substring(a,b),
+        }
+        vim.text=
+            vim.text.substring(0,a)+
+            vim.text.substring(b)
         return{
             acceptable:true,
             complete:true,
@@ -55,7 +64,26 @@ Promise.all([
         }
     }
     function P(vim,cmd,arg){
-        uppercaseCommands.P.call(vim,arg)
+        if(!vim.register)
+            return{
+                acceptable:true,
+                complete:true,
+            }
+        if(vim.register.mode=='string'){
+            let c=vim._cursor.abs
+            vim.text=
+                vim.text.substring(0,c)+
+                vim.register.string+
+                vim.text.substring(c)
+            vim._cursor.moveTo(c+vim.register.string.length-1)
+        }else if(vim.register.mode=='line'){
+            let c=vim._cursor.lineStart
+            vim.text=
+                vim.text.substring(0,c)+
+                vim.register.string+
+                vim.text.substring(c)
+            vim._cursor.moveTo(vim._cursor.lineStart)
+        }
         return{
             acceptable:true,
             complete:true,
@@ -82,9 +110,18 @@ Promise.all([
         if(cmd=='')
             return{acceptable:true}
         if(cmd=='d'){
+            arg=arg||1
+            arg=Math.min(vim._cursor._countOfRows-vim._cursor.r,arg)
+            let
+                a=vim._cursor.line(vim._cursor.r),
+                b=vim._cursor.line(vim._cursor.r+arg)
+            vim.register={
+                mode:'line',
+                string:vim.text.substring(a,b),
+            }
             vim.text=
-                vim.text.substring(0,vim._cursor.line(vim._cursor.r))+
-                vim.text.substring(vim._cursor.line(vim._cursor.r+1))
+                vim.text.substring(0,a)+
+                vim.text.substring(b)
             vim._cursor.moveTo(vim._cursor.lineStart)
             return{
                 acceptable:true,
@@ -93,31 +130,6 @@ Promise.all([
             }
         }
     }
-/*
-    function dd(count){
-        count=count||1
-        let f=this.textarea.selectionStart
-        let l=this.textarea.selectionStart
-        f=getLineStartByCursor(this.textarea.value,f)
-        for(let i=0;i<count;i++)
-            l=getLineEndByCursor(this.textarea.value,l)
-        this.yank(1,this.textarea.value.substring(f,l))
-        this.textarea.value
-            =this.textarea.value.substring(0,f)
-            +this.textarea.value.substring(
-                l,this.textarea.value.length
-            )
-        if(f<this.textarea.value.length)
-            this.textarea.selectionStart=this.textarea.selectionEnd=f
-        else{
-            this.textarea.selectionStart=this.textarea.selectionEnd=
-                getLineStartByCursor(
-                    this.textarea.value,
-                    this.textarea.value.length-1
-                )
-        }
-    }
-*/
     function g(vim,cmd,arg){
         if(cmd=='')
             return{acceptable:true}
@@ -193,7 +205,26 @@ Promise.all([
         }
     }
     function p(vim,cmd,arg){
-        lowercaseCommands.p.call(vim,arg)
+        if(!vim.register)
+            return{
+                acceptable:true,
+                complete:true,
+            }
+        if(vim.register.mode=='string'){
+            let c=vim._cursor.abs
+            vim.text=
+                vim.text.substring(0,c+1)+
+                vim.register.string+
+                vim.text.substring(c+1)
+            vim._cursor.moveTo(c+vim.register.string.length)
+        }else if(vim.register.mode=='line'){
+            let c=vim._cursor.lineEnd
+            vim.text=
+                vim.text.substring(0,c)+
+                vim.register.string+
+                vim.text.substring(c)
+            vim._cursor.moveTo(vim._cursor.lineEnd)
+        }
         return{
             acceptable:true,
             complete:true,
