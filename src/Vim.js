@@ -6,7 +6,7 @@ let
     EventEmmiter=module.arguments.events||module.importByPath('https://cdn.rawgit.com/anliting/module/5ddc4f02188066d00a698eea63f983ab1e5b7d4f/node/events.js')
 module=module.share({CryptoJS})
 Promise.all([
-    module.shareImport('Vim/createViewDiv.js'),
+    module.shareImport('Vim/createView.js'),
     module.shareImport('Vim/JsonFormatter.js'),
     module.shareImport('Vim/commands.js'),
     module.shareImport('Vim/createInput.js'),
@@ -16,7 +16,7 @@ Promise.all([
     EventEmmiter,
 ]).then(modules=>{
     let
-        createViewDiv=          modules[0],
+        createView=             modules[0],
         JsonFormatter=          modules[1],
         commands=               modules[2],
         createInput=            modules[3],
@@ -142,7 +142,7 @@ Promise.all([
     Vim.prototype.focus=function(){
         this.inputTag.focus()
     }
-    Vim.prototype.createViewDiv=createViewDiv
+    Vim.prototype.createView=createView
     // begin 2015-09-07
     function linesOf(text){
     /*

@@ -1,13 +1,18 @@
 Promise.all([
-    module.shareImport('createViewDiv/htmlEntities.js'),
-    module.shareImport('createViewDiv/line.js'),
-    module.shareImport('createViewDiv/createViewVim.js'),
+    module.shareImport('createView/htmlEntities.js'),
+    module.shareImport('createView/line.js'),
+    module.shareImport('createView/createViewVim.js'),
 ]).then(modules=>{
     let
         htmlEntities=modules[0],
         line=modules[1],
         createViewVim=modules[2]
-    return createViewDiv
+    return createView
+    function createView(){
+        return{
+            div:createViewDiv.call(this)
+        }
+    }
     function createViewDiv(){
         let
             div=document.createElement('div'),

@@ -1,9 +1,18 @@
 module.styleByPath('vim.css')
 module.debug=true
 module.shareImport('../Vim.js').then(Vim=>{
-    let vim=new Vim
-    document.body.appendChild(vim.createViewDiv())
-    vim.text=`<!doctype html>
+    let
+        div=document.createElement('div')
+    div.style.backgroundColor='gray'
+    div.style.width='600px'
+    div.style.margin='0 auto'
+    let vim=createVim()
+    div.appendChild(vim.createView().div)
+    document.body.appendChild(div)
+    vim.focus()
+    function createVim(){
+        let vim=new Vim
+        vim.text=`<!doctype html>
 <html>
     <head>
         <title>Title</title>
@@ -13,5 +22,6 @@ module.shareImport('../Vim.js').then(Vim=>{
     </body>
 </html>
 `
-    vim.focus()
+        return vim
+    }
 })
