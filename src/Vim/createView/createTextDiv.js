@@ -1,6 +1,6 @@
 Promise.all([
-    module.shareImport('htmlEntities.js'),
-    module.shareImport('line.js'),
+    module.shareImport('createTextDiv/htmlEntities.js'),
+    module.shareImport('createTextDiv/line.js'),
 ]).then(modules=>{
     let
         htmlEntities=modules[0],
@@ -12,18 +12,19 @@ Promise.all([
         div.style.fontSize=`${vim.lineHeightInPx}px`
         div.style.lineHeight='1'
         div.style.whiteSpace='pre'
-        div.addEventListener('dblclick',()=>{
-            vim.focus()
-        })
+        f()
         vim.on('view',changed=>{
+            f()
+        })
+        return div
+        function f(){
             if(vim.mode=='normal')
                 normal(vim,div)
             else if(vim.mode=='insert')
                 insert(vim,div)
             else if(vim.mode=='cmdline')
                 cmdline(vim,div)
-        })
-        return div
+        }
     }
     function normal(vim,div){
         let text,lines,r,c

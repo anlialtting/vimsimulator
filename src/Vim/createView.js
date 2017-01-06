@@ -22,15 +22,14 @@ Promise.all([
     function createViewDiv(view){
         let
             vim=view._vim,
-            div=document.createElement('div'),
-            commandDiv=createCommandDiv(vim)
+            div=document.createElement('div')
         vim.inputTag.style.outline='none'
         vim.inputTag.style.width='0'
         vim.inputTag.style.color='white'
         vim.inputTag.style.backgroundColor='black'
         div.style.position='relative'
         div.appendChild(createTextDiv(vim))
-        div.appendChild(commandDiv)
+        div.appendChild(createCommandDiv(vim))
         div.appendChild(vim.inputTag)
         vim.on('view',changed=>{
             let r=vim.text?vim._cursor.r:0
@@ -41,15 +40,19 @@ Promise.all([
         view.div=div
     }
     function createCommandDiv(vim){
-        let
-            div=document.createElement('div')
+        let div=document.createElement('div')
         div.style.fontFamily='monospace'
         div.style.fontSize=`${vim.lineHeightInPx}px`
         div.style.lineHeight='1'
         div.style.whiteSpace='pre'
+        f()
         vim.on('view',changed=>{
             if(changed.indexOf('mode')<0)
                 return
+            f()
+        })
+        return div
+        function f(){
             if(vim.mode=='normal')
                 div.textContent=''
             else if(vim.mode=='insert')
@@ -70,8 +73,7 @@ Promise.all([
                     div.textContent=vim.command
                 }
             }
-        })
-        return div
+        }
     }
     return function(){
         return new View(this)

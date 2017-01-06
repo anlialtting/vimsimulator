@@ -6,14 +6,15 @@ module.shareImport('../Vim.js').then(Vim=>{
     div.style.margin='0 auto'
     let vim=createVim()
     let view=vim.createView()
-    view.width=80
-    view.height=24
-    div.appendChild(view.div)
+    let vimViewDiv=createVimViewDiv(view)
+    div.appendChild(vimViewDiv)
     div.appendChild(createTextarea(vim))
     vim.on('quit',()=>{
-        div.removeChild(view.div)
+        div.removeChild(vimViewDiv)
     })
     document.body.appendChild(div)
+    view.width=80
+    view.height=24
     vim.focus()
     function createVim(){
         let vim=new Vim
@@ -31,23 +32,33 @@ module.shareImport('../Vim.js').then(Vim=>{
 `
         return vim
     }
-    function createTextarea(vim){
-        let textarea=document.createElement('textarea')
-        textarea.style.width=`${13/2*80}px`
-        textarea.style.height=`${13*24}px`
-        vim.on('view',()=>{
-            textarea.value=vim.text
-            if(vim.text){
-                let c=vim._cursor.abs
-                if(vim.mode=='normal'){
-                    textarea.selectionStart=c
-                    textarea.selectionEnd=c+1
-                }else if(vim.mode=='insert'){
-                    textarea.selectionStart=c
-                    textarea.selectionEnd=c
-                }
-            }
-        })
-        return textarea
-    }
 })
+function createVimViewDiv(view){
+    let div=document.createElement('div')
+    div.addEventListener('dblclick',()=>{
+        vim.focus()
+    })
+    div.appendChild(view.div)
+    return div
+}
+function createTextarea(vim){
+    let textarea=document.createElement('textarea')
+    textarea.style.width=`${13/2*80}px`
+    textarea.style.height=`${13*24}px`
+    f()
+    vim.on('view',f)
+    return textarea
+    function f(){
+        textarea.value=vim.text
+        if(vim.text){
+            let c=vim._cursor.abs
+            if(vim.mode=='normal'){
+                textarea.selectionStart=c
+                textarea.selectionEnd=c+1
+            }else if(vim.mode=='insert'){
+                textarea.selectionStart=c
+                textarea.selectionEnd=c
+            }
+        }
+    }
+}
