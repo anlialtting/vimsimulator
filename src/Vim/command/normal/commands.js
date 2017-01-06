@@ -1,10 +1,8 @@
 Promise.all([
-    module.shareImport('lowercaseCommands.js'),
-    module.shareImport('uppercaseCommands.js'),
+    module.shareImport('lowercaseCommands.js')
 ]).then(modules=>{
     let
-        lowercaseCommands=modules[0],
-        uppercaseCommands=modules[1]
+        lowercaseCommands=modules[0]
     return{
         A,D,G,I,O,P,X,a,d,g,h,i,j,k,l,n,o,p,r,u,v,x,y,
         '<':lt,
@@ -91,7 +89,10 @@ Promise.all([
         }
     }
     function X(vim,cmd,arg){
-        uppercaseCommands.X.call(vim,arg)
+        vim.text=
+            vim.text.substring(0,vim._cursor.abs-1)+
+            vim.text.substring(vim._cursor.abs)
+        vim._cursor.moveTo(vim._cursor.abs-1)
         return{
             acceptable:true,
             complete:true,
@@ -232,7 +233,12 @@ Promise.all([
         }
     }
     function r(vim,cmd,arg){
-        lowercaseCommands.r.call(vim,arg)
+        if(cmd=='')
+            return{acceptable:true}
+        vim.text=
+            vim.text.substring(0,vim._cursor.abs)+
+            cmd+
+            vim.text.substring(vim._cursor.abs+1)
         return{
             acceptable:true,
             complete:true,
@@ -256,7 +262,9 @@ Promise.all([
         }
     }
     function x(vim,cmd,arg){
-        lowercaseCommands.x.call(vim,arg)
+        vim.text=
+            vim.text.substring(0,vim._cursor.abs)+
+            vim.text.substring(vim._cursor.abs+1)
         return{
             acceptable:true,
             complete:true,

@@ -1,3 +1,19 @@
+function createViewVim(vim){
+    let
+        viewVim=Object.create(vim),
+        viewCursor=Object.create(vim._cursor)
+    Object.defineProperty(viewVim,'text',{
+        set(val){vim.text=val},
+        get(){return vim.text||'\n'}
+    })
+    Object.defineProperty(viewVim,'_cursor',{
+        get(){return viewCursor}
+    })
+    Object.defineProperty(viewCursor,'_vim',{
+        get(){return viewVim}
+    })
+    return viewVim
+}
 Promise.all([
     module.shareImport('createViewDiv/htmlEntities.js'),
     module.shareImport('createViewDiv/line.js'),
@@ -47,6 +63,7 @@ Promise.all([
         return div
     }
     function createTextDiv(vim){
+        vim=createViewVim(vim)
         let
             div=document.createElement('div')
         div.style.fontFamily='monospace'
