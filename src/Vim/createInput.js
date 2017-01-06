@@ -34,6 +34,8 @@
         input.style.width=`${mesureWidth(input.value)}px`
     })
     input.addEventListener('keydown',e=>{
+        if(composing)
+            return
         if(e.key=='Backspace')
             vim.command+=String.fromCharCode(8)
         else if(e.key=='Enter')
