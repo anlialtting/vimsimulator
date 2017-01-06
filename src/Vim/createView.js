@@ -7,12 +7,22 @@ Promise.all([
         htmlEntities=modules[0],
         line=modules[1],
         createViewVim=modules[2]
-    return createView
-    function createView(){
-        return{
-            div:createViewDiv.call(this)
-        }
+    function View(vim){
+        this._vim=vim
+        this.div=createViewDiv.call(vim)
     }
+    Object.defineProperty(View.prototype,'width',{set(val){
+        this._width=val
+        this.div.style.width=`${this._vim.lineHeightInPx/2*this.width}px`
+    },get(){
+        return this._width
+    }})
+    Object.defineProperty(View.prototype,'height',{set(val){
+        this._height=val
+        this.div.style.height=`${this._vim.lineHeightInPx*this.height}px`
+    },get(){
+        return this._height
+    }})
     function createViewDiv(){
         let
             div=document.createElement('div'),
@@ -138,5 +148,8 @@ Promise.all([
                 )
             }`
         }
+    }
+    return function(){
+        return new View(this)
     }
 })

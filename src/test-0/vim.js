@@ -3,11 +3,14 @@ module.debug=true
 module.shareImport('../Vim.js').then(Vim=>{
     let
         div=document.createElement('div')
-    div.style.backgroundColor='gray'
-    div.style.width='600px'
+    div.style.border='1px solid'
+    div.style.width='min-content'
     div.style.margin='0 auto'
     let vim=createVim()
-    div.appendChild(vim.createView().div)
+    let view=vim.createView()
+    view.width=80
+    view.height=24
+    div.appendChild(view.div)
     document.body.appendChild(div)
     vim.focus()
     function createVim(){
