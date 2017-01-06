@@ -343,9 +343,16 @@ function dot(vim,cmd,arg){
         complete:true,
     }
 }
+function colon(vim){
+    vim.mode='cmdline'
+    return{
+        acceptable:true,
+    }
+}
 ({
     A,D,G,I,O,P,X,a,d,g,h,i,j,k,l,n,o,p,r,u,v,x,y,
     '<':lt,
     '>':gt,
     '.':dot,
+    ':':colon,
 })

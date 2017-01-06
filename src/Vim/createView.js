@@ -39,18 +39,6 @@ Promise.all([
             this.inputTag.style.top=`${
                 (this._cursor.r+1)*this.lineHeightInPx
             }px`
-            changed.forEach(key=>{
-                if(key=='mode'){
-                    if(this.mode=='normal')
-                        commandDiv.textContent=''
-                    else if(this.mode=='insert')
-                        commandDiv.textContent='-- INSERT --'
-                    else if(this.mode=='visual')
-                        commandDiv.textContent='-- VISUAL --'
-                    else if(this.mode=='visual-block')
-                        commandDiv.textContent='-- VISUAL BLOCK --'
-                }
-            })
         })
         return div
     }
@@ -61,6 +49,30 @@ Promise.all([
         div.style.fontSize=`${vim.lineHeightInPx}px`
         div.style.lineHeight='1'
         div.style.whiteSpace='pre'
+        vim.on('view',changed=>{
+            if(changed.indexOf('mode')<0)
+                return
+            if(vim.mode=='normal')
+                div.textContent=''
+            else if(vim.mode=='insert')
+                div.textContent='-- INSERT --'
+            else if(vim.mode=='visual')
+                div.textContent='-- VISUAL --'
+            else if(vim.mode=='visual-block')
+                div.textContent='-- VISUAL BLOCK --'
+            else if(vim.mode=='cmdline'){
+                update()
+                vim.on('view',listener)
+                function listener(){
+                    update()
+                    if(vim.mode!='cmdline')
+                        vim.removeListener('view',listener)
+                }
+                function update(){
+                    div.textContent=vim.command
+                }
+            }
+        })
         return div
     }
     function createTextDiv(vim){

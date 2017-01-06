@@ -1,4 +1,4 @@
-(function(vim){
+function main(vim){
     if(vim.command==String.fromCharCode(8)){
         if(vim.text){
             let
@@ -35,4 +35,9 @@
         vim.text.substring(vim._cursor.abs)
     vim._cursor.moveTo(vim._cursor.abs+vim.command.length)
     vim.command=''
+}
+(vim=>{
+    let r=main(vim)
+    vim.view()
+    return r
 })

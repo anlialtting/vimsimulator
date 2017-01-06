@@ -10,6 +10,9 @@ module.shareImport('../Vim.js').then(Vim=>{
     view.height=24
     div.appendChild(view.div)
     div.appendChild(createTextarea(vim))
+    vim.on('quit',()=>{
+        div.removeChild(view.div)
+    })
     document.body.appendChild(div)
     vim.focus()
     function createVim(){

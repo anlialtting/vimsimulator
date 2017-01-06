@@ -30,8 +30,6 @@
             vim.command+=input.value
             input.value=''
         }
-        if(vim.mode=='insert')
-            vim.view()
         input.style.width=`${mesureWidth(input.value)}px`
     })
     input.addEventListener('keydown',e=>{
