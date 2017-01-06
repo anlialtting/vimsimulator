@@ -1,26 +1,12 @@
-function createViewVim(vim){
-    let
-        viewVim=Object.create(vim),
-        viewCursor=Object.create(vim._cursor)
-    Object.defineProperty(viewVim,'text',{
-        set(val){vim.text=val},
-        get(){return vim.text||'\n'}
-    })
-    Object.defineProperty(viewVim,'_cursor',{
-        get(){return viewCursor}
-    })
-    Object.defineProperty(viewCursor,'_vim',{
-        get(){return viewVim}
-    })
-    return viewVim
-}
 Promise.all([
     module.shareImport('createViewDiv/htmlEntities.js'),
     module.shareImport('createViewDiv/line.js'),
+    module.shareImport('createViewDiv/createViewVim.js'),
 ]).then(modules=>{
     let
         htmlEntities=modules[0],
-        line=modules[1]
+        line=modules[1],
+        createViewVim=modules[2]
     return createViewDiv
     function createViewDiv(){
         let
