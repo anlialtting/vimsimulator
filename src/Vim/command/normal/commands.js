@@ -125,7 +125,8 @@ function d(vim,cmd,arg){
             vim.text=
                 vim.text.substring(0,a)+
                 vim.text.substring(b)
-            vim._cursor.moveTo(vim._cursor.lineStart)
+            if(vim.text)
+                vim._cursor.moveTo(vim._cursor.lineStart)
         }
         return{
             acceptable:true,
