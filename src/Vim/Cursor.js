@@ -5,10 +5,10 @@ function Cursor(vim){
 }
 // start 0
 Object.defineProperty(Cursor.prototype,'_countOfRows',{get(){
-    return this._vim.text.split('\n').length-1
+    return this._vim._text.split('\n').length-1
 }})
 Object.defineProperty(Cursor.prototype,'_countOfCols',{get(){
-    return this._vim.text.split('\n')[this.r].length
+    return this._vim._text.split('\n')[this.r].length
 }})
 Object.defineProperty(Cursor.prototype,'r',{get(){
     return Math.min(this._countOfRows-1,Math.max(0,this._y))
@@ -23,7 +23,7 @@ function availableCols(c){
         return c._countOfCols+1
 }
 Cursor.prototype.line=function(n){
-    return this._vim.text.split('\n').slice(0,n).join('').length+n
+    return this._vim._text.split('\n').slice(0,n).join('').length+n
 }
 // end 0
 // start 1
@@ -42,16 +42,16 @@ Cursor.prototype.moveDown=function(){
 // end 1
 // start 1a
 Object.defineProperty(Cursor.prototype,'abs',{get(){
-    return this._vim.text.split('\n').slice(0,this.r).join('').length+
+    return this._vim._text.split('\n').slice(0,this.r).join('').length+
         this.r+
         this.c
 }})
 // end 1a
 // start 1b
 Cursor.prototype.moveTo=function(n){
-    this._y=this._vim.text.substring(0,n).split('\n').length-1
+    this._y=this._vim._text.substring(0,n).split('\n').length-1
     this._x=n-(
-        this._vim.text.split('\n').slice(0,this.r).join('').length+this.r
+        this._vim._text.split('\n').slice(0,this.r).join('').length+this.r
     )
 }
 // end 1b

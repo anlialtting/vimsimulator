@@ -1,5 +1,5 @@
 function A(vim){
-    if(vim.text){
+    if(vim._text){
         vim._cursor.moveToEOL()
     }
     vim.mode='insert'
@@ -9,17 +9,17 @@ function A(vim){
     }
 }
 function D(vim,cmd,arg){
-    if(vim.text){
+    if(vim._text){
         let
             a=vim._cursor.abs,
             b=vim._cursor.lineEnd-1
         vim.register={
             mode:'string',
-            string:vim.text.substring(a,b),
+            string:vim._text.substring(a,b),
         }
-        vim.text=
-            vim.text.substring(0,a)+
-            vim.text.substring(b)
+        vim._text=
+            vim._text.substring(0,a)+
+            vim._text.substring(b)
     }
     return{
         acceptable:true,
@@ -27,7 +27,7 @@ function D(vim,cmd,arg){
     }
 }
 function G(vim,cmd,arg){
-    if(vim.text){
+    if(vim._text){
         arg=arg||vim._cursor._countOfRows
         arg=Math.min(vim._cursor._countOfRows,arg)
         vim._cursor.moveTo(vim._cursor.line(arg-1))
@@ -38,7 +38,7 @@ function G(vim,cmd,arg){
     }
 }
 function I(vim,cmd,arg){
-    if(vim.text){
+    if(vim._text){
         vim._cursor.moveTo(vim._cursor.lineStart)
     }
     vim.mode='insert'
@@ -49,10 +49,10 @@ function I(vim,cmd,arg){
 }
 function O(vim,cmd,arg){
     vim.mode='insert'
-    vim.text||(vim.text='\n')
+    vim._text||(vim._text='\n')
     vim._cursor.moveTo(vim._cursor.lineStart)
     let c=vim._cursor.abs
-    vim.text=vim.text.substring(0,c)+'\n'+vim.text.substring(c)
+    vim._text=vim._text.substring(0,c)+'\n'+vim._text.substring(c)
     return{
         acceptable:true,
         complete:true,
@@ -65,20 +65,20 @@ function P(vim,cmd,arg){
             acceptable:true,
             complete:true,
         }
-    vim.text||(vim.text='\n')
+    vim._text||(vim._text='\n')
     if(vim.register.mode=='string'){
         let c=vim._cursor.abs
-        vim.text=
-            vim.text.substring(0,c)+
+        vim._text=
+            vim._text.substring(0,c)+
             vim.register.string+
-            vim.text.substring(c)
+            vim._text.substring(c)
         vim._cursor.moveTo(c+vim.register.string.length-1)
     }else if(vim.register.mode=='line'){
         let c=vim._cursor.lineStart
-        vim.text=
-            vim.text.substring(0,c)+
+        vim._text=
+            vim._text.substring(0,c)+
             vim.register.string+
-            vim.text.substring(c)
+            vim._text.substring(c)
         vim._cursor.moveTo(vim._cursor.lineStart)
     }
     return{
@@ -88,10 +88,10 @@ function P(vim,cmd,arg){
     }
 }
 function X(vim,cmd,arg){
-    vim.text||(vim.text='\n')
-    vim.text=
-        vim.text.substring(0,vim._cursor.abs-1)+
-        vim.text.substring(vim._cursor.abs)
+    vim._text||(vim._text='\n')
+    vim._text=
+        vim._text.substring(0,vim._cursor.abs-1)+
+        vim._text.substring(vim._cursor.abs)
     vim._cursor.moveTo(vim._cursor.abs-1)
     return{
         acceptable:true,
@@ -101,7 +101,7 @@ function X(vim,cmd,arg){
 }
 function a(vim,cmd,arg){
     vim.mode='insert'
-    if(vim.text)
+    if(vim._text)
         vim._cursor.moveRight()
     return{
         acceptable:true,
@@ -112,7 +112,7 @@ function d(vim,cmd,arg){
     if(cmd=='')
         return{acceptable:true}
     if(cmd=='d'){
-        if(vim.text){
+        if(vim._text){
             arg=arg||1
             arg=Math.min(vim._cursor._countOfRows-vim._cursor.r,arg)
             let
@@ -120,12 +120,12 @@ function d(vim,cmd,arg){
                 b=vim._cursor.line(vim._cursor.r+arg)
             vim.register={
                 mode:'line',
-                string:vim.text.substring(a,b),
+                string:vim._text.substring(a,b),
             }
-            vim.text=
-                vim.text.substring(0,a)+
-                vim.text.substring(b)
-            if(vim.text)
+            vim.__text=
+                vim._text.substring(0,a)+
+                vim._text.substring(b)
+            if(vim._text)
                 vim._cursor.moveTo(vim._cursor.lineStart)
         }
         return{
@@ -139,7 +139,7 @@ function g(vim,cmd,arg){
     if(cmd=='')
         return{acceptable:true}
     if(cmd=='g'){
-        if(vim.text){
+        if(vim._text){
             arg=arg||1
             arg=Math.min(vim._cursor._countOfRows,arg)
             vim._cursor.moveTo(vim._cursor.line(arg-1))
@@ -152,7 +152,7 @@ function g(vim,cmd,arg){
 }
 function h(vim,cmd,arg){
     arg=arg||1
-    if(vim.text)
+    if(vim._text)
         while(arg--)
             vim._cursor.moveLeft()
     return{
@@ -169,7 +169,7 @@ function i(vim,cmd,arg){
 }
 function j(vim,cmd,arg){
     arg=arg||1
-    if(vim.text)
+    if(vim._text)
         while(arg--)
             vim._cursor.moveDown()
     return{
@@ -179,7 +179,7 @@ function j(vim,cmd,arg){
 }
 function k(vim,cmd,arg){
     arg=arg||1
-    if(vim.text)
+    if(vim._text)
         while(arg--)
             vim._cursor.moveUp()
     return{
@@ -189,7 +189,7 @@ function k(vim,cmd,arg){
 }
 function l(vim,cmd,arg){
     arg=arg||1
-    if(vim.text)
+    if(vim._text)
         while(arg--)
             vim._cursor.moveRight()
     return{
@@ -205,11 +205,11 @@ function n(vim,cmd,arg){
     }
 }
 function o(vim,cmd,arg){
-    vim.text||(vim.text='\n')
+    vim._text||(vim._text='\n')
     vim.mode='insert'
     vim._cursor.moveTo(vim._cursor.lineEnd)
     let c=vim._cursor.abs
-    vim.text=vim.text.substring(0,c)+'\n'+vim.text.substring(c)
+    vim._text=vim._text.substring(0,c)+'\n'+vim._text.substring(c)
     return{
         acceptable:true,
         complete:true,
@@ -222,20 +222,20 @@ function p(vim,cmd,arg){
             acceptable:true,
             complete:true,
         }
-    vim.text||(vim.text='\n')
+    vim._text||(vim._text='\n')
     if(vim.register.mode=='string'){
         let c=vim._cursor.abs
-        vim.text=
-            vim.text.substring(0,c+1)+
+        vim._text=
+            vim._text.substring(0,c+1)+
             vim.register.string+
-            vim.text.substring(c+1)
+            vim._text.substring(c+1)
         vim._cursor.moveTo(c+vim.register.string.length)
     }else if(vim.register.mode=='line'){
         let c=vim._cursor.lineEnd
-        vim.text=
-            vim.text.substring(0,c)+
+        vim._text=
+            vim._text.substring(0,c)+
             vim.register.string+
-            vim.text.substring(c)
+            vim._text.substring(c)
         vim._cursor.moveTo(vim._cursor.lineEnd)
     }
     return{
@@ -247,11 +247,11 @@ function p(vim,cmd,arg){
 function r(vim,cmd,arg){
     if(cmd=='')
         return{acceptable:true}
-    if(vim.text){
-        vim.text=
-            vim.text.substring(0,vim._cursor.abs)+
+    if(vim._text){
+        vim._text=
+            vim._text.substring(0,vim._cursor.abs)+
             cmd+
-            vim.text.substring(vim._cursor.abs+1)
+            vim._text.substring(vim._cursor.abs+1)
     }
     return{
         acceptable:true,
@@ -289,10 +289,10 @@ function v(vim,cmd,arg){
     }
 }
 function x(vim,cmd,arg){
-    if(vim.text){
-        vim.text=
-            vim.text.substring(0,vim._cursor.abs)+
-            vim.text.substring(vim._cursor.abs+1)
+    if(vim._text){
+        vim._text=
+            vim._text.substring(0,vim._cursor.abs)+
+            vim._text.substring(vim._cursor.abs+1)
     }
     return{
         acceptable:true,
@@ -304,7 +304,7 @@ function y(vim,cmd,arg){
     if(cmd=='')
         return{acceptable:true}
     if(cmd=='y'){
-        if(vim.text){
+        if(vim._text){
             arg=arg||1
             arg=Math.min(vim._cursor._countOfRows-vim._cursor.r,arg)
             let
@@ -312,7 +312,7 @@ function y(vim,cmd,arg){
                 b=vim._cursor.line(vim._cursor.r+arg)
             vim.register={
                 mode:'line',
-                string:vim.text.substring(a,b),
+                string:vim._text.substring(a,b),
             }
         }
         return{
@@ -367,16 +367,6 @@ function colon(vim){
     ':':colon,
 })
 /*
-Vim.prototype.command_yy=function(count){
-    count=count||1
-    let
-        f=this.textarea.selectionStart,
-        l=this.textarea.selectionStart
-    f=getLineStartByCursor(this.textarea.value,f)
-    for(var i=0;i<count;i++)
-        l=getLineEndByCursor(this.textarea.value,l)
-    this.yank(1,this.textarea.value.substring(f,l))
-}
 Vim.prototype.command_ltlt=function(count){
     count=count||1
     let lineNumber=

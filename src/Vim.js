@@ -15,30 +15,43 @@ Promise.all([
         EventEmmiter=           modules[4]
     function Vim(){
         EventEmmiter.call(this)
-        this._text=''
+        this._values={}
+        this._viewChanged=[]
         this._command=''
-        this.viewChanged=[]
-        this.lineHeightInPx=13
-        this.inputTag=createInput(this)
+        this._text=''
         this._mode='normal'
         this._cursor=new Cursor(this)
+        this._undoBranchManager=new UndoBranchManager
+        this._undoBranchManager.push('')
+        this.lineHeightInPx=13
+        this.inputTag=createInput(this)
     }
     Object.setPrototypeOf(Vim.prototype,EventEmmiter.prototype)
     Object.defineProperty(Vim.prototype,'mode',{
         set(val){
             this._mode=val
-            this.viewChanged.mode=true
+            this._viewChanged.mode=true
         },
         get(){
             return this._mode
         }
     })
+    Object.defineProperty(Vim.prototype,'_text',{
+        set(val){
+            this._values.text=val
+            this._viewChanged.text=true
+            this.view()
+            this.emit('textChange')
+        },
+        get(){
+            return this._values.text
+        }
+    })
     Object.defineProperty(Vim.prototype,'text',{
         set(val){
             this._text=val
-            this.viewChanged.text=true
-            this.view()
-            this.emit('textChange')
+            this._undoBranchManager.clear()
+            this._undoBranchManager.push(this._text)
         },
         get(){
             return this._text
@@ -47,7 +60,7 @@ Promise.all([
     Object.defineProperty(Vim.prototype,'command',{
         set(val){
             this._command=val
-            this.viewChanged.command=true
+            this._viewChanged.command=true
             if(this._command){
                 command.call(this)
                 this.view()
@@ -59,12 +72,24 @@ Promise.all([
         }
     })
     Vim.prototype.view=function(){
-        this.emit('view',Object.keys(this.viewChanged))
-        this.viewChanged={}
+        this.emit('view',Object.keys(this._viewChanged))
+        this._viewChanged={}
     }
     Vim.prototype.focus=function(){
         this.inputTag.focus()
     }
     Vim.prototype.createView=createView
+    function UndoBranchManager(){
+        this._undoBranches=[]
+    }
+    UndoBranchManager.prototype.clear=function(){
+        this._undoBranches=[]
+    }
+    UndoBranchManager.prototype.push=function(text){
+        this._undoBranches.push(new UndoBranch(text))
+    }
+    function UndoBranch(text){
+        this.text=text
+    }
     return Vim
 })

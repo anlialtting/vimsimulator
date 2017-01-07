@@ -22,7 +22,7 @@ Promise.all([
     function viewText(view){
         let
             vim=view._vim,
-            text=vim.text||'\n',
+            text=vim._text||'\n',
             vc=viewCursor(vim),
             viewRowsCount=0,
             cursorViewRow
@@ -118,7 +118,7 @@ Promise.all([
     }
     function viewCursor(vim){
         let r,c
-        if(vim.text){
+        if(vim._text){
             r=vim._cursor.r
             c=vim._cursor.c
         }else{

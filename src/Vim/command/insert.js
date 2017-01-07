@@ -1,14 +1,14 @@
 function main(vim){
     if(vim.command==String.fromCharCode(8)){
-        if(vim.text){
+        if(vim._text){
             let
                 text=
                     vim.text.substring(0,vim._cursor.abs-1)+
                     vim.text.substring(vim._cursor.abs),
                 pos=
                     vim._cursor.abs-1
-            vim.text=text
-            if(vim.text)
+            vim._text=text
+            if(vim._text)
                 vim._cursor.moveTo(pos)
             vim.command=''
         }
@@ -20,19 +20,19 @@ function main(vim){
         return
     }
     if(vim.command==String.fromCharCode(127)){
-        if(vim.text){
-            vim.text=
-                vim.text.substring(0,vim._cursor.abs)+
-                vim.text.substring(vim._cursor.abs+1)
+        if(vim._text){
+            vim._text=
+                vim._text.substring(0,vim._cursor.abs)+
+                vim._text.substring(vim._cursor.abs+1)
         }
         vim.command=''
         return
     }
-    vim.text||(vim.text='\n')
-    vim.text=
-        vim.text.substring(0,vim._cursor.abs)+
+    vim._text||(vim._text='\n')
+    vim._text=
+        vim._text.substring(0,vim._cursor.abs)+
         vim.command.replace(/\r/,'\n')+
-        vim.text.substring(vim._cursor.abs)
+        vim._text.substring(vim._cursor.abs)
     vim._cursor.moveTo(vim._cursor.abs+vim.command.length)
     vim.command=''
 }
