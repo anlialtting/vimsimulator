@@ -27,10 +27,6 @@ Promise.all([
         let
             vim=view._vim,
             text=viewText(view)
-        if(document.activeElement!=vim.inputTag)
-            return div.textContent=text.map(l=>
-                l.map(s=>s+'\n').join('')
-            ).join('')
         div.innerHTML=highlight(view,text)
     }
     function insert(view,div){
@@ -81,8 +77,12 @@ Promise.all([
         let res=[]
         text.map((l,i)=>
             l.map((row,j)=>{
-                if(view.width&&i==r&&j*view.width<=c&&c<(j+1)*view.width){
-                    let viewC=c-j*view.width
+                if(
+                    document.activeElement==vim.inputTag&&
+                    i==r&&
+                    (!view.width||j*view.width<=c&&c<(j+1)*view.width)
+                ){
+                    let viewC=view.width?c-j*view.width:c
                     res.push(`${
                         htmlEntities.encode(row.substring(0,viewC))
                     }<span class=cursor style=background-color:black;color:white>${

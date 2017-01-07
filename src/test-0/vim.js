@@ -8,14 +8,14 @@ module.shareImport('../Vim.js').then(Vim=>{
     let view=vim.createView()
     let vimViewDiv=createVimViewDiv(view,vim)
     div.appendChild(vimViewDiv)
-    div.appendChild(createTextarea(vim))
+    //div.appendChild(createTextarea(vim))
     vim.on('quit',()=>{
         div.removeChild(vimViewDiv)
     })
     document.body.appendChild(div)
-    view.width=80
+    /*view.width=80
     view.height=24
-    vim.focus()
+    vim.focus()*/
     function createVim(){
         let vim=new Vim
         vim.text=`<!doctype html>
@@ -23,7 +23,6 @@ module.shareImport('../Vim.js').then(Vim=>{
     <head>
         <title>Title</title>
     </head>
-    aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
     <body>
         <!-- this is a comment -->
         <p>
@@ -36,14 +35,14 @@ module.shareImport('../Vim.js').then(Vim=>{
 })
 function createVimViewDiv(view,vim){
     let div=document.createElement('div')
-    div.style.border='1px solid lightgray'
+    //div.style.border='1px solid lightgray'
     div.addEventListener('dblclick',()=>{
         vim.focus()
     })
     div.appendChild(view.div)
     return div
 }
-function createTextarea(vim){
+/*function createTextarea(vim){
     let textarea=document.createElement('textarea')
     textarea.style.width=`${13/2*80}px`
     textarea.style.height=`${13*24}px`
@@ -63,4 +62,4 @@ function createTextarea(vim){
             }
         }
     }
-}
+}*/
