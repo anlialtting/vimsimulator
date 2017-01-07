@@ -1,15 +1,19 @@
 Promise.all([
     module.shareImport('createView/createTextDiv.js'),
+    module.shareImport('measureWidth.js'),
 ]).then(modules=>{
     let
-        createTextDiv=modules[0]
+        createTextDiv=modules[0],
+        measureWidth=modules[1]
     function View(vim){
         this._vim=vim
         createViewDiv(this)
     }
     Object.defineProperty(View.prototype,'width',{set(val){
         this._width=val
-        this.div.style.width=`${this._vim.lineHeightInPx/2*this.width}px`
+        this.div.style.width=`${
+            measureWidth(this._vim,'a'.repeat(this.width))
+        }px`
     },get(){
         return this._width
     }})
@@ -27,15 +31,18 @@ Promise.all([
         vim.inputTag.style.width='0'
         vim.inputTag.style.color='white'
         vim.inputTag.style.backgroundColor='black'
+        vim.inputTag.style.zIndex='1'
         div.style.position='relative'
-        div.appendChild(createTextDiv(vim))
+        div.appendChild(createTextDiv(view))
         div.appendChild(createCommandDiv(vim))
-        div.appendChild(vim.inputTag)
+        document.body.appendChild(vim.inputTag)
         vim.on('view',changed=>{
-            let r=vim.text?vim._cursor.r:0
-            vim.inputTag.style.top=`${
-                (r+1)*vim.lineHeightInPx
-            }px`
+            let span=div.getElementsByClassName('cursor')[0]
+            if(span){
+                let rect=span.getBoundingClientRect()
+                vim.inputTag.style.left=`${rect.left}px`
+                vim.inputTag.style.top=`${rect.top}px`
+            }
         })
         view.div=div
     }
