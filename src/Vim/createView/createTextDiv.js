@@ -65,20 +65,23 @@ Promise.all([
                 view._scroll=cursorViewRow-(view.height-1)+1
             if(cursorViewRow<view._scroll)
                 view._scroll=cursorViewRow
-        }
-        res=res.map(l=>{
-            if(l.end<=view._scroll||view._scroll+view.height-1<=l.start)
-                return
-            l.rows=l.rows.map((r,i)=>{
-                if(!(
-                    view._scroll<=l.start+i&&
-                    l.start+i<view._scroll+view.height-1
-                ))
+            res=res.map(l=>{
+                if(
+                    l.end<=view._scroll||
+                    view._scroll+view.height-1<=l.start
+                )
                     return
-                return r
-            }).filter(r=>r!=undefined)
-            return l
-        }).filter(l=>l!=undefined)
+                l.rows=l.rows.map((r,i)=>{
+                    if(!(
+                        view._scroll<=l.start+i&&
+                        l.start+i<view._scroll+view.height-1
+                    ))
+                        return
+                    return r
+                }).filter(r=>r!=undefined)
+                return l
+            }).filter(l=>l!=undefined)
+        }
         return res
     }
     function highlight(view,text){
