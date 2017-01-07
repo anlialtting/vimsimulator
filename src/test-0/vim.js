@@ -13,9 +13,9 @@ module.shareImport('../Vim.js').then(Vim=>{
         div.removeChild(vimViewDiv)
     })
     document.body.appendChild(div)
-    /*view.width=80
+    view.width=80
     view.height=24
-    vim.focus()*/
+    vim.focus()
     function createVim(){
         let vim=new Vim
         vim.text=`<!doctype html>
@@ -35,7 +35,7 @@ module.shareImport('../Vim.js').then(Vim=>{
 })
 function createVimViewDiv(view,vim){
     let div=document.createElement('div')
-    //div.style.border='1px solid lightgray'
+    div.style.border='1px solid lightgray'
     div.addEventListener('dblclick',()=>{
         vim.focus()
     })
