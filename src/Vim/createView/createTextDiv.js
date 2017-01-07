@@ -5,9 +5,6 @@ Promise.all([
     let
         htmlEntities=modules[0],
         line=modules[1]
-    let modes={
-        normal,insert,cmdline
-    }
     function createTextDiv(view){
         let vim=view._vim
         let div=document.createElement('div')
@@ -19,23 +16,8 @@ Promise.all([
         vim.on('view',f)
         return div
         function f(){
-            if(vim.mode in modes)
-                modes[vim.mode](view,div)
+            div.innerHTML=highlight(view,viewText(view))
         }
-    }
-    function normal(view,div){
-        let
-            vim=view._vim,
-            text=viewText(view)
-        div.innerHTML=highlight(view,text)
-    }
-    function insert(view,div){
-        // same as normal
-        normal(view,div)
-    }
-    function cmdline(view,div){
-        // same as normal
-        normal(view,div)
     }
     function viewText(view){
         let
@@ -48,7 +30,10 @@ Promise.all([
         }else{
             r=c=0
         }
-        return line.lines(text).map((l,j)=>{
+        let
+            viewRowsCount=0,
+            cursorViewRow
+        let res=line.lines(text).map((l,j)=>{
             if(j==r)
                 if(vim.imInput)
                     l=
@@ -57,13 +42,33 @@ Promise.all([
                         l.substring(c)
                 else if(c==l.length)
                     l+=' '
-            if(!view.width)
+            if(view.width&&l.length){
+                let res=[]
+                for(let i=0;i*view.width<l.length;i++){
+                    res.push(l.substring(i*view.width,(i+1)*view.width))
+                    if(j==r&&i*view.width<=c&&c<(i+1)*view.width)
+                        cursorViewRow=viewRowsCount
+                    viewRowsCount++
+                }
+                return res
+            }else{
+                if(j==r)
+                    cursorViewRow=viewRowsCount
+                viewRowsCount++
                 return[l]
-            let res=[]
-            for(let i=0;i*view.width<l.length;i++)
-                res.push(l.substring(i*view.width,(i+1)*view.width))
-            return res
+            }
         })
+        if(view.height){
+            while(view._scroll+view.height-1<=cursorViewRow)
+                view._scroll++
+            if(cursorViewRow<view._scroll)
+                view._scroll=cursorViewRow
+        }
+        for(let i=0;i<view._scroll;){
+            i+=res[0].length||1
+            res.shift()
+        }
+        return res
     }
     function highlight(view,text){
         let vim=view._vim
@@ -75,7 +80,9 @@ Promise.all([
             r=c=0
         }
         let res=[]
-        text.map((l,i)=>
+        text.map((l,i)=>{
+            if(!l.length)
+                return res.push('')
             l.map((row,j)=>{
                 if(
                     document.activeElement==vim.inputTag&&
@@ -94,7 +101,7 @@ Promise.all([
                     res.push(htmlEntities.encode(row))
                 }
             })
-        )
+        })
         while(res.length<view.height-1)
             res.push('~')
         return res.map(s=>s+'\n').join('')

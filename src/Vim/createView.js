@@ -7,6 +7,7 @@ Promise.all([
         measureWidth=modules[1]
     function View(vim){
         this._vim=vim
+        this._scroll=0
         createViewDiv(this)
     }
     Object.defineProperty(View.prototype,'width',{set(val){
