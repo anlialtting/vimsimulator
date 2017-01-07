@@ -33,6 +33,7 @@ Promise.all([
         vim.inputTag.style.color='white'
         vim.inputTag.style.backgroundColor='black'
         vim.inputTag.style.zIndex='1'
+        vim.inputTag.style.position='fixed'
         div.style.position='relative'
         div.appendChild(createTextDiv(view))
         div.appendChild(createCommandDiv(vim))
