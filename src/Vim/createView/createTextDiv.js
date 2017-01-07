@@ -35,8 +35,11 @@ Promise.all([
                         l.substring(vc.c)
                 else if(vc.c==l.length)
                     l+=' '
-            let res={}
+            let res={
+                index:j
+            }
             if(view.width&&l.length){
+                res.start=viewRowsCount
                 res.rows=[]
                 for(let i=0;i*view.width<l.length;i++){
                     res.rows.push(
@@ -46,24 +49,36 @@ Promise.all([
                         cursorViewRow=viewRowsCount
                     viewRowsCount++
                 }
+                res.end=viewRowsCount
             }else{
                 if(j==vc.r)
                     cursorViewRow=viewRowsCount
-                viewRowsCount++
+                res.start=viewRowsCount
                 res.rows=[l]
+                viewRowsCount++
+                res.end=viewRowsCount
             }
             return res
         })
         if(view.height){
             if(view._scroll+view.height-1<=cursorViewRow)
-                view._scroll+=cursorViewRow-view.height+2
+                view._scroll=cursorViewRow-(view.height-1)+1
             if(cursorViewRow<view._scroll)
                 view._scroll=cursorViewRow
         }
-        /*for(let i=0;i<view._scroll;){
-            i+=res[0].length||1
-            res.shift()
-        }*/
+        res=res.map(l=>{
+            if(l.end<=view._scroll||view._scroll+view.height-1<=l.start)
+                return
+            l.rows=l.rows.map((r,i)=>{
+                if(!(
+                    view._scroll<=l.start+i&&
+                    l.start+i<view._scroll+view.height-1
+                ))
+                    return
+                return r
+            }).filter(r=>r!=undefined)
+            return l
+        }).filter(l=>l!=undefined)
         return res
     }
     function highlight(view,text){
@@ -71,12 +86,12 @@ Promise.all([
             vim=view._vim,
             vc=viewCursor(vim),
             res=[]
-        text.map((l,i)=>{
+        text.map(l=>{
             if(!l.rows.length)
                 return res.push('')
             l.rows.map((row,j)=>{
                 if(!(
-                    document.activeElement==vim.inputTag&&i==vc.r&&(
+                    document.activeElement==vim.inputTag&&l.index==vc.r&&(
                         !view.width||
                         j*view.width<=vc.c&&vc.c<(j+1)*view.width
                     )
