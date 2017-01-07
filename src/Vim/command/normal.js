@@ -14,9 +14,11 @@ Promise.all([
         let res=tryCommand(vim,cmd,arg)||{}
         if(res.acceptable){
             if(res.complete){
-                if(res.changed)
-                    vim.lastChangingCommand=
-                        vim.command
+                if(res.changed){
+                    /*vim.lastChangingCommand=
+                        vim.command*/
+                    vim._undoBranchManager.push(vim._text)
+                }
                 vim.command=''
             }
         }else{

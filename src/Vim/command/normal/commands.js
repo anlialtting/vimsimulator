@@ -122,7 +122,7 @@ function d(vim,cmd,arg){
                 mode:'line',
                 string:vim._text.substring(a,b),
             }
-            vim.__text=
+            vim._text=
                 vim._text.substring(0,a)+
                 vim._text.substring(b)
             if(vim._text)
@@ -260,6 +260,15 @@ function r(vim,cmd,arg){
     }
 }
 function u(vim,cmd,arg){
+    if(vim._undoBranchManager.current.previous!=undefined){
+        vim._undoBranchManager.current=
+            vim._undoBranchManager.current.previous
+        vim._text=vim._undoBranchManager.current.text
+    }
+    return{
+        acceptable:true,
+        complete:true,
+    }
     /*
     var c=this.textarea.selectionStart
     this.textarea.value=
@@ -274,11 +283,6 @@ function u(vim,cmd,arg){
         this.textarea.value=this.histories[this.histories.length-1]
     this.textarea.selectionStart=c
     */
-    return{
-        acceptable:true,
-        complete:true,
-        changed:true,
-    }
 }
 function v(vim,cmd,arg){
     vim.mode='visual'
