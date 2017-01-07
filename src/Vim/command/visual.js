@@ -1,5 +1,5 @@
-(function(vim){
-    if(vim.command==='d'){
+(vim=>{
+    /*if(vim.command==='d'){
         vim.command_vd()
         vim.command=''
     }else if(vim.command==='y'){
@@ -11,7 +11,7 @@
     }else if(vim.command==='>'){
         vim.command_vgt()
         vim.command=''
-    }
+    }*/
 })
 /*
 Promise.all([
