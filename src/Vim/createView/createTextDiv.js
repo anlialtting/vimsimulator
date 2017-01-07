@@ -53,17 +53,14 @@ Promise.all([
             r=c=0
         }
         return line.lines(text).map((l,j)=>{
-            if(j==r){
-                if(vim.imInput){
+            if(j==r)
+                if(vim.imInput)
                     l=
                         l.substring(0,c)+
                         vim.imInput+
                         l.substring(c)
-                }else{
-                    if(c==l.length)
-                        l+=' '
-                }
-            }
+                else if(c==l.length)
+                    l+=' '
             if(!view.width)
                 return[l]
             let res=[]
@@ -88,7 +85,7 @@ Promise.all([
                     let viewC=c-j*view.width
                     res.push(`${
                         htmlEntities.encode(row.substring(0,viewC))
-                    }<span class=cursor style=background-color:black;color:white;>${
+                    }<span class=cursor style=background-color:black;color:white>${
                         htmlEntities.encode(row[viewC])
                     }</span>${
                         htmlEntities.encode(row.substring(viewC+1))
@@ -98,6 +95,8 @@ Promise.all([
                 }
             })
         )
+        while(res.length<view.height-1)
+            res.push('~')
         return res.map(s=>s+'\n').join('')
     }
     return createTextDiv
