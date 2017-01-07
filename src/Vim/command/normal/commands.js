@@ -304,7 +304,17 @@ function y(vim,cmd,arg){
     if(cmd=='')
         return{acceptable:true}
     if(cmd=='y'){
-        lowercaseCommands.yy.call(vim,arg)
+        if(vim.text){
+            arg=arg||1
+            arg=Math.min(vim._cursor._countOfRows-vim._cursor.r,arg)
+            let
+                a=vim._cursor.line(vim._cursor.r),
+                b=vim._cursor.line(vim._cursor.r+arg)
+            vim.register={
+                mode:'line',
+                string:vim.text.substring(a,b),
+            }
+        }
         return{
             acceptable:true,
             complete:true,
