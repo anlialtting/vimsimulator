@@ -41,6 +41,8 @@ module.shareImport('measureWidth.js').then(measureWidth=>{
                 vim.command+=String.fromCharCode(27)
             else if(e.key=='Delete')
                 vim.command+=String.fromCharCode(127)
+            else if(e.ctrlKey&&e.key=='r')
+                vim.command+=String.fromCharCode(17)+'r'
             else
                 return
             e.preventDefault()

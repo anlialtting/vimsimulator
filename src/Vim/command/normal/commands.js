@@ -269,20 +269,6 @@ function u(vim,cmd,arg){
         acceptable:true,
         complete:true,
     }
-    /*
-    var c=this.textarea.selectionStart
-    this.textarea.value=
-        this.histories[this.histories.length-1]
-    while(
-        0<=this.histories.length-1&&
-        this.histories[this.histories.length-1]===
-        this.textarea.value
-    )
-        this.histories.pop()
-    if(0<=this.histories.length-1)
-        this.textarea.value=this.histories[this.histories.length-1]
-    this.textarea.selectionStart=c
-    */
 }
 function v(vim,cmd,arg){
     vim.mode='visual'
@@ -336,6 +322,17 @@ function lt(vim,cmd,arg){
             changed:true,
         }
     }
+/*
+Vim.prototype.command_ltlt=function(count){
+    count=count||1
+    let lineNumber=
+        lineNumberOf(
+            this.textarea.value,
+            this.textarea.selectionStart
+        )
+    this.unindent(lineNumber,lineNumber+count)
+}
+*/
 }
 function gt(vim,cmd,arg){
     if(cmd=='')
@@ -348,38 +345,7 @@ function gt(vim,cmd,arg){
             changed:true,
         }
     }
-}
-function dot(vim,cmd,arg){
-    if(vim.lastChangingCommand)
-        vim.command=vim.lastChangingCommand
-    return{
-        acceptable:true,
-        complete:true,
-    }
-}
-function colon(vim){
-    vim.mode='cmdline'
-    return{
-        acceptable:true,
-    }
-}
-({
-    A,D,G,I,O,P,X,a,d,g,h,i,j,k,l,n,o,p,r,u,v,x,y,
-    '<':lt,
-    '>':gt,
-    '.':dot,
-    ':':colon,
-})
 /*
-Vim.prototype.command_ltlt=function(count){
-    count=count||1
-    let lineNumber=
-        lineNumberOf(
-            this.textarea.value,
-            this.textarea.selectionStart
-        )
-    this.unindent(lineNumber,lineNumber+count)
-}
 Vim.prototype.command_gtgt=function(count){
     count=count||1
     let start_currentLine_textarea=getLineStartByCursor(
@@ -408,3 +374,44 @@ Vim.prototype.command_gtgt=function(count){
     }
 }
 */
+}
+function dot(vim,cmd,arg){
+    if(vim.lastChangingCommand)
+        vim.command=vim.lastChangingCommand
+    return{
+        acceptable:true,
+        complete:true,
+    }
+}
+function colon(vim){
+    vim.mode='cmdline'
+    return{
+        acceptable:true,
+    }
+}
+function ctrl(vim,cmd){
+    if(cmd=='')
+        return{
+            acceptable:true,
+        }
+    if(cmd=='r'){
+        if(vim._undoBranchManager.current.next!=undefined){
+            vim._undoBranchManager.current=
+                vim._undoBranchManager.current.next
+            vim._text=vim._undoBranchManager.current.text
+        }
+        return{
+            acceptable:true,
+            complete:true,
+        }
+    }
+}
+let commands={
+    A,D,G,I,O,P,X,a,d,g,h,i,j,k,l,n,o,p,r,u,v,x,y,
+    '<':lt,
+    '>':gt,
+    '.':dot,
+    ':':colon,
+}
+commands[String.fromCharCode(17)]=ctrl
+commands
