@@ -29,23 +29,23 @@ Promise.all([
         text.map(l=>{
             if(!l.rows.length)
                 return res.push('')
-            l.rows.map((row,j)=>{
+            l.rows.map(row=>{
                 if(!(
                     document.activeElement==vim._inputTag&&l.index==vc.r&&(
                         !view.width||
-                        j*view.width<=vc.c&&vc.c<(j+1)*view.width
+                        row.start<=vc.c&&vc.c<row.end
                     )
                 ))
-                    return res.push(htmlEntities.encode(row))
-                let viewC=view.width?vc.c-j*view.width:vc.c
+                    return res.push(htmlEntities.encode(row.string))
+                let viewC=view.width?vc.c-row.start:vc.c
                 res.push(`${
-                    htmlEntities.encode(row.substring(0,viewC))
+                    htmlEntities.encode(row.string.substring(0,viewC))
                 }<span
                     class=cursor
                     style=background-color:black;color:white>${
-                    htmlEntities.encode(row[viewC])
+                    htmlEntities.encode(row.string[viewC])
                 }</span>${
-                    htmlEntities.encode(row.substring(viewC+1))
+                    htmlEntities.encode(row.string.substring(viewC+1))
                 }`)
             })
         })

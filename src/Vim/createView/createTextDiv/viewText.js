@@ -1,10 +1,12 @@
 Promise.all([
-    module.shareImport('line.js'),
+    module.shareImport('viewText/line.js'),
     module.shareImport('viewCursor.js'),
+    module.shareImport('charWidth.js'),
 ]).then(modules=>{
     let
         line=       modules[0],
-        viewCursor= modules[1]
+        viewCursor= modules[1],
+        charWidth=  modules[2]
     function viewText(view){
         let
             vim=view._vim,
@@ -27,15 +29,27 @@ Promise.all([
             if(view.width&&l.length){
                 res.start=viewRowsCount
                 res.rows=[]
-                for(let i=0;i*view.width<l.length;i++){
-                    res.rows.push(
-                        l.substring(i*view.width,(i+1)*view.width)
-                    )
-                    if(j==vc.r&&i*view.width<=vc.c&&vc.c<(i+1)*view.width)
+                for(let i=0;i<l.length;){
+                    let start=i,end=calcEnd(i)
+                    res.rows.push({
+                        start,
+                        end,
+                        string:l.substring(start,end)
+                    })
+                    if(j==vc.r&&start<=vc.c&&vc.c<end)
                         cursorViewRow=viewRowsCount
                     viewRowsCount++
+                    i=end
                 }
                 res.end=viewRowsCount
+                function calcEnd(i){
+                    for(
+                        let rowWidth=0;
+                        rowWidth+charWidth(l[i])<=view.width;
+                        rowWidth+=charWidth(l[i++])
+                    );
+                    return i
+                }
             }else{
                 if(j==vc.r)
                     cursorViewRow=viewRowsCount
