@@ -1,4 +1,4 @@
-module.import('ascii.js').then(ascii=>{
+module.import('../ascii.js').then(ascii=>{
     function main(vim){
         if(vim.command==ascii.bs){
             if(vim._text){

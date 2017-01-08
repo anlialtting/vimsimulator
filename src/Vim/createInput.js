@@ -1,4 +1,10 @@
-module.shareImport('measureWidth.js').then(measureWidth=>{
+Promise.all([
+    module.shareImport('measureWidth.js'),
+    module.shareImport('ascii.js'),
+]).then(modules=>{
+    let
+        measureWidth=   modules[0],
+        ascii=          modules[1]
     return(vim=>{
         let input=document.createElement('input')
         input.style.position='absolute'
@@ -30,17 +36,17 @@ module.shareImport('measureWidth.js').then(measureWidth=>{
             if(composing)
                 return
             if(e.key=='Backspace')
-                vim.command+=String.fromCharCode(8)
+                vim.command+=ascii.bs
             else if(e.key=='Enter')
-                vim.command+=String.fromCharCode(13)
+                vim.command+=ascii.cr
             else if(
                 e.key=='Escape'||
                 e.ctrlKey&&e.key=='c'||
                 e.ctrlKey&&e.key=='['
             )
-                vim.command+=String.fromCharCode(27)
+                vim.command+=ascii.esc
             else if(e.key=='Delete')
-                vim.command+=String.fromCharCode(127)
+                vim.command+=ascii.del
             else if(e.ctrlKey&&e.key=='r')
                 vim.command+=String.fromCharCode(17)+'r'
             else
