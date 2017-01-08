@@ -122,9 +122,7 @@ function d(vim,cmd,arg){
                 mode:'line',
                 string:vim._text.substring(a,b),
             }
-            vim._text=
-                vim._text.substring(0,a)+
-                vim._text.substring(b)
+            vim._text=vim._text.substring(0,a)+vim._text.substring(b)
             if(vim._text)
                 vim._cursor.moveTo(vim._cursor.lineStart)
         }
@@ -248,10 +246,8 @@ function r(vim,cmd,arg){
     if(cmd=='')
         return{acceptable:true}
     if(vim._text){
-        vim._text=
-            vim._text.substring(0,vim._cursor.abs)+
-            cmd+
-            vim._text.substring(vim._cursor.abs+1)
+        let c=vim._cursor.abs
+        vim._text=vim._text.substring(0,c)+cmd+vim._text.substring(c+1)
     }
     return{
         acceptable:true,
@@ -280,9 +276,8 @@ function v(vim,cmd,arg){
 }
 function x(vim,cmd,arg){
     if(vim._text){
-        vim._text=
-            vim._text.substring(0,vim._cursor.abs)+
-            vim._text.substring(vim._cursor.abs+1)
+        let c=vim._cursor.abs
+        vim._text=vim._text.substring(0,c)+vim._text.substring(c+1)
     }
     return{
         acceptable:true,
