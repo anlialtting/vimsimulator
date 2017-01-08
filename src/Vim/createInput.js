@@ -6,33 +6,35 @@ Promise.all([
         measureWidth=   modules[0],
         ascii=          modules[1]
     return(vim=>{
-        let input=document.createElement('input')
-        input.style.position='absolute'
-        input.style.fontFamily='monospace'
-        input.style.border=0
-        input.style.padding=0
-        input.style.fontSize=`${vim._lineHeightInPx}px`
-        input.style.backgroundColor='rgba(0,0,0,0)'
-        //input.style.height=0
+        let textarea=document.createElement('textarea')
+        textarea.style.position='absolute'
+        textarea.style.fontFamily='monospace'
+        textarea.style.border=0
+        textarea.style.padding=0
+        textarea.style.fontSize=`${vim._lineHeightInPx}px`
+        textarea.style.backgroundColor='rgba(0,0,0,0)'
+        textarea.style.height=`${vim._lineHeightInPx+2}px`
+        textarea.style.resize='none'
+        textarea.style.overflow='hidden'
         let composing=false
-        input.addEventListener('blur',()=>{
+        textarea.addEventListener('blur',()=>{
             vim.view()
         })
-        input.addEventListener('compositionstart',e=>{
+        textarea.addEventListener('compositionstart',e=>{
             composing=true
         })
-        input.addEventListener('compositionend',e=>{
+        textarea.addEventListener('compositionend',e=>{
             vim.imInput=''
             composing=false
             f()
         })
-        input.addEventListener('focus',()=>{
+        textarea.addEventListener('focus',()=>{
             vim.view()
         })
-        input.addEventListener('input',()=>{
+        textarea.addEventListener('input',()=>{
             f()
         })
-        input.addEventListener('keydown',e=>{
+        textarea.addEventListener('keydown',e=>{
             if(composing)
                 return
             if(e.key=='Backspace')
@@ -54,16 +56,19 @@ Promise.all([
             e.preventDefault()
             e.stopPropagation()
         })
-        return input
+        return textarea
         function f(){
             if(composing){
-                vim.imInput=input.value
+                vim.imInput=textarea.value
                 vim.view()
             }else{
-                vim.command+=input.value
-                input.value=''
+                vim.command+=textarea.value
+                textarea.value=''
             }
-            input.style.width=`${measureWidth(vim,input.value)}px`
+            let width=measureWidth(vim,textarea.value)
+            if(width)
+                width++
+            textarea.style.width=`${width}px`
         }
     })
 })
