@@ -6,13 +6,15 @@ Promise.all([
     module.shareImport('Vim/Cursor.js'),
     module.shareImport('Vim/command.js'),
     EventEmmiter,
+    module.shareImport('Vim/UndoBranchManager.js'),
 ]).then(modules=>{
     let
         createView=             modules[0],
         createInput=            modules[1],
         Cursor=                 modules[2],
         command=                modules[3],
-        EventEmmiter=           modules[4]
+        EventEmmiter=           modules[4],
+        UndoBranchManager=      modules[5]
     function Vim(){
         EventEmmiter.call(this)
         this._values={}
@@ -79,24 +81,5 @@ Promise.all([
         this.inputTag.focus()
     }
     Vim.prototype.createView=createView
-    function UndoBranchManager(){
-        this._undoBranches=[]
-    }
-    UndoBranchManager.prototype.clear=function(){
-        this._undoBranches=[]
-        delete this.current
-    }
-    UndoBranchManager.prototype.push=function(text){
-        let b=new UndoBranch(text)
-        this._undoBranches.push(b)
-        if(this.current!=undefined){
-            this.current.next=b
-            b.previous=this.current
-        }
-        this.current=b
-    }
-    function UndoBranch(text){
-        this.text=text
-    }
     return Vim
 })
