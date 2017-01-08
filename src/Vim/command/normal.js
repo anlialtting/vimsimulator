@@ -15,8 +15,8 @@ Promise.all([
         if(res.acceptable){
             if(res.complete){
                 if(res.changed){
-                    /*vim.lastChangingCommand=
-                        vim.command*/
+                    vim.lastChangingCommand=
+                        vim.command
                     vim._undoBranchManager.push(vim._text)
                 }
                 vim.command=''
