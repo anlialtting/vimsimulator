@@ -11,7 +11,7 @@ Promise.all([
         let vim=view._vim
         let div=document.createElement('div')
         div.style.fontFamily='monospace'
-        div.style.fontSize=`${vim.lineHeightInPx}px`
+        div.style.fontSize=`${vim._lineHeightInPx}px`
         div.style.lineHeight='1'
         div.style.whiteSpace='pre'
         f()
@@ -31,7 +31,7 @@ Promise.all([
                 return res.push('')
             l.rows.map((row,j)=>{
                 if(!(
-                    document.activeElement==vim.inputTag&&l.index==vc.r&&(
+                    document.activeElement==vim._inputTag&&l.index==vc.r&&(
                         !view.width||
                         j*view.width<=vc.c&&vc.c<(j+1)*view.width
                     )

@@ -20,7 +20,7 @@ Promise.all([
     }})
     Object.defineProperty(View.prototype,'height',{set(val){
         this._height=val
-        this.div.style.height=`${this._vim.lineHeightInPx*this.height}px`
+        this.div.style.height=`${this._vim._lineHeightInPx*this.height}px`
     },get(){
         return this._height
     }})
@@ -28,22 +28,22 @@ Promise.all([
         let
             vim=view._vim,
             div=document.createElement('div')
-        vim.inputTag.style.outline='none'
-        vim.inputTag.style.width='0'
-        vim.inputTag.style.color='white'
-        vim.inputTag.style.backgroundColor='black'
-        vim.inputTag.style.zIndex='1'
-        vim.inputTag.style.position='fixed'
+        vim._inputTag.style.outline='none'
+        vim._inputTag.style.width='0'
+        vim._inputTag.style.color='white'
+        vim._inputTag.style.backgroundColor='black'
+        vim._inputTag.style.zIndex='1'
+        vim._inputTag.style.position='fixed'
         div.style.position='relative'
         div.appendChild(createTextDiv(view))
         div.appendChild(createCommandDiv(vim))
-        div.appendChild(vim.inputTag)
+        div.appendChild(vim._inputTag)
         vim.on('view',changed=>{
             let span=div.getElementsByClassName('cursor')[0]
             if(span){
                 let rect=span.getBoundingClientRect()
-                vim.inputTag.style.left=`${rect.left}px`
-                vim.inputTag.style.top=`${rect.top}px`
+                vim._inputTag.style.left=`${rect.left}px`
+                vim._inputTag.style.top=`${rect.top}px`
             }
         })
         view.div=div
@@ -51,7 +51,7 @@ Promise.all([
     function createCommandDiv(vim){
         let div=document.createElement('div')
         div.style.fontFamily='monospace'
-        div.style.fontSize=`${vim.lineHeightInPx}px`
+        div.style.fontSize=`${vim._lineHeightInPx}px`
         div.style.lineHeight='1'
         div.style.whiteSpace='pre'
         f()
