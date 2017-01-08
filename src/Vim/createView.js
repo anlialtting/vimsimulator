@@ -37,7 +37,7 @@ Promise.all([
         div.style.position='relative'
         div.appendChild(createTextDiv(view))
         div.appendChild(createCommandDiv(vim))
-        document.body.appendChild(vim.inputTag)
+        div.appendChild(vim.inputTag)
         vim.on('view',changed=>{
             let span=div.getElementsByClassName('cursor')[0]
             if(span){

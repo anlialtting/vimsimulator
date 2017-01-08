@@ -11,13 +11,15 @@ function main(vim){
             vim.mode='normal'
         }
     }
-    /*
     if(vim.command[0]=='/'){
-        vim.searchPattern=vim.command.substring(1)
-        vim.gotoNextMatch()
-        vim.command=''
+        if(/\r$/.test(vim.command)){
+            /*
+            vim.searchPattern=vim.command.substring(1)
+            vim.gotoNextMatch()
+            */
+            vim.command=''
+        }
     }
-    */
 }
 (vim=>{
     let r=main(vim)

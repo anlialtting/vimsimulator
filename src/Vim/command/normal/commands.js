@@ -389,6 +389,12 @@ function colon(vim){
         acceptable:true,
     }
 }
+function slash(vim){
+    vim.mode='cmdline'
+    return{
+        acceptable:true,
+    }
+}
 function ctrl(vim,cmd){
     if(cmd=='')
         return{
@@ -412,6 +418,7 @@ let commands={
     '>':gt,
     '.':dot,
     ':':colon,
+    '/':slash,
 }
 commands[String.fromCharCode(17)]=ctrl
 commands
