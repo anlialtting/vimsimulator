@@ -38,19 +38,19 @@ Promise.all([
             if(composing)
                 return
             if(e.key=='Backspace')
-                vim.command+=ascii.bs
+                vim.input=ascii.bs
             else if(e.key=='Enter')
-                vim.command+=ascii.cr
+                vim.input=ascii.cr
             else if(
                 e.key=='Escape'||
                 e.ctrlKey&&e.key=='c'||
                 e.ctrlKey&&e.key=='['
             )
-                vim.command+=ascii.esc
+                vim.input=ascii.esc
             else if(e.key=='Delete')
-                vim.command+=ascii.del
+                vim.input=ascii.del
             else if(e.ctrlKey&&e.key=='r')
-                vim.command+=String.fromCharCode(17)+'r'
+                vim.input=String.fromCharCode(17)+'r'
             else
                 return
             e.preventDefault()
@@ -62,7 +62,7 @@ Promise.all([
                 vim.imInput=textarea.value
                 vim._view()
             }else{
-                vim.command+=textarea.value
+                vim.input=textarea.value
                 textarea.value=''
             }
             let width=measureWidth(vim,textarea.value)

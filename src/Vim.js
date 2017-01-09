@@ -35,8 +35,7 @@ Promise.all([
             this._viewChanged.text=true
             this._view()
             this.emit('textChange')
-        },
-        get(){
+        },get(){
             return this._values.text
         }
     })
@@ -48,13 +47,8 @@ Promise.all([
         set(val){
             this._command=val
             this._viewChanged.command=true
-            if(this._command){
-                command.call(this)
-                this._view()
-            }
             this.emit('commandChange')
-        },
-        get(){
+        },get(){
             return this._command
         }
     })
@@ -63,8 +57,7 @@ Promise.all([
             this._mode=val
             this._viewChanged.mode=true
             this._modeData={}
-        },
-        get(){
+        },get(){
             return this._mode
         }
     })
@@ -73,14 +66,18 @@ Promise.all([
             this._text=val
             this._undoBranchManager.clear()
             this._undoBranchManager.push(this._text)
-        },
-        get(){
+        },get(){
             return this._text
         }
     })
     Vim.prototype.focus=function(){
         this._inputTag.focus()
     }
+    Object.defineProperty(Vim.prototype,'input',{set(val){
+        this.command+=val
+        command(this)
+        this._view()
+    }})
     Object.defineProperty(Vim.prototype,'view',modules[4])
     return Vim
 })

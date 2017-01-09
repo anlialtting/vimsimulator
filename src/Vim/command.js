@@ -6,13 +6,13 @@ Promise.all([
 ]).then(modules=>{
     let
         modes={
-            normal:modules[0],
-            insert:modules[1],
-            visual:modules[2],
-            cmdline:modules[3],
+            normal:     modules[0],
+            insert:     modules[1],
+            visual:     modules[2],
+            cmdline:    modules[3],
         }
-    return function(){
-        if(this.mode in modes)
-            return modes[this.mode](this)
+    return vim=>{
+        if(vim.mode in modes)
+            return modes[vim.mode](vim)
     }
 })
