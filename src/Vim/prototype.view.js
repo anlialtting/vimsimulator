@@ -1,5 +1,5 @@
 Promise.all([
-    module.shareImport('createView/createTextDiv.js'),
+    module.shareImport('prototype.view/createTextDiv.js'),
     module.shareImport('measureWidth.js'),
 ]).then(modules=>{
     let
@@ -84,7 +84,7 @@ Promise.all([
             }
         }
     }
-    return function(){
+    return{get(){
         return new View(this)
-    }
+    }}
 })

@@ -5,7 +5,7 @@ Promise.all([
     module.shareImport('Vim/createInput.js'),
     module.shareImport('Vim/Cursor.js'),
     module.shareImport('Vim/command.js'),
-    module.shareImport('Vim/createView.js'),
+    module.shareImport('Vim/prototype.view.js'),
     module.shareImport('Vim/UndoBranchManager.js'),
 ]).then(modules=>{
     let
@@ -13,7 +13,6 @@ Promise.all([
         createInput=            modules[1],
         Cursor=                 modules[2],
         command=                modules[3],
-        createView=             modules[4],
         UndoBranchManager=      modules[5]
     function Vim(){
         EventEmmiter.call(this)
@@ -41,6 +40,10 @@ Promise.all([
             return this._values.text
         }
     })
+    Vim.prototype._view=function(){
+        this.emit('view',Object.keys(this._viewChanged))
+        this._viewChanged={}
+    }
     Object.defineProperty(Vim.prototype,'command',{
         set(val){
             this._command=val
@@ -75,13 +78,9 @@ Promise.all([
             return this._text
         }
     })
-    Vim.prototype._view=function(){
-        this.emit('view',Object.keys(this._viewChanged))
-        this._viewChanged={}
-    }
     Vim.prototype.focus=function(){
         this._inputTag.focus()
     }
-    Vim.prototype.createView=createView
+    Object.defineProperty(Vim.prototype,'view',modules[4])
     return Vim
 })

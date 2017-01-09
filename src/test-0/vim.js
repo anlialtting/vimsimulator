@@ -5,10 +5,9 @@ module.shareImport('../Vim.js').then(Vim=>{
     div.style.width='min-content'
     div.style.margin='0 auto'
     let vim=createVim()
-    let view=vim.createView()
+    let view=vim.view
     let vimViewDiv=createVimViewDiv(view,vim)
     div.appendChild(vimViewDiv)
-    //div.appendChild(createTextarea(vim))
     vim.on('quit',()=>{
         div.removeChild(vimViewDiv)
     })
@@ -42,24 +41,3 @@ function createVimViewDiv(view,vim){
     div.appendChild(view.div)
     return div
 }
-/*function createTextarea(vim){
-    let textarea=document.createElement('textarea')
-    textarea.style.width=`${13/2*80}px`
-    textarea.style.height=`${13*24}px`
-    f()
-    vim.on('view',f)
-    return textarea
-    function f(){
-        textarea.value=vim.text
-        if(vim.text){
-            let c=vim._cursor.abs
-            if(vim.mode=='normal'){
-                textarea.selectionStart=c
-                textarea.selectionEnd=c+1
-            }else if(vim.mode=='insert'){
-                textarea.selectionStart=c
-                textarea.selectionEnd=c
-            }
-        }
-    }
-}*/
