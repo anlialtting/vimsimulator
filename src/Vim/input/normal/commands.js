@@ -334,8 +334,6 @@ function gt(vim,cmd,arg){
     }
 }
 function dot(vim,cmd,arg){
-    if(vim.lastChangingCommand)
-        vim.command=vim.lastChangingCommand
     return{
         acceptable:true,
         complete:true,
@@ -343,12 +341,14 @@ function dot(vim,cmd,arg){
 }
 function colon(vim){
     vim.mode='cmdline'
+    vim._modeData.command=':'
     return{
         acceptable:true,
     }
 }
 function slash(vim){
     vim.mode='cmdline'
+    vim._modeData.command='/'
     return{
         acceptable:true,
     }

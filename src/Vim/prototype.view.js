@@ -79,7 +79,7 @@ Promise.all([
                         vim.removeListener('view',listener)
                 }
                 function update(){
-                    div.textContent=vim.command
+                    div.textContent=vim._modeData.command
                 }
             }
         }

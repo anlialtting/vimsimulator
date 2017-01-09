@@ -11,9 +11,6 @@ Promise.all([
             visual:     modules[2],
             cmdline:    modules[3],
         }
-    return(vim,val)=>{
-        vim.command+=val
-        modes[vim.mode](vim)
-        vim._view()
-    }
+    return(vim,val)=>
+        modes[vim.mode](vim,val)
 })

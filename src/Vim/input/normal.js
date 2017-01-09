@@ -1,11 +1,13 @@
 Promise.all([
     module.shareImport('normal/commands.js'),
 ]).then(modules=>{
-    let
-        commands=modules[0]
-    return function(vim){
+    let commands=modules[0]
+    return(vim,val)=>{
+        if(!('command' in vim._modeData))
+            vim._modeData.command=''
+        vim._modeData.command+=val
         let
-            cmd=vim.command,
+            cmd=vim._modeData.command,
             arg
         if(49<=cmd.charCodeAt(0)&&cmd.charCodeAt(0)<58){
             arg=parseInt(cmd,10)
@@ -14,16 +16,14 @@ Promise.all([
         let res=tryCommand(vim,cmd,arg)||{}
         if(res.acceptable){
             if(res.complete){
-                if(res.changed){
-                    vim.lastChangingCommand=
-                        vim.command
+                if(res.changed)
                     vim._undoBranchManager.push(vim._text)
-                }
-                vim.command=''
+                vim._modeData.command=''
             }
         }else{
-            vim.command=''
+            vim._modeData.command=''
         }
+        vim._view()
     }
     function tryCommand(vim,cmd,arg){
         if(cmd=='')

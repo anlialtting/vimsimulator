@@ -18,7 +18,6 @@ Promise.all([
         EventEmmiter.call(this)
         this._values={}
         this._viewChanged=[]
-        this._command=''
         this._text=''
         this._mode='normal'
         this._modeData={}
@@ -43,15 +42,6 @@ Promise.all([
         this.emit('view',Object.keys(this._viewChanged))
         this._viewChanged={}
     }
-    Object.defineProperty(Vim.prototype,'command',{
-        set(val){
-            this._command=val
-            this._viewChanged.command=true
-            this.emit('commandChange')
-        },get(){
-            return this._command
-        }
-    })
     Object.defineProperty(Vim.prototype,'mode',{
         set(val){
             this._mode=val
