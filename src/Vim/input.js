@@ -13,8 +13,7 @@ Promise.all([
         }
     return(vim,val)=>{
         vim.command+=val
-        if(vim.mode in modes)
-            return modes[vim.mode](vim)
+        modes[vim.mode](vim)
         vim._view()
     }
 })
