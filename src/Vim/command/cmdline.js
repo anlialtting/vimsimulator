@@ -29,7 +29,7 @@ module.import('../ascii.js').then(ascii=>{
     }
     return vim=>{
         let r=main(vim)
-        vim.view()
+        vim._view()
         return r
     }
 })

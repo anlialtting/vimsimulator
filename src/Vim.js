@@ -30,6 +30,31 @@ Promise.all([
         this._inputTag=createInput(this)
     }
     Object.setPrototypeOf(Vim.prototype,EventEmmiter.prototype)
+    Object.defineProperty(Vim.prototype,'_text',{
+        set(val){
+            this._values.text=val
+            this._viewChanged.text=true
+            this._view()
+            this.emit('textChange')
+        },
+        get(){
+            return this._values.text
+        }
+    })
+    Object.defineProperty(Vim.prototype,'command',{
+        set(val){
+            this._command=val
+            this._viewChanged.command=true
+            if(this._command){
+                command.call(this)
+                this._view()
+            }
+            this.emit('commandChange')
+        },
+        get(){
+            return this._command
+        }
+    })
     Object.defineProperty(Vim.prototype,'mode',{
         set(val){
             this._mode=val
@@ -38,17 +63,6 @@ Promise.all([
         },
         get(){
             return this._mode
-        }
-    })
-    Object.defineProperty(Vim.prototype,'_text',{
-        set(val){
-            this._values.text=val
-            this._viewChanged.text=true
-            this.view()
-            this.emit('textChange')
-        },
-        get(){
-            return this._values.text
         }
     })
     Object.defineProperty(Vim.prototype,'text',{
@@ -61,21 +75,7 @@ Promise.all([
             return this._text
         }
     })
-    Object.defineProperty(Vim.prototype,'command',{
-        set(val){
-            this._command=val
-            this._viewChanged.command=true
-            if(this._command){
-                command.call(this)
-                this.view()
-            }
-            this.emit('commandChange')
-        },
-        get(){
-            return this._command
-        }
-    })
-    Vim.prototype.view=function(){
+    Vim.prototype._view=function(){
         this.emit('view',Object.keys(this._viewChanged))
         this._viewChanged={}
     }

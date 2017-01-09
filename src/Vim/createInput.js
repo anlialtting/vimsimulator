@@ -18,7 +18,7 @@ Promise.all([
         textarea.style.overflow='hidden'
         let composing=false
         textarea.addEventListener('blur',()=>{
-            vim.view()
+            vim._view()
         })
         textarea.addEventListener('compositionstart',e=>{
             composing=true
@@ -29,7 +29,7 @@ Promise.all([
             f()
         })
         textarea.addEventListener('focus',()=>{
-            vim.view()
+            vim._view()
         })
         textarea.addEventListener('input',()=>{
             f()
@@ -60,7 +60,7 @@ Promise.all([
         function f(){
             if(composing){
                 vim.imInput=textarea.value
-                vim.view()
+                vim._view()
             }else{
                 vim.command+=textarea.value
                 textarea.value=''
