@@ -1,8 +1,8 @@
 Promise.all([
-    module.shareImport('command/normal.js'),
-    module.shareImport('command/insert.js'),
-    module.shareImport('command/visual.js'),
-    module.shareImport('command/cmdline.js'),
+    module.shareImport('input/normal.js'),
+    module.shareImport('input/insert.js'),
+    module.shareImport('input/visual.js'),
+    module.shareImport('input/cmdline.js'),
 ]).then(modules=>{
     let
         modes={
@@ -11,8 +11,10 @@ Promise.all([
             visual:     modules[2],
             cmdline:    modules[3],
         }
-    return vim=>{
+    return(vim,val)=>{
+        vim.command+=val
         if(vim.mode in modes)
             return modes[vim.mode](vim)
+        vim._view()
     }
 })
