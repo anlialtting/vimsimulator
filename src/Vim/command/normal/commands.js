@@ -310,65 +310,28 @@ function lt(vim,cmd,arg){
     if(cmd=='')
         return{acceptable:true}
     if(cmd=='<'){
-        vim.command_ltlt(arg)
         return{
             acceptable:true,
             complete:true,
             changed:true,
         }
     }
-/*
-Vim.prototype.command_ltlt=function(count){
-    count=count||1
-    let lineNumber=
-        lineNumberOf(
-            this.textarea.value,
-            this.textarea.selectionStart
-        )
-    this.unindent(lineNumber,lineNumber+count)
-}
-*/
 }
 function gt(vim,cmd,arg){
     if(cmd=='')
         return{acceptable:true}
     if(cmd=='>'){
-        vim.command_gtgt(arg)
+        vim._text=
+            vim._text.substring(0,vim._cursor.lineStart)+
+            '    '+
+            vim._text.substring(vim._cursor.lineStart,vim._cursor.lineEnd)+
+            vim._text.substring(vim._cursor.lineEnd)
         return{
             acceptable:true,
             complete:true,
             changed:true,
         }
     }
-/*
-Vim.prototype.command_gtgt=function(count){
-    count=count||1
-    let start_currentLine_textarea=getLineStartByCursor(
-        this.textarea.value,
-        this.textarea.selectionStart
-    )
-    let lineNumber=
-        lineNumberOf(this.textarea.value,this.textarea.selectionStart)
-    let lines=linesOf(this.textarea.value)
-    for(let i=0;i<count;i++)
-        lines[lineNumber+i]=
-            '    '+lines[lineNumber+i]
-    this.textarea.value=lines.join('\n')
-    this.textarea.selectionStart=
-        start_currentLine_textarea+
-        this.textarea.value.substring(
-            start_currentLine_textarea
-        ).search(/[^ ]/)
-    function linesOf(text){
-        let result=text.split('\n')
-        result.pop()
-        return result
-    }
-    function lineNumberOf(text,cursor){
-        return text.substring(0,cursor).split('\n').length-1
-    }
-}
-*/
 }
 function dot(vim,cmd,arg){
     if(vim.lastChangingCommand)

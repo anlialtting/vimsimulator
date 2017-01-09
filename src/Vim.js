@@ -22,6 +22,7 @@ Promise.all([
         this._command=''
         this._text=''
         this._mode='normal'
+        this._modeData={}
         this._cursor=new Cursor(this)
         this._undoBranchManager=new UndoBranchManager
         this._undoBranchManager.push('')
@@ -33,6 +34,7 @@ Promise.all([
         set(val){
             this._mode=val
             this._viewChanged.mode=true
+            this._modeData={}
         },
         get(){
             return this._mode
