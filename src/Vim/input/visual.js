@@ -1,5 +1,5 @@
 ((vim,val)=>{
-    vim._modeData.command+=val
+    //vim._modeData.command+=val
     /*if(vim.command==='d'){
         vim.command_vd()
         vim.command=''
@@ -13,7 +13,7 @@
         vim.command_vgt()
         vim.command=''
     }*/
-    vim._view()
+    //vim._view()
 })
 /*
 Promise.all([

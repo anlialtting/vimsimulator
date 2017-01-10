@@ -78,5 +78,17 @@ Promise.all([
         input(this,val)
     }})
     Object.defineProperty(Vim.prototype,'view',modules[4])
+    Object.defineProperty(Vim.prototype,'_mainView',{get(){
+        return this._values.mainView||(this._values.mainView=this.view)
+    }})
+    Object.defineProperty(Vim.prototype,'width',{set(val){
+        this._mainView.width=val
+    }})
+    Object.defineProperty(Vim.prototype,'height',{set(val){
+        this._mainView.height=val
+    }})
+    Object.defineProperty(Vim.prototype,'div',{get(){
+        return this._mainView.div
+    }})
     return Vim
 })

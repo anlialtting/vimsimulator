@@ -1,5 +1,19 @@
 module.import('../ascii.js').then(ascii=>{
     function main(vim,val){
+        if(val instanceof KeyboardEvent){
+            if(val.key=='Backspace')
+                val=ascii.bs
+            else if(val.key=='Enter')
+                val=ascii.cr
+            else if(
+                val.key=='Escape'||
+                val.ctrlKey&&val.key=='c'||
+                val.ctrlKey&&val.key=='['
+            )
+                val=ascii.esc
+            else if(val.key=='Delete')
+                val=ascii.del
+        }
         if(val==ascii.bs){
             if(vim._text){
                 let

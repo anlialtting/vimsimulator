@@ -1,19 +1,10 @@
 module.styleByPath('vim.css')
 module.debug=true
 module.shareImport('../Vim.js').then(Vim=>{
-    let div=document.createElement('div')
-    div.style.width='min-content'
-    div.style.margin='0 auto'
     let vim=createVim()
-    let view=vim.view
-    let vimViewDiv=createVimViewDiv(view,vim)
-    div.appendChild(vimViewDiv)
-    vim.on('quit',()=>{
-        div.removeChild(vimViewDiv)
-    })
-    document.body.appendChild(div)
-    view.width=80
-    view.height=24
+    let vimViewDiv=createVimViewDiv(vim)
+    document.body.appendChild(vimViewDiv)
+    vim.on('quit',()=>document.body.removeChild(vimViewDiv))
     vim.focus()
     function createVim(){
         let vim=new Vim
@@ -32,12 +23,16 @@ module.shareImport('../Vim.js').then(Vim=>{
         return vim
     }
 })
-function createVimViewDiv(view,vim){
+function createVimViewDiv(vim){
     let div=document.createElement('div')
     div.style.border='1px solid lightgray'
-    div.addEventListener('click',()=>{
+    div.style.width='min-content'
+    div.style.margin='0 auto'
+    div.addEventListener('click',()=>
         vim.focus()
-    })
-    div.appendChild(view.div)
+    )
+    vim.width=80
+    vim.height=24
+    div.appendChild(vim.div)
     return div
 }
