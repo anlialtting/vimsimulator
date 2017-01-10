@@ -41,29 +41,10 @@ function main(vim,val){
     if(!enter)
         return
     if(cmd[0]==':'){
-        if(/set?/.test(cmd)){
-            cmd=cmd.match(/set? (.*)/)[1]
-            if(/.*\?$/.test(cmd)){
-                cmd=cmd.match(/(.*)\?$/)[1]
-                if(cmd in shortcut)
-                    cmd=shortcut[cmd]
-                console.log(vim._options[cmd]?
-                    cmd
-                :
-                    `no${cmd}`
-                )
-            }else if(/^no.*/.test(cmd)){
-                cmd=cmd.match(/^no(.*)/)[1]
-                if(cmd in shortcut)
-                    cmd=shortcut[cmd]
-                if(cmd in vim._options)
-                    vim._options[cmd]=false
-            }else{
-                if(cmd in shortcut)
-                    cmd=shortcut[cmd]
-                if(cmd in vim._options)
-                    vim._options[cmd]=true
-            }
+        cmd=cmd.substring(1)
+        let setPattern=/^set?(.*)/
+        if(setPattern.test(cmd)){
+            set(vim,cmd.match(setPattern)[1])
         }else{
             for(let i=1;i<cmd.length;i++){
                 if(cmd[i]=='q')
@@ -75,6 +56,39 @@ function main(vim,val){
     }else if(cmd[0]=='/'){
     }
     vim.mode='normal'
+}
+function set(vim,cmd){
+    let argumentPattern=/ (.*)/
+    if(argumentPattern.test(cmd)){
+        cmd=cmd.match(argumentPattern)[1]
+        let
+            showValuePattern=   /(.*)\?$/,
+            noPattern=          /^no(.*)/,
+            show=       false,
+            no=         false,
+            toSet=      false
+        if(showValuePattern.test(cmd)){
+            show=true
+            cmd=cmd.match(showValuePattern)[1]
+        }else{
+            toSet=true
+            if(noPattern.test(cmd)){
+                no=true
+                cmd=cmd.match(noPattern)[1]
+            }
+        }
+        if(cmd in shortcut)
+            cmd=shortcut[cmd]
+        if(toSet){
+            if(cmd in vim._options)
+                vim._options[cmd]=!no
+        }else if(show)
+            console.log(vim._options[cmd]?
+                cmd
+            :
+                `no${cmd}`
+            )
+    }
 }
 ((vim,val)=>{
     let r=main(vim,val)
