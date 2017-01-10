@@ -3,8 +3,8 @@ Promise.all([
     module.shareImport('measureWidth.js'),
 ]).then(modules=>{
     let
-        createTextDiv=modules[0],
-        measureWidth=modules[1]
+        createTextDiv=  modules[0],
+        measureWidth=   modules[1]
     function View(vim){
         this._vim=vim
         this._scroll=0

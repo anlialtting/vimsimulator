@@ -35,7 +35,7 @@ module.shareImport('../Vim.js').then(Vim=>{
 function createVimViewDiv(view,vim){
     let div=document.createElement('div')
     div.style.border='1px solid lightgray'
-    div.addEventListener('dblclick',()=>{
+    div.addEventListener('click',()=>{
         vim.focus()
     })
     div.appendChild(view.div)
