@@ -86,7 +86,7 @@ Promise.all([
         function update(div){
             let
                 text=vim._modeData.inputBuffer,
-                cursor=vim._modeData.cursor
+                cursor=vim._modeData.cursor.position
             if(cursor==text.length)
                 text+=' '
             div.innerHTML=`${

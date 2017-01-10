@@ -3,17 +3,19 @@ let
 Promise.all([
     EventEmmiter,
     module.shareImport('Vim/createInput.js'),
-    module.shareImport('Vim/Cursor.js'),
+    module.shareImport('Vim/VimCursor.js'),
     module.shareImport('Vim/input.js'),
     module.shareImport('Vim/prototype.view.js'),
     module.shareImport('Vim/UndoBranchManager.js'),
+    module.shareImport('Vim/Cursor.js'),
 ]).then(modules=>{
     let
         EventEmmiter=           modules[0],
         createInput=            modules[1],
-        Cursor=                 modules[2],
+        VimCursor=              modules[2],
         input=                  modules[3],
-        UndoBranchManager=      modules[5]
+        UndoBranchManager=      modules[5],
+        Cursor=                 modules[6]
     let defaultOptions={
         list:   false,
         number: false,
@@ -26,7 +28,7 @@ Promise.all([
         this._text=''
         this._mode='normal'
         this._modeData={}
-        this._cursor=new Cursor(this)
+        this._cursor=new VimCursor(this)
         this._undoBranchManager=new UndoBranchManager
         this._undoBranchManager.push('')
         this._lineHeightInPx=13
@@ -54,7 +56,11 @@ Promise.all([
             this._modeData={}
             if(this._mode=='cmdline'){
                 this._modeData.inputBuffer=''
-                this._modeData.cursor=1
+                this._modeData.cursor=new Cursor(v=>
+                    this._modeData.inputBuffer=v
+                ,()=>
+                    this._modeData.inputBuffer
+                )
             }
         },get(){
             return this._mode
@@ -81,14 +87,14 @@ Promise.all([
     Object.defineProperty(Vim.prototype,'_mainView',{get(){
         return this._values.mainView||(this._values.mainView=this.view)
     }})
-    Object.defineProperty(Vim.prototype,'width',{set(val){
-        this._mainView.width=val
+    Object.defineProperty(Vim.prototype,'div',{get(){
+        return this._mainView.div
     }})
     Object.defineProperty(Vim.prototype,'height',{set(val){
         this._mainView.height=val
     }})
-    Object.defineProperty(Vim.prototype,'div',{get(){
-        return this._mainView.div
+    Object.defineProperty(Vim.prototype,'width',{set(val){
+        this._mainView.width=val
     }})
     return Vim
 })

@@ -344,11 +344,13 @@ function dot(vim,cmd,arg){
 function colon(vim){
     vim.mode='cmdline'
     vim._modeData.inputBuffer=':'
+    vim._modeData.cursor.position=1
     return{acceptable:true}
 }
 function slash(vim){
     vim.mode='cmdline'
     vim._modeData.inputBuffer='/'
+    vim._modeData.cursor.position=1
     return{acceptable:true}
 }
 function ctrl(vim,cmd){

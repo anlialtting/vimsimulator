@@ -41,9 +41,11 @@ Promise.all([
                 e.key=='ArrowDown'||
                 e.key=='ArrowUp'||
                 e.key=='Backspace'||
+                e.key=='Delete'||
+                e.key=='End'||
                 e.key=='Enter'||
                 e.key=='Escape'||
-                e.key=='Delete'||
+                e.key=='Home'||
                 e.ctrlKey&&e.key=='c'||
                 e.ctrlKey&&e.key=='['||
                 e.ctrlKey&&e.key=='r'
