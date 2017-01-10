@@ -28,8 +28,8 @@ Promise.all([
             let res={
                 index:j
             }
+            res.start=viewRowsCount
             if(view.width&&l.length){
-                res.start=viewRowsCount
                 res.rows=[]
                 for(let i=0;i<l.length;){
                     let start=i,end=calcEnd(i)
@@ -43,7 +43,6 @@ Promise.all([
                     viewRowsCount++
                     i=end
                 }
-                res.end=viewRowsCount
                 function calcEnd(i){
                     for(
                         let rowWidth=0;
@@ -55,11 +54,14 @@ Promise.all([
             }else{
                 if(j==vc.r)
                     cursorViewRow=viewRowsCount
-                res.start=viewRowsCount
-                res.rows=[l]
+                res.rows=[{
+                    start:0,
+                    end:l.length,
+                    string:l
+                }]
                 viewRowsCount++
-                res.end=viewRowsCount
             }
+            res.end=viewRowsCount
             return res
         })
         if(view.height){
