@@ -19,9 +19,12 @@ module.import('../ascii.js').then(ascii=>{
             vim._modeData.cursor+=val.length
         }
         let cmd=vim._modeData.inputBuffer
-        if(!/\r$/.test(cmd)){
+        if(!cmd){
+            vim.mode='normal'
             return
         }
+        if(!/\r$/.test(cmd))
+            return
         if(cmd[0]==':'){
             if(/set?/.test(cmd)){
             }else{

@@ -35,26 +35,19 @@ Promise.all([
             f()
         })
         textarea.addEventListener('keydown',e=>{
-            if(composing)
-                return
-            if(e.key=='Backspace')
-                vim.input=ascii.bs
-            else if(e.key=='Enter')
-                vim.input=ascii.cr
-            else if(
+            if(composing||!(
+                e.key=='Backspace'||
+                e.key=='Enter'||
                 e.key=='Escape'||
+                e.key=='Delete'||
                 e.ctrlKey&&e.key=='c'||
-                e.ctrlKey&&e.key=='['
-            )
-                vim.input=ascii.esc
-            else if(e.key=='Delete')
-                vim.input=ascii.del
-            else if(e.ctrlKey&&e.key=='r')
-                vim.input=String.fromCharCode(17)+'r'
-            else
+                e.ctrlKey&&e.key=='['||
+                e.ctrlKey&&e.key=='r'
+            ))
                 return
             e.preventDefault()
             e.stopPropagation()
+            vim.input=e
         })
         return textarea
         function f(){
