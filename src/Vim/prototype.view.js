@@ -1,10 +1,12 @@
 Promise.all([
     module.shareImport('prototype.view/createTextDiv.js'),
     module.shareImport('measureWidth.js'),
+    module.shareImport('prototype.view/htmlEntities.js'),
 ]).then(modules=>{
     let
         createTextDiv=  modules[0],
-        measureWidth=   modules[1]
+        measureWidth=   modules[1],
+        htmlEntities=   modules[2]
     function View(vim){
         this._vim=vim
         this._scroll=0
@@ -71,17 +73,29 @@ Promise.all([
             else if(vim.mode=='visual-block')
                 div.textContent='-- VISUAL BLOCK --'
             else if(vim.mode=='cmdline'){
-                update()
+                update(div)
                 vim.on('view',listener)
                 function listener(){
-                    update()
-                    if(vim.mode!='cmdline')
+                    if(vim.mode=='cmdline')
+                        update(div)
+                    else
                         vim.removeListener('view',listener)
                 }
-                function update(){
-                    div.textContent=vim._modeData.command
-                }
             }
+        }
+        function update(div){
+            let
+                text=vim._modeData.inputBuffer,
+                cursor=vim._modeData.cursor
+            if(cursor==text.length)
+                text+=' '
+            div.innerHTML=`${
+                htmlEntities.encode(text.substring(0,cursor))
+            }<span style=background-color:black;color:white>${
+                htmlEntities.encode(text.substring(cursor,cursor+1))
+            }</span>${
+                htmlEntities.encode(text.substring(cursor+1))
+            }`
         }
     }
     return{get(){

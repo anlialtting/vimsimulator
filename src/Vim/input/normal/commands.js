@@ -320,11 +320,14 @@ function gt(vim,cmd,arg){
     if(cmd=='')
         return{acceptable:true}
     if(cmd=='>'){
+        let
+            a=vim._cursor.lineStart,
+            b=vim._cursor.lineEnd
         vim._text=
-            vim._text.substring(0,vim._cursor.lineStart)+
-            '    '+
-            vim._text.substring(vim._cursor.lineStart,vim._cursor.lineEnd)+
-            vim._text.substring(vim._cursor.lineEnd)
+            vim._text.substring(0,a)+
+            '\t'+
+            vim._text.substring(a,b)+
+            vim._text.substring(b)
         return{
             acceptable:true,
             complete:true,
@@ -340,17 +343,13 @@ function dot(vim,cmd,arg){
 }
 function colon(vim){
     vim.mode='cmdline'
-    vim._modeData.command=':'
-    return{
-        acceptable:true,
-    }
+    vim._modeData.inputBuffer=':'
+    return{acceptable:true}
 }
 function slash(vim){
     vim.mode='cmdline'
-    vim._modeData.command='/'
-    return{
-        acceptable:true,
-    }
+    vim._modeData.inputBuffer='/'
+    return{acceptable:true}
 }
 function ctrl(vim,cmd){
     if(cmd=='')
@@ -370,7 +369,8 @@ function ctrl(vim,cmd){
     }
 }
 let commands={
-    A,D,G,I,O,P,X,a,d,g,h,i,j,k,l,n,o,p,r,u,v,x,y,
+    A,D,G,I,O,P,X,
+    a,d,g,h,i,j,k,l,n,o,p,r,u,v,x,y,
     '<':lt,
     '>':gt,
     '.':dot,

@@ -14,9 +14,14 @@ Promise.all([
         Cursor=                 modules[2],
         input=                  modules[3],
         UndoBranchManager=      modules[5]
+    let defaultOptions={
+        list:   false,
+        number: false,
+    }
     function Vim(){
         EventEmmiter.call(this)
         this._values={}
+        this._options=Object.create(defaultOptions)
         this._viewChanged=[]
         this._text=''
         this._mode='normal'
@@ -47,6 +52,10 @@ Promise.all([
             this._mode=val
             this._viewChanged.mode=true
             this._modeData={}
+            if(this._mode=='cmdline'){
+                this._modeData.inputBuffer=''
+                this._modeData.cursor=1
+            }
         },get(){
             return this._mode
         }
