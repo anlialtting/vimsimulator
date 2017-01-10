@@ -36,6 +36,10 @@ Promise.all([
         })
         textarea.addEventListener('keydown',e=>{
             if(composing||!(
+                e.key=='ArrowLeft'||
+                e.key=='ArrowRight'||
+                e.key=='ArrowDown'||
+                e.key=='ArrowUp'||
                 e.key=='Backspace'||
                 e.key=='Enter'||
                 e.key=='Escape'||
