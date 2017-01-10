@@ -53,6 +53,8 @@ Promise.all([
     })
     Object.defineProperty(Vim.prototype,'text',{
         set(val){
+            if(/[^\n]$/.test(val))
+                val+='\n'
             this._text=val
             this._undoBranchManager.clear()
             this._undoBranchManager.push(this._text)

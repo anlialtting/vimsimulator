@@ -1,7 +1,6 @@
 function A(vim){
-    if(vim._text){
+    if(vim._text)
         vim._cursor.moveToEOL()
-    }
     vim.mode='insert'
     return{
         acceptable:true,
