@@ -25,9 +25,7 @@ module.shareImport('../Vim.js').then(Vim=>{
 })
 function createVimViewDiv(vim){
     let div=document.createElement('div')
-    div.style.border='1px solid lightgray'
-    div.style.width='min-content'
-    div.style.margin='0 auto'
+    div.className='vimView'
     div.addEventListener('click',()=>
         vim.focus()
     )
