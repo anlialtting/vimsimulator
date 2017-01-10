@@ -15,6 +15,8 @@ Promise.all([
             viewRowsCount=0,
             cursorViewRow
         let res=line.lines(text).map((l,j)=>{
+            if(vim._options.list)
+                l+='$'
             if(j==vc.r)
                 if(vim.imInput)
                     l=

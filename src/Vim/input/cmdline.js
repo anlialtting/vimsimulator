@@ -1,3 +1,6 @@
+let shortcut={
+    nu:'number',
+}
 function main(vim,val){
     let enter=false
     if(typeof val=='object'){
@@ -39,6 +42,28 @@ function main(vim,val){
         return
     if(cmd[0]==':'){
         if(/set?/.test(cmd)){
+            cmd=cmd.match(/set? (.*)/)[1]
+            if(/.*\?$/.test(cmd)){
+                cmd=cmd.match(/(.*)\?$/)[1]
+                if(cmd in shortcut)
+                    cmd=shortcut[cmd]
+                console.log(vim._options[cmd]?
+                    cmd
+                :
+                    `no${cmd}`
+                )
+            }else if(/^no.*/.test(cmd)){
+                cmd=cmd.match(/^no(.*)/)[1]
+                if(cmd in shortcut)
+                    cmd=shortcut[cmd]
+                if(cmd in vim._options)
+                    vim._options[cmd]=false
+            }else{
+                if(cmd in shortcut)
+                    cmd=shortcut[cmd]
+                if(cmd in vim._options)
+                    vim._options[cmd]=true
+            }
         }else{
             for(let i=1;i<cmd.length;i++){
                 if(cmd[i]=='q')
