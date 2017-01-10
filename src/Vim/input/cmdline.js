@@ -45,13 +45,13 @@ function main(vim,val){
         let setPattern=/^set?(.*)/
         if(setPattern.test(cmd)){
             set(vim,cmd.match(setPattern)[1])
-        }else{
-            for(let i=1;i<cmd.length;i++){
-                if(cmd[i]=='q')
-                    vim.emit('quit')
-                if(cmd[i]=='w')
-                    vim.emit('write')
-            }
+        }else if(/^q(?:uit)?$/.test(cmd)){
+            vim.emit('quit')
+        }else if(/^wq$/.test(cmd)){
+            vim.emit('write')
+            vim.emit('quit')
+        }else if(/^w(?:rite)?$/.test(cmd)){
+            vim.emit('write')
         }
     }else if(cmd[0]=='/'){
     }
