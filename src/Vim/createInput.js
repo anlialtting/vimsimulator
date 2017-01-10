@@ -46,6 +46,7 @@ Promise.all([
                 e.key=='Enter'||
                 e.key=='Escape'||
                 e.key=='Home'||
+                e.key=='Tab'||
                 e.ctrlKey&&e.key=='c'||
                 e.ctrlKey&&e.key=='['||
                 e.ctrlKey&&e.key=='r'

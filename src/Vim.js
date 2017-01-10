@@ -17,8 +17,9 @@ Promise.all([
         UndoBranchManager=      modules[5],
         Cursor=                 modules[6]
     let defaultOptions={
-        list:   false,
-        number: false,
+        expandtab:  false,
+        list:       false,
+        number:     false,
     }
     function Vim(){
         EventEmmiter.call(this)
