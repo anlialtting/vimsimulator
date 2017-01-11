@@ -22,7 +22,7 @@ Promise.all([
         this._width=val
         this._cli.width=this._width
         this.div.style.width=`${
-            measureWidth(this._vim,'a'.repeat(this._width))
+            measureWidth(this._vim._lineHeightInPx,'a')*this._width
         }px`
     },get(){
         return this._width

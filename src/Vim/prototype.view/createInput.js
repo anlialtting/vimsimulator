@@ -57,7 +57,7 @@ Promise.all([
                 vim.input=textarea.value
                 textarea.value=''
             }
-            let width=measureWidth(vim,textarea.value)
+            let width=measureWidth(vim._lineHeightInPx,textarea.value)
             if(width)
                 width++
             textarea.style.width=`${width}px`
