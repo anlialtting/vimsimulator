@@ -31,7 +31,7 @@ Promise.all([
                 return res.push('')
             l.rows.map(row=>{
                 if(!(
-                    document.activeElement==vim._inputTag&&l.index==vc.r&&(
+                    document.activeElement==view._inputTag&&l.index==vc.r&&(
                         !view.width||
                         row.start<=vc.c&&vc.c<row.end
                     )

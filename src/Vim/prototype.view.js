@@ -2,14 +2,23 @@ Promise.all([
     module.shareImport('prototype.view/createTextDiv.js'),
     module.shareImport('measureWidth.js'),
     module.shareImport('prototype.view/htmlEntities.js'),
+    module.shareImport('createInput.js'),
 ]).then(modules=>{
     let
         createTextDiv=  modules[0],
         measureWidth=   modules[1],
-        htmlEntities=   modules[2]
+        htmlEntities=   modules[2],
+        createInput=    modules[3]
     function View(vim){
         this._vim=vim
         this._scroll=0
+        this._inputTag=createInput(this._vim)
+        this._inputTag.style.outline='none'
+        this._inputTag.style.width='0'
+        this._inputTag.style.color='white'
+        this._inputTag.style.backgroundColor='black'
+        this._inputTag.style.zIndex='1'
+        this._inputTag.style.position='fixed'
         createViewDiv(this)
     }
     Object.defineProperty(View.prototype,'width',{set(val){
@@ -26,26 +35,23 @@ Promise.all([
     },get(){
         return this._height
     }})
+    View.prototype.focus=function(){
+        this._inputTag.focus()
+    }
     function createViewDiv(view){
         let
             vim=view._vim,
             div=document.createElement('div')
-        vim._inputTag.style.outline='none'
-        vim._inputTag.style.width='0'
-        vim._inputTag.style.color='white'
-        vim._inputTag.style.backgroundColor='black'
-        vim._inputTag.style.zIndex='1'
-        vim._inputTag.style.position='fixed'
         div.style.position='relative'
         div.appendChild(createTextDiv(view))
         div.appendChild(createCommandDiv(vim))
-        div.appendChild(vim._inputTag)
+        div.appendChild(view._inputTag)
         vim.on('view',changed=>{
             let span=div.getElementsByClassName('cursor')[0]
             if(span){
                 let rect=span.getBoundingClientRect()
-                vim._inputTag.style.left=`${rect.left}px`
-                vim._inputTag.style.top=`${rect.top}px`
+                view._inputTag.style.left=`${rect.left}px`
+                view._inputTag.style.top=`${rect.top}px`
             }
         })
         view.div=div

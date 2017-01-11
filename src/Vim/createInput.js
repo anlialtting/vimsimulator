@@ -1,10 +1,8 @@
 Promise.all([
     module.shareImport('measureWidth.js'),
-    module.shareImport('ascii.js'),
 ]).then(modules=>{
     let
-        measureWidth=   modules[0],
-        ascii=          modules[1]
+        measureWidth=   modules[0]
     return(vim=>{
         let textarea=document.createElement('textarea')
         textarea.style.position='absolute'

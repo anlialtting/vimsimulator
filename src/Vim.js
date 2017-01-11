@@ -2,20 +2,18 @@ let
     EventEmmiter=module.arguments.events||module.importByPath('https://cdn.rawgit.com/anliting/module/5ddc4f02188066d00a698eea63f983ab1e5b7d4f/node/events.js')
 Promise.all([
     EventEmmiter,
-    module.shareImport('Vim/createInput.js'),
+    module.shareImport('Vim/Cursor.js'),
     module.shareImport('Vim/VimCursor.js'),
     module.shareImport('Vim/input.js'),
     module.shareImport('Vim/prototype.view.js'),
     module.shareImport('Vim/UndoBranchManager.js'),
-    module.shareImport('Vim/Cursor.js'),
 ]).then(modules=>{
     let
         EventEmmiter=           modules[0],
-        createInput=            modules[1],
+        Cursor=                 modules[1],
         VimCursor=              modules[2],
         input=                  modules[3],
-        UndoBranchManager=      modules[5],
-        Cursor=                 modules[6]
+        UndoBranchManager=      modules[5]
     let defaultOptions={
         expandtab:  false,
         list:       false,
@@ -33,7 +31,6 @@ Promise.all([
         this._undoBranchManager=new UndoBranchManager
         this._undoBranchManager.push('')
         this._lineHeightInPx=13
-        this._inputTag=createInput(this)
     }
     Object.setPrototypeOf(Vim.prototype,EventEmmiter.prototype)
     Object.defineProperty(Vim.prototype,'_text',{
@@ -79,7 +76,7 @@ Promise.all([
         }
     })
     Vim.prototype.focus=function(){
-        this._inputTag.focus()
+        this._mainView.focus()
     }
     Object.defineProperty(Vim.prototype,'input',{set(val){
         input(this,val)
