@@ -1,8 +1,8 @@
 Promise.all([
     module.shareImport('prototype.view/createTextDiv.js'),
-    module.shareImport('measureWidth.js'),
+    module.shareImport('prototype.view/measureWidth.js'),
     module.shareImport('prototype.view/htmlEntities.js'),
-    module.shareImport('createInput.js'),
+    module.shareImport('prototype.view/createInput.js'),
 ]).then(modules=>{
     let
         createTextDiv=  modules[0],

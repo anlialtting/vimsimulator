@@ -1,6 +1,6 @@
 Promise.all([
     module.shareImport('normal/commands.js'),
-    module.shareImport('../ascii.js'),
+    module.shareImport('normal/ascii.js'),
 ]).then(modules=>{
     let
         commands=   modules[0],
