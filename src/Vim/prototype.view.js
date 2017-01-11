@@ -13,7 +13,7 @@ Promise.all([
         this._vim=vim
         this._scroll=0
         this._inputTag=createInput(this._vim)
-        createViewDiv(this)
+        this.div=createViewDiv(this)
     }
     Object.defineProperty(View.prototype,'width',{set(val){
         this._width=val
@@ -48,7 +48,7 @@ Promise.all([
                 view._inputTag.style.top=`${rect.top}px`
             }
         })
-        view.div=div
+        return div
     }
     return{get(){
         return new View(this)
