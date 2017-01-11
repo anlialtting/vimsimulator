@@ -1,13 +1,17 @@
+module.rootScript.parentNode.removeChild(module.rootScript)
 module.styleByPath('vim.css').then(style=>
     document.head.appendChild(style)
 )
 module.debug=true
 module.shareImport('../Vim.js').then(Vim=>{
-    document.body.appendChild(Vim.style)
     let vim=createVim()
     let vimViewDiv=createVimViewDiv(vim)
+    document.head.appendChild(Vim.style)
     document.body.appendChild(vimViewDiv)
-    vim.on('quit',()=>document.body.removeChild(vimViewDiv))
+    vim.on('quit',()=>{
+        document.head.removeChild(Vim.style)
+        document.body.removeChild(vimViewDiv)
+    })
     vim.focus()
     function createVim(){
         let vim=new Vim
