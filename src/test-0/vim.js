@@ -1,6 +1,9 @@
-module.styleByPath('vim.css')
+module.styleByPath('vim.css').then(style=>
+    document.head.appendChild(style)
+)
 module.debug=true
 module.shareImport('../Vim.js').then(Vim=>{
+    document.body.appendChild(Vim.style)
     let vim=createVim()
     let vimViewDiv=createVimViewDiv(vim)
     document.body.appendChild(vimViewDiv)

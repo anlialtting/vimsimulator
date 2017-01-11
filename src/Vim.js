@@ -7,13 +7,15 @@ Promise.all([
     module.shareImport('Vim/input.js'),
     module.shareImport('Vim/prototype.view.js'),
     module.shareImport('Vim/UndoBranchManager.js'),
+    module.style('Vim/style.css'),
 ]).then(modules=>{
     let
         EventEmmiter=           modules[0],
         Cursor=                 modules[1],
         VimCursor=              modules[2],
         input=                  modules[3],
-        UndoBranchManager=      modules[5]
+        UndoBranchManager=      modules[5],
+        style=                  modules[6]
     let defaultOptions={
         expandtab:  false,
         list:       false,
@@ -94,5 +96,6 @@ Promise.all([
     Object.defineProperty(Vim.prototype,'width',{set(val){
         this._mainView.width=val
     }})
+    Vim.style=style
     return Vim
 })

@@ -5,19 +5,9 @@ Promise.all([
         measureWidth=   modules[0]
     return(vim=>{
         let textarea=document.createElement('textarea')
-        textarea.style.fontFamily='monospace'
-        textarea.style.border=0
-        textarea.style.padding=0
+        textarea.className='vimInput'
         textarea.style.fontSize=`${vim._lineHeightInPx}px`
         textarea.style.height=`${vim._lineHeightInPx+2}px`
-        textarea.style.resize='none'
-        textarea.style.overflow='hidden'
-        textarea.style.outline='none'
-        textarea.style.width='0'
-        textarea.style.color='white'
-        textarea.style.backgroundColor='black'
-        textarea.style.zIndex='1'
-        textarea.style.position='fixed'
         let composing=false
         textarea.addEventListener('blur',()=>{
             vim._view()
