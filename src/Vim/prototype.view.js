@@ -13,12 +13,6 @@ Promise.all([
         this._vim=vim
         this._scroll=0
         this._inputTag=createInput(this._vim)
-        this._inputTag.style.outline='none'
-        this._inputTag.style.width='0'
-        this._inputTag.style.color='white'
-        this._inputTag.style.backgroundColor='black'
-        this._inputTag.style.zIndex='1'
-        this._inputTag.style.position='fixed'
         createViewDiv(this)
     }
     Object.defineProperty(View.prototype,'width',{set(val){
