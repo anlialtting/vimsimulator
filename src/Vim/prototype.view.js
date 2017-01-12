@@ -1,3 +1,4 @@
+module.repository.Cli=module.shareImport('prototype.view/Cli.js')
 Promise.all([
     module.shareImport('prototype.view/createTextDiv.js'),
     module.shareImport('prototype.view/measureWidth.js'),
