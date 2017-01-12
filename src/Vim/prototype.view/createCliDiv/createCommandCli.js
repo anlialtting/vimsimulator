@@ -16,15 +16,19 @@ Promise.all([
             if(vim.mode=='normal'){
                 cli.clear()
                 cli.appendChild('')
+                cli.flush()
             }else if(vim.mode=='insert'){
                 cli.clear()
                 cli.appendChild('-- INSERT --')
+                cli.flush()
             }else if(vim.mode=='visual'){
                 cli.clear()
                 cli.appendChild('-- VISUAL --')
+                cli.flush()
             }else if(vim.mode=='visual-block'){
                 cli.clear()
                 cli.appendChild('-- VISUAL BLOCK --')
+                cli.flush()
             }else if(vim.mode=='cmdline'){
                 update(cli)
                 vim.on('view',listener)
@@ -51,6 +55,7 @@ Promise.all([
                     color:'white',
                 }
             })
+            cli.flush()
         }
     }
     return createCommandDiv

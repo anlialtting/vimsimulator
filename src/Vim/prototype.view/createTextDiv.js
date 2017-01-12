@@ -10,31 +10,37 @@ Promise.all([
         viewText=       modules[1],
         viewCursor=     modules[2],
         Cli=            modules[3],
-        charWidth=      modules[4]
+        charWidth=      modules[4],
+        refreshTime=    50
     function createTextDiv(view){
         let vim=view._vim
         let cli=new Cli
         f()
         vim.on('view',f)
+        setInterval(()=>{
+            //let startTime=new Date
+            cli.flush()
+            //console.log(new Date-startTime)
+        },refreshTime)
         return cli.view.div
         function f(){
             let res=highlight(view,viewText(view))
             cli.clear()
             cli.appendChild(res.string)
-            if(!(
+            if(
                 document.activeElement==view._inputTag&&
                 'clientCursorRow' in res
-            ))
-                return
-            cli.appendChild({
-                child:res.clientCursorChar||' ',
-                r:res.clientCursorRow,
-                c:res.clientCursorCol,
-                style:{
-                    backgroundColor:'black',
-                    color:'white',
-                }
-            })
+            )
+                cli.appendChild({
+                    child:res.clientCursorChar||' ',
+                    r:res.clientCursorRow,
+                    c:res.clientCursorCol,
+                    style:{
+                        backgroundColor:'black',
+                        color:'white',
+                    }
+                })
+            //cli.flush()
         }
     }
     function highlight(view,text){
@@ -79,51 +85,5 @@ Promise.all([
             return res
         }
     }
-    /*function createTextDiv(view){
-        let vim=view._vim
-        let div=document.createElement('div')
-        div.style.fontFamily='monospace'
-        div.style.fontSize=`${vim._fontSize}px`
-        div.style.lineHeight='1'
-        div.style.whiteSpace='pre'
-        f()
-        vim.on('view',f)
-        return div
-        function f(){
-            div.innerHTML=highlight(view,viewText(view))
-        }
-    }
-    function highlight(view,text){
-        let
-            vim=view._vim,
-            vc=viewCursor(vim),
-            res=[]
-        text.map(l=>{
-            if(!l.rows.length)
-                return res.push('')
-            l.rows.map(row=>{
-                if(!(
-                    document.activeElement==view._inputTag&&l.index==vc.r&&(
-                        !view.width||
-                        row.start<=vc.c&&vc.c<row.end
-                    )
-                ))
-                    return res.push(htmlEntities.encode(row.string))
-                let viewC=view.width?vc.c-row.start:vc.c
-                res.push(`${
-                    htmlEntities.encode(row.string.substring(0,viewC))
-                }<span
-                    class=cursor
-                    style=background-color:black;color:white>${
-                    htmlEntities.encode(row.string[viewC])
-                }</span>${
-                    htmlEntities.encode(row.string.substring(viewC+1))
-                }`)
-            })
-        })
-        while(res.length<view.height-1)
-            res.push('~')
-        return res.map(s=>s+'\n').join('')
-    }*/
     return createTextDiv
 })

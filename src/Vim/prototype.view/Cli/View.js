@@ -37,9 +37,9 @@ Promise.all([
                 if(typeof c.child=='string'){
                     childDiv.textContent=c.child
                 }else{
-                    /*let v=c.child.view
+                    let v=c.child.view
                     view._children.push(v)
-                    childDiv.appendChild(v.div)*/
+                    childDiv.appendChild(v.div)
                 }
             })
         }

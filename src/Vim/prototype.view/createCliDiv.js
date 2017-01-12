@@ -28,7 +28,7 @@ Promise.all([
                 child:view._commandCli,
                 r:view._height-1||vim._cursor._countOfRows||1
             })
+            cli.flush()
         }
     }
 })
-

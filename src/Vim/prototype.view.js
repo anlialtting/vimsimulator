@@ -43,14 +43,14 @@ Promise.all([
         div.appendChild(createTextDiv(view))
         div.appendChild(view._inputTag)
         div.appendChild(createCliDiv(view))
-        vim.on('view',changed=>{
+        /*vim.on('view',changed=>{
             let span=div.getElementsByClassName('cursor')[0]
             if(span){
                 let rect=span.getBoundingClientRect()
                 view._inputTag.style.left=`${rect.left}px`
                 view._inputTag.style.top=`${rect.top}px`
             }
-        })
+        })*/
         return div
     }
     return{get(){
