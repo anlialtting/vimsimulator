@@ -1,10 +1,12 @@
 Promise.all([
     module.repository.EventEmmiter,
     module.shareImport('measureWidth.js'),
+    module.shareImport('charWidth.js'),
 ]).then(modules=>{
     let
         EventEmmiter=   modules[0],
-        measureWidth=   modules[1]
+        measureWidth=   modules[1],
+        charWidth=      modules[2]
     function Cli(){
         EventEmmiter.call(this)
         this._children=[]
@@ -19,17 +21,34 @@ Promise.all([
         this._children=[]
         this.emit('view')
     }
-    Cli.prototype.appendChild=function(c){
+    Cli.prototype.appendChild=function(child){
         if(
-            typeof c=='string'||
-            c instanceof Cli
+            typeof child=='string'||
+            child instanceof Cli
         )
-            c={child:c}
-        if(!('r' in c))
-            c.r=0
-        if(!('c' in c))
-            c.c=0
-        this._children.push(c)
+            child={child}
+        if(!('r' in child))
+            child.r=0
+        if(!('c' in child))
+            child.c=0
+        if(typeof child.child=='string'){
+            let r=0,c=0
+            for(let i=0;i<child.child.length;i++){
+                let chr=child.child[i]
+                this._children.push({
+                    child:chr,
+                    r:child.r+r,
+                    c:child.c+c,
+                    style:child.style,
+                })
+                if(chr=='\n'){
+                    r++
+                    c=0
+                }else
+                    c+=charWidth(chr)
+            }
+        }else
+            this._children.push(child)
         this.emit('view')
     }
     function View(cli){
