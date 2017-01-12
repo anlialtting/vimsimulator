@@ -33,7 +33,7 @@ Promise.all([
             child.r=0
         if(!('c' in child))
             child.c=0
-        /*if(typeof child.child=='string'){
+        if(typeof child.child=='string'){
             let r=0,c=0
             for(let i=0;i<child.child.length;i++){
                 let chr=child.child[i]
@@ -49,7 +49,7 @@ Promise.all([
                 }else
                     c+=charWidth(chr)
             }
-        }else*/
+        }else
             this._children.push(child)
         //let startTime=new Date
         this.emit('view')
