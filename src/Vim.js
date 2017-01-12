@@ -1,7 +1,6 @@
-let
-    EventEmmiter=module.arguments.events||module.importByPath('https://cdn.rawgit.com/anliting/module/5ddc4f02188066d00a698eea63f983ab1e5b7d4f/node/events.js')
+module.repository.EventEmmiter=module.arguments.EventEmmiter||module.importByPath('https://cdn.rawgit.com/anliting/module/5ddc4f02188066d00a698eea63f983ab1e5b7d4f/node/events.js')
 Promise.all([
-    EventEmmiter,
+    module.repository.EventEmmiter,
     module.shareImport('Vim/Cursor.js'),
     module.shareImport('Vim/VimCursor.js'),
     module.shareImport('Vim/input.js'),

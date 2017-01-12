@@ -1,54 +1,56 @@
 Promise.all([
-    module.shareImport('htmlEntities.js'),
+    module.shareImport('Cli.js'),
 ]).then(modules=>{
     let
-        htmlEntities=   modules[0]
+        Cli=            modules[0]
     function createCommandDiv(vim){
-        let div=document.createElement('div')
-        div.style.fontFamily='monospace'
-        div.style.fontSize=`${vim._lineHeightInPx}px`
-        div.style.lineHeight='1'
-        div.style.whiteSpace='pre'
-        f()
+        let cli=new Cli
+        f(cli)
         vim.on('view',changed=>{
             if(changed.indexOf('mode')<0)
                 return
-            f()
+            f(cli)
         })
-        return div
-        function f(){
-            if(vim.mode=='normal')
-                div.textContent=''
-            else if(vim.mode=='insert')
-                div.textContent='-- INSERT --'
-            else if(vim.mode=='visual')
-                div.textContent='-- VISUAL --'
-            else if(vim.mode=='visual-block')
-                div.textContent='-- VISUAL BLOCK --'
-            else if(vim.mode=='cmdline'){
-                update(div)
+        return cli.view
+        function f(cli){
+            if(vim.mode=='normal'){
+                cli.clear()
+                cli.appendChild('')
+            }else if(vim.mode=='insert'){
+                cli.clear()
+                cli.appendChild('-- INSERT --')
+            }else if(vim.mode=='visual'){
+                cli.clear()
+                cli.appendChild('-- VISUAL --')
+            }else if(vim.mode=='visual-block'){
+                cli.clear()
+                cli.appendChild('-- VISUAL BLOCK --')
+            }else if(vim.mode=='cmdline'){
+                update(cli)
                 vim.on('view',listener)
                 function listener(){
                     if(vim.mode=='cmdline')
-                        update(div)
+                        update(cli)
                     else
                         vim.removeListener('view',listener)
                 }
             }
         }
-        function update(div){
+        function update(cli){
             let
                 text=vim._modeData.inputBuffer,
                 cursor=vim._modeData.cursor.position
-            if(cursor==text.length)
-                text+=' '
-            div.innerHTML=`${
-                htmlEntities.encode(text.substring(0,cursor))
-            }<span style=background-color:black;color:white>${
-                htmlEntities.encode(text.substring(cursor,cursor+1))
-            }</span>${
-                htmlEntities.encode(text.substring(cursor+1))
-            }`
+            cli.clear()
+            cli.appendChild(text)
+            cli.appendChild({
+                child:
+                    text.substring(cursor,cursor+1)||' ',
+                c:cursor,
+                style:{
+                    backgroundColor:'black',
+                    color:'white',
+                }
+            })
         }
     }
     return createCommandDiv
