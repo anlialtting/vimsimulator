@@ -4,6 +4,7 @@ Promise.all([
         this._cli=cli
         this._children=[]
         this._divs={}
+        this._used=[]
         this.div=document.createElement('div')
         this.div.className='cli'
         this.div.style.fontSize=`${cli._fontSize}px`
@@ -11,24 +12,21 @@ Promise.all([
         this._cli.on('view',this._listener=()=>update(this))
         function update(view){
             let div=view.div
-            for(let r in view._divs)
-                for(let c in view._divs[r]){
-                    let div=view._divs[r][c].div
-                    div.removeAttribute('style')
-                    div.innerHTML=''
-                }
+            view._used.map(d=>{
+                d.removeAttribute('style')
+                d.innerHTML=''
+            })
+            view._used=[]
             view.freeChildren()
             cli._children.map(c=>{
                 if(!(c.r in view._divs))
                     view._divs[c.r]={}
                 if(!(c.c in view._divs[c.r])){
-                    let d=document.createElement('div')
-                    view._divs[c.r][c.c]={
-                        div:d
-                    }
-                    div.appendChild(d)
+                    div.appendChild(
+                        view._divs[c.r][c.c]=document.createElement('div')
+                    )
                 }
-                let childDiv=view._divs[c.r][c.c].div
+                let childDiv=view._divs[c.r][c.c]
                 childDiv.style.position='absolute'
                 childDiv.style.top=`${c.r*cli._fontSize}px`
                 childDiv.style.left=`${c.c*cli._fontWidth}px`
@@ -41,6 +39,7 @@ Promise.all([
                     view._children.push(v)
                     childDiv.appendChild(v.div)
                 }
+                view._used.push(childDiv)
             })
         }
     }

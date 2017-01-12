@@ -11,7 +11,7 @@ Promise.all([
         viewCursor=     modules[2],
         Cli=            modules[3],
         charWidth=      modules[4],
-        refreshTime=    50
+        refreshTime=    33
     function createTextDiv(view){
         let vim=view._vim
         let cli=new Cli
@@ -22,7 +22,7 @@ Promise.all([
             cli.flush()
             //console.log(new Date-startTime)
         },refreshTime)
-        return cli.view.div
+        return cli
         function f(){
             let res=highlight(view,viewText(view))
             cli.clear()

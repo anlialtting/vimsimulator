@@ -40,9 +40,9 @@ Promise.all([
             vim=view._vim,
             div=document.createElement('div')
         div.className='webvim'
-        div.appendChild(createTextDiv(view))
-        div.appendChild(view._inputTag)
         div.appendChild(createCliDiv(view))
+        div.appendChild(createTextDiv(view).view.div)
+        div.appendChild(view._inputTag)
         /*vim.on('view',changed=>{
             let span=div.getElementsByClassName('cursor')[0]
             if(span){
