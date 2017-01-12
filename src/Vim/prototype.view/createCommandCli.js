@@ -11,7 +11,7 @@ Promise.all([
                 return
             f(cli)
         })
-        return cli.view
+        return cli
         function f(cli){
             if(vim.mode=='normal'){
                 cli.clear()

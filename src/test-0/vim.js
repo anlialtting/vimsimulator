@@ -5,7 +5,7 @@ module.styleByPath('vim.css').then(style=>
 module.debug=true
 module.shareImport('../Vim.js').then(Vim=>{
     let vim=createVim()
-    let vimViewDiv=createVimViewDiv(vim)
+    let vimViewDiv=createTestDiv(vim)
     document.head.appendChild(Vim.style)
     document.body.appendChild(vimViewDiv)
     vim.on('quit',()=>{
@@ -30,9 +30,9 @@ module.shareImport('../Vim.js').then(Vim=>{
         return vim
     }
 })
-function createVimViewDiv(vim){
+function createTestDiv(vim){
     let div=document.createElement('div')
-    div.className='vimView'
+    div.className='test'
     div.addEventListener('click',()=>
         vim.focus()
     )

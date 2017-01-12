@@ -13,10 +13,8 @@ Promise.all([
     Object.setPrototypeOf(Cli.prototype,EventEmmiter.prototype)
     Object.defineProperty(Cli.prototype,'view',{get(){
         let div=document.createElement('div')
-        div.style.position='relative'
+        div.className='cli'
         div.style.fontSize=`${this._fontSize}px`
-        div.style.fontFamily='monospace'
-        div.style.whiteSpace='pre'
         this.on('view',()=>{
             div.innerHTML=''
             this._children.map(c=>{

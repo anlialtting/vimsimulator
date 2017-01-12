@@ -1,4 +1,4 @@
-div.vimView{
+body>div.test{
     border:1px solid lightgray;
     width:min-content;
     margin:0 auto;

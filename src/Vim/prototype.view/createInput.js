@@ -5,7 +5,7 @@ Promise.all([
         measureWidth=   modules[0]
     return(vim=>{
         let textarea=document.createElement('textarea')
-        textarea.className='vimInput'
+        textarea.className='input'
         textarea.style.fontSize=`${vim._fontSize}px`
         textarea.style.height=`${vim._fontSize+2}px`
         let composing=false

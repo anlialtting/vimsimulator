@@ -1,4 +1,12 @@
-textarea.vimInput{
+div.webvim{
+    position:relative;
+}
+div.webvim>div.cli{
+    position:relative;
+    font-family:monospace;
+    white-space:pre;
+}
+div.webvim>textarea.input{
     font-family:monospace;
     border:0;
     padding:0;
