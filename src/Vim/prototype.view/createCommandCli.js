@@ -1,5 +1,5 @@
 Promise.all([
-    module.shareImport('Cli.js'),
+    module.repository.Cli
 ]).then(modules=>{
     let
         Cli=            modules[0]

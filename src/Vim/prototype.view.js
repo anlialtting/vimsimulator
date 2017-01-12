@@ -1,26 +1,24 @@
+module.repository.Cli=module.shareImport('prototype.view/Cli.js')
 Promise.all([
     module.shareImport('prototype.view/createTextDiv.js'),
     module.shareImport('prototype.view/measureWidth.js'),
     module.shareImport('prototype.view/createInput.js'),
-    module.shareImport('prototype.view/createCommandCli.js'),
-    module.shareImport('prototype.view/Cli.js'),
+    module.shareImport('prototype.view/createCliDiv.js'),
 ]).then(modules=>{
     let
         createTextDiv=      modules[0],
         measureWidth=       modules[1],
         createInput=        modules[2],
-        createCommandCli=   modules[3],
-        Cli=                modules[4]
+        createCliDiv=       modules[3]
     function View(vim){
         this._vim=vim
         this._scroll=0
         this._inputTag=createInput(this._vim)
-        this._cli=createCli(this)
         this.div=createViewDiv(this)
     }
     Object.defineProperty(View.prototype,'width',{set(val){
         this._width=val
-        this._cli.width=this._width
+        //this._cli.width=this._width
         this.div.style.width=`${
             measureWidth(this._vim._fontSize)*this._width
         }px`
@@ -29,7 +27,7 @@ Promise.all([
     }})
     Object.defineProperty(View.prototype,'height',{set(val){
         this._height=val
-        this._cli.height=this._height
+        //this._cli.height=this._height
         this.div.style.height=`${this._vim._fontSize*this._height}px`
     },get(){
         return this._height
@@ -43,8 +41,8 @@ Promise.all([
             div=document.createElement('div')
         div.className='webvim'
         div.appendChild(createTextDiv(view))
-        div.appendChild(createCommandCli(vim).view)
         div.appendChild(view._inputTag)
+        div.appendChild(createCliDiv(view))
         vim.on('view',changed=>{
             let span=div.getElementsByClassName('cursor')[0]
             if(span){
@@ -54,10 +52,6 @@ Promise.all([
             }
         })
         return div
-    }
-    function createCli(view){
-        let cli=new Cli
-        return cli
     }
     return{get(){
         return new View(this)
