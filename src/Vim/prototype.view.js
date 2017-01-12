@@ -22,7 +22,7 @@ Promise.all([
         this._width=val
         this._cli.width=this._width
         this.div.style.width=`${
-            measureWidth(this._vim._lineHeightInPx,'a')*this._width
+            measureWidth(this._vim._fontSize,'a')*this._width
         }px`
     },get(){
         return this._width
@@ -30,7 +30,7 @@ Promise.all([
     Object.defineProperty(View.prototype,'height',{set(val){
         this._height=val
         this._cli.height=this._height
-        this.div.style.height=`${this._vim._lineHeightInPx*this._height}px`
+        this.div.style.height=`${this._vim._fontSize*this._height}px`
     },get(){
         return this._height
     }})

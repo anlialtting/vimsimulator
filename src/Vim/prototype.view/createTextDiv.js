@@ -11,7 +11,7 @@ Promise.all([
         let vim=view._vim
         let div=document.createElement('div')
         div.style.fontFamily='monospace'
-        div.style.fontSize=`${vim._lineHeightInPx}px`
+        div.style.fontSize=`${vim._fontSize}px`
         div.style.lineHeight='1'
         div.style.whiteSpace='pre'
         f()

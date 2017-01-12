@@ -31,7 +31,7 @@ Promise.all([
         this._cursor=new VimCursor(this)
         this._undoBranchManager=new UndoBranchManager
         this._undoBranchManager.push('')
-        this._lineHeightInPx=13
+        this._fontSize=13
     }
     Object.setPrototypeOf(Vim.prototype,EventEmmiter.prototype)
     Object.defineProperty(Vim.prototype,'_text',{
