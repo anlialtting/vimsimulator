@@ -1,5 +1,6 @@
+module.repository.Cli=module.shareImport('createCliDiv/Cli.js')
 Promise.all([
-    module.shareImport('createCommandCli.js'),
+    module.shareImport('createCliDiv/createCommandCli.js'),
     module.repository.Cli,
 ]).then(modules=>{
     let

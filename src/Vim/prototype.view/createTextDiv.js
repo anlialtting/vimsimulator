@@ -1,5 +1,5 @@
 Promise.all([
-    module.shareImport('htmlEntities.js'),
+    module.shareImport('createTextDiv/htmlEntities.js'),
     module.shareImport('createTextDiv/viewText.js'),
     module.shareImport('createTextDiv/viewCursor.js'),
 ]).then(modules=>{
