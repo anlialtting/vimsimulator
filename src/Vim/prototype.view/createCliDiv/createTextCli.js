@@ -53,8 +53,8 @@ Promise.all([
             res=[],
             clientCursorRow,
             clientCursorCol,
-            clientCursorChar,
-            cli=new Cli
+            clientCursorChar
+        //let cli=new Cli
         text.map(l=>{
             if(!l.rows.length)
                 return res.push('')
@@ -76,10 +76,10 @@ Promise.all([
         })
         while(res.length<view.height-1)
             res.push('~')
-        cli.appendChild(res.map(s=>s+'\n').join(''))
+        //cli.appendChild(res.map(s=>s+'\n').join(''))
         return{
             string:res.map(s=>s+'\n').join(''),
-            cli,
+            //cli,
             clientCursorRow,
             clientCursorCol,
             clientCursorChar,
