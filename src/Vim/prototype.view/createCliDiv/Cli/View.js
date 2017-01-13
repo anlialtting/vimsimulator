@@ -24,17 +24,22 @@ Promise.all([
     function update(view){
         clearUsed(view)
         view.freeChildren()
-        view._cli._children.map(c=>{
-            if(!(c.r in view._divs))
-                view._divs[c.r]={}
-            if(!(c.c in view._divs[c.r]))
-                view.div.appendChild(
-                    view._divs[c.r][c.c]=document.createElement('div')
-                )
-            let childDiv=view._divs[c.r][c.c]
+        dfs(view,view._cli,0,0)
+    }
+    function clearUsed(view){
+        view._used.map(d=>{
+            d.removeAttribute('style')
+            d.innerHTML=''
+        })
+        view._used=[]
+    }
+    function dfs(view,cli,dr,dc){
+        cli._children.map(c=>{
+            let tr=dr+c.r,tc=dc+c.c
+            let childDiv=getDiv(view,tr,tc)
             childDiv.style.position='absolute'
-            childDiv.style.top=`${c.r*view._cli._fontSize}px`
-            childDiv.style.left=`${c.c*view._cli._fontWidth}px`
+            childDiv.style.top=`${tr*cli._fontSize}px`
+            childDiv.style.left=`${tc*cli._fontWidth}px`
             for(let i in c.style)
                 childDiv.style[i]=c.style[i]
             if(typeof c.child=='string')
@@ -46,13 +51,15 @@ Promise.all([
             }
             view._used.push(childDiv)
         })
-    }
-    function clearUsed(view){
-        view._used.map(d=>{
-            d.removeAttribute('style')
-            d.innerHTML=''
-        })
-        view._used=[]
+        function getDiv(view,r,c){
+            if(!(r in view._divs))
+                view._divs[r]={}
+            if(!(c in view._divs[r]))
+                view.div.appendChild(
+                    view._divs[r][c]=document.createElement('div')
+                )
+            return view._divs[r][c]
+        }
     }
     return View
 })
