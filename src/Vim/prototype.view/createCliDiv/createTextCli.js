@@ -1,16 +1,14 @@
 Promise.all([
-    module.shareImport('createTextCli/htmlEntities.js'),
+    module.shareImport('../charWidth.js'),
     module.shareImport('createTextCli/viewText.js'),
     module.shareImport('createTextCli/viewCursor.js'),
     module.repository.Cli,
-    module.shareImport('../charWidth.js'),
 ]).then(modules=>{
     let
-        htmlEntities=   modules[0],
+        charWidth=      modules[0],
         viewText=       modules[1],
         viewCursor=     modules[2],
         Cli=            modules[3],
-        charWidth=      modules[4],
         refreshTime=    33
     function createTextCli(view){
         let vim=view._vim

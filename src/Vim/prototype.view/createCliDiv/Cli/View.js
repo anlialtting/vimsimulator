@@ -22,26 +22,19 @@ Promise.all([
         this._children=[]
     }
     function update(view){
-        let
-            div=view.div,
-            cli=view._cli
-        view._used.map(d=>{
-            d.removeAttribute('style')
-            d.innerHTML=''
-        })
-        view._used=[]
+        clearUsed(view)
         view.freeChildren()
-        cli._children.map(c=>{
+        view._cli._children.map(c=>{
             if(!(c.r in view._divs))
                 view._divs[c.r]={}
             if(!(c.c in view._divs[c.r]))
-                div.appendChild(
+                view.div.appendChild(
                     view._divs[c.r][c.c]=document.createElement('div')
                 )
             let childDiv=view._divs[c.r][c.c]
             childDiv.style.position='absolute'
-            childDiv.style.top=`${c.r*cli._fontSize}px`
-            childDiv.style.left=`${c.c*cli._fontWidth}px`
+            childDiv.style.top=`${c.r*view._cli._fontSize}px`
+            childDiv.style.left=`${c.c*view._cli._fontWidth}px`
             for(let i in c.style)
                 childDiv.style[i]=c.style[i]
             if(typeof c.child=='string')
@@ -53,6 +46,13 @@ Promise.all([
             }
             view._used.push(childDiv)
         })
+    }
+    function clearUsed(view){
+        view._used.map(d=>{
+            d.removeAttribute('style')
+            d.innerHTML=''
+        })
+        view._used=[]
     }
     return View
 })

@@ -1,11 +1,9 @@
-({
+let e=document.createElement('div')
+;({
     encode(s){
-        let e=document.createElement('div')
         e.textContent=s
         return e.innerHTML
-    },
-    decode(s){
-        let e=document.createElement('div')
+    },decode(s){
         e.innerHTML=s
         return e.textContent
     }
