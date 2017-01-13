@@ -14,11 +14,9 @@ Promise.all([
         let vim=view._vim
         let cli=new Cli
         f()
-        vim.on('view',f)
+        view.on('update',f)
         setInterval(()=>{
-            //let startTime=new Date
             cli.flush()
-            //console.log(new Date-startTime)
         },refreshTime)
         return cli
         function f(){

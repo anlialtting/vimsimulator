@@ -46,7 +46,7 @@ Promise.all([
                 function calcEnd(i){
                     for(
                         let rowWidth=0;
-                        rowWidth+width(l[i])<=view.width;
+                        i<l.length&&rowWidth+width(l[i])<=view.width;
                         rowWidth+=width(l[i++])
                     );
                     return i

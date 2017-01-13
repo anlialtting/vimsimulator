@@ -16,7 +16,7 @@ Promise.all([
             currentR
         view._commandCli=createCommandCli(vim)
         setCliChild()
-        vim.on('view',setCliChild)
+        view.on('update',setCliChild)
         return cli.view.div
         function setCliChild(){
             let r=view._height-1||vim._cursor._countOfRows||1

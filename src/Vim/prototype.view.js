@@ -2,31 +2,43 @@ Promise.all([
     module.shareImport('prototype.view/createCliDiv.js'),
     module.shareImport('prototype.view/measureWidth.js'),
     module.shareImport('prototype.view/createInput.js'),
+    module.repository.EventEmmiter,
 ]).then(modules=>{
     let
         createCliDiv=       modules[0],
         measureWidth=       modules[1],
-        createInput=        modules[2]
+        createInput=        modules[2],
+        EventEmmiter=       modules[3]
     function View(vim){
+        EventEmmiter.call(this)
         this._vim=vim
         this._scroll=0
         this._inputTag=createInput(this._vim)
         this.div=createViewDiv(this)
+        this._vim.on('view',()=>
+            this._update()
+        )
     }
+    Object.setPrototypeOf(View.prototype,EventEmmiter.prototype)
     Object.defineProperty(View.prototype,'width',{set(val){
         this._width=val
         this.div.style.width=`${
             measureWidth(this._vim._fontSize)*this._width
         }px`
+        this._update()
     },get(){
         return this._width
     }})
     Object.defineProperty(View.prototype,'height',{set(val){
         this._height=val
         this.div.style.height=`${this._vim._fontSize*this._height}px`
+        this._update()
     },get(){
         return this._height
     }})
+    View.prototype._update=function(){
+        this.emit('update')
+    }
     View.prototype.focus=function(){
         this._inputTag.focus()
     }
