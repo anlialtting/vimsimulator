@@ -35,7 +35,6 @@ Promise.all([
             let tr=dr+c.r,tc=dc+c.c
             if(typeof c.child=='string'){
                 let childDiv=getDiv(view,tr,tc)
-                childDiv.style.position='absolute'
                 childDiv.style.top=`${tr*cli._fontSize}px`
                 childDiv.style.left=`${tc*cli._fontWidth}px`
                 for(let i in c.style)

@@ -7,6 +7,9 @@ div.webvim div.cli{
     white-space:pre;
     line-height:1;
 }
+div.webvim div.cli>div{
+    position:absolute;
+}
 div.webvim>textarea.input{
     font-family:monospace;
     border:0;
