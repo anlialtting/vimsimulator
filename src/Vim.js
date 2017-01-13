@@ -6,7 +6,7 @@ if(!module.repository.EventEmmiter)
     )
 Promise.all([
     module.repository.EventEmmiter,
-    module.shareImport('Vim/Cursor.js'),
+    module.shareImport('Vim/prototype.mode.js'),
     module.shareImport('Vim/VimCursor.js'),
     module.shareImport('Vim/prototype.input.js'),
     module.shareImport('Vim/prototype.ui.js'),
@@ -15,7 +15,6 @@ Promise.all([
 ]).then(modules=>{
     let
         EventEmmiter=           modules[0],
-        Cursor=                 modules[1],
         VimCursor=              modules[2],
         UndoBranchManager=      modules[5],
         style=                  modules[6]
@@ -52,23 +51,7 @@ Promise.all([
         this.emit('view',Object.keys(this._viewChanged))
         this._viewChanged={}
     }
-    Object.defineProperty(Vim.prototype,'mode',{
-        set(val){
-            this._mode=val
-            this._viewChanged.mode=true
-            this._modeData={}
-            if(this._mode=='cmdline'){
-                this._modeData.inputBuffer=''
-                this._modeData.cursor=new Cursor(v=>
-                    this._modeData.inputBuffer=v
-                ,()=>
-                    this._modeData.inputBuffer
-                )
-            }
-        },get(){
-            return this._mode
-        }
-    })
+    Object.defineProperty(Vim.prototype,'mode',modules[1])
     Object.defineProperty(Vim.prototype,'text',{
         set(val){
             if(/[^\n]$/.test(val))
