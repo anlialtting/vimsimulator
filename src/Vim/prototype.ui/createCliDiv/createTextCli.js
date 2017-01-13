@@ -17,38 +17,19 @@ Promise.all([
         setInterval(()=>cli.flush(),refreshTime)
         return cli
         function f(){
-            let res=g(view,viewText(view,
-                view._vim._options.number?view.width-4:view.width
-            ))
             cli.clear()
-            cli.appendChild({
-                child:res.cli,
-            })
-            if(!(
-                document.activeElement==view._inputTag&&
-                'clientCursor' in res
-            ))
-                return
-            cli.appendChild({
-                child:res.clientCursor.char||' ',
-                r:res.clientCursor.row,
-                c:(view._vim._options.number?4:0)+res.clientCursor.col,
-                style:{
-                    backgroundColor:'black',
-                    color:'white',
-                }
-            })
+            build(cli,view,viewText(view,
+                view._vim._options.number?view.width-4:view.width
+            ),document.activeElement==view._inputTag)
         }
     }
-    function g(view,text){
+    function build(cli,view,text,showCursor){
         let
             vc=viewCursor(view._vim),
             rowsCount=0,
             numberCli,
             textCli=new Cli,
-            res={
-                cli:new Cli,
-            }
+            clientCursor
         if(view._vim._options.number)
             numberCli=new Cli
         text.map(l=>{
@@ -67,7 +48,7 @@ Promise.all([
                     )
                 ){
                     let viewC=view.width?vc.c-row.start:vc.c
-                    res.clientCursor={
+                    clientCursor={
                         row:rowsCount,
                         col:width(row.string.substring(0,viewC)),
                         char:row.string[viewC],
@@ -81,19 +62,29 @@ Promise.all([
             })
         })
         for(let r=rowsCount;r<view.height-1;r++)
-            res.cli.appendChild({
+            cli.appendChild({
                 child:'~',
                 r,
             })
         if(view._vim._options.number)
-            res.cli.appendChild({
+            cli.appendChild({
                 child:numberCli,
             })
-        res.cli.appendChild({
+        cli.appendChild({
             child:textCli,
             c:view._vim._options.number?4:0,
         })
-        return res
+        if(showCursor&&clientCursor)
+            textCli.appendChild({
+                child:clientCursor.char||' ',
+                r:clientCursor.row,
+                c:clientCursor.col,
+                style:{
+                    backgroundColor:'black',
+                    color:'white',
+                }
+            })
+        return cli
         function pad(s){
             return ' '.repeat(3-s.length)+s
         }

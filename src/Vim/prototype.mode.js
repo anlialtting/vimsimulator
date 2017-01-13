@@ -7,6 +7,9 @@ Promise.all([
             this._mode=val
             this._viewChanged.mode=true
             this._modeData={}
+            if(this._mode=='visual'){
+                this._modeData.cursor=this._cursor.abs
+            }
             if(this._mode=='cmdline'){
                 this._modeData.inputBuffer=''
                 this._modeData.cursor=new Cursor(v=>
