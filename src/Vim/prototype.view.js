@@ -1,15 +1,12 @@
-module.repository.Cli=module.shareImport('prototype.view/Cli.js')
 Promise.all([
-    module.shareImport('prototype.view/createTextDiv.js'),
+    module.shareImport('prototype.view/createCliDiv.js'),
     module.shareImport('prototype.view/measureWidth.js'),
     module.shareImport('prototype.view/createInput.js'),
-    module.shareImport('prototype.view/createCliDiv.js'),
 ]).then(modules=>{
     let
-        createTextDiv=      modules[0],
+        createCliDiv=       modules[0],
         measureWidth=       modules[1],
-        createInput=        modules[2],
-        createCliDiv=       modules[3]
+        createInput=        modules[2]
     function View(vim){
         this._vim=vim
         this._scroll=0
@@ -18,7 +15,6 @@ Promise.all([
     }
     Object.defineProperty(View.prototype,'width',{set(val){
         this._width=val
-        //this._cli.width=this._width
         this.div.style.width=`${
             measureWidth(this._vim._fontSize)*this._width
         }px`
@@ -27,7 +23,6 @@ Promise.all([
     }})
     Object.defineProperty(View.prototype,'height',{set(val){
         this._height=val
-        //this._cli.height=this._height
         this.div.style.height=`${this._vim._fontSize*this._height}px`
     },get(){
         return this._height
@@ -41,7 +36,6 @@ Promise.all([
             div=document.createElement('div')
         div.className='webvim'
         div.appendChild(createCliDiv(view))
-        div.appendChild(createTextDiv(view).view.div)
         div.appendChild(view._inputTag)
         /*vim.on('view',changed=>{
             let span=div.getElementsByClassName('cursor')[0]

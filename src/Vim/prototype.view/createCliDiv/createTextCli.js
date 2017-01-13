@@ -1,9 +1,9 @@
 Promise.all([
-    module.shareImport('createTextDiv/htmlEntities.js'),
-    module.shareImport('createTextDiv/viewText.js'),
-    module.shareImport('createTextDiv/viewCursor.js'),
+    module.shareImport('createTextCli/htmlEntities.js'),
+    module.shareImport('createTextCli/viewText.js'),
+    module.shareImport('createTextCli/viewCursor.js'),
     module.repository.Cli,
-    module.shareImport('charWidth.js'),
+    module.shareImport('../charWidth.js'),
 ]).then(modules=>{
     let
         htmlEntities=   modules[0],
@@ -12,7 +12,7 @@ Promise.all([
         Cli=            modules[3],
         charWidth=      modules[4],
         refreshTime=    33
-    function createTextDiv(view){
+    function createTextCli(view){
         let vim=view._vim
         let cli=new Cli
         f()
@@ -40,7 +40,6 @@ Promise.all([
                         color:'white',
                     }
                 })
-            //cli.flush()
         }
     }
     function highlight(view,text){
@@ -85,5 +84,5 @@ Promise.all([
             return res
         }
     }
-    return createTextDiv
+    return createTextCli
 })
