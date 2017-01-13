@@ -1,14 +1,14 @@
 Promise.all([
-    module.shareImport('../charWidth.js'),
+    module.repository.Cli,
     module.shareImport('createTextCli/viewText.js'),
     module.shareImport('createTextCli/viewCursor.js'),
-    module.repository.Cli,
+    module.shareImport('../width.js'),
 ]).then(modules=>{
     let
-        charWidth=      modules[0],
+        Cli=            modules[0],
         viewText=       modules[1],
         viewCursor=     modules[2],
-        Cli=            modules[3],
+        width=          modules[3],
         refreshTime=    33
     function createTextCli(view){
         let vim=view._vim
@@ -61,7 +61,7 @@ Promise.all([
                     let viewC=view.width?vc.c-row.start:vc.c
                     clientCursorRow=res.length
                     clientCursorCol=
-                        stringWidth(row.string.substring(0,viewC))
+                        width(row.string.substring(0,viewC))
                     clientCursorChar=row.string[viewC]
                 }
                 return res.push(row.string)
@@ -74,12 +74,6 @@ Promise.all([
             clientCursorRow,
             clientCursorCol,
             clientCursorChar,
-        }
-        function stringWidth(s){
-            let res=0
-            for(let i=0;i<s.length;i++)
-                res+=charWidth(s[i])
-            return res
         }
     }
     return createTextCli

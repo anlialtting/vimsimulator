@@ -1,12 +1,12 @@
 Promise.all([
     module.shareImport('viewText/line.js'),
     module.shareImport('viewCursor.js'),
-    module.shareImport('../../charWidth.js'),
+    module.shareImport('../../width.js'),
 ]).then(modules=>{
     let
         line=       modules[0],
         viewCursor= modules[1],
-        charWidth=  modules[2]
+        width=      modules[2]
     function viewText(view){
         let
             vim=view._vim,
@@ -46,8 +46,8 @@ Promise.all([
                 function calcEnd(i){
                     for(
                         let rowWidth=0;
-                        rowWidth+charWidth(l[i])<=view.width;
-                        rowWidth+=charWidth(l[i++])
+                        rowWidth+width(l[i])<=view.width;
+                        rowWidth+=width(l[i++])
                     );
                     return i
                 }

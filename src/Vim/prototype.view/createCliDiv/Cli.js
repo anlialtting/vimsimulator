@@ -1,13 +1,13 @@
 Promise.all([
     module.repository.EventEmmiter,
     module.shareImport('../measureWidth.js'),
-    module.shareImport('../charWidth.js'),
+    module.shareImport('../width.js'),
     module.shareImport('Cli/View.js'),
 ]).then(modules=>{
     let
         EventEmmiter=   modules[0],
         measureWidth=   modules[1],
-        charWidth=      modules[2],
+        width=          modules[2],
         View=           modules[3]
     function Cli(){
         EventEmmiter.call(this)
@@ -54,7 +54,7 @@ Promise.all([
                     r++
                     c=0
                 }else
-                    c+=charWidth(chr)
+                    c+=width(chr)
             }
         }else
             this._children.push(child)
