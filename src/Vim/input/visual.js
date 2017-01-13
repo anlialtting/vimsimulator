@@ -1,5 +1,10 @@
-((vim,val)=>{
-    //vim._modeData.command+=val
+function main(vim,val){
+    if(
+        val.key=='Escape'||
+        val.ctrlKey&&val.key=='c'||
+        val.ctrlKey&&val.key=='['
+    )
+        return vim.mode='normal'
     /*if(vim.command==='d'){
         vim.command_vd()
         vim.command=''
@@ -13,7 +18,10 @@
         vim.command_vgt()
         vim.command=''
     }*/
-    //vim._view()
+}
+((vim,val)=>{
+    main(vim,val)
+    vim._view()
 })
 /*
 Promise.all([
