@@ -27,6 +27,7 @@ Promise.all([
             cli.clear()
             cli.appendChild({
                 child:res.string,
+                //child:res.cli,
                 c:view._vim._options.number?4:0,
             })
             if(!(
@@ -52,7 +53,8 @@ Promise.all([
             res=[],
             clientCursorRow,
             clientCursorCol,
-            clientCursorChar
+            clientCursorChar,
+            cli=new Cli
         text.map(l=>{
             if(!l.rows.length)
                 return res.push('')
@@ -74,8 +76,10 @@ Promise.all([
         })
         while(res.length<view.height-1)
             res.push('~')
+        cli.appendChild(res.map(s=>s+'\n').join(''))
         return{
             string:res.map(s=>s+'\n').join(''),
+            cli,
             clientCursorRow,
             clientCursorCol,
             clientCursorChar,
