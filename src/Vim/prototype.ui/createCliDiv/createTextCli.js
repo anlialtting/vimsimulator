@@ -1,15 +1,13 @@
 Promise.all([
     module.repository.Cli,
     module.shareImport('createTextCli/viewText.js'),
-    module.shareImport('createTextCli/viewCursor.js'),
-    module.shareImport('width.js'),
+    module.shareImport('createTextCli/createTextContentCli.js'),
 ]).then(modules=>{
     let
-        Cli=            modules[0],
-        viewText=       modules[1],
-        viewCursor=     modules[2],
-        width=          modules[3],
-        refreshTime=    33
+        Cli=                    modules[0],
+        viewText=               modules[1],
+        createTextContentCli=   modules[2],
+        refreshTime=            33
     function createTextCli(view){
         let cli=new Cli
         f()
@@ -20,68 +18,34 @@ Promise.all([
             cli.clear()
             build(cli,view,viewText(view,
                 view._vim._options.number?view.width-4:view.width
-            ),document.activeElement==view._inputTag)
+            ),document.activeElement==view._inputTag&&view._vim.mode!='cmdline')
         }
     }
     function build(cli,view,text,showCursor){
-        let
-            vc=viewCursor(view._vim),
-            rowsCount=0,
-            numberCli,
-            textCli=new Cli,
-            clientCursor
-        if(view._vim._options.number)
-            numberCli=new Cli
-        text.map(l=>{
-            if(view._vim._options.number)
-                numberCli.appendChild({
-                    child:pad((l.index+1).toString()),
-                    r:rowsCount,
-                })
-            if(!l.rows.length)
-                rowsCount++
-            l.rows.map(row=>{
-                if(
-                    l.index==vc.r&&(
-                        !view.width||
-                        row.start<=vc.c&&vc.c<row.end
-                    )
-                ){
-                    let viewC=view.width?vc.c-row.start:vc.c
-                    clientCursor={
-                        row:rowsCount,
-                        col:width(row.string.substring(0,viewC)),
-                        char:row.string[viewC],
-                    }
-                }
-                textCli.appendChild({
-                    child:row.string,
-                    r:rowsCount
-                })
-                rowsCount++
-            })
-        })
-        for(let r=rowsCount;r<view.height-1;r++)
+        let res=createTextContentCli(view,text,showCursor)
+        if(view._vim._options.number){
+            cli.appendChild(number(text))
             cli.appendChild({
-                child:'~',
-                r,
+                child:res.textCli,
+                c:4,
             })
-        if(view._vim._options.number)
-            cli.appendChild(numberCli)
-        cli.appendChild({
-            child:textCli,
-            c:view._vim._options.number?4:0,
+        }else{
+            cli.appendChild(res.textCli)
+        }
+        for(let r=res.rowsCount;r<view.height-1;r++)
+            cli.appendChild({child:'~',r})
+        return cli
+    }
+    function number(text){
+        let cli=new Cli
+        let currentRowsCount=0
+        text.map(l=>{
+            cli.appendChild({
+                child:pad((l.index+1).toString()),
+                r:currentRowsCount,
+            })
+            currentRowsCount+=l.rows.length||1
         })
-        if(showCursor&&clientCursor)
-            textCli.appendChild({
-                child:clientCursor.char||' ',
-                r:clientCursor.row,
-                c:clientCursor.col,
-                style:{
-                    backgroundColor:'black',
-                    color:'white',
-                }
-            })
         return cli
         function pad(s){
             return ' '.repeat(3-s.length)+s
