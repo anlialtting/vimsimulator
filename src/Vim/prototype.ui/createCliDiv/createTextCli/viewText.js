@@ -1,7 +1,7 @@
 Promise.all([
     module.shareImport('viewText/line.js'),
     module.shareImport('viewCursor.js'),
-    module.shareImport('../../width.js'),
+    module.shareImport('../width.js'),
 ]).then(modules=>{
     let
         line=       modules[0],

@@ -2,7 +2,7 @@ Promise.all([
     module.repository.Cli,
     module.shareImport('createTextCli/viewText.js'),
     module.shareImport('createTextCli/viewCursor.js'),
-    module.shareImport('../width.js'),
+    module.shareImport('width.js'),
 ]).then(modules=>{
     let
         Cli=            modules[0],

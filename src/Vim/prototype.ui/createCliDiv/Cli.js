@@ -1,7 +1,7 @@
 Promise.all([
     module.repository.EventEmmiter,
     module.shareImport('../measureWidth.js'),
-    module.shareImport('../width.js'),
+    module.shareImport('width.js'),
     module.shareImport('Cli/View.js'),
 ]).then(modules=>{
     let
