@@ -7,7 +7,7 @@ Promise.all([
         line=       modules[0],
         viewCursor= modules[1],
         width=      modules[2]
-    function viewText(view){
+    function viewText(view,targetWidth){
         let
             vim=view._vim,
             text=vim._text||'\n',
@@ -29,7 +29,7 @@ Promise.all([
                 index:j
             }
             res.start=viewRowsCount
-            if(view.width&&l.length){
+            if(targetWidth&&l.length){
                 res.rows=[]
                 for(let i=0;i<l.length;){
                     let start=i,end=calcEnd(i)
@@ -46,7 +46,7 @@ Promise.all([
                 function calcEnd(i){
                     for(
                         let rowWidth=0;
-                        i<l.length&&rowWidth+width(l[i])<=view.width;
+                        i<l.length&&rowWidth+width(l[i])<=targetWidth;
                         rowWidth+=width(l[i++])
                     );
                     return i

@@ -20,22 +20,28 @@ Promise.all([
         },refreshTime)
         return cli
         function f(){
-            let res=highlight(view,viewText(view))
+            let targetWidth=
+                view._vim._options.number?view.width-4:view.width
+            let res=highlight(view,viewText(view,targetWidth))
             cli.clear()
-            cli.appendChild(res.string)
-            if(
+            cli.appendChild({
+                child:res.string,
+                c:view._vim._options.number?4:0,
+            })
+            if(!(
                 document.activeElement==view._inputTag&&
                 'clientCursorRow' in res
-            )
-                cli.appendChild({
-                    child:res.clientCursorChar||' ',
-                    r:res.clientCursorRow,
-                    c:res.clientCursorCol,
-                    style:{
-                        backgroundColor:'black',
-                        color:'white',
-                    }
-                })
+            ))
+                return
+            cli.appendChild({
+                child:res.clientCursorChar||' ',
+                r:res.clientCursorRow,
+                c:(view._vim._options.number?4:0)+res.clientCursorCol,
+                style:{
+                    backgroundColor:'black',
+                    color:'white',
+                }
+            })
         }
     }
     function highlight(view,text){
