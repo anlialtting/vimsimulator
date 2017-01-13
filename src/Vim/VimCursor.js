@@ -19,7 +19,10 @@ Object.defineProperty(Cursor.prototype,'c',{get(){
 function availableCols(c){
     if(c._vim.mode=='normal')
         return Math.max(1,c._countOfCols)
-    if(c._vim.mode=='insert')
+    if(
+        c._vim.mode=='visual'||
+        c._vim.mode=='insert'
+    )
         return c._countOfCols+1
 }
 Cursor.prototype.line=function(n){

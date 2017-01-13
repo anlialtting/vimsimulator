@@ -1,10 +1,21 @@
 function main(vim,val){
-    if(
-        val.key=='Escape'||
-        val.ctrlKey&&val.key=='c'||
-        val.ctrlKey&&val.key=='['
-    )
-        return vim.mode='normal'
+    if(typeof val=='string'){
+        if(val=='h')
+            return vim._cursor.moveLeft()
+        if(val=='j')
+            return vim._cursor.moveDown()
+        if(val=='k')
+            return vim._cursor.moveUp()
+        if(val=='l')
+            return vim._cursor.moveRight()
+    }else if(typeof val=='object'){
+        if(
+            val.key=='Escape'||
+            val.ctrlKey&&val.key=='c'||
+            val.ctrlKey&&val.key=='['
+        )
+            return vim.mode='normal'
+    }
     /*if(vim.command==='d'){
         vim.command_vd()
         vim.command=''

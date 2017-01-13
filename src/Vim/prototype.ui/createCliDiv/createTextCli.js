@@ -67,9 +67,7 @@ Promise.all([
                 r,
             })
         if(view._vim._options.number)
-            cli.appendChild({
-                child:numberCli,
-            })
+            cli.appendChild(numberCli)
         cli.appendChild({
             child:textCli,
             c:view._vim._options.number?4:0,
