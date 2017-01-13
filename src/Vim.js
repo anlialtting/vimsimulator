@@ -1,10 +1,15 @@
-module.repository.EventEmmiter=module.arguments.EventEmmiter||module.importByPath('https://cdn.rawgit.com/anliting/module/5ddc4f02188066d00a698eea63f983ab1e5b7d4f/node/events.js')
+if(!module.repository.EventEmmiter)
+    module.repository.EventEmmiter=module.importByPath(
+        `https://cdn.rawgit.com/anliting/module/${
+            '5ddc4f02188066d00a698eea63f983ab1e5b7d4f'
+        }/node/events.js`
+    )
 Promise.all([
     module.repository.EventEmmiter,
     module.shareImport('Vim/Cursor.js'),
     module.shareImport('Vim/VimCursor.js'),
-    module.shareImport('Vim/input.js'),
-    module.shareImport('Vim/prototype.view.js'),
+    module.shareImport('Vim/prototype.input.js'),
+    module.shareImport('Vim/prototype.ui.js'),
     module.shareImport('Vim/UndoBranchManager.js'),
     module.style('Vim/style.css'),
 ]).then(modules=>{
@@ -12,7 +17,6 @@ Promise.all([
         EventEmmiter=           modules[0],
         Cursor=                 modules[1],
         VimCursor=              modules[2],
-        input=                  modules[3],
         UndoBranchManager=      modules[5],
         style=                  modules[6]
     let defaultOptions={
@@ -77,23 +81,21 @@ Promise.all([
         }
     })
     Vim.prototype.focus=function(){
-        this._mainView.focus()
+        this._mainUi.focus()
     }
-    Object.defineProperty(Vim.prototype,'input',{set(val){
-        input(this,val)
-    }})
-    Object.defineProperty(Vim.prototype,'view',modules[4])
-    Object.defineProperty(Vim.prototype,'_mainView',{get(){
-        return this._values.mainView||(this._values.mainView=this.view)
+    Object.defineProperty(Vim.prototype,'input',modules[3])
+    Object.defineProperty(Vim.prototype,'ui',modules[4])
+    Object.defineProperty(Vim.prototype,'_mainUi',{get(){
+        return this._values._mainUi||(this._values._mainUi=this.ui)
     }})
     Object.defineProperty(Vim.prototype,'div',{get(){
-        return this._mainView.div
+        return this._mainUi.div
     }})
     Object.defineProperty(Vim.prototype,'height',{set(val){
-        this._mainView.height=val
+        this._mainUi.height=val
     }})
     Object.defineProperty(Vim.prototype,'width',{set(val){
-        this._mainView.width=val
+        this._mainUi.width=val
     }})
     Vim.style=style
     return Vim
