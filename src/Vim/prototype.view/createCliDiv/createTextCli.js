@@ -22,7 +22,8 @@ Promise.all([
         function f(){
             let targetWidth=
                 view._vim._options.number?view.width-4:view.width
-            let res=highlight(view,viewText(view,targetWidth))
+            let text=viewText(view,targetWidth)
+            let res=highlight(view,text)
             cli.clear()
             cli.appendChild({
                 child:res.string,
