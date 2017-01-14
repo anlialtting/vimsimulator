@@ -1,4 +1,10 @@
-module.shareImport('../visualRange.js').then(visualRange=>{
+Promise.all([
+    module.shareImport('../visualRange.js'),
+    module.shareImport('shift.js'),
+]).then(modules=>{
+    let
+        visualRange=modules[0],
+        shift=modules[1]
     function main(vim,val){
         if(typeof val=='string'){
             if(val=='d'){
@@ -26,6 +32,28 @@ module.shareImport('../visualRange.js').then(visualRange=>{
                     mode:'string',
                     string:vim._text.substring(r.s,r.e),
                 }
+                vim.mode='normal'
+                return
+            }
+            if(val=='<'){
+                let r=visualRange(vim)
+                let cursor=vim._cursor.clone
+                cursor.moveTo(r.s)
+                let s=cursor.r
+                cursor.moveTo(r.e)
+                let e=cursor.r
+                shift.left(vim,s,e+1)
+                vim.mode='normal'
+                return
+            }
+            if(val=='>'){
+                let r=visualRange(vim)
+                let cursor=vim._cursor.clone
+                cursor.moveTo(r.s)
+                let s=cursor.r
+                cursor.moveTo(r.e)
+                let e=cursor.r
+                shift.right(vim,s,e+1)
                 vim.mode='normal'
                 return
             }

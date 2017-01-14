@@ -2,15 +2,19 @@ Promise.all([
     module.shareImport('commands/uppercases.js'),
     module.shareImport('commands/lowercasesAM.js'),
     module.shareImport('commands/lowercasesNZ.js'),
+    module.shareImport('../shift.js'),
 ]).then(modules=>{
     let
         uppercases=     modules[0],
         lowercasesAM=   modules[1],
-        lowercasesNZ=   modules[2]
+        lowercasesNZ=   modules[2],
+        shift=          modules[3]
     function lt(vim,cmd,arg){
         if(cmd=='')
             return{acceptable:true}
         if(cmd=='<'){
+            arg||(arg=1)
+            shift.left(vim,vim._cursor.r,vim._cursor.r+arg)
             return{
                 acceptable:true,
                 complete:true,
@@ -22,14 +26,8 @@ Promise.all([
         if(cmd=='')
             return{acceptable:true}
         if(cmd=='>'){
-            let
-                a=vim._cursor.lineStart,
-                b=vim._cursor.lineEnd
-            vim._text=
-                vim._text.substring(0,a)+
-                '\t'+
-                vim._text.substring(a,b)+
-                vim._text.substring(b)
+            arg||(arg=1)
+            shift.right(vim,vim._cursor.r,vim._cursor.r+arg)
             return{
                 acceptable:true,
                 complete:true,

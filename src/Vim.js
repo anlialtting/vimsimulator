@@ -22,6 +22,8 @@ Promise.all([
         expandtab:  false,
         list:       false,
         number:     false,
+        shiftwidth: 8,
+        tabstop:    8,
     }
     function Vim(){
         EventEmmiter.call(this)

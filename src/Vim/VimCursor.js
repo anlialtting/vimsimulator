@@ -10,10 +10,14 @@ Object.defineProperty(Cursor.prototype,'_countOfRows',{get(){
 Object.defineProperty(Cursor.prototype,'_countOfCols',{get(){
     return this._vim._text.split('\n')[this.r].length
 }})
-Object.defineProperty(Cursor.prototype,'r',{get(){
+Object.defineProperty(Cursor.prototype,'r',{set(val){
+    this._y=val
+},get(){
     return Math.min(this._countOfRows-1,Math.max(0,this._y))
 }})
-Object.defineProperty(Cursor.prototype,'c',{get(){
+Object.defineProperty(Cursor.prototype,'c',{set(val){
+    this._x=val
+},get(){
     return Math.min(availableCols(this)-1,Math.max(0,this._x))
 }})
 function availableCols(c){
@@ -29,6 +33,14 @@ Cursor.prototype.line=function(n){
     return this._vim._text.split('\n').slice(0,n).join('').length+n
 }
 // end 0
+Object.defineProperty(Cursor.prototype,'clone',{get(){
+    let cursor=new Cursor(this._vim)
+    cursor._x=this._x
+    cursor._y=this._y
+    return cursor
+}})
+// start 0a
+// end 0a
 // start 1
 Cursor.prototype.moveLeft=function(){
     this._x=Math.max(0,this.c-1)
