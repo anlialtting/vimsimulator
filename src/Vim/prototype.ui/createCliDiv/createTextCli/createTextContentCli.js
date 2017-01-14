@@ -8,16 +8,14 @@ Promise.all([
         viewCursor=     modules[1],
         width=          modules[2]
     function createTextContentCli(view,text,showCursor){
-        let
-            textCli=new Cli
-        let rowsCount
+        let cli=new Cli,rowsCount
         {
             let currentRowsCount=0
             text.map(l=>{
                 if(!l.rows.length)
                     currentRowsCount++
                 l.rows.map(row=>{
-                    textCli.appendChild({
+                    cli.appendChild({
                         child:row.string,
                         r:currentRowsCount
                     })
@@ -27,9 +25,9 @@ Promise.all([
             rowsCount=currentRowsCount
         }
         if(showCursor)
-            textCli.appendChild(cursor(view,text))
+            cli.appendChild(cursor(view,text))
         return{
-            textCli,
+            textCli:cli,
             rowsCount,
         }
     }
@@ -58,16 +56,15 @@ Promise.all([
                 currentRowsCount++
             })
         })
-        if(clientCursor)
-            return{
-                child:clientCursor.char||' ',
-                r:clientCursor.row,
-                c:clientCursor.col,
-                style:{
-                    backgroundColor:'black',
-                    color:'white',
-                }
+        return{
+            child:clientCursor.char||' ',
+            r:clientCursor.row,
+            c:clientCursor.col,
+            style:{
+                backgroundColor:'black',
+                color:'white',
             }
+        }
     }
     return createTextContentCli
 })
