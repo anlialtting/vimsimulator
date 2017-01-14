@@ -2,23 +2,42 @@ Promise.all([
     module.repository.Cli,
     module.shareImport('viewCursor.js'),
     module.shareImport('../width.js'),
+    module.shareImport('../../../visualRange.js'),
 ]).then(modules=>{
     let
         Cli=            modules[0],
         viewCursor=     modules[1],
-        width=          modules[2]
+        width=          modules[2],
+        visualRange=    modules[3]
     function createTextContentCli(view,text,showCursor){
         let cli=new Cli,rowsCount
         {
-            let currentRowsCount=0
+            let
+                currentRowsCount=0,
+                highlightRange=visualRange(view._vim)
             text.map(l=>{
                 if(!l.rows.length)
                     currentRowsCount++
                 l.rows.map(row=>{
-                    cli.appendChild({
-                        child:row.string,
-                        r:currentRowsCount
-                    })
+                    let rowStart=l.start+row.start
+                    for(
+                        let i=0,c=0;
+                        i<row.string.length;
+                        c+=width(row.string[i++])
+                    ){
+                        let o={
+                            child:row.string[i],
+                            r:currentRowsCount,
+                            c,
+                        }
+                        if(
+                            highlightRange&&
+                            highlightRange.s<=rowStart+c&&
+                            rowStart+c<highlightRange.e
+                        )
+                            o.style={backgroundColor:'gray'}
+                        cli.appendChild(o)
+                    }
                     currentRowsCount++
                 })
             })
@@ -68,4 +87,3 @@ Promise.all([
     }
     return createTextContentCli
 })
-

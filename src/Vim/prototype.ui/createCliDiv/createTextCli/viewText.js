@@ -8,27 +8,36 @@ Promise.all([
         viewCursor= modules[1],
         width=      modules[2]
     function viewText(view,targetWidth){
+        let res=wrap(view,targetWidth)
+        if(view.height){
+            checkScroll(view,res.cursorViewRow)
+            res.res=cut(view,res.res)
+        }
+        return res.res
+    }
+    function wrap(view,targetWidth){
         let
-            vim=view._vim,
-            text=vim._text||'\n',
-            vc=viewCursor(vim),
+            vc=viewCursor(view._vim),
+            charCount=0,
             viewRowsCount=0,
             cursorViewRow
-        let res=line.lines(text).map((l,j)=>{
-            if(vim._options.list)
+        let res=line.lines(view._vim._text||'\n').map((l,j)=>{
+            let rawL=l
+            if(view._vim._options.list)
                 l+='$'
             if(j==vc.r)
-                if(vim.imInput)
+                if(view._vim.imInput)
                     l=
                         l.substring(0,vc.c)+
-                        vim.imInput+
+                        view._vim.imInput+
                         l.substring(vc.c)
                 else if(vc.c==l.length)
                     l+=' '
             let res={
                 index:j
             }
-            res.start=viewRowsCount
+            res.start=charCount
+            res.startRow=viewRowsCount
             if(targetWidth&&l.length){
                 res.rows=[]
                 for(let i=0;i<l.length;){
@@ -61,32 +70,38 @@ Promise.all([
                 }]
                 viewRowsCount++
             }
-            res.end=viewRowsCount
+            res.endRow=viewRowsCount
+            charCount+=rawL.length+1
             return res
         })
-        if(view.height){
-            if(view._scroll+view.height-1<=cursorViewRow)
-                view._scroll=cursorViewRow-(view.height-1)+1
-            if(cursorViewRow<view._scroll)
-                view._scroll=cursorViewRow
-            res=res.map(l=>{
-                if(
-                    l.end<=view._scroll||
-                    view._scroll+view.height-1<=l.start
-                )
-                    return
-                l.rows=l.rows.map((r,i)=>{
-                    if(!(
-                        view._scroll<=l.start+i&&
-                        l.start+i<view._scroll+view.height-1
-                    ))
-                        return
-                    return r
-                }).filter(r=>r!=undefined)
-                return l
-            }).filter(l=>l!=undefined)
+        return{
+            res,
+            cursorViewRow
         }
-        return res
     }
     return viewText
 })
+function checkScroll(view,cursorViewRow){
+    if(view._scroll+view.height-1<=cursorViewRow)
+        view._scroll=cursorViewRow-(view.height-1)+1
+    if(cursorViewRow<view._scroll)
+        view._scroll=cursorViewRow
+}
+function cut(view,res){
+    return res.map(l=>{
+        if(
+            l.endRow<=view._scroll||
+            view._scroll+view.height-1<=l.startRow
+        )
+            return
+        l.rows=l.rows.map((r,i)=>{
+            if(!(
+                view._scroll<=l.startRow+i&&
+                l.startRow+i<view._scroll+view.height-1
+            ))
+                return
+            return r
+        }).filter(r=>r!=undefined)
+        return l
+    }).filter(l=>l!=undefined)
+}
