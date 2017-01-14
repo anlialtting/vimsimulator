@@ -32,8 +32,8 @@ Promise.all([
                         }
                         if(
                             highlightRange&&
-                            highlightRange.s<=rowStart+c&&
-                            rowStart+c<highlightRange.e
+                            highlightRange.s<=rowStart+i&&
+                            rowStart+i<highlightRange.e
                         )
                             o.style={backgroundColor:'gray'}
                         cli.appendChild(o)
