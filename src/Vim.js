@@ -55,7 +55,6 @@ type  :q<Enter>               to exit
         set(val){
             this._values.text=val
             this._viewChanged.text=true
-            this._welcomeText=undefined
             this._view()
             this.emit('textChange')
         },get(){
@@ -72,6 +71,7 @@ type  :q<Enter>               to exit
             if(/[^\n]$/.test(val))
                 val+='\n'
             this._text=val
+            this._welcomeText=undefined
             this._undoBranchManager.clear()
             this._undoBranchManager.push(this._text)
         },get(){

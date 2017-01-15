@@ -19,15 +19,15 @@ Promise.all([
     Object.defineProperty(Cli.prototype,'view',{get(){
         return new View(this)
     }})
+    Cli.prototype.clear=function(){
+        this._flushed=false
+        this._children=[]
+    }
     Cli.prototype.flush=function(){
         if(this._flushed)
             return
         this.emit('view')
         this._flushed=true
-    }
-    Cli.prototype.clear=function(){
-        this._flushed=false
-        this._children=[]
     }
     Cli.prototype.appendChild=function(child){
         this._flushed=false

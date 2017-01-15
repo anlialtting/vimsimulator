@@ -33,20 +33,23 @@ Promise.all([
     function dfs(view,cli,dr,dc){
         cli._children.map(c=>{
             let tr=dr+c.r,tc=dc+c.c
-            if(typeof c.child=='string'){
-                let childDiv=getDiv(view,tr,tc)
-                childDiv.style.top=`${tr*cli._fontSize}px`
-                childDiv.style.left=`${tc*cli._fontWidth}px`
-                for(let i in c.style)
-                    childDiv.style[i]=c.style[i]
-                childDiv.textContent=c.child
-                view._used.push(childDiv)
-            }else
+            if(typeof c.child=='string')
+                write(c,tr,tc)
+            else
                 dfs(view,c.child,tr,tc)
         })
         let listener=()=>update(view)
         view._listeners.push({cli,listener})
         cli.on('view',listener)
+        function write(doc,r,c){
+            let div=getDiv(view,r,c)
+            div.style.top=`${r*cli._fontSize}px`
+            div.style.left=`${c*cli._fontWidth}px`
+            for(let i in doc.style)
+                div.style[i]=doc.style[i]
+            div.textContent=doc.child
+            view._used.push(div)
+        }
         function getDiv(view,r,c){
             if(!(r in view._divs))
                 view._divs[r]={}
