@@ -39,6 +39,18 @@ Promise.all([
         this._fontSize=13
     }
     Object.setPrototypeOf(Vim.prototype,EventEmmiter.prototype)
+    Vim.prototype._welcomeText=`\
+            VIM - Vi IMproved
+
+               version WEB
+              by An-Li Ting
+ Vim is open source and freely distributable
+
+        Thanks Bram Moolenaar,
+        for inventing the original Vim!
+
+type  :q<Enter>               to exit
+`
     Object.defineProperty(Vim.prototype,'_text',{
         set(val){
             this._values.text=val

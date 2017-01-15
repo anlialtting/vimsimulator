@@ -20,7 +20,7 @@ Promise.all([
     vim.focus()
     function createVim(){
         let vim=new Vim
-        vim.text=`<!doctype html>
+        /*vim.text=`<!doctype html>
 <html>
     <head>
         <title>Title</title>
@@ -31,7 +31,7 @@ Promise.all([
             存在先於本質
     </body>
 </html>
-`
+`*/
         return vim
     }
 })

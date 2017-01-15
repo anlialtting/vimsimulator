@@ -7,8 +7,12 @@ Promise.all([
             this._mode=val
             this._viewChanged.mode=true
             this._modeData={}
+            if(this._mode=='insert'){
+                this._welcomeText=undefined
+            }
             if(this._mode=='visual'){
                 this._modeData.cursor=this._cursor.abs
+                this._welcomeText=undefined
             }
             if(this._mode=='cmdline'){
                 this._modeData.inputBuffer=''

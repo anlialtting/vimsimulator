@@ -13,14 +13,18 @@ Promise.all([
         let
             vim=view._vim,
             cli=new Cli,
-            currentR
+            currentR,
+            currentWelcomeText
         view._commandCli=createCommandCli(vim)
         setCliChild()
         view.on('update',setCliChild)
         return cli.view.div
         function setCliChild(){
             let r=view._height-1||vim._cursor._countOfRows||1
-            if(currentR==r)
+            if(
+                currentR==r&&
+                currentWelcomeText==vim._welcomeText
+            )
                 return
             cli.clear()
             cli.appendChild(createTextCli(view))
@@ -28,8 +32,27 @@ Promise.all([
                 child:view._commandCli,
                 r,
             })
+            if(vim._welcomeText&&50<=view.width&&16<=view.height){
+                let
+                    r=Math.floor(
+                        (view.height-vim._welcomeText.split('\n').length-1)/2
+                    ),
+                    c=Math.floor(
+                        (view.width-vim._welcomeText.split('\n').map(
+                            s=>s.length
+                        ).reduce(
+                            (a,b)=>Math.max(a,b)
+                        ))/2
+                    )
+                cli.appendChild({
+                    child:vim._welcomeText,
+                    r,
+                    c,
+                })
+            }
             cli.flush()
             currentR=r
+            currentWelcomeText=vim._welcomeText
         }
     }
 })
