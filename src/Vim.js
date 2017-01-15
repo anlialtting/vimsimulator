@@ -40,14 +40,14 @@ Promise.all([
     }
     Object.setPrototypeOf(Vim.prototype,EventEmmiter.prototype)
     Vim.prototype._welcomeText=`\
-            VIM - Vi IMproved
+              VIM - Vi IMproved
 
-               version WEB
-              by An-Li Ting
+                 version WEB
+                by An-Li Ting
  Vim is open source and freely distributable
 
-        Thanks Bram Moolenaar,
-        for inventing the original Vim!
+            Thanks Bram Moolenaar,
+       for inventing the original Vim!
 
 type  :q<Enter>               to exit
 `
