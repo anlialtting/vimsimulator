@@ -40,22 +40,25 @@ function main(vim,val){
         return vim.mode='normal'
     if(!enter)
         return
+    let status
     if(cmd[0]==':'){
         cmd=cmd.substring(1)
         let setPattern=/^set?(.*)/
         if(setPattern.test(cmd)){
-            set(vim,cmd.match(setPattern)[1])
+            status=set(vim,cmd.match(setPattern)[1])
         }else if(/^q(?:uit)?$/.test(cmd)){
-            vim.emit('quit')
+            vim._quit()
         }else if(/^wq$/.test(cmd)){
-            vim.emit('write')
-            vim.emit('quit')
+            vim._write()
+            vim._quit()
         }else if(/^w(?:rite)?$/.test(cmd)){
-            vim.emit('write')
+            status=vim._write()
         }
     }else if(cmd[0]=='/'){
     }
     vim.mode='normal'
+    if(status)
+        vim._modeData.status=status
 }
 function set(vim,cmd){
     let argumentPattern=/ (.*)/
@@ -83,11 +86,10 @@ function set(vim,cmd){
             if(cmd in vim._options)
                 vim._options[cmd]=!no
         }else if(show)
-            console.log(vim._options[cmd]?
+            return vim._options[cmd]?
                 cmd
             :
                 `no${cmd}`
-            )
     }
 }
 ((vim,val)=>{

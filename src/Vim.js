@@ -82,6 +82,15 @@ Promise.all([
     Object.defineProperty(Vim.prototype,'width',{set(val){
         this._mainUi.width=val
     }})
+    Vim.prototype._write=function(){
+        this.emit('write')
+        return `<EVENT-DRIVEN> ${this._text.split('\n').length-1}L, ${
+            this._text.length
+        }C written`
+    }
+    Vim.prototype._quit=function(){
+        this.emit('quit')
+    }
     Vim.style=style
     return Vim
 })

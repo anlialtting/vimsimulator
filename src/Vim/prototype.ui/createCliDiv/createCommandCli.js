@@ -15,7 +15,11 @@ Promise.all([
         function f(cli){
             if(vim.mode=='normal'){
                 cli.clear()
-                cli.appendChild('')
+                cli.appendChild(vim._modeData.status!=undefined?
+                    vim._modeData.status
+                :
+                    ''
+                )
                 cli.flush()
             }else if(vim.mode=='insert'){
                 cli.clear()
