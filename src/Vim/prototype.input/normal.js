@@ -31,7 +31,8 @@ Promise.all([
             if(res.complete){
                 if(res.changed)
                     vim._undoBranchManager.push(vim._text)
-                vim._modeData.command=''
+                if(vim.mode=='normal')
+                    vim._modeData.command=''
             }
         }else{
             vim._modeData.command=''

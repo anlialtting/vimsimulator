@@ -71,7 +71,6 @@ function u(vim,cmd,arg){
 }
 function v(vim,cmd,arg){
     vim.mode='visual'
-    //vim.visualmode.fixedCursor=vim.selectionStart
     return{
         acceptable:true,
         complete:true,
@@ -110,4 +109,3 @@ function y(vim,cmd,arg){
     }
 }
 ({n,o,p,r,u,v,x,y})
-
