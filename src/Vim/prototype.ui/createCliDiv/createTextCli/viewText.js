@@ -26,12 +26,12 @@ Promise.all([
             if(view._vim._options.list)
                 l+='$'
             if(j==vc.r)
-                if(view._vim.imInput)
+                /*if(view._vim.imInput)
                     l=
                         l.substring(0,vc.c)+
                         view._vim.imInput+
-                        l.substring(vc.c)
-                else if(vc.c==l.length)
+                        l.substring(vc.c)*/
+                if(vc.c==l.length)
                     l+=' '
             let res={
                 index:j

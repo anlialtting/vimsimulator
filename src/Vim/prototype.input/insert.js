@@ -33,6 +33,7 @@ function main(vim,val){
         if(
             val.key=='Tab'
         ){
+            vim._text||(vim._text='\n')
             vim._text=
                 vim._text.substring(0,vim._cursor.abs)+
                 '\t'+

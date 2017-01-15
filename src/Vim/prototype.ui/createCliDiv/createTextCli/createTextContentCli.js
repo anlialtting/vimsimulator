@@ -53,8 +53,7 @@ Promise.all([
     function cursor(view,text){
         let currentRowsCount=0
         let vc=viewCursor(view._vim)
-        let
-            clientCursor
+        let clientCursor
         text.map(l=>{
             if(!l.rows.length)
                 currentRowsCount++
@@ -75,6 +74,10 @@ Promise.all([
                 currentRowsCount++
             })
         })
+        view._cursor={
+            r:clientCursor.row,
+            c:clientCursor.col,
+        }
         return{
             child:clientCursor.char||' ',
             r:clientCursor.row,

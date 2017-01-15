@@ -49,14 +49,16 @@ Promise.all([
         div.className='webvim'
         div.appendChild(createCliDiv(view))
         div.appendChild(view._inputTag)
-        /*vim.on('view',changed=>{
-            let span=div.getElementsByClassName('cursor')[0]
-            if(span){
-                let rect=span.getBoundingClientRect()
-                view._inputTag.style.left=`${rect.left}px`
-                view._inputTag.style.top=`${rect.top}px`
+        vim.on('view',changed=>{
+            if(view._cursor){
+                view._inputTag.style.left=`${
+                    view._cursor.c*measureWidth(view._vim.fontSize)
+                }px`
+                view._inputTag.style.top=`${
+                    view._cursor.r*view._vim._fontSize
+                }px`
             }
-        })*/
+        })
         return div
     }
     return{get(){
