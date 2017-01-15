@@ -16,9 +16,13 @@ Promise.all([
         return cli
         function f(){
             cli.clear()
-            build(cli,view,viewText(view,
-                view._vim._options.number?view.width-4:view.width
-            ),document.activeElement==view._inputTag&&view._vim.mode!='cmdline')
+            build(
+                cli,view,viewText(view,
+                    view._vim._options.number?view.width-4:view.width
+                ),
+                document.activeElement==view._inputTag&&
+                view._vim.mode!='cmdline'
+            )
         }
     }
     function build(cli,view,text,showCursor){

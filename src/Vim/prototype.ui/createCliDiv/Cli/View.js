@@ -7,6 +7,7 @@ Promise.all([
         this._children=[]
         this._divs={}
         this._listeners=[]
+        this._used=[]
         this.node=document.createElement('div')
         this.node.className='cli'
         this.node.style.fontSize=`${cli._fontSize}px`
