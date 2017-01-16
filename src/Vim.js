@@ -93,14 +93,13 @@ Promise.all([
         this._mainUi.width=val
     }})
     Vim.prototype._welcomeText=`\
-              VIM - Vi IMproved
+                  Web Vim
 
-                 version WEB
-                by An-Li Ting
- Vim is open source and freely distributable
+                 version 0
+               by An-Li Ting
+ Web Vim is an editor simulating Vim on Web.
 
-            Thanks Bram Moolenaar,
-       for inventing the original Vim!
+ Thanks Bram Moolenaar for the original Vim!
 
 type  :q<Enter>               to exit
 `
