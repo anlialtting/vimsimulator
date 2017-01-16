@@ -86,9 +86,10 @@ Promise.all([
     }})
     Vim.prototype._write=function(){
         this.emit('write')
-        return `<EVENT-DRIVEN> ${this._text.split('\n').length-1}L, ${
-            this._text.length
-        }C written`
+        let
+            l=this._text.split('\n').length-1,
+            c=this._text.length
+        return `<EVENT-DRIVEN> ${l}L, ${c}C written`
     }
     Vim.prototype._quit=function(){
         this.emit('quit')
