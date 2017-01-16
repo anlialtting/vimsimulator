@@ -42,6 +42,8 @@ Promise.all([
     Object.setPrototypeOf(Vim.prototype,EventEmmiter.prototype)
     Object.defineProperty(Vim.prototype,'_text',{
         set(val){
+            if(/[^\n]$/.test(val))
+                val+='\n'
             this._values.text=val
             this._viewChanged.text=true
         },get(){
@@ -56,8 +58,6 @@ Promise.all([
     Object.defineProperty(Vim.prototype,'mode',modules[1])
     Object.defineProperty(Vim.prototype,'text',{
         set(val){
-            if(/[^\n]$/.test(val))
-                val+='\n'
             this._text=val
             this._welcomeText=undefined
             this._undoBranchManager.clear()
