@@ -14,16 +14,6 @@ function shift(vim,s,e,count){
             vim._text.substring(b)
     }
 }
-function left(vim,s,e){
-    shift(vim,s,e,m=>
-        Math.max(0,countPadding(vim,m)-vim._options.shiftwidth)
-    )
-}
-function right(vim,s,e){
-    shift(vim,s,e,m=>
-        countPadding(vim,m)+vim._options.shiftwidth
-    )
-}
 function padding(vim,n){
     let
         a=Math.floor(n/vim._options.tabstop),
@@ -35,6 +25,12 @@ function countPadding(vim,s){
     function count(s,c){
         return s.split(c).length-1
     }
+}
+function left(vim,s,e){
+    shift(vim,s,e,m=>Math.max(0,countPadding(vim,m)-vim._options.shiftwidth))
+}
+function right(vim,s,e){
+    shift(vim,s,e,m=>countPadding(vim,m)+vim._options.shiftwidth)
 }
 ({
     left,

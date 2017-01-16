@@ -1,16 +1,15 @@
 Promise.all([
     module.repository.Cli,
-    module.shareImport('viewCursor.js'),
-    module.shareImport('../width.js'),
     module.shareImport('../../../visualRange.js'),
+    module.shareImport('../width.js'),
 ]).then(modules=>{
     let
         Cli=            modules[0],
-        viewCursor=     modules[1],
-        width=          modules[2],
-        visualRange=    modules[3]
-    function createTextContentCli(view,text,showCursor){
+        visualRange=    modules[1],
+        width=          modules[2]
+    function createTextContentCli(view,text,cursor,showCursor){
         let cli=new Cli,rowsCount
+        //let cursor=viewCursor(view._vim)
         {
             let
                 currentRowsCount=0,
@@ -44,15 +43,14 @@ Promise.all([
             rowsCount=currentRowsCount
         }
         if(showCursor)
-            cli.appendChild(cursor(view,text))
+            cli.appendChild(cursorCli(view,text,cursor))
         return{
             textCli:cli,
             rowsCount,
         }
     }
-    function cursor(view,text){
+    function cursorCli(view,text,vc){
         let currentRowsCount=0
-        let vc=viewCursor(view._vim)
         let clientCursor
         text.map(l=>{
             if(!l.rows.length)
