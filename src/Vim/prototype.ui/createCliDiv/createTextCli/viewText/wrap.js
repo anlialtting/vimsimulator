@@ -5,12 +5,12 @@ Promise.all([
     let
         line=       modules[0],
         width=      modules[1]
-    function wrap(view,targetWidth,vc){
+    function wrap(view,text,targetWidth,vc){
         let
             charCount=0,
             viewRowsCount=0,
             cursorViewRow
-        let res=line.lines(view._vim._text||'\n').map((l,j)=>{
+        let res=line.lines(text).map((l,j)=>{
             let rawL=l
             if(view._vim._options.list)
                 l+='$'

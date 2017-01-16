@@ -3,8 +3,8 @@ Promise.all([
 ]).then(modules=>{
     let
         wrap=       modules[0]
-    function viewText(view,targetWidth,vc){
-        let res=wrap(view,targetWidth,vc)
+    function viewText(view,text,targetWidth,vc){
+        let res=wrap(view,text,targetWidth,vc)
         if(view.height){
             checkScroll(view,res.cursorViewRow)
             res.res=cut(view,res.res)
