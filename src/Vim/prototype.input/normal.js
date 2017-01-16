@@ -7,14 +7,32 @@ Promise.all([
         ascii=      modules[1]
     return(vim,val)=>{
         if(typeof val=='object'){
-            if(val.key=='Backspace')
-                val=ascii.bs
-            else if(val.key=='Enter')
-                val=ascii.cr
-            else if(val.key=='Delete')
-                val=ascii.del
-            else if(val.ctrlKey&&val.key=='r')
-                val=String.fromCharCode(17)+'r'
+            if(val.ctrlKey){
+                if(val.key=='r')
+                    val=String.fromCharCode(17)+'r'
+            }else switch(val.key){
+                case 'ArrowLeft':
+                    val='h'
+                    break
+                case 'ArrowRight':
+                    val='l'
+                    break
+                case 'ArrowDown':
+                    val='j'
+                    break
+                case 'ArrowUp':
+                    val='k'
+                    break
+                case 'Backspace':
+                    val=ascii.bs
+                    break
+                case 'Enter':
+                    val=ascii.cr
+                    break
+                case 'Delete':
+                    val=ascii.del
+                    break
+            }
         }
         if(!('command' in vim._modeData))
             vim._modeData.command=''

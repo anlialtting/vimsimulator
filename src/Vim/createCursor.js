@@ -6,7 +6,7 @@ Promise.all([
     function createCursor(vim){
         let cursor=new VimCursor
         Object.defineProperty(cursor,'text',{get(){
-            return vim._text||'\n'
+            return vim._trueText
         }})
         Object.defineProperty(cursor,'mode',{get(){
             return vim._mode
