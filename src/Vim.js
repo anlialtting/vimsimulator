@@ -55,6 +55,19 @@ Promise.all([
         this.emit('view',Object.keys(this._viewChanged))
         this._viewChanged={}
     }
+    Vim.prototype._write=function(){
+        this.emit('write')
+        let
+            l=this._text.split('\n').length-1,
+            c=this._text.length
+        return `<EVENT-DRIVEN> ${l}L, ${c}C written`
+    }
+    Vim.prototype._quit=function(){
+        this.emit('quit')
+    }
+    Object.defineProperty(Vim.prototype,'_mainUi',{get(){
+        return this._values._mainUi||(this._values._mainUi=this.ui)
+    }})
     Object.defineProperty(Vim.prototype,'mode',modules[1])
     Object.defineProperty(Vim.prototype,'text',{
         set(val){
@@ -72,11 +85,8 @@ Promise.all([
     }
     Object.defineProperty(Vim.prototype,'input',modules[3])
     Object.defineProperty(Vim.prototype,'ui',modules[4])
-    Object.defineProperty(Vim.prototype,'_mainUi',{get(){
-        return this._values._mainUi||(this._values._mainUi=this.ui)
-    }})
     Object.defineProperty(Vim.prototype,'div',{get(){
-        return this._mainUi.div
+        return this._mainUi.node
     }})
     Object.defineProperty(Vim.prototype,'height',{set(val){
         this._mainUi.height=val
@@ -84,17 +94,6 @@ Promise.all([
     Object.defineProperty(Vim.prototype,'width',{set(val){
         this._mainUi.width=val
     }})
-    Vim.prototype._write=function(){
-        this.emit('write')
-        let
-            l=this._text.split('\n').length-1,
-            c=this._text.length
-        return `<EVENT-DRIVEN> ${l}L, ${c}C written`
-    }
-    Vim.prototype._quit=function(){
-        this.emit('quit')
-    }
-    Vim.style=style
     Vim.prototype._welcomeText=`\
               VIM - Vi IMproved
 
@@ -107,5 +106,6 @@ Promise.all([
 
 type  :q<Enter>               to exit
 `
+    Vim.style=style
     return Vim
 })

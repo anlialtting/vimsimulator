@@ -14,7 +14,7 @@ Promise.all([
         this._vim=vim
         this._scroll=0
         this._inputTag=createInput(this._vim)
-        this.div=createViewDiv(this)
+        this.node=createViewNode(this)
         this._vim.on('view',()=>
             this._update()
         )
@@ -22,7 +22,7 @@ Promise.all([
     Object.setPrototypeOf(View.prototype,EventEmmiter.prototype)
     Object.defineProperty(View.prototype,'width',{set(val){
         this._width=val
-        this.div.style.width=`${
+        this.node.style.width=`${
             measureWidth(this._vim._fontSize)*this._width
         }px`
         this._update()
@@ -31,7 +31,7 @@ Promise.all([
     }})
     Object.defineProperty(View.prototype,'height',{set(val){
         this._height=val
-        this.div.style.height=`${this._vim._fontSize*this._height}px`
+        this.node.style.height=`${this._vim._fontSize*this._height}px`
         this._update()
     },get(){
         return this._height
@@ -42,7 +42,7 @@ Promise.all([
     View.prototype.focus=function(){
         this._inputTag.focus()
     }
-    function createViewDiv(view){
+    function createViewNode(view){
         let
             vim=view._vim,
             div=document.createElement('div')
