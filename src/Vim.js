@@ -13,19 +13,14 @@ Promise.all([
     module.shareImport('Vim/UndoBranchManager.js'),
     module.style('Vim/style.css'),
     module.shareImport('Vim/prototype._mode.js'),
+    module.shareImport('Vim/defaultOptions.js'),
 ]).then(modules=>{
     let
         EventEmmiter=           modules[0],
         createCursor=           modules[2],
         UndoBranchManager=      modules[5],
-        style=                  modules[6]
-    let defaultOptions={
-        expandtab:  false,
-        list:       false,
-        number:     false,
-        shiftwidth: 8,
-        tabstop:    8,
-    }
+        style=                  modules[6],
+        defaultOptions=         modules[8]
     function Vim(){
         EventEmmiter.call(this)
         this._values={}
@@ -40,6 +35,10 @@ Promise.all([
         this._fontSize=13
     }
     Object.setPrototypeOf(Vim.prototype,EventEmmiter.prototype)
+    Object.defineProperty(Vim.prototype,'_mode',modules[7])
+    Vim.prototype._quit=function(){
+        this.emit('quit')
+    }
     Object.defineProperty(Vim.prototype,'_text',{
         set(val){
             if(/[^\n]$/.test(val))
@@ -50,7 +49,6 @@ Promise.all([
             return this._values.text
         }
     })
-    Object.defineProperty(Vim.prototype,'_mode',modules[7])
     Vim.prototype._view=function(){
         this.emit('view',Object.keys(this._viewChanged))
         this._viewChanged={}
@@ -61,9 +59,6 @@ Promise.all([
             l=this._text.split('\n').length-1,
             c=this._text.length
         return `<EVENT-DRIVEN> ${l}L, ${c}C written`
-    }
-    Vim.prototype._quit=function(){
-        this.emit('quit')
     }
     Object.defineProperty(Vim.prototype,'_mainUi',{get(){
         return this._values._mainUi||(this._values._mainUi=this.ui)
