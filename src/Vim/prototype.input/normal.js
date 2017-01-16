@@ -6,7 +6,7 @@ Promise.all([
         commands=   modules[0],
         ascii=      modules[1]
     return(vim,val)=>{
-        if(val instanceof KeyboardEvent){
+        if(typeof val=='object'){
             if(val.key=='Backspace')
                 val=ascii.bs
             else if(val.key=='Enter')
