@@ -15,7 +15,7 @@ Promise.all([
                     c=vim._text.substring(r.e)
                 vim._text=a+c
                 vim.register={mode:'string',string:b}
-                vim.mode='normal'
+                vim._mode='normal'
                 return
             }
             if(val=='h')
@@ -32,29 +32,29 @@ Promise.all([
                     mode:'string',
                     string:vim._text.substring(r.s,r.e),
                 }
-                vim.mode='normal'
+                vim._mode='normal'
                 return
             }
             if(val=='<'){
                 let r=visualRange(vim)
-                let cursor=vim._cursor.clone
+                let cursor=Object.create(vim._cursor)
                 cursor.moveTo(r.s)
                 let s=cursor.r
                 cursor.moveTo(r.e)
                 let e=cursor.r
                 shift.left(vim,s,e+1)
-                vim.mode='normal'
+                vim._mode='normal'
                 return
             }
             if(val=='>'){
                 let r=visualRange(vim)
-                let cursor=vim._cursor.clone
+                let cursor=Object.create(vim._cursor)
                 cursor.moveTo(r.s)
                 let s=cursor.r
                 cursor.moveTo(r.e)
                 let e=cursor.r
                 shift.right(vim,s,e+1)
-                vim.mode='normal'
+                vim._mode='normal'
                 return
             }
         }else if(typeof val=='object'){
@@ -63,7 +63,7 @@ Promise.all([
                 val.ctrlKey&&val.key=='c'||
                 val.ctrlKey&&val.key=='['
             )
-                return vim.mode='normal'
+                return vim._mode='normal'
         }
     }
     return(vim,val)=>{

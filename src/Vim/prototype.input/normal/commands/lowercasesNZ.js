@@ -7,7 +7,7 @@ function n(vim,cmd,arg){
 }
 function o(vim,cmd,arg){
     vim._text||(vim._text='\n')
-    vim.mode='insert'
+    vim._mode='insert'
     vim._cursor.moveTo(vim._cursor.lineEnd)
     let c=vim._cursor.abs
     vim._text=vim._text.substring(0,c)+'\n'+vim._text.substring(c)
@@ -70,7 +70,7 @@ function u(vim,cmd,arg){
     }
 }
 function v(vim,cmd,arg){
-    vim.mode='visual'
+    vim._mode='visual'
     return{
         acceptable:true,
         complete:true,

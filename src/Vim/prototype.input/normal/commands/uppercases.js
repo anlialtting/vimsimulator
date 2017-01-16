@@ -1,7 +1,7 @@
 function A(vim){
     if(vim._text)
         vim._cursor.moveToEOL()
-    vim.mode='insert'
+    vim._mode='insert'
     return{
         acceptable:true,
         complete:true,
@@ -40,14 +40,14 @@ function I(vim,cmd,arg){
     if(vim._text){
         vim._cursor.moveTo(vim._cursor.lineStart)
     }
-    vim.mode='insert'
+    vim._mode='insert'
     return{
         acceptable:true,
         complete:true,
     }
 }
 function O(vim,cmd,arg){
-    vim.mode='insert'
+    vim._mode='insert'
     vim._text||(vim._text='\n')
     vim._cursor.moveTo(vim._cursor.lineStart)
     let c=vim._cursor.abs

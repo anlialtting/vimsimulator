@@ -21,7 +21,7 @@ function main(vim,val){
             val.ctrlKey&&val.key=='c'||
             val.ctrlKey&&val.key=='['
         )
-            return vim.mode='normal'
+            return vim._mode='normal'
         else if(val.key=='Home')
             vim._modeData.cursor.home
     }else if(typeof val=='string'){
@@ -37,7 +37,7 @@ function main(vim,val){
     }
     let cmd=vim._modeData.inputBuffer
     if(!cmd)
-        return vim.mode='normal'
+        return vim._mode='normal'
     if(!enter)
         return
     let status
@@ -56,7 +56,7 @@ function main(vim,val){
         }
     }else if(cmd[0]=='/'){
     }
-    vim.mode='normal'
+    vim._mode='normal'
     if(status)
         vim._modeData.status=status
 }

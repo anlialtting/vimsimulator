@@ -1,5 +1,5 @@
 function visualRange(vim){
-    if(vim.mode=='visual'){
+    if(vim._mode=='visual'){
         let
             c=vim._modeData.cursor,
             d=vim._cursor.abs

@@ -29,7 +29,7 @@ function main(vim,val){
             val.ctrlKey&&val.key=='c'||
             val.ctrlKey&&val.key=='['
         )
-            return vim.mode='normal'
+            return vim._mode='normal'
         if(
             val.key=='Tab'
         ){

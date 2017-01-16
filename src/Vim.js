@@ -7,15 +7,16 @@ if(!module.repository.EventEmmiter)
 Promise.all([
     module.repository.EventEmmiter,
     module.shareImport('Vim/prototype.mode.js'),
-    module.shareImport('Vim/VimCursor.js'),
+    module.shareImport('Vim/createCursor.js'),
     module.shareImport('Vim/prototype.input.js'),
     module.shareImport('Vim/prototype.ui.js'),
     module.shareImport('Vim/UndoBranchManager.js'),
     module.style('Vim/style.css'),
+    module.shareImport('Vim/prototype._mode.js'),
 ]).then(modules=>{
     let
         EventEmmiter=           modules[0],
-        VimCursor=              modules[2],
+        createCursor=           modules[2],
         UndoBranchManager=      modules[5],
         style=                  modules[6]
     let defaultOptions={
@@ -33,34 +34,21 @@ Promise.all([
         this._text=''
         this._mode='normal'
         this._modeData={}
-        this._cursor=new VimCursor(this)
+        this._cursor=createCursor(this)
         this._undoBranchManager=new UndoBranchManager
         this._undoBranchManager.push('')
         this._fontSize=13
     }
     Object.setPrototypeOf(Vim.prototype,EventEmmiter.prototype)
-    Vim.prototype._welcomeText=`\
-              VIM - Vi IMproved
-
-                 version WEB
-                by An-Li Ting
- Vim is open source and freely distributable
-
-            Thanks Bram Moolenaar,
-       for inventing the original Vim!
-
-type  :q<Enter>               to exit
-`
     Object.defineProperty(Vim.prototype,'_text',{
         set(val){
             this._values.text=val
             this._viewChanged.text=true
-            this._view()
-            this.emit('textChange')
         },get(){
             return this._values.text
         }
     })
+    Object.defineProperty(Vim.prototype,'_mode',modules[7])
     Vim.prototype._view=function(){
         this.emit('view',Object.keys(this._viewChanged))
         this._viewChanged={}
@@ -74,6 +62,7 @@ type  :q<Enter>               to exit
             this._welcomeText=undefined
             this._undoBranchManager.clear()
             this._undoBranchManager.push(this._text)
+            this._view()
         },get(){
             return this._text
         }
@@ -105,5 +94,17 @@ type  :q<Enter>               to exit
         this.emit('quit')
     }
     Vim.style=style
+    Vim.prototype._welcomeText=`\
+              VIM - Vi IMproved
+
+                 version WEB
+                by An-Li Ting
+ Vim is open source and freely distributable
+
+            Thanks Bram Moolenaar,
+       for inventing the original Vim!
+
+type  :q<Enter>               to exit
+`
     return Vim
 })

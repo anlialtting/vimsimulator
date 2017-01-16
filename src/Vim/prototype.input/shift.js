@@ -1,5 +1,5 @@
 function left(vim,s,e){
-    let cursor=vim._cursor.clone
+    let cursor=Object.create(vim._cursor)
     for(;s!=e;s++){
         cursor.r=s
         let
@@ -18,7 +18,7 @@ function left(vim,s,e){
     }
 }
 function right(vim,s,e){
-    let cursor=vim._cursor.clone
+    let cursor=Object.create(vim._cursor)
     for(;s!=e;s++){
         cursor.r=s
         let

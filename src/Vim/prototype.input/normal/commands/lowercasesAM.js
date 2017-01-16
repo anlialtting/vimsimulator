@@ -1,5 +1,5 @@
 function a(vim,cmd,arg){
-    vim.mode='insert'
+    vim._mode='insert'
     if(vim._text)
         vim._cursor.moveRight()
     return{
@@ -58,7 +58,7 @@ function h(vim,cmd,arg){
     }
 }
 function i(vim,cmd,arg){
-    vim.mode='insert'
+    vim._mode='insert'
     return{
         acceptable:true,
         complete:true,
