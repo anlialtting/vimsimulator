@@ -44,6 +44,6 @@ function createTestDiv(vim){
     )
     vim.width=80
     vim.height=24
-    div.appendChild(vim.div)
+    div.appendChild(vim.node)
     return div
 }

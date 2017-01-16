@@ -85,7 +85,7 @@ Promise.all([
     }
     Object.defineProperty(Vim.prototype,'input',modules[3])
     Object.defineProperty(Vim.prototype,'ui',modules[4])
-    Object.defineProperty(Vim.prototype,'div',{get(){
+    Object.defineProperty(Vim.prototype,'node',{get(){
         return this._mainUi.node
     }})
     Object.defineProperty(Vim.prototype,'height',{set(val){
