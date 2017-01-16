@@ -14,7 +14,7 @@ Promise.all([
                     b=vim._text.substring(r.s,r.e),
                     c=vim._text.substring(r.e)
                 vim._text=a+c
-                vim.register={mode:'string',string:b}
+                vim._registers['"']={mode:'string',string:b}
                 vim._mode='normal'
                 return
             }
@@ -28,7 +28,7 @@ Promise.all([
                 return vim._cursor.moveRight()
             if(val=='y'){
                 let r=visualRange(vim)
-                vim.register={
+                vim._registers['"']={
                     mode:'string',
                     string:vim._text.substring(r.s,r.e),
                 }

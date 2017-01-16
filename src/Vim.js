@@ -28,6 +28,7 @@ Promise.all([
         this._viewChanged=[]
         this._text=''
         this._mode='normal'
+        this._registers={}
         this._modeData={}
         this._cursor=createCursor(this)
         this._undoBranchManager=new UndoBranchManager

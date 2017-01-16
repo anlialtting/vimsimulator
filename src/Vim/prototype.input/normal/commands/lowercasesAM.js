@@ -17,7 +17,7 @@ function d(vim,cmd,arg){
             let
                 a=vim._cursor.line(vim._cursor.r),
                 b=vim._cursor.line(vim._cursor.r+arg)
-            vim.register={
+            vim._registers['"']={
                 mode:'line',
                 string:vim._text.substring(a,b),
             }

@@ -11,7 +11,7 @@ function D(vim,cmd,arg){
     let
         a=vim._cursor.abs,
         b=vim._cursor.lineEnd-1
-    vim.register={
+    vim._registers['"']={
         mode:'string',
         string:vim._trueText.substring(a,b),
     }
@@ -53,23 +53,23 @@ function O(vim,cmd,arg){
     }
 }
 function P(vim,cmd,arg){
-    if(!vim.register)
+    if(!vim._registers['"'])
         return{
             acceptable:true,
             complete:true,
         }
-    if(vim.register.mode=='string'){
+    if(vim._registers['"'].mode=='string'){
         let c=vim._cursor.abs
         vim._text=
             vim._trueText.substring(0,c)+
-            vim.register.string+
+            vim._registers['"'].string+
             vim._trueText.substring(c)
-        vim._cursor.moveTo(c+vim.register.string.length-1)
-    }else if(vim.register.mode=='line'){
+        vim._cursor.moveTo(c+vim._registers['"'].string.length-1)
+    }else if(vim._registers['"'].mode=='line'){
         let c=vim._cursor.lineStart
         vim._text=
             vim._trueText.substring(0,c)+
-            vim.register.string+
+            vim._registers['"'].string+
             vim._trueText.substring(c)
         vim._cursor.moveTo(vim._cursor.lineStart)
     }

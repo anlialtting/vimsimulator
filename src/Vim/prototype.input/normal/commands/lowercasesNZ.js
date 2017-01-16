@@ -18,24 +18,24 @@ function o(vim,cmd,arg){
     }
 }
 function p(vim,cmd,arg){
-    if(!vim.register)
+    if(!vim._registers['"'])
         return{
             acceptable:true,
             complete:true,
         }
     vim._text||(vim._text='\n')
-    if(vim.register.mode=='string'){
+    if(vim._registers['"'].mode=='string'){
         let c=vim._cursor.abs
         vim._text=
             vim._text.substring(0,c+1)+
-            vim.register.string+
+            vim._registers['"'].string+
             vim._text.substring(c+1)
-        vim._cursor.moveTo(c+vim.register.string.length)
-    }else if(vim.register.mode=='line'){
+        vim._cursor.moveTo(c+vim._registers['"'].string.length)
+    }else if(vim._registers['"'].mode=='line'){
         let c=vim._cursor.lineEnd
         vim._text=
             vim._text.substring(0,c)+
-            vim.register.string+
+            vim._registers['"'].string+
             vim._text.substring(c)
         vim._cursor.moveTo(vim._cursor.lineEnd)
     }
@@ -97,7 +97,7 @@ function y(vim,cmd,arg){
             let
                 a=vim._cursor.line(vim._cursor.r),
                 b=vim._cursor.line(vim._cursor.r+arg)
-            vim.register={
+            vim._registers['"']={
                 mode:'line',
                 string:vim._text.substring(a,b),
             }
