@@ -55,8 +55,8 @@ Promise.all([
                     text.substring(cursor,cursor+1)||' ',
                 c:cursor,
                 style:{
-                    backgroundColor:'black',
-                    color:'white',
+                    backgroundColor:'var(--foreground-color)',
+                    color:'var(--background-color)',
                 }
             })
             cli.flush()

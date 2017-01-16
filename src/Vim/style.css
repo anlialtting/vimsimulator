@@ -1,5 +1,9 @@
 div.webvim{
+    --background-color:black;
+    --foreground-color:lightgray;
+    --middle-color:gray;
     position:relative;
+    background-color:var(--background-color);
 }
 div.webvim div.cli{
     position:relative;
@@ -9,6 +13,8 @@ div.webvim div.cli{
 }
 div.webvim div.cli>div{
     position:absolute;
+    color:var(--foreground-color);
+    background-color:var(--background-color);
 }
 div.webvim>textarea.input{
     font-family:monospace;
@@ -19,7 +25,7 @@ div.webvim>textarea.input{
     overflow:hidden;
     outline:none;
     width:0;
-    color:white;
-    background-color:black;
+    color:var(--background-color);
+    background-color:var(--foreground-color);
     z-index:1;
 }

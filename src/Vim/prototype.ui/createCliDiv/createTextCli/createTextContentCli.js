@@ -34,7 +34,7 @@ Promise.all([
                             highlightRange.s<=rowStart+i&&
                             rowStart+i<highlightRange.e
                         )
-                            o.style={backgroundColor:'gray'}
+                            o.style={backgroundColor:'var(--middle-color)'}
                         cli.appendChild(o)
                     }
                     currentRowsCount++
@@ -81,8 +81,8 @@ Promise.all([
             r:clientCursor.row,
             c:clientCursor.col,
             style:{
-                backgroundColor:'black',
-                color:'white',
+                backgroundColor:'var(--foreground-color)',
+                color:'var(--background-color)',
             }
         }
     }
