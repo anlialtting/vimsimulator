@@ -9,11 +9,11 @@ Promise.all([
         width=          modules[2]
     function createTextContentCli(view,text,cursor,showCursor){
         let cli=new Cli,rowsCount
-        //let cursor=viewCursor(view._vim)
         {
             let
                 currentRowsCount=0,
-                highlightRange=visualRange(view._vim)
+                highlightRange=
+                    view._vim._mode=='visual'&&visualRange(view._vim)
             text.map(l=>{
                 if(!l.rows.length)
                     currentRowsCount++
