@@ -66,7 +66,7 @@ Promise.all([
         let
             l=this._text.split('\n').length-1,
             c=this._text.length
-        return `<EVENT-DRIVEN> ${l}L, ${c}C written`
+        return `<EMMITING-EVENT> ${l}L, ${c}C written`
     }
     Object.defineProperty(Vim.prototype,'_mainUi',{get(){
         return this._values._mainUi||(this._values._mainUi=this.ui)
