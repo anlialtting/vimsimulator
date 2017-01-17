@@ -22,16 +22,12 @@ Promise.all([
     Object.setPrototypeOf(View.prototype,EventEmmiter.prototype)
     Object.defineProperty(View.prototype,'width',{set(val){
         this._width=val
-        this.node.style.width=`${
-            measureWidth(this._vim._fontSize)*this._width
-        }px`
         this._update()
     },get(){
         return this._width
     }})
     Object.defineProperty(View.prototype,'height',{set(val){
         this._height=val
-        this.node.style.height=`${this._vim._fontSize*this._height}px`
         this._update()
     },get(){
         return this._height

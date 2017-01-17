@@ -1,4 +1,8 @@
 function update(view){
+    if(view._cli._width)
+        view.node.style.width=`${view._cli._width*view._fontWidth}px`
+    if(view._cli._height)
+        view.node.style.height=`${view._cli._height*view._fontSize}px`
     view._listeners.map(doc=>
         doc.cli.removeListener('view',doc.listener)
     )
@@ -39,8 +43,8 @@ function dfs(view,cli,dr,dc){
             view._divs[r]={}
         if(!(c in view._divs[r])){
             let div=document.createElement('div')
-            div.style.top=`${r*cli._fontSize}px`
-            div.style.left=`${c*cli._fontWidth}px`
+            div.style.top=`${r*view._fontSize}px`
+            div.style.left=`${c*view._fontWidth}px`
             view._divs[r][c]=div
             view.node.appendChild(div)
         }

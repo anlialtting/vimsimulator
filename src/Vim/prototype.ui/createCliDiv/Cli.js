@@ -13,11 +13,18 @@ Promise.all([
         EventEmmiter.call(this)
         this._children=[]
         this._fontSize=13
-        this._fontWidth=measureWidth(13)
     }
     Object.setPrototypeOf(Cli.prototype,EventEmmiter.prototype)
     Object.defineProperty(Cli.prototype,'view',{get(){
-        return new View(this)
+        return new View(this,this._fontSize)
+    }})
+    Object.defineProperty(Cli.prototype,'width',{set(val){
+        this._width=val
+        this.emit('view')
+    }})
+    Object.defineProperty(Cli.prototype,'height',{set(val){
+        this._height=val
+        this.emit('view')
     }})
     Cli.prototype.clear=function(){
         this._flushed=false
