@@ -3,18 +3,17 @@ div.webvim{
     --foreground-color:lightgray;
     --middle-color:gray;
     position:relative;
-    background-color:var(--background-color);
 }
 div.webvim div.cli{
     position:relative;
     font-family:monospace;
     white-space:pre;
     line-height:1;
+    color:var(--foreground-color);
+    background-color:var(--background-color);
 }
 div.webvim div.cli>div{
     position:absolute;
-    color:var(--foreground-color);
-    background-color:var(--background-color);
 }
 div.webvim>textarea.input{
     font-family:monospace;
