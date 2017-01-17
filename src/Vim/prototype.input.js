@@ -12,7 +12,6 @@ Promise.all([
             cmdline:    modules[3],
         }
     return{set(val){
-        console.log(this._cursor.abs)
         modes[this.mode](this,val)
     }}
 })
