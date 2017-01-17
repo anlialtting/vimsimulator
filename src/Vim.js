@@ -104,11 +104,8 @@ Promise.all([
 
                  version 0
                by An-Li Ting
- Web Vim is an editor simulating Vim on Web.
 
- Thanks Bram Moolenaar for the original Vim!
-
-type  :q<Enter>               to exit
+Thanks Bram Moolenaar for the original Vim!
 `
     return Vim
 })
