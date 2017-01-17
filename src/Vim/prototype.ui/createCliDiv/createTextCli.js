@@ -9,12 +9,16 @@ Promise.all([
         createTextContentCli=   modules[2],
         refreshTime=            33
     function createTextCli(view){
-        let cli=new Cli
+        let
+            cli=new Cli,
+            updated=false
         f()
-        view.on('update',f)
-        setInterval(()=>cli.flush(),refreshTime)
+        view.on('update',()=>updated=false)
+        setInterval(f,refreshTime)
         return cli
         function f(){
+            if(updated)
+                return
             cli.clear()
             build(
                 cli,
@@ -29,6 +33,8 @@ Promise.all([
                 document.activeElement==view._inputTag&&
                 view._vim.mode!='cmdline'
             )
+            cli.flush()
+            updated=true
         }
     }
     function build(cli,view,text,cursor,showCursor){

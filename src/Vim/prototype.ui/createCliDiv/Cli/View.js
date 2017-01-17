@@ -22,10 +22,14 @@ Promise.all([
     Object.defineProperty(View.prototype,'width',{set(val){
         this._width=val
         update(this)
+    },get(){
+        return this._width
     }})
     Object.defineProperty(View.prototype,'height',{set(val){
         this._height=val
         update(this)
+    },get(){
+        return this._height
     }})
     View.prototype.free=function(){
         this._cli.removeListener('view',this._listener)

@@ -21,9 +21,9 @@ Promise.all([
         view.on('update',update)
         return cliView.node
         function update(){
-            if(view._width)
+            if(cliView.width!=view._width)
                 cliView.width=view._width
-            if(view._height)
+            if(cliView.height!=view._height)
                 cliView.height=view._height
             let r=view._height-1||vim._cursor._countOfRows||1
             if(
