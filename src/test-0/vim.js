@@ -20,7 +20,7 @@ Promise.all([
     vim.focus()
     function createVim(){
         let vim=new Vim
-        //vim.text=('a'.repeat(80)+'\n').repeat(23)
+        vim.text=('a'.repeat(80)+'\n').repeat(23)
         /*vim.text=`<!doctype html>
 <html>
     <head>

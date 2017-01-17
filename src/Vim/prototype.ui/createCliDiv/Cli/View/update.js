@@ -7,9 +7,8 @@ function update(view){
         doc.cli.removeListener('view',doc.listener)
     )
     view._listeners=[]
-    view._used.map(n=>
-        n.textContent=''
-    )
+    // bottleneck
+    view._used.map(n=>n.textContent='')
     view._used=[]
     dfs(view,view._cli,0,0)
 }
