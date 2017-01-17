@@ -11,16 +11,18 @@ Promise.all([
     module.shareImport('Vim/prototype.input.js'),
     module.shareImport('Vim/prototype.ui.js'),
     module.shareImport('Vim/UndoBranchManager.js'),
-    module.style('Vim/style.css'),
+    module.get('Vim/style.css'),
     module.shareImport('Vim/prototype._mode.js'),
     module.shareImport('Vim/defaultOptions.js'),
+    module.get('Vim/colors.css'),
 ]).then(modules=>{
     let
         EventEmmiter=           modules[0],
         createCursor=           modules[2],
         UndoBranchManager=      modules[5],
         style=                  modules[6],
-        defaultOptions=         modules[8]
+        defaultOptions=         modules[8],
+        colors=                 modules[9]
     function Vim(){
         EventEmmiter.call(this)
         this._values={}
@@ -34,6 +36,9 @@ Promise.all([
         this._undoBranchManager=new UndoBranchManager
         this._undoBranchManager.push('')
         this._fontSize=13
+        this.style=document.createElement('style')
+        this.style.appendChild(document.createTextNode(style))
+        this.style.appendChild(document.createTextNode(colors))
     }
     Object.setPrototypeOf(Vim.prototype,EventEmmiter.prototype)
     Object.defineProperty(Vim.prototype,'_mode',modules[7])
@@ -104,6 +109,5 @@ Promise.all([
 
 type  :q<Enter>               to exit
 `
-    Vim.style=style
     return Vim
 })

@@ -1,7 +1,4 @@
 div.webvim{
-    --background-color:black;
-    --foreground-color:lightgray;
-    --middle-color:gray;
     position:relative;
 }
 div.webvim div.cli{

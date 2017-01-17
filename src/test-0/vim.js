@@ -10,11 +10,11 @@ Promise.all([
     let vim=createVim()
     let vimViewDiv=createTestDiv(vim)
     document.head.appendChild(style)
-    document.head.appendChild(Vim.style)
+    document.head.appendChild(vim.style)
     document.body.appendChild(vimViewDiv)
     vim.on('quit',()=>{
         document.head.removeChild(style)
-        document.head.removeChild(Vim.style)
+        document.head.removeChild(vim.style)
         document.body.removeChild(vimViewDiv)
     })
     vim.focus()

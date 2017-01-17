@@ -13,17 +13,18 @@ Promise.all([
         let
             vim=view._vim,
             cli=new Cli,
+            cliView=cli.view,
             currentR,
             currentWelcomeText
         view._commandCli=createCommandCli(vim)
         update()
         view.on('update',update)
-        return cli.view.node
+        return cliView.node
         function update(){
             if(view._width)
-                cli.width=view._width
+                cliView.width=view._width
             if(view._height)
-                cli.height=view._height
+                cliView.height=view._height
             let r=view._height-1||vim._cursor._countOfRows||1
             if(
                 currentR==r&&

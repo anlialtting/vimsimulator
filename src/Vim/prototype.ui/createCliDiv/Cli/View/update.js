@@ -1,8 +1,8 @@
 function update(view){
-    if(view._cli._width)
-        view.node.style.width=`${view._cli._width*view._fontWidth}px`
-    if(view._cli._height)
-        view.node.style.height=`${view._cli._height*view._fontSize}px`
+    if(view._width)
+        view.node.style.width=`${view._width*view._fontWidth}px`
+    if(view._height)
+        view.node.style.height=`${view._height*view._fontSize}px`
     view._listeners.map(doc=>
         doc.cli.removeListener('view',doc.listener)
     )

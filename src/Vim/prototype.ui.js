@@ -9,7 +9,7 @@ Promise.all([
         measureWidth=       modules[1],
         createInput=        modules[2],
         EventEmmiter=       modules[3]
-    function View(vim){
+    function Ui(vim){
         EventEmmiter.call(this)
         this._vim=vim
         this._scroll=0
@@ -19,23 +19,23 @@ Promise.all([
             this._update()
         )
     }
-    Object.setPrototypeOf(View.prototype,EventEmmiter.prototype)
-    Object.defineProperty(View.prototype,'width',{set(val){
+    Object.setPrototypeOf(Ui.prototype,EventEmmiter.prototype)
+    Object.defineProperty(Ui.prototype,'width',{set(val){
         this._width=val
         this._update()
     },get(){
         return this._width
     }})
-    Object.defineProperty(View.prototype,'height',{set(val){
+    Object.defineProperty(Ui.prototype,'height',{set(val){
         this._height=val
         this._update()
     },get(){
         return this._height
     }})
-    View.prototype._update=function(){
+    Ui.prototype._update=function(){
         this.emit('update')
     }
-    View.prototype.focus=function(){
+    Ui.prototype.focus=function(){
         this._inputTag.focus()
     }
     function createViewNode(view){
@@ -58,6 +58,6 @@ Promise.all([
         return div
     }
     return{get(){
-        return new View(this)
+        return new Ui(this)
     }}
 })

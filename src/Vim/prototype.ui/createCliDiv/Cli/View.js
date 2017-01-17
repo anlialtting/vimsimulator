@@ -1,5 +1,5 @@
 Promise.all([
-    module.shareImport('update.js'),
+    module.shareImport('View/update.js'),
     module.shareImport('../../measureWidth.js'),
 ]).then(modules=>{
     let
@@ -19,6 +19,14 @@ Promise.all([
         update(this)
         this._cli.on('view',this._listener=()=>update(this))
     }
+    Object.defineProperty(View.prototype,'width',{set(val){
+        this._width=val
+        update(this)
+    }})
+    Object.defineProperty(View.prototype,'height',{set(val){
+        this._height=val
+        update(this)
+    }})
     View.prototype.free=function(){
         this._cli.removeListener('view',this._listener)
     }
