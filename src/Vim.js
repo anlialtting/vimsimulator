@@ -6,7 +6,7 @@ if(!module.repository.EventEmmiter)
     )
 Promise.all([
     module.repository.EventEmmiter,
-    module.shareImport('Vim/prototype.mode.js'),
+    module.get('Vim/colors.css'),
     module.shareImport('Vim/createCursor.js'),
     module.shareImport('Vim/prototype.input.js'),
     module.shareImport('Vim/prototype.ui.js'),
@@ -14,15 +14,14 @@ Promise.all([
     module.get('Vim/style.css'),
     module.shareImport('Vim/prototype._mode.js'),
     module.shareImport('Vim/defaultOptions.js'),
-    module.get('Vim/colors.css'),
 ]).then(modules=>{
     let
         EventEmmiter=           modules[0],
+        colors=                 modules[1],
         createCursor=           modules[2],
         UndoBranchManager=      modules[5],
         style=                  modules[6],
-        defaultOptions=         modules[8],
-        colors=                 modules[9]
+        defaultOptions=         modules[8]
     function Vim(){
         EventEmmiter.call(this)
         this._values={}
@@ -72,7 +71,9 @@ Promise.all([
     Object.defineProperty(Vim.prototype,'_mainUi',{get(){
         return this._values._mainUi||(this._values._mainUi=this.ui)
     }})
-    Object.defineProperty(Vim.prototype,'mode',modules[1])
+    Object.defineProperty(Vim.prototype,'mode',{get(){
+        return this._mode
+    }})
     Object.defineProperty(Vim.prototype,'text',{
         set(val){
             this._text=val

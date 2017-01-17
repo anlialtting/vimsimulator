@@ -20,7 +20,10 @@ Object.defineProperty(Cursor.prototype,'c',{set(val){
     return Math.min(availableCols(this)-1,Math.max(0,this._x))
 }})
 function availableCols(c){
-    if(c.mode=='normal')
+    if(
+        c.mode=='normal'||
+        c.mode=='cmdline'
+    )
         return Math.max(1,c._countOfCols)
     if(
         c.mode=='visual'||
