@@ -7,7 +7,7 @@ Promise.all([
         Cli=                    modules[0],
         viewText=               modules[1],
         createTextContentCli=   modules[2],
-        refreshTime=            33
+        refreshTime=            20
     function createTextCli(view){
         let
             cli=new Cli,
