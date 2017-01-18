@@ -6,15 +6,14 @@ Promise.all([
     let
         Cli=                    modules[0],
         viewText=               modules[1],
-        createTextContentCli=   modules[2],
-        refreshTime=            20
-    function createTextCli(view){
+        createTextContentCli=   modules[2]
+    function createTextCli(ui){
         let
             cli=new Cli,
             updated=false
         f()
-        view.on('update',()=>updated=false)
-        setInterval(f,refreshTime)
+        ui.on('update',()=>updated=false)
+        setInterval(f,ui.refreshMinTime)
         return cli
         function f(){
             if(updated)
@@ -22,24 +21,24 @@ Promise.all([
             cli.clear()
             build(
                 cli,
-                view,
+                ui,
                 viewText(
-                    view,
-                    view._vim._text||'\n',
-                    view._vim._options.number?view.width-4:view.width,
-                    view._vim._cursor
+                    ui,
+                    ui._vim._text||'\n',
+                    ui._vim._options.number?ui.width-4:ui.width,
+                    ui._vim._cursor
                 ),
-                view._vim._cursor,
-                document.activeElement==view._inputTag&&
-                view._vim.mode!='cmdline'
+                ui._vim._cursor,
+                document.activeElement==ui._inputTag&&
+                ui._vim.mode!='cmdline'
             )
             cli.flush()
             updated=true
         }
     }
-    function build(cli,view,text,cursor,showCursor){
-        let res=createTextContentCli(view,text,cursor,showCursor)
-        if(view._vim._options.number){
+    function build(cli,ui,text,cursor,showCursor){
+        let res=createTextContentCli(ui,text,cursor,showCursor)
+        if(ui._vim._options.number){
             cli.appendChild(number(text))
             cli.appendChild({
                 child:res.textCli,
@@ -48,7 +47,7 @@ Promise.all([
         }else{
             cli.appendChild(res.textCli)
         }
-        for(let r=res.rowsCount;r<view.height-1;r++)
+        for(let r=res.rowsCount;r<ui.height-1;r++)
             cli.appendChild({child:'~',r})
         return cli
     }

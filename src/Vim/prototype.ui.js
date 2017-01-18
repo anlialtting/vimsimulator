@@ -15,6 +15,7 @@ Promise.all([
         this._scroll=0
         this._inputTag=createInput(this._vim)
         this.node=createViewNode(this)
+        this._refreshMinTime=20
         this._vim.on('view',()=>
             this._update()
         )
@@ -38,22 +39,22 @@ Promise.all([
     Ui.prototype.focus=function(){
         this._inputTag.focus()
     }
-    function createViewNode(view){
+    function createViewNode(ui){
         let
-            vim=view._vim,
+            vim=ui._vim,
             div=document.createElement('div')
         div.className='webvim'
-        div.appendChild(createCliDiv(view))
-        div.appendChild(view._inputTag)
+        div.appendChild(createCliDiv(ui))
+        div.appendChild(ui._inputTag)
         vim.on('view',changed=>{
-            if(view._cursor){
-                view._inputTag.style.left=`${
-                    view._cursor.c*measureWidth(view._vim.fontSize)
-                }px`
-                view._inputTag.style.top=`${
-                    view._cursor.r*view._vim._fontSize
-                }px`
-            }
+            if(!ui._cursor)
+                return
+            ui._inputTag.style.left=`${
+                ui._cursor.c*measureWidth(ui._vim.fontSize)
+            }px`
+            ui._inputTag.style.top=`${
+                ui._cursor.r*ui._vim._fontSize
+            }px`
         })
         return div
     }
