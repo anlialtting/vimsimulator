@@ -1,3 +1,4 @@
+let highlightStyle={backgroundColor:'var(--middle-color)'}
 Promise.all([
     module.repository.Cli,
     module.shareImport('../../../visualRange.js'),
@@ -34,7 +35,7 @@ Promise.all([
                             highlightRange.s<=rowStart+i&&
                             rowStart+i<highlightRange.e
                         )
-                            o.style={backgroundColor:'var(--middle-color)'}
+                            o.style=highlightStyle
                         cli.appendChild(o)
                     }
                     currentRowsCount++

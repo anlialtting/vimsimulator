@@ -11,7 +11,7 @@ Promise.all([
         this._children=[]
         this._divs={}
         this._listeners=[]
-        this._used=[]
+        this._previousArray={}
         this._fontWidth=measureWidth(this._fontSize)
         this.node=document.createElement('div')
         this.node.className='cli'
