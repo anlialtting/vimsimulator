@@ -7,14 +7,11 @@ function update(view){
         doc.cli.removeListener('view',doc.listener)
     )
     view._listeners=[]
-    // bottleneck
-    let s=new Date
     {
         let a=dfs(view,view._cli,0,0)
         reuseWrite(view,a,view._previousArray)
         view._previousArray=a
     }
-    console.log(new Date-s)
 }
 function dfs(view,cli,dr,dc,o){
     o||(o={})
