@@ -35,7 +35,8 @@ Promise.all([
         this._undoBranchManager=new UndoBranchManager
         this._undoBranchManager.push('')
         this._fontSize=13
-        this.style=document.createElement('style')
+        this._styleManager=new StyleManager
+        this.style=this._styleManager.style
         this.style.appendChild(document.createTextNode(style))
         this.style.appendChild(document.createTextNode(colors))
     }
@@ -109,3 +110,6 @@ Thanks Bram Moolenaar for the original Vim!
 `
     return Vim
 })
+function StyleManager(){
+    this.style=document.createElement('style')
+}

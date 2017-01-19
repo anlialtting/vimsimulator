@@ -15,7 +15,7 @@ Promise.all([
         this._scroll=0
         this._inputTag=createInput(this._vim)
         this.node=createViewNode(this)
-        this._refreshMinTime=20
+        this._refreshMinTime=16
         this._vim.on('view',()=>
             this._update()
         )
