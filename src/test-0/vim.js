@@ -1,28 +1,14 @@
 module.rootScript.parentNode.removeChild(module.rootScript)
 module.debug=true
-let testdata={
-    longText:'a'.repeat(16384),
-    fullScreen:('a'.repeat(80)+'\n').repeat(23),
-    htmlDoc:`<!doctype html>
-<html>
-    <head>
-        <title>Title</title>
-    </head>
-    <body>
-        <!-- this is a comment -->
-        <p>
-            存在先於本質
-    </body>
-</html>
-`,
-}
 Promise.all([
     module.shareImport('../Vim.js'),
     module.styleByPath('vim.css'),
+    module.shareImport('testdata.js'),
 ]).then(modules=>{
     let
         Vim=modules[0],
-        style=modules[1]
+        style=modules[1],
+        testdata=modules[2]
     let vim=createVim()
     let vimViewDiv=createTestDiv(vim)
     document.head.appendChild(style)
@@ -36,7 +22,7 @@ Promise.all([
     vim.focus()
     function createVim(){
         let vim=new Vim
-        vim.text=testdata.longText
+        //vim.text=testdata.longText
         return vim
     }
 })
