@@ -1,22 +1,19 @@
 Promise.all([
     module.repository.EventEmmiter,
-    module.shareImport('../measureWidth.js'),
     module.shareImport('width.js'),
     module.shareImport('Cli/View.js'),
 ]).then(modules=>{
     let
         EventEmmiter=   modules[0],
-        measureWidth=   modules[1],
-        width=          modules[2],
-        View=           modules[3]
+        width=          modules[1],
+        View=           modules[2]
     function Cli(){
         EventEmmiter.call(this)
         this._children=[]
-        this._fontSize=13
     }
     Object.setPrototypeOf(Cli.prototype,EventEmmiter.prototype)
     Object.defineProperty(Cli.prototype,'view',{get(){
-        return new View(this,this._fontSize)
+        return new View(this)
     }})
     Cli.prototype.clear=function(){
         this._flushed=false
