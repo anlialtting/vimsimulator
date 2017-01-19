@@ -37,8 +37,6 @@ Promise.all([
         this._fontSize=13
         this._styleManager=new StyleManager
         this.style=this._styleManager.style
-        this.style.appendChild(document.createTextNode(style))
-        this.style.appendChild(document.createTextNode(colors))
     }
     Object.setPrototypeOf(Vim.prototype,EventEmmiter.prototype)
     Object.defineProperty(Vim.prototype,'_mode',modules[7])
@@ -112,4 +110,6 @@ Thanks Bram Moolenaar for the original Vim!
 })
 function StyleManager(){
     this.style=document.createElement('style')
+    this.style.appendChild(document.createTextNode(style))
+    this.style.appendChild(document.createTextNode(colors))
 }
