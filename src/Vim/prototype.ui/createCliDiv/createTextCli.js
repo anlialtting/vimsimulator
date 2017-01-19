@@ -20,9 +20,11 @@ Promise.all([
             build(
                 cli,
                 ui,
+                ui._vim._text||'\n',
                 ui._vim._cursor,
                 document.activeElement==ui._inputTag&&
-                ui._vim.mode!='cmdline'
+                    ui._vim.mode!='cmdline',
+                ui._vim._options.number
             )
             cli.flush()
             updated=true
