@@ -107,9 +107,9 @@ Promise.all([
 Thanks Bram Moolenaar for the original Vim!
 `
     return Vim
+    function StyleManager(){
+        this.style=document.createElement('style')
+        this.style.appendChild(document.createTextNode(style))
+        this.style.appendChild(document.createTextNode(colors))
+    }
 })
-function StyleManager(){
-    this.style=document.createElement('style')
-    this.style.appendChild(document.createTextNode(style))
-    this.style.appendChild(document.createTextNode(colors))
-}

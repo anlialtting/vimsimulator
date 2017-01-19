@@ -50,7 +50,7 @@ Promise.all([
             if(!ui._cursor)
                 return
             ui._inputTag.style.left=`${
-                ui._cursor.c*measureWidth(ui._vim.fontSize)
+                ui._cursor.c*measureWidth(ui._vim._fontSize)
             }px`
             ui._inputTag.style.top=`${
                 ui._cursor.r*ui._vim._fontSize
