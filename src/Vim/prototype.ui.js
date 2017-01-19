@@ -12,6 +12,7 @@ Promise.all([
     function Ui(vim){
         EventEmmiter.call(this)
         this._vim=vim
+        this._fontSize=this._vim._fontSize
         this._scroll=0
         this._inputTag=createInput(this._vim)
         this.node=createViewNode(this)
@@ -50,10 +51,10 @@ Promise.all([
             if(!ui._cursor)
                 return
             ui._inputTag.style.left=`${
-                ui._cursor.c*measureWidth(ui._vim._fontSize)
+                ui._cursor.c*measureWidth(ui._fontSize)
             }px`
             ui._inputTag.style.top=`${
-                ui._cursor.r*ui._vim._fontSize
+                ui._cursor.r*ui._fontSize
             }px`
         })
         return div

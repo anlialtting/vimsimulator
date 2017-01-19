@@ -17,6 +17,7 @@ Promise.all([
             currentR,
             currentWelcomeText
         view._commandCli=createCommandCli(vim)
+        cliView.fontSize=view._fontSize
         update()
         view.on('update',update)
         return cliView.node

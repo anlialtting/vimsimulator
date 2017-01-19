@@ -5,9 +5,9 @@ Promise.all([
     let
         update=modules[0],
         measureWidth=modules[1]
-    function View(cli,fontSize){
+    function View(cli){
         this._cli=cli
-        this._fontSize=fontSize
+        this._fontSize=13
         this._children=[]
         this._divs={}
         this._listeners=[]
@@ -30,6 +30,10 @@ Promise.all([
         update(this)
     },get(){
         return this._height
+    }})
+    Object.defineProperty(View.prototype,'fontSize',{set(val){
+        this._fontSize=val
+        update(this)
     }})
     View.prototype.free=function(){
         this._cli.removeListener('view',this._listener)
