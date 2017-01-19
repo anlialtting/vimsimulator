@@ -15,7 +15,6 @@ Promise.all([
         this._fontWidth=measureWidth(this._fontSize)
         this.node=document.createElement('div')
         this.node.className='cli'
-        this.node.style.fontSize=`${this._fontSize}px`
         update(this)
         this._cli.on('view',this._listener=()=>update(this))
     }
@@ -33,6 +32,8 @@ Promise.all([
     }})
     Object.defineProperty(View.prototype,'fontSize',{set(val){
         this._fontSize=val
+        this._fontWidth=measureWidth(this._fontSize)
+        this.node.style.fontSize=`${this._fontSize}px`
         update(this)
     }})
     View.prototype.free=function(){
