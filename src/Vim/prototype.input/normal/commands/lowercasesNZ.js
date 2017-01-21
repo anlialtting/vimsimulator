@@ -70,7 +70,9 @@ function u(vim,cmd,arg){
     }
 }
 function v(vim,cmd,arg){
+    let c=vim._cursor.abs
     vim._mode='visual'
+    vim._cursor.moveTo(c)
     return{
         acceptable:true,
         complete:true,
