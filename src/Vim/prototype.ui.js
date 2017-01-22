@@ -14,12 +14,9 @@ Promise.all([
         this._vim=vim
         this._fontSize=this._vim._fontSize
         this._scroll=0
-        this._inputTag=createInput(this._vim)
-        this.node=createViewNode(this)
         this._refreshMinTime=16
-        this._vim.on('view',()=>
-            this._update()
-        )
+        this.node=createViewNode(this)
+        this._vim.on('view',()=>this._update())
     }
     Object.setPrototypeOf(Ui.prototype,EventEmmiter.prototype)
     Object.defineProperty(Ui.prototype,'width',{set(val){
@@ -43,10 +40,11 @@ Promise.all([
     function createViewNode(ui){
         let
             vim=ui._vim,
-            div=document.createElement('div')
-        div.className='webvim'
-        div.appendChild(createCliDiv(ui))
-        div.appendChild(ui._inputTag)
+            n=document.createElement('div')
+        n.className='webvim'
+        n.appendChild(createCliDiv(ui))
+        ui._inputTag=createInput(ui._vim)
+        n.appendChild(ui._inputTag)
         vim.on('view',changed=>{
             if(!ui._cursor)
                 return
@@ -57,7 +55,7 @@ Promise.all([
                 ui._cursor.r*ui._fontSize
             }px`
         })
-        return div
+        return n
     }
     return{get(){
         return new Ui(this)

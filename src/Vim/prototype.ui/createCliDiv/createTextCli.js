@@ -11,7 +11,7 @@ Promise.all([
             updated=false
         f()
         ui.on('update',()=>updated=false)
-        setInterval(f,ui.refreshMinTime)
+        setInterval(f,ui._refreshMinTime)
         return cli
         function f(){
             if(updated)
