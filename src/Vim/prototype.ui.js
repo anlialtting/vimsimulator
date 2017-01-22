@@ -12,13 +12,19 @@ Promise.all([
     function Ui(vim){
         EventEmmiter.call(this)
         this._vim=vim
-        this._fontSize=this._vim._fontSize
+        this._fontSize=13
         this._scroll=0
         this._refreshMinTime=16
         this.node=createViewNode(this)
         this._vim.on('view',()=>this._update())
     }
     Object.setPrototypeOf(Ui.prototype,EventEmmiter.prototype)
+    Object.defineProperty(Ui.prototype,'_fontWidth',{get(){
+        return measureWidth(this._fontSize)
+    }})
+    Ui.prototype._update=function(){
+        this.emit('update')
+    }
     Object.defineProperty(Ui.prototype,'width',{set(val){
         this._width=val
         this._update()
@@ -31,9 +37,6 @@ Promise.all([
     },get(){
         return this._height
     }})
-    Ui.prototype._update=function(){
-        this.emit('update')
-    }
     Ui.prototype.focus=function(){
         this._inputTag.focus()
     }
@@ -43,13 +46,13 @@ Promise.all([
             n=document.createElement('div')
         n.className='webvim'
         n.appendChild(createCliDiv(ui))
-        ui._inputTag=createInput(ui._vim)
+        ui._inputTag=createInput(ui)
         n.appendChild(ui._inputTag)
         vim.on('view',changed=>{
             if(!ui._cursor)
                 return
             ui._inputTag.style.left=`${
-                ui._cursor.c*measureWidth(ui._fontSize)
+                ui._cursor.c*ui._fontWidth
             }px`
             ui._inputTag.style.top=`${
                 ui._cursor.r*ui._fontSize

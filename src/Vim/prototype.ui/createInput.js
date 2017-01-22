@@ -3,11 +3,12 @@ Promise.all([
 ]).then(modules=>{
     let
         measureWidth=   modules[0]
-    return(vim=>{
+    return(ui=>{
+        let vim=ui._vim
         let textarea=document.createElement('textarea')
         textarea.className='input'
-        textarea.style.fontSize=`${vim._fontSize}px`
-        textarea.style.height=`${vim._fontSize+2}px`
+        textarea.style.fontSize=`${ui._fontSize}px`
+        textarea.style.height=`${ui._fontSize+2}px`
         let composing=false
         textarea.addEventListener('blur',()=>{
             vim._view()
@@ -57,7 +58,7 @@ Promise.all([
                 vim.input=textarea.value
                 textarea.value=''
             }
-            let width=measureWidth(vim._fontSize,textarea.value)
+            let width=measureWidth(ui._fontSize,textarea.value)
             if(width)
                 width++
             textarea.style.width=`${width}px`

@@ -34,7 +34,6 @@ Promise.all([
         this._cursor=createCursor(this)
         this._undoBranchManager=new UndoBranchManager
         this._undoBranchManager.push('')
-        this._fontSize=13
         this._styleManager=new StyleManager
         this.style=this._styleManager.style
     }

@@ -22,17 +22,11 @@ Promise.all([
                 )
                 cli.flush()
             }else if(vim.mode=='insert'){
-                cli.clear()
-                cli.appendChild('-- INSERT --')
-                cli.flush()
+                g('-- INSERT --')
             }else if(vim.mode=='visual'){
-                cli.clear()
-                cli.appendChild('-- VISUAL --')
-                cli.flush()
+                g('-- VISUAL --')
             }else if(vim.mode=='visual-block'){
-                cli.clear()
-                cli.appendChild('-- VISUAL BLOCK --')
-                cli.flush()
+                g('-- VISUAL BLOCK --')
             }else if(vim.mode=='cmdline'){
                 update(cli)
                 vim.on('view',listener)
@@ -42,6 +36,11 @@ Promise.all([
                     else
                         vim.removeListener('view',listener)
                 }
+            }
+            function g(s){
+                cli.clear()
+                cli.appendChild({child:s,style:{fontWeight:'bold'}})
+                cli.flush()
             }
         }
         function update(cli){
