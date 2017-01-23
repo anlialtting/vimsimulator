@@ -33,6 +33,9 @@ Promise.all([
                 _scroll:0,
             }
         }else if(this._values.wrapMethod=='b'){
+            this._wrapMethodData={
+                _scroll:0,
+            }
         }
     },get(){
         return this._values.wrapMethod
@@ -63,12 +66,8 @@ Promise.all([
         vim.on('view',changed=>{
             if(!ui._cursor)
                 return
-            ui._inputTag.style.left=`${
-                ui._cursor.c*ui._fontWidth
-            }px`
-            ui._inputTag.style.top=`${
-                ui._cursor.r*ui._fontSize
-            }px`
+            ui._inputTag.style.left=`${ui._cursor.c*ui._fontWidth}px`
+            ui._inputTag.style.top=`${ui._cursor.r*ui._fontSize}px`
         })
         return n
     }
