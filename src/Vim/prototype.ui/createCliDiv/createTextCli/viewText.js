@@ -3,7 +3,7 @@ Promise.all([
 ]).then(modules=>{
     let
         wrap=       modules[0]
-    function viewText(ui,text,targetWidth,vc){
+    function uiText(ui,text,targetWidth,vc){
         let res=wrap(ui,text,targetWidth,vc)
         if(ui.height){
             checkScroll(ui,res.cursorViewRow)
@@ -11,26 +11,21 @@ Promise.all([
         }
         return res.res
     }
-    return viewText
+    return uiText
 })
-function checkScroll(view,cursorViewRow){
-    if(view._scroll+view.height-1<=cursorViewRow)
-        view._scroll=cursorViewRow-(view.height-1)+1
-    if(cursorViewRow<view._scroll)
-        view._scroll=cursorViewRow
+function checkScroll(ui,cursorViewRow){
+    if(ui._wrapMethodData._scroll+ui.height-1<=cursorViewRow)
+        ui._wrapMethodData._scroll=cursorViewRow-(ui.height-1)+1
+    if(cursorViewRow<ui._wrapMethodData._scroll)
+        ui._wrapMethodData._scroll=cursorViewRow
 }
-function cut(view,res){
+function cut(ui,res){
+    let s=ui._wrapMethodData._scroll
     return res.map(l=>{
-        if(
-            l.endRow<=view._scroll||
-            view._scroll+view.height-1<=l.startRow
-        )
+        if(l.endRow<=s||s+ui.height-1<=l.startRow)
             return
         l.rows=l.rows.map((r,i)=>{
-            if(!(
-                view._scroll<=l.startRow+i&&
-                l.startRow+i<view._scroll+view.height-1
-            ))
+            if(!(s<=l.startRow+i&&l.startRow+i<s+ui.height-1))
                 return
             return r
         }).filter(r=>r!=undefined)

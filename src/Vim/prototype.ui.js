@@ -11,9 +11,10 @@ Promise.all([
         EventEmmiter=       modules[3]
     function Ui(vim){
         EventEmmiter.call(this)
+        this._values={}
         this._vim=vim
         this._fontSize=13
-        this._scroll=0
+        this._wrapMethod='a'
         this._refreshMinTime=16
         this.node=createViewNode(this)
         this._vim.on('view',()=>this._update())
@@ -25,6 +26,17 @@ Promise.all([
     Ui.prototype._update=function(){
         this.emit('update')
     }
+    Object.defineProperty(Ui.prototype,'_wrapMethod',{set(val){
+        this._values.wrapMethod=val
+        if(this._values.wrapMethod=='a'){
+            this._wrapMethodData={
+                _scroll:0,
+            }
+        }else if(this._values.wrapMethod=='b'){
+        }
+    },get(){
+        return this._values.wrapMethod
+    }})
     Object.defineProperty(Ui.prototype,'width',{set(val){
         this._width=val
         this._update()
