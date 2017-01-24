@@ -1,7 +1,6 @@
 function a(vim,cmd,arg){
     vim._mode='insert'
-    if(vim._text)
-        vim._cursor.moveRight()
+    vim._cursor.moveRight()
     return{
         acceptable:true,
         complete:true,
