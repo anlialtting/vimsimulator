@@ -1,44 +1,60 @@
 function main(vim,val){
     if(typeof val=='object'){
-        if(val.key=='Backspace'){
-            if(vim._text){
-                let
-                    text=
-                        vim.text.substring(0,vim._cursor.abs-1)+
-                        vim.text.substring(vim._cursor.abs),
-                    pos=
-                        vim._cursor.abs-1
-                vim._text=text
-                if(vim._text)
-                    vim._cursor.moveTo(pos)
-            }
-            return
-        }
-        if(val.key=='Delete'){
-            if(vim._text){
-                vim._text=
-                    vim._text.substring(0,vim._cursor.abs)+
-                    vim._text.substring(vim._cursor.abs+1)
-            }
-            return
-        }
-        if(val.key=='Enter')
-            val='\r'
         if(
-            val.key=='Escape'||
             val.ctrlKey&&val.key=='c'||
             val.ctrlKey&&val.key=='['
         )
-            return vim._mode='normal'
-        if(
-            val.key=='Tab'
-        ){
-            let
-                txt=vim._trueText,
-                abs=vim._cursor.abs
-            vim._text=txt.substring(0,abs)+'\t'+txt.substring(abs)
-            vim._cursor.moveTo(abs+1)
-            return
+            val={key:'Escape'}
+        switch(val.key){
+            case 'ArrowDown':
+                vim._cursor.moveDown()
+                return
+            case 'ArrowLeft':
+                vim._cursor.moveLeft()
+                return
+            case 'ArrowRight':
+                vim._cursor.moveRight()
+                return
+            case 'ArrowUp':
+                vim._cursor.moveUp()
+                return
+            case 'Backspace':
+                {
+                    let
+                        txt=vim._trueText,
+                        abs=vim._cursor.abs
+                    if(abs==0)
+                        return
+                    vim._text=txt.substring(0,abs-1)+txt.substring(abs),
+                    vim._cursor.moveTo(abs-1)
+                }
+                return
+            case 'Delete':
+                {
+                    let
+                        txt=vim._trueText,
+                        abs=vim._cursor.abs
+                    if(abs+1==txt.length)
+                        return
+                    vim._text=txt.substring(0,abs)+txt.substring(abs+1)
+                    vim._cursor.moveTo(abs)
+                }
+                return
+            case 'Enter':
+                val='\r'
+                break
+            case 'Escape':
+                vim._mode='normal'
+                return
+            case 'Tab':
+                {
+                    let
+                        txt=vim._trueText,
+                        abs=vim._cursor.abs
+                    vim._text=txt.substring(0,abs)+'\t'+txt.substring(abs)
+                    vim._cursor.moveTo(abs+1)
+                }
+                return
         }
     }
     if(typeof val=='string'){
