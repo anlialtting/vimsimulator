@@ -5,20 +5,20 @@ Promise.all([
     let
         line=       modules[0],
         width=      modules[1]
-    function wrap(view,text,targetWidth,vc){
+    function wrap(ui,text,targetWidth,vc){
         let
             charCount=0,
             viewRowsCount=0,
             cursorViewRow
         let res=line.lines(text).map((l,j)=>{
             let rawL=l
-            if(view._vim._options.list)
+            if(ui._vim._options.list)
                 l+='$'
             if(j==vc.r)
-                /*if(view._vim.imInput)
+                /*if(ui._vim.imInput)
                     l=
                         l.substring(0,vc.c)+
-                        view._vim.imInput+
+                        ui._vim.imInput+
                         l.substring(vc.c)*/
                 if(vc.c==l.length)
                     l+=' '

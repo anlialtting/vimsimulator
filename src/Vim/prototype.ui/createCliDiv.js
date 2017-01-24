@@ -9,42 +9,42 @@ Promise.all([
         Cli=                modules[1],
         createTextCli=      modules[2]
     return createCliDiv
-    function createCliDiv(view){
+    function createCliDiv(ui){
         let
-            vim=view._vim,
+            vim=ui._vim,
             cli=new Cli,
             cliView=cli.view,
             currentR,
             currentWelcomeText
-        view._commandCli=createCommandCli(vim)
-        cliView.fontSize=view._fontSize
+        ui._commandCli=createCommandCli(vim)
+        cliView.fontSize=ui._fontSize
         update()
-        view.on('update',update)
+        ui.on('update',update)
         return cliView.node
         function update(){
-            if(cliView.width!=view._width)
-                cliView.width=view._width
-            if(cliView.height!=view._height)
-                cliView.height=view._height
-            let r=view._height-1||vim._cursor._countOfRows||1
+            if(cliView.width!=ui._width)
+                cliView.width=ui._width
+            if(cliView.height!=ui._height)
+                cliView.height=ui._height
+            let r=ui._height-1||vim._cursor._countOfRows||1
             if(
                 currentR==r&&
                 currentWelcomeText==vim._welcomeText
             )
                 return
             cli.clear()
-            cli.appendChild(createTextCli(view))
+            cli.appendChild(createTextCli(ui))
             cli.appendChild({
-                child:view._commandCli,
+                child:ui._commandCli,
                 r,
             })
-            if(vim._welcomeText&&50<=view.width&&16<=view.height){
+            if(vim._welcomeText&&50<=ui.width&&16<=ui.height){
                 let
                     r=Math.floor(
-                        (view.height-vim._welcomeText.split('\n').length-1)/2
+                        (ui.height-vim._welcomeText.split('\n').length-1)/2
                     ),
                     c=Math.floor(
-                        (view.width-vim._welcomeText.split('\n').map(
+                        (ui.width-vim._welcomeText.split('\n').map(
                             s=>s.length
                         ).reduce(
                             (a,b)=>Math.max(a,b)

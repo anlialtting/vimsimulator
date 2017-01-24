@@ -8,13 +8,13 @@ Promise.all([
         Cli=            modules[0],
         visualRange=    modules[1],
         width=          modules[2]
-    function createTextContentCli(view,text,cursor,showCursor){
+    function createTextContentCli(ui,text,cursor,showCursor){
         let cli=new Cli,rowsCount
         {
             let
                 currentRowsCount=0,
                 highlightRange=
-                    view._vim._mode=='visual'&&visualRange(view._vim)
+                    ui._vim._mode=='visual'&&visualRange(ui._vim)
             text.map(l=>{
                 if(!l.rows.length)
                     currentRowsCount++
@@ -44,13 +44,13 @@ Promise.all([
             rowsCount=currentRowsCount
         }
         if(showCursor)
-            cli.appendChild(cursorCli(view,text,cursor))
+            cli.appendChild(cursorCli(ui,text,cursor))
         return{
             textCli:cli,
             rowsCount,
         }
     }
-    function cursorCli(view,text,vc){
+    function cursorCli(ui,text,vc){
         let currentRowsCount=0
         let clientCursor
         text.map(l=>{
@@ -59,11 +59,11 @@ Promise.all([
             l.rows.map(row=>{
                 if(
                     l.index==vc.r&&(
-                        !view.width||
+                        !ui.width||
                         row.start<=vc.c&&vc.c<row.end
                     )
                 ){
-                    let viewC=view.width?vc.c-row.start:vc.c
+                    let viewC=ui.width?vc.c-row.start:vc.c
                     clientCursor={
                         row:currentRowsCount,
                         col:width(row.string.substring(0,viewC)),
@@ -73,7 +73,7 @@ Promise.all([
                 currentRowsCount++
             })
         })
-        view._cursor={
+        ui._cursor={
             r:clientCursor.row,
             c:clientCursor.col,
         }
