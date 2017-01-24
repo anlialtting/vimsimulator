@@ -79,11 +79,28 @@ function P(vim,cmd,arg){
         changed:true,
     }
 }
+function x(vim,cmd,arg){
+    return{
+        acceptable:true,
+        complete:true,
+        changed:true,
+    }
+}
 function X(vim,cmd,arg){
-    vim._text=
-        vim._trueText.substring(0,vim._cursor.abs-1)+
-        vim._trueText.substring(vim._cursor.abs)
-    vim._cursor.moveTo(vim._cursor.abs-1)
+    let
+        abs=vim._cursor.abs
+        ls=vim._cursor.lineStart,
+        txt=vim._trueText
+    arg=Math.min(abs-ls,Math.max(0,arg||1))
+    let
+        a=abs-arg,
+        b=abs
+    vim._text=txt.substring(0,a)+txt.substring(b)
+    vim._registers['"']={
+        mode:'string',
+        string:txt.substring(a,b)
+    }
+    vim._cursor.moveTo(a)
     return{
         acceptable:true,
         complete:true,

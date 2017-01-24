@@ -79,10 +79,20 @@ function v(vim,cmd,arg){
     }
 }
 function x(vim,cmd,arg){
-    if(vim._text){
-        let c=vim._cursor.abs
-        vim._text=vim._text.substring(0,c)+vim._text.substring(c+1)
+    let
+        abs=vim._cursor.abs
+        le=vim._cursor.lineEnd,
+        txt=vim._trueText
+    arg=Math.min(le-1-abs,Math.max(0,arg||1))
+    let
+        a=abs,
+        b=abs+arg
+    vim._text=txt.substring(0,a)+txt.substring(b)
+    vim._registers['"']={
+        mode:'string',
+        string:txt.substring(a,b)
     }
+    vim._cursor.moveTo(a)
     return{
         acceptable:true,
         complete:true,

@@ -33,22 +33,21 @@ function main(vim,val){
         if(
             val.key=='Tab'
         ){
-            vim._text||(vim._text='\n')
-            vim._text=
-                vim._text.substring(0,vim._cursor.abs)+
-                '\t'+
-                vim._text.substring(vim._cursor.abs)
-            vim._cursor.moveTo(vim._cursor.abs+1)
+            let
+                txt=vim._trueText,
+                abs=vim._cursor.abs
+            vim._text=txt.substring(0,abs)+'\t'+txt.substring(abs)
+            vim._cursor.moveTo(abs+1)
             return
         }
     }
     if(typeof val=='string'){
-        vim._text||(vim._text='\n')
-        vim._text=
-            vim._text.substring(0,vim._cursor.abs)+
-            val.replace(/\r/,'\n')+
-            vim._text.substring(vim._cursor.abs)
-        vim._cursor.moveTo(vim._cursor.abs+val.length)
+        let
+            txt=vim._trueText,
+            abs=vim._cursor.abs
+        val=val.replace(/\r/,'\n')
+        vim._text=txt.substring(0,abs)+val+txt.substring(abs)
+        vim._cursor.moveTo(abs+val.length)
     }
 }
 ((vim,val)=>{
