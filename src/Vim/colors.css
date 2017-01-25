@@ -1,4 +1,6 @@
 div.webvim{
+    --color4:blue;
+    --color4i:dodgerblue;
     --background-color:black;
     --foreground-color:lightgray;
     --middle-color:gray;

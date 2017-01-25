@@ -1,3 +1,6 @@
+let color4i={
+    color:'var(--color4i)'
+}
 Promise.all([
     module.repository.Cli,
     module.shareImport('viewText.js'),
@@ -25,7 +28,11 @@ Promise.all([
             cli.appendChild(res.textCli)
         }
         for(let r=res.rowsCount;r<ui.height-1;r++)
-            cli.appendChild({child:'~',r})
+            cli.appendChild({
+                child:'~',
+                r,
+                style:color4i
+            })
         return cli
     }
     function number(text){
