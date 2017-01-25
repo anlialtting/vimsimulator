@@ -1,14 +1,12 @@
 Promise.all([
     module.shareImport('prototype.ui/createCliDiv.js'),
     module.shareImport('prototype.ui/measureWidth.js'),
-    module.shareImport('prototype.ui/createInput.js'),
     module.repository.EventEmmiter,
 ]).then(modules=>{
     let
         createCliDiv=       modules[0],
         measureWidth=       modules[1],
-        createInput=        modules[2],
-        EventEmmiter=       modules[3]
+        EventEmmiter=       modules[2]
     function Ui(vim){
         EventEmmiter.call(this)
         this._values={}
@@ -56,19 +54,8 @@ Promise.all([
         this._inputTag.focus()
     }
     function createViewNode(ui){
-        let
-            vim=ui._vim,
-            n=document.createElement('div')
-        n.className='webvim'
-        n.appendChild(createCliDiv(ui))
-        ui._inputTag=createInput(ui)
-        n.appendChild(ui._inputTag)
-        vim.on('view',changed=>{
-            if(!ui._cursor)
-                return
-            ui._inputTag.style.left=`${ui._cursor.c*ui._fontWidth}px`
-            ui._inputTag.style.top=`${ui._cursor.r*ui._fontSize}px`
-        })
+        let n=createCliDiv(ui)
+        n.classList.add('webvim')
         return n
     }
     return{get(){

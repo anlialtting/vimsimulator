@@ -1,7 +1,4 @@
-div.webvim{
-    position:relative;
-}
-div.webvim div.cli{
+div.webvim.cli{
     position:relative;
     font-family:monospace;
     white-space:pre;
@@ -9,10 +6,10 @@ div.webvim div.cli{
     color:var(--foreground-color);
     background-color:var(--background-color);
 }
-div.webvim div.cli>div{
+div.webvim.cli>div{
     position:absolute;
 }
-div.webvim>textarea.input{
+div.webvim.cli>textarea.input{
     font-family:monospace;
     position:absolute;
     border:0;

@@ -3,11 +3,13 @@ Promise.all([
     module.shareImport('createCliDiv/createCommandCli.js'),
     module.repository.Cli,
     module.shareImport('createCliDiv/createTextCli.js'),
+    module.shareImport('createInput.js'),
 ]).then(modules=>{
     let
         createCommandCli=   modules[0],
         Cli=                modules[1],
-        createTextCli=      modules[2]
+        createTextCli=      modules[2],
+        createInput=        modules[3]
     return createCliDiv
     function createCliDiv(ui){
         let
@@ -20,12 +22,19 @@ Promise.all([
         cliView.fontSize=ui._fontSize
         update()
         ui.on('update',update)
-        return cliView.node
+        let n=cliView.node
+        ui._inputTag=createInput(ui)
+        n.appendChild(ui._inputTag)
+        return n
         function update(){
             if(cliView.width!=ui._width)
                 cliView.width=ui._width
             if(cliView.height!=ui._height)
                 cliView.height=ui._height
+            if(ui._cursor){
+                ui._inputTag.style.left=`${ui._cursor.c*ui._fontWidth}px`
+                ui._inputTag.style.top=`${ui._cursor.r*ui._fontSize}px`
+            }
             let r=ui._height-1||vim._cursor._countOfRows||1
             if(
                 currentR==r&&

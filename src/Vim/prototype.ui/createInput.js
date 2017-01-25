@@ -60,7 +60,7 @@ Promise.all([
             }
             let width=measureWidth(ui._fontSize,textarea.value)
             if(width)
-                width++
+                width+=2
             textarea.style.width=`${width}px`
         }
     })
