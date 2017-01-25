@@ -6,8 +6,8 @@ Promise.all([
         set(val){
             this._viewChanged.mode=true
             this._modeData={}
+            let abs=this._cursor.abs
             if(val=='insert'){
-                this._cursor.moveTo(this._cursor.abs)
                 this._welcomeText=undefined
             }
             if(val=='visual'){
@@ -23,6 +23,7 @@ Promise.all([
                 )
             }
             this._values.mode=val
+            this._cursor.moveTo(abs)
         },get(){
             return this._values.mode
         }

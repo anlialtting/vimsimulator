@@ -24,11 +24,12 @@ Promise.all([
         defaultOptions=         modules[8]
     function Vim(){
         EventEmmiter.call(this)
-        this._values={}
+        this._values={
+            mode:'normal'
+        }
         this._options=Object.create(defaultOptions)
         this._viewChanged=[]
         this._text=''
-        this._mode='normal'
         this._registers={}
         this._modeData={}
         this._cursor=createCursor(this)
