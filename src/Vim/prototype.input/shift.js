@@ -3,15 +3,16 @@ function shift(vim,s,e,count){
     for(;s!=e;s++){
         cursor.r=s
         let
+            txt=vim._trueText,
             a=cursor.lineStart,
             b=cursor.lineEnd,
-            l=vim._text.substring(a,b),
+            l=txt.substring(a,b),
             m=l.match(/^([\t ]*)([\S\s]*)/)
         vim._text=
-            vim._text.substring(0,a)+
+            txt.substring(0,a)+
             padding(vim,count(m[1]))+
             m[2]+
-            vim._text.substring(b)
+            txt.substring(b)
     }
 }
 function padding(vim,n){

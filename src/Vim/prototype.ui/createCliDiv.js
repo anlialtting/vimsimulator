@@ -3,7 +3,7 @@ Promise.all([
     module.shareImport('createCliDiv/createCommandCli.js'),
     module.repository.Cli,
     module.shareImport('createCliDiv/createTextCli.js'),
-    module.shareImport('createInput.js'),
+    module.shareImport('createCliDiv/createInput.js'),
 ]).then(modules=>{
     let
         createCommandCli=   modules[0],
