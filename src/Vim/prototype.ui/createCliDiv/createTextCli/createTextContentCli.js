@@ -20,6 +20,7 @@ Promise.all([
                     currentRowsCount++
                 l.rows.map(row=>{
                     let rowStart=l.start+row.start
+                    row.string+='\n'
                     for(
                         let i=0,c=0;
                         i<row.string.length;
