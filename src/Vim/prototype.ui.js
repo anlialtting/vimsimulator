@@ -12,7 +12,7 @@ Promise.all([
         this._values={}
         this._vim=vim
         this._fontSize=13
-        this._wrapMethod='a'
+        this._wrapMethod='greedy'
         this._refreshMinTime=16
         this.node=createViewNode(this)
         this._vim.on('view',()=>this._update())
@@ -26,11 +26,11 @@ Promise.all([
     }
     Object.defineProperty(Ui.prototype,'_wrapMethod',{set(val){
         this._values.wrapMethod=val
-        if(this._values.wrapMethod=='a'){
+        if(this._values.wrapMethod=='greedy'){
             this._wrapMethodData={
                 _scroll:0,
             }
-        }else if(this._values.wrapMethod=='b'){
+        }else if(this._values.wrapMethod=='fixed'){
             this._wrapMethodData={
                 _scroll:0,
             }

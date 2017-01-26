@@ -101,10 +101,9 @@ Promise.all([
     Vim.prototype._welcomeText=`\
                   Web Vim
 
-                 version 0
-               by An-Li Ting
-
 Thanks Bram Moolenaar for the original Vim!
+
+          type :q<Enter> to exit            
 `
     return Vim
     function StyleManager(){
