@@ -14,15 +14,15 @@ function d(vim,cmd,arg){
             arg=arg||1
             arg=Math.min(vim._cursor._countOfRows-vim._cursor.r,arg)
             let
+                txt=vim._trueText,
                 a=vim._cursor.line(vim._cursor.r),
                 b=vim._cursor.line(vim._cursor.r+arg)
             vim._registers['"']={
                 mode:'line',
-                string:vim._text.substring(a,b),
+                string:txt.substring(a,b),
             }
-            vim._text=vim._text.substring(0,a)+vim._text.substring(b)
-            if(vim._text)
-                vim._cursor.moveTo(vim._cursor.lineStart)
+            vim._text=txt.substring(0,a)+txt.substring(b)
+            vim._cursor.moveTo(vim._cursor.lineStart)
         }
         return{
             acceptable:true,
@@ -35,11 +35,9 @@ function g(vim,cmd,arg){
     if(cmd=='')
         return{acceptable:true}
     if(cmd=='g'){
-        if(vim._text){
-            arg=arg||1
-            arg=Math.min(vim._cursor._countOfRows,arg)
-            vim._cursor.moveTo(vim._cursor.line(arg-1))
-        }
+        arg=arg||1
+        arg=Math.min(vim._cursor._countOfRows,arg)
+        vim._cursor.moveTo(vim._cursor.line(arg-1))
         return{
             acceptable:true,
             complete:true,
@@ -94,4 +92,3 @@ function l(vim,cmd,arg){
     }
 }
 ({a,d,g,h,i,j,k,l})
-

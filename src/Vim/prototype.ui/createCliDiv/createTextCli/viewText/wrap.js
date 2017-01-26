@@ -12,16 +12,7 @@ Promise.all([
             cursorViewRow
         let res=line.lines(text).map((l,j)=>{
             let rawL=l
-            if(ui._vim._options.list)
-                l+='$'
-            if(j==vc.r)
-                /*if(ui._vim.imInput)
-                    l=
-                        l.substring(0,vc.c)+
-                        ui._vim.imInput+
-                        l.substring(vc.c)*/
-                if(vc.c==l.length)
-                    l+=' '
+            l+=ui._vim._options.list?'$':'\n'
             let res={
                 index:j
             }
@@ -70,3 +61,9 @@ Promise.all([
     }
     return wrap
 })
+/*if(j==vc.r&&ui._vim.imInput){
+    l=
+        l.substring(0,vc.c)+
+        ui._vim.imInput+
+        l.substring(vc.c)
+}*/

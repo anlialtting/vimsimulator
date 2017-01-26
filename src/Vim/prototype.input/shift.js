@@ -6,8 +6,7 @@ function shift(vim,s,e,count){
             txt=vim._trueText,
             a=cursor.lineStart,
             b=cursor.lineEnd,
-            l=txt.substring(a,b),
-            m=l.match(/^([\t ]*)([\S\s]*)/)
+            m=txt.substring(a,b).match(/^([\t ]*)([\S\s]*)/)
         vim._text=
             txt.substring(0,a)+
             padding(vim,count(m[1]))+
