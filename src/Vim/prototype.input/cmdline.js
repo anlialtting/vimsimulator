@@ -43,9 +43,13 @@ function main(vim,val){
     let status
     if(cmd[0]==':'){
         cmd=cmd.substring(1)
-        let setPattern=/^set?(.*)/
+        let
+            setPattern=/^set?(.*)/,
+            editPattern=/^e(?:dit)?(.*)/
         if(setPattern.test(cmd)){
             status=set(vim,cmd.match(setPattern)[1])
+        }else if(editPattern.test(cmd)){
+            status=edit(vim,cmd.match(editPattern)[1])
         }else if(/^q(?:uit)?$/.test(cmd)){
             vim._quit()
         }else if(/^wq$/.test(cmd)){
@@ -59,6 +63,8 @@ function main(vim,val){
     vim._mode='normal'
     if(status)
         vim._modeData.status=status
+}
+function edit(vim,cmd){
 }
 function set(vim,cmd){
     let argumentPattern=/ (.*)/

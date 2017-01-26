@@ -60,15 +60,28 @@ Promise.all([
         this.emit('view',Object.keys(this._viewChanged))
         this._viewChanged={}
     }
+    Vim.prototype._read=function(path){
+        return this.read&&this.read(path)
+    }
     Vim.prototype._write=function(){
-        this.emit('write')
+        this.emit('write',this._registers['%'])
         let
             l=this._text.split('\n').length-1,
             c=this._text.length
-        return `<EMMITING-EVENT> ${l}L, ${c}C written`
+        return `${
+            this._registers['%']?
+                `"${this._registers['%']}"`
+            :
+                '[Event]'
+        } ${l}L, ${c}C written`
     }
     Object.defineProperty(Vim.prototype,'_mainUi',{get(){
-        return this._values._mainUi||(this._values._mainUi=this.ui)
+        if(!this._values._mainUi){
+            this._values._mainUi=this.ui
+            this._values._mainUi.width=80
+            this._values._mainUi.height=24
+        }
+        return this._values._mainUi
     }})
     Object.defineProperty(Vim.prototype,'mode',{get(){
         return this._mode
@@ -97,6 +110,12 @@ Promise.all([
     }})
     Object.defineProperty(Vim.prototype,'width',{set(val){
         this._mainUi.width=val
+    }})
+    Object.defineProperty(Vim.prototype,'pollute',{get(){
+        document.head.appendChild(this.style)
+        this.once('quit',()=>{
+            document.head.removeChild(this.style)
+        })
     }})
     Vim.prototype._welcomeText=`\
                   Web Vim
