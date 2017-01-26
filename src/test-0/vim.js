@@ -9,7 +9,12 @@ Promise.all([
         Vim=modules[0],
         style=modules[1],
         testdata=modules[2]
-    let vim=new Vim
+    let vim=new Vim(p=>{
+        if(p=='~/.vimrc')
+            return `\
+se nu
+`
+    })
     //vim.text=testdata.longText
     let vimViewDiv=createTestDiv(vim)
     vim.pollute

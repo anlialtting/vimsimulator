@@ -58,16 +58,20 @@ function reuseWrite(view,a,b){
     }
 }
 function write(view,doc,r,c){
-    let div=getDiv(view,r,c)
+    let
+        div=getDiv(view,r,c),
+        textContent=doc.child
+    if(textContent=='\n')
+        textContent=' '
     if(doc.style){
         let span=document.createElement('span')
         for(let i in doc.style)
             span.style[i]=doc.style[i]
-        span.textContent=doc.child
+        span.textContent=textContent
         div.textContent=''
         div.appendChild(span)
     }else{
-        div.textContent=doc.child
+        div.textContent=textContent
     }
     function getDiv(view,r,c){
         if(!(r in view._divs))

@@ -22,7 +22,7 @@ Promise.all([
         UndoBranchManager=      modules[5],
         style=                  modules[6],
         defaultOptions=         modules[8]
-    function Vim(){
+    function Vim(read){
         EventEmmiter.call(this)
         this._values={
             mode:'normal'
@@ -37,6 +37,8 @@ Promise.all([
         this._undoBranchManager.push('')
         this._styleManager=new StyleManager
         this.style=this._styleManager.style
+        this.read=read
+        rc(this)
     }
     Object.setPrototypeOf(Vim.prototype,EventEmmiter.prototype)
     Object.defineProperty(Vim.prototype,'_mode',modules[7])
@@ -129,5 +131,19 @@ Thanks Bram Moolenaar for the original Vim!
         this.style=document.createElement('style')
         this.style.appendChild(document.createTextNode(style))
         this.style.appendChild(document.createTextNode(colors))
+    }
+    function rc(vim){
+        let vimrc=vim._read('~/.vimrc')
+        if(vimrc==undefined)
+            return
+        vimrc.split('\n').map(c=>{
+            if(!c)
+                return
+            vim._mode='cmdline'
+            vim._modeData.inputBuffer=':'
+            vim._modeData.cursor.position=1
+            vim.input=c
+            vim.input={key:'Enter'}
+        })
     }
 })
