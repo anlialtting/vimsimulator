@@ -1,6 +1,10 @@
-let color4i={
-    color:'var(--color4i)'
-}
+let
+    color3i={
+        color:'var(--color3i)'
+    },
+    color4i={
+        color:'var(--color4i)'
+    }
 Promise.all([
     module.repository.Cli,
     module.shareImport('viewText.js'),
@@ -42,6 +46,7 @@ Promise.all([
             cli.appendChild({
                 child:pad((l.index+1).toString()),
                 r:currentRowsCount,
+                style:color3i
             })
             currentRowsCount+=l.rows.length||1
         })
