@@ -14,6 +14,11 @@ Promise.all([
     module.get('Vim/style.css'),
     module.shareImport('Vim/prototype._mode.js'),
     module.shareImport('Vim/defaultOptions.js'),
+    module.shareImport('Vim/StyleManager.js'),
+    module.shareImport('Vim/rc.js'),
+    module.shareImport('Vim/prototype._welcomeText.js'),
+    module.shareImport('Vim/prototype._write.js'),
+    module.shareImport('Vim/loadSyntacticSugar.js'),
 ]).then(modules=>{
     let
         EventEmmiter=           modules[0],
@@ -21,7 +26,10 @@ Promise.all([
         createCursor=           modules[2],
         UndoBranchManager=      modules[5],
         style=                  modules[6],
-        defaultOptions=         modules[8]
+        defaultOptions=         modules[8],
+        StyleManager=           modules[9],
+        rc=                     modules[10],
+        loadSyntacticSugar=     modules[13]
     function Vim(read){
         EventEmmiter.call(this)
         this._values={
@@ -37,6 +45,8 @@ Promise.all([
         this._undoBranchManager.push('')
         this._styleManager=new StyleManager
         this.style=this._styleManager.style
+        this._styleManager.appendChild(document.createTextNode(style))
+        this._styleManager.appendChild(document.createTextNode(colors))
         this.read=read
         rc(this)
     }
@@ -65,18 +75,7 @@ Promise.all([
     Vim.prototype._read=function(path){
         return this.read&&this.read(path)
     }
-    Vim.prototype._write=function(){
-        this.emit('write',this._registers['%'])
-        let
-            l=this._text.split('\n').length-1,
-            c=this._text.length
-        return `${
-            this._registers['%']?
-                `"${this._registers['%']}"`
-            :
-                '[Event]'
-        } ${l}L, ${c}C written`
-    }
+    Vim.prototype._write=modules[12]
     Object.defineProperty(Vim.prototype,'_mainUi',{get(){
         if(!this._values._mainUi){
             this._values._mainUi=this.ui
@@ -104,46 +103,7 @@ Promise.all([
     }
     Object.defineProperty(Vim.prototype,'input',modules[3])
     Object.defineProperty(Vim.prototype,'ui',modules[4])
-    Object.defineProperty(Vim.prototype,'node',{get(){
-        return this._mainUi.node
-    }})
-    Object.defineProperty(Vim.prototype,'height',{set(val){
-        this._mainUi.height=val
-    }})
-    Object.defineProperty(Vim.prototype,'width',{set(val){
-        this._mainUi.width=val
-    }})
-    Object.defineProperty(Vim.prototype,'pollute',{get(){
-        document.head.appendChild(this.style)
-        this.once('quit',()=>{
-            document.head.removeChild(this.style)
-        })
-    }})
-    Vim.prototype._welcomeText=`\
-                  Web Vim
-
-Thanks Bram Moolenaar for the original Vim!
-
-          type :q<Enter> to exit            
-`
+    loadSyntacticSugar(Vim.prototype)
+    Vim.prototype._welcomeText=modules[11]
     return Vim
-    function StyleManager(){
-        this.style=document.createElement('style')
-        this.style.appendChild(document.createTextNode(style))
-        this.style.appendChild(document.createTextNode(colors))
-    }
-    function rc(vim){
-        let vimrc=vim._read('~/.vimrc')
-        if(vimrc==undefined)
-            return
-        vimrc.split('\n').map(c=>{
-            if(!c)
-                return
-            vim._mode='cmdline'
-            vim._modeData.inputBuffer=':'
-            vim._modeData.cursor.position=1
-            vim.input=c
-            vim.input={key:'Enter'}
-        })
-    }
 })
