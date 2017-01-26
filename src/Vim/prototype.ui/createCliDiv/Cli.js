@@ -40,17 +40,18 @@ Promise.all([
             let r=0,c=0
             for(let i=0;i<child.child.length;i++){
                 let chr=child.child[i]
-                this._children.push({
-                    child:chr,
-                    r:child.r+r,
-                    c:child.c+c,
-                    style:child.style,
-                })
                 if(chr=='\n'){
                     r++
                     c=0
-                }else
+                }else{
+                    this._children.push({
+                        child:chr,
+                        r:child.r+r,
+                        c:child.c+c,
+                        style:child.style,
+                    })
                     c+=width(chr)
+                }
             }
         }else
             this._children.push(child)

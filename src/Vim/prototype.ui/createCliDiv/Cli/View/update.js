@@ -17,6 +17,8 @@ function dfs(view,cli,dr,dc,o){
     o||(o={})
     cli._children.map(c=>{
         let tr=dr+c.r,tc=dc+c.c
+        if(!(0<=tr&&tr<view._height&&0<=tc&&tc<view._width))
+            return
         if(typeof c.child=='string'){
             o[tr]||(o[tr]={})
             o[tr][tc]=c
