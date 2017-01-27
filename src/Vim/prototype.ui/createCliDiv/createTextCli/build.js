@@ -1,4 +1,5 @@
-let
+// chrome 56 bug: cannot be <code>let</code>
+var
     color3i={
         color:'var(--color3i)'
     },

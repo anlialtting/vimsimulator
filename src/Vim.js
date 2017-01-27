@@ -1,7 +1,7 @@
 if(!module.repository.EventEmmiter)
     module.repository.EventEmmiter=module.importByPath(
         `https://cdn.rawgit.com/anliting/module/${
-            '5ddc4f02188066d00a698eea63f983ab1e5b7d4f'
+            '2d26d418c38376c193bf54da66293ac3b0f9cdc7'
         }/node/events.js`
     )
 Promise.all([
