@@ -31,9 +31,10 @@ Promise.all([
                 cliView.width=ui._width
             if(cliView.height!=ui._height)
                 cliView.height=ui._height
-            if(ui._cursor){
-                ui._inputTag.style.top=`${ui._cursor.r*ui._fontSize}px`
-                ui._inputTag.style.left=`${ui._cursor.c*ui._fontWidth}px`
+            if(cliView.symbols[ui._cursor]){
+                let c=cliView.symbols[ui._cursor]
+                ui._inputTag.style.top=`${c.r*ui._fontSize}px`
+                ui._inputTag.style.left=`${c.c*ui._fontWidth}px`
             }
             let r=ui._height-1||vim._cursor._countOfRows||1
             if(

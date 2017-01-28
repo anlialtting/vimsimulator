@@ -22,7 +22,9 @@ function dfs(view,cli,dr,dc,o){
         if(typeof c.child=='string'){
             o[tr]||(o[tr]={})
             o[tr][tc]=c
-        }else
+        }else if(typeof c.child=='symbol')
+            view.symbols[c.child]={r:tr,c:tc}
+        else
             dfs(view,c.child,tr,tc,o)
     })
     let listener=()=>update(view)

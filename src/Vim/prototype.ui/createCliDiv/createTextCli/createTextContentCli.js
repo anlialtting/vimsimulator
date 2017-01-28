@@ -44,8 +44,15 @@ Promise.all([
             })
             rowsCount=currentRowsCount
         }
-        if(showCursor)
-            cli.appendChild(cursorCli(ui,text,cursor))
+        if(showCursor){
+            let c=cursorCli(ui,text,cursor)
+            cli.appendChild(c)
+            cli.appendChild({
+                child:ui._cursor,
+                r:c.r,
+                c:c.c,
+            })
+        }
         return{
             textCli:cli,
             rowsCount,
@@ -74,10 +81,6 @@ Promise.all([
                 currentRowsCount++
             })
         })
-        ui._cursor={
-            r:clientCursor.row,
-            c:clientCursor.col,
-        }
         return{
             child:clientCursor.char||' ',
             r:clientCursor.row,

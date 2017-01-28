@@ -15,6 +15,7 @@ Promise.all([
         this._fontWidth=measureWidth(this._fontSize)
         this.node=document.createElement('div')
         this.node.className='cli'
+        this.symbols={}
         update(this)
         this._cli.on('view',this._listener=()=>update(this))
     }
