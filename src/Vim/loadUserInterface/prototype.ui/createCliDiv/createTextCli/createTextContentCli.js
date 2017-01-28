@@ -2,7 +2,7 @@
 var highlightStyle={backgroundColor:'var(--middle-color)'}
 Promise.all([
     module.repository.Cli,
-    module.shareImport('../../../visualRange.js'),
+    module.shareImport('../../../../visualRange.js'),
     module.shareImport('../width.js'),
 ]).then(modules=>{
     let

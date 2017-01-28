@@ -1,6 +1,6 @@
 Promise.all([
-    module.shareImport('prototype.input.js'),
-    module.shareImport('prototype.ui.js'),
+    module.shareImport('loadUserInterface/prototype.input.js'),
+    module.shareImport('loadUserInterface/prototype.ui.js'),
 ]).then(modules=>{
     return o=>{
         Object.defineProperty(o,'mode',{get(){

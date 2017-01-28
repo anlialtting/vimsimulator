@@ -1,5 +1,5 @@
 Promise.all([
-    module.shareImport('../visualRange.js'),
+    module.shareImport('../../visualRange.js'),
     module.shareImport('shift.js'),
 ]).then(modules=>{
     let
