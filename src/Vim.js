@@ -8,28 +8,28 @@ Promise.all([
     module.repository.EventEmmiter,
     module.get('Vim/colors.css'),
     module.shareImport('Vim/createCursor.js'),
-    module.shareImport('Vim/prototype.input.js'),
-    module.shareImport('Vim/prototype.ui.js'),
+    module.shareImport('Vim/rc.js'),
+    module.shareImport('Vim/loadSyntacticSugar.js'),
     module.shareImport('Vim/UndoBranchManager.js'),
     module.get('Vim/style.css'),
     module.shareImport('Vim/prototype._mode.js'),
     module.shareImport('Vim/defaultOptions.js'),
     module.shareImport('Vim/StyleManager.js'),
-    module.shareImport('Vim/rc.js'),
     module.shareImport('Vim/prototype._welcomeText.js'),
     module.shareImport('Vim/prototype._write.js'),
-    module.shareImport('Vim/loadSyntacticSugar.js'),
+    module.shareImport('Vim/loadUserInterface.js'),
 ]).then(modules=>{
     let
         EventEmmiter=           modules[0],
         colors=                 modules[1],
         createCursor=           modules[2],
+        rc=                     modules[3],
+        loadSyntacticSugar=     modules[4],
         UndoBranchManager=      modules[5],
         style=                  modules[6],
         defaultOptions=         modules[8],
         StyleManager=           modules[9],
-        rc=                     modules[10],
-        loadSyntacticSugar=     modules[13]
+        loadUserInterface=      modules[12]
     function Vim(read){
         EventEmmiter.call(this)
         this._values={
@@ -75,7 +75,7 @@ Promise.all([
     Vim.prototype._read=function(path){
         return this.read&&this.read(path)
     }
-    Vim.prototype._write=modules[12]
+    Vim.prototype._write=modules[11]
     Object.defineProperty(Vim.prototype,'_mainUi',{get(){
         if(!this._values._mainUi){
             this._values._mainUi=this.ui
@@ -84,26 +84,8 @@ Promise.all([
         }
         return this._values._mainUi
     }})
-    Object.defineProperty(Vim.prototype,'mode',{get(){
-        return this._mode
-    }})
-    Object.defineProperty(Vim.prototype,'text',{
-        set(val){
-            this._text=val
-            this._welcomeText=undefined
-            this._undoBranchManager.clear()
-            this._undoBranchManager.push(this._text)
-            this._view()
-        },get(){
-            return this._text
-        }
-    })
-    Vim.prototype.focus=function(){
-        this._mainUi.focus()
-    }
-    Object.defineProperty(Vim.prototype,'input',modules[3])
-    Object.defineProperty(Vim.prototype,'ui',modules[4])
+    Vim.prototype._welcomeText=modules[10]
+    loadUserInterface(Vim.prototype)
     loadSyntacticSugar(Vim.prototype)
-    Vim.prototype._welcomeText=modules[11]
     return Vim
 })
