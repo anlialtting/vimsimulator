@@ -25,6 +25,7 @@ Promise.all([
     module.shareImport('Vim/prototype._welcomeText.js'),
     module.shareImport('Vim/prototype._write.js'),
     module.shareImport('Vim/loadUserInterface.js'),
+    module.shareImport('Vim/prototype._edit.js'),
 ]).then(modules=>{
     let
         EventEmmiter=           modules[0],
@@ -83,6 +84,7 @@ Promise.all([
         return this.read&&this.read(path)
     }
     Vim.prototype._write=modules[11]
+    Vim.prototype._edit=modules[13]
     Object.defineProperty(Vim.prototype,'_mainUi',{get(){
         if(!this._values._mainUi){
             this._values._mainUi=this.ui

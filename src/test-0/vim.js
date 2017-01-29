@@ -13,9 +13,8 @@ Promise.all([
         if(p=='~/.vimrc')
             return localStorage.webvimVimrc
     })
-    vim.on('write',()=>{
-        let path=vim._registers['%']
-        if(!path)
+    vim.on('write',p=>{
+        if(!p)
             return
         if(p=='~/.vimrc')
             localStorage.webvimVimrc=vim.text

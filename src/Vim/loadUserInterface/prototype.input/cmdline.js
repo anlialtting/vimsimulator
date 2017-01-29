@@ -66,6 +66,11 @@ function main(vim,val){
         vim._modeData.status=status
 }
 function edit(vim,cmd){
+    let argumentPattern=/ (.*)/
+    if(argumentPattern.test(cmd)){
+        cmd=cmd.match(argumentPattern)[1]
+        return vim._edit(cmd)
+    }
 }
 function set(vim,cmd){
     let argumentPattern=/ (.*)/
