@@ -1,13 +1,14 @@
 function charWidth(c){
     if(c=='\t')
         return 8
+    c=c.charCodeAt(0)
     if(
 // Scripts - East Asian Scripts - CJK Unified Ideographs (Han)
-        /[\u4E00-\u9fff]/.test(c)||
+        0x4e00<=c&&c<=0x9fff||
 // Symbols and Punctuation - Punctuation - CJK Symbols and Punctuation
-        /[\u3000-\u303f]/.test(c)||
+        0x3000<=c&&c<=0x303f||
 // Symbols and Punctuation - Punctuation - CJK Symbols and Punctuation - Halfwidth and Fullwidth Forms
-        /[\uff00-\uffef]/.test(c)
+        0xff00<=c&&c<=0xffef
     )
         return 2
     return 1

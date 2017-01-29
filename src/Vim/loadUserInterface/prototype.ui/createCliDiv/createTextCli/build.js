@@ -16,18 +16,21 @@ Promise.all([
         viewText=               modules[1],
         createTextContentCli=   modules[2]
     function build(cli,ui,text,cursor,showCursor,showNumber){
+        let numberWidth=Math.max(3,Math.floor(
+            Math.log(ui._vim._cursor._countOfRows)/Math.log(10)
+        )+1)
         text=viewText(
             ui,
             text,
-            showNumber?ui.width-4:ui.width,
+            showNumber?ui.width-(numberWidth+1):ui.width,
             cursor
         )
         let res=createTextContentCli(ui,text,cursor,showCursor)
         if(showNumber){
-            cli.appendChild(number(text))
+            cli.appendChild(number(text,numberWidth))
             cli.appendChild({
                 child:res.textCli,
-                c:4,
+                c:numberWidth+1,
             })
         }else{
             cli.appendChild(res.textCli)
@@ -40,7 +43,7 @@ Promise.all([
             })
         return cli
     }
-    function number(text){
+    function number(text,numberWidth){
         let cli=new Cli
         let currentRowsCount=0
         text.map(l=>{
@@ -53,7 +56,7 @@ Promise.all([
         })
         return cli
         function pad(s){
-            return ' '.repeat(3-s.length)+s
+            return ' '.repeat(numberWidth-s.length)+s
         }
     }
     return build
