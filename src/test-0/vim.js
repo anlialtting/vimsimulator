@@ -16,7 +16,6 @@ se nu
 `
     })
     //vim.text=testdata.longText
-    vim.text='一ノ瀬アメリ'
     let vimViewDiv=createTestDiv(vim)
     vim.pollute
     document.head.appendChild(style)

@@ -1,15 +1,16 @@
-if(!module.repository.EventEmmiter)
-    module.repository.EventEmmiter=module.importByPath(
-        `https://cdn.rawgit.com/anliting/module/${
-            '0e94e04505484aaf3b367423b36cf426a4242006'
-        }/node/events.js`
-    )
-if(!module.repository.stringWidth)
-    module.repository.stringWidth=module.importByPath(
-        `https://cdn.rawgit.com/anliting/module/${
-            '0e94e04505484aaf3b367423b36cf426a4242006'
-        }/node/string-width.js`
-    )
+{
+    let moduleNode=`https://cdn.rawgit.com/anliting/module/${
+        '0e94e04505484aaf3b367423b36cf426a4242006'
+    }/node`
+    if(!module.repository.EventEmmiter)
+        module.repository.EventEmmiter=module.importByPath(
+            `${moduleNode}/events.js`
+        )
+    if(!module.repository.stringWidth)
+        module.repository.stringWidth=module.importByPath(
+            `${moduleNode}/string-width.js`
+        )
+}
 Promise.all([
     module.repository.EventEmmiter,
     module.get('Vim/colors.css'),
