@@ -1,8 +1,14 @@
 if(!module.repository.EventEmmiter)
     module.repository.EventEmmiter=module.importByPath(
         `https://cdn.rawgit.com/anliting/module/${
-            '2d26d418c38376c193bf54da66293ac3b0f9cdc7'
+            '0e94e04505484aaf3b367423b36cf426a4242006'
         }/node/events.js`
+    )
+if(!module.repository.stringWidth)
+    module.repository.stringWidth=module.importByPath(
+        `https://cdn.rawgit.com/anliting/module/${
+            '0e94e04505484aaf3b367423b36cf426a4242006'
+        }/node/string-width.js`
     )
 Promise.all([
     module.repository.EventEmmiter,
