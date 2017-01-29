@@ -11,9 +11,14 @@ Promise.all([
         testdata=modules[2]
     let vim=new Vim(p=>{
         if(p=='~/.vimrc')
-            return `\
-se nu
-`
+            return localStorage.webvimVimrc
+    })
+    vim.on('write',()=>{
+        let path=vim._registers['%']
+        if(!path)
+            return
+        if(p=='~/.vimrc')
+            localStorage.webvimVimrc=vim.text
     })
     //vim.text=testdata.longText
     let vimViewDiv=createTestDiv(vim)
