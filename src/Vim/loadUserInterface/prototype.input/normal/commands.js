@@ -53,6 +53,23 @@ Promise.all([
         vim._modeData.cursor.position=1
         return{acceptable:true}
     }
+    function caret(vim){
+        vim._cursor.moveTo(vim._cursor.lineStart)
+        return{
+            acceptable:true,
+            complete:true,
+        }
+    }
+    function dollarSign(vim){
+        vim._cursor.moveTo(Math.max(
+            vim._cursor.lineStart,
+            vim._cursor.lineEnd-2
+        ))
+        return{
+            acceptable:true,
+            complete:true,
+        }
+    }
     function ctrl(vim,cmd){
         if(cmd=='')
             return{
@@ -99,6 +116,8 @@ Promise.all([
         '.':dot,
         ':':colon,
         '/':slash,
+        '^':caret,
+        '$':dollarSign,
     }
     commands[String.fromCharCode(17)]=ctrl
     return commands
