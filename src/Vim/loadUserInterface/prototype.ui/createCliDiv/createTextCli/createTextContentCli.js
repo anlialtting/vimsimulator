@@ -3,12 +3,20 @@ var highlightStyle={backgroundColor:'var(--middle-color)'}
 Promise.all([
     module.repository.Cli,
     module.shareImport('../../../../visualRange.js'),
-    module.shareImport('../width.js'),
+    module.shareImport('../stringWidth.js'),
 ]).then(modules=>{
     let
         Cli=            modules[0],
         visualRange=    modules[1],
-        width=          modules[2]
+        stringWidth=    modules[2]
+    function width(a){
+        let x=0
+        for(let i=0;i<a.length;i++){
+            let v=a[i]
+            x+=typeof v=='object'?stringWidth(v.child):stringWidth(v)
+        }
+        return x
+    }
     function createTextContentCli(ui,text,cursor,showCursor){
         let cli=new Cli,rowsCount
         {
@@ -26,11 +34,11 @@ Promise.all([
                         i<row.string.length;
                         c+=width(row.string[i++])
                     ){
-                        let o={
-                            child:row.string[i],
-                            r:currentRowsCount,
-                            c,
-                        }
+                        let o=row.string[i]
+                        if(typeof o=='string')
+                            o={child:o}
+                        o.r=currentRowsCount
+                        o.c=c
                         if(
                             highlightRange&&
                             highlightRange.s<=rowStart+i&&
@@ -74,22 +82,23 @@ Promise.all([
                     let viewC=ui.width?vc.c-row.start:vc.c
                     clientCursor={
                         row:currentRowsCount,
-                        col:width(row.string.substring(0,viewC)),
-                        char:row.string[viewC],
+                        col:width(row.string.slice(0,viewC)),
+                        doc:row.string[viewC],
                     }
                 }
                 currentRowsCount++
             })
         })
-        return{
-            child:clientCursor.char||' ',
-            r:clientCursor.row,
-            c:clientCursor.col,
-            style:{
-                backgroundColor:'var(--foreground-color)',
-                color:'var(--background-color)',
-            }
+        if(typeof clientCursor.doc!='object')
+            clientCursor.doc={child:clientCursor.doc}
+        clientCursor.doc.child=clientCursor.doc.child||' '
+        clientCursor.doc.r=clientCursor.row
+        clientCursor.doc.c=clientCursor.col,
+        clientCursor.doc.style={
+            backgroundColor:'var(--foreground-color)',
+            color:'var(--background-color)',
         }
+        return clientCursor.doc
     }
     return createTextContentCli
 })
