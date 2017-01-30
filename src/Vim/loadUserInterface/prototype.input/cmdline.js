@@ -78,30 +78,41 @@ function set(vim,cmd){
         cmd=cmd.match(argumentPattern)[1]
         let
             showValuePattern=   /(.*)\?$/,
+            argsPattern=        /(.*)[=:](.*)/,
             noPattern=          /^no(.*)/,
             show=       false,
-            no=         false,
-            toSet=      false
+            toSet=      false,
+            option,
+            value
         if(showValuePattern.test(cmd)){
             show=true
-            cmd=cmd.match(showValuePattern)[1]
+            option=cmd.match(showValuePattern)[1]
+        }else if(argsPattern.test(cmd)){
+            toSet=true
+            option=cmd.match(argsPattern)[1]
+            value=parseInt(cmd.match(argsPattern)[2],10)
         }else{
             toSet=true
             if(noPattern.test(cmd)){
-                no=true
-                cmd=cmd.match(noPattern)[1]
+                option=cmd.match(noPattern)[1]
+                value=false
+            }else{
+                option=cmd
+                value=true
             }
         }
-        if(cmd in shortcut)
-            cmd=shortcut[cmd]
+        if(option in shortcut)
+            option=shortcut[option]
         if(toSet){
-            if(cmd in vim._options)
-                vim._options[cmd]=!no
-        }else if(show)
-            return vim._options[cmd]?
-                cmd
-            :
-                `no${cmd}`
+            if(option in vim._options)
+                vim._options[option]=value
+        }else if(show){
+            let v=vim._options[option]
+            let res=`${v==false?'no':'  '}${option}`
+            if(typeof v=='number')
+                res+=`=${v}`
+            return res
+        }
     }
 }
 ((vim,val)=>{
