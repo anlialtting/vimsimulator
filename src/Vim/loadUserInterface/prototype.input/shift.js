@@ -18,7 +18,9 @@ function padding(vim,n){
     let
         a=Math.floor(n/vim._options.tabstop),
         b=n-a*vim._options.tabstop
-    return '\t'.repeat(a)+' '.repeat(b)
+    return(
+        vim._options.expandtab?' '.repeat(vim._options.tabstop):'\t'
+    ).repeat(a)+' '.repeat(b)
 }
 function countPadding(vim,s){
     return count(s,'\t')*vim._options.tabstop+count(s,' ')
