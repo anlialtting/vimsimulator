@@ -43,7 +43,7 @@ module.import('insertAt.js').then(insertAt=>{
     }
     function O(vim,cmd,arg){
         let
-            c=vim._cursor.abs,
+            c=vim._cursor.lineStart,
             txt=vim._trueText
         vim._mode='insert'
         vim._text=txt.substring(0,c)+'\n'+txt.substring(c)
