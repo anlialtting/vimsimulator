@@ -3,6 +3,9 @@ Promise.all([
     module.shareImport('loadUserInterface/prototype.ui.js'),
 ]).then(modules=>{
     return o=>{
+        Object.defineProperty(o,'cursor',{get(){
+            return this._cursor.abs
+        }})
         Object.defineProperty(o,'mode',{get(){
             return this._mode
         }})
