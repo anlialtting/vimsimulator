@@ -38,7 +38,7 @@ Promise.all([
         defaultOptions=         modules[8],
         StyleManager=           modules[9],
         loadUserInterface=      modules[12]
-    function Vim(read){
+    function Vim(read,write){
         EventEmmiter.call(this)
         this._values={
             mode:'normal'
@@ -56,6 +56,7 @@ Promise.all([
         this._styleManager.appendChild(document.createTextNode(style))
         this._styleManager.appendChild(document.createTextNode(colors))
         this.read=read
+        this.write=write
         rc(this)
     }
     Object.setPrototypeOf(Vim.prototype,EventEmmiter.prototype)

@@ -12,16 +12,13 @@ Promise.all([
     let vim=new Vim(p=>{
         if(p=='~/.vimrc')
             return localStorage.webvimVimrc
-    })
-    vim.on('write',p=>{
-        if(!p)
-            return
+    },p=>{
         if(p=='~/.vimrc')
             localStorage.webvimVimrc=vim.text
     })
+    vim.pollute
     //vim.text=testdata.longText
     let vimViewDiv=createTestDiv(vim)
-    vim.pollute
     document.head.appendChild(style)
     document.body.appendChild(vimViewDiv)
     vim.once('quit',()=>{
