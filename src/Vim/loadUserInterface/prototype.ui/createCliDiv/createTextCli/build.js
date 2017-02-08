@@ -8,7 +8,7 @@ var
     }
 Promise.all([
     module.repository.Cli,
-    module.shareImport('viewText.js'),
+    module.shareImport('build/viewText.js'),
     module.shareImport('createTextContentCli.js'),
 ]).then(modules=>{
     let

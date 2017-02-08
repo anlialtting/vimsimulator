@@ -1,4 +1,6 @@
 module.repository.Cli=module.shareImport('createCliDiv/Cli.js')
+module.repository.stringWidth=
+    module.shareImport('createCliDiv/stringWidth.js')
 Promise.all([
     module.shareImport('createCliDiv/createCommandCli.js'),
     module.repository.Cli,

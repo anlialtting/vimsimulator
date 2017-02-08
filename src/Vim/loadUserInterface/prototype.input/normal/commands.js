@@ -2,7 +2,7 @@ Promise.all([
     module.shareImport('commands/uppercases.js'),
     module.shareImport('commands/lowercasesAM.js'),
     module.shareImport('commands/lowercasesNZ.js'),
-    module.shareImport('../shift.js'),
+    module.repository.shift,
 ]).then(modules=>{
     let
         uppercases=     modules[0],

@@ -6,8 +6,10 @@
         module.repository.EventEmmiter=module.importByPath(
             `${moduleNode}/events.js`
         )
-    if(!module.repository.stringWidth)
-        module.repository.stringWidth=module.importByPath(
+    if(!module.repository.npm)
+        module.repository.npm={}
+    if(!module.repository.npm.stringWidth)
+        module.repository.npm.stringWidth=module.importByPath(
             `${moduleNode}/string-width.js`
         )
 }

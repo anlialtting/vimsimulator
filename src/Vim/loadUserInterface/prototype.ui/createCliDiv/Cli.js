@@ -1,6 +1,6 @@
 Promise.all([
     module.repository.EventEmmiter,
-    module.shareImport('stringWidth.js'),
+    module.repository.stringWidth,
     module.shareImport('Cli/View.js'),
 ]).then(modules=>{
     let

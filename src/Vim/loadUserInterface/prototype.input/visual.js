@@ -1,6 +1,6 @@
 Promise.all([
-    module.shareImport('../../visualRange.js'),
-    module.shareImport('shift.js'),
+    module.repository.visualRange,
+    module.repository.shift,
 ]).then(modules=>{
     let
         visualRange=modules[0],

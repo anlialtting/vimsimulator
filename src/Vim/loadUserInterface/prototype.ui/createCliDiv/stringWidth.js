@@ -1,4 +1,4 @@
-module.repository.stringWidth.then(npmStringWidth=>{
+module.repository.npm.stringWidth.then(npmStringWidth=>{
     function charWidth(c){
         if(c=='\t')
             return 8

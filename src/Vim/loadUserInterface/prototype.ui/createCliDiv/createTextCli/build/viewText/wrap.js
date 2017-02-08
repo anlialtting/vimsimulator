@@ -1,7 +1,7 @@
 var color4i={color:'var(--color4i)'}
 Promise.all([
     module.shareImport('wrap/line.js'),
-    module.shareImport('../../stringWidth.js'),
+    module.repository.stringWidth,
 ]).then(modules=>{
     let
         line=       modules[0],

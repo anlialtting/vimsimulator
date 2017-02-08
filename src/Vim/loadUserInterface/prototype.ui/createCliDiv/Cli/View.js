@@ -1,6 +1,6 @@
 Promise.all([
     module.shareImport('View/update.js'),
-    module.shareImport('../../measureWidth.js'),
+    module.repository.measureWidth,
 ]).then(modules=>{
     let
         update=modules[0],

@@ -1,5 +1,5 @@
 Promise.all([
-    module.shareImport('../measureWidth.js'),
+    module.repository.measureWidth,
 ]).then(modules=>{
     let
         measureWidth=   modules[0]

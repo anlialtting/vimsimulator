@@ -1,6 +1,8 @@
+module.repository.measureWidth=
+    module.shareImport('prototype.ui/measureWidth.js'),
 Promise.all([
     module.shareImport('prototype.ui/createCliDiv.js'),
-    module.shareImport('prototype.ui/measureWidth.js'),
+    module.repository.measureWidth,
     module.repository.EventEmmiter,
 ]).then(modules=>{
     let
