@@ -1,4 +1,4 @@
-module.import('insertAt.js').then(insertAt=>{
+module.repository.insertAt.then(insertAt=>{
     function n(vim,cmd,arg){
         //vim.gotoNextMatch()
         return{
@@ -24,14 +24,14 @@ module.import('insertAt.js').then(insertAt=>{
                 acceptable:true,
                 complete:true,
             }
-        vim._text||(vim._text='\n')
+        let s=vim._registers['"'].string.repeat(arg||1)
         if(vim._registers['"'].mode=='string'){
             let c=vim._cursor.abs
-            vim._text=insertAt(vim._registers['"'].string,vim._trueText,c+1)
-            vim._cursor.moveTo(c+vim._registers['"'].string.length)
+            vim._text=insertAt(s,vim._trueText,c+1)
+            vim._cursor.moveTo(c+s.length)
         }else if(vim._registers['"'].mode=='line'){
             let c=vim._cursor.lineEnd
-            vim._text=insertAt(vim._registers['"'].string,vim._trueText,c)
+            vim._text=insertAt(s,vim._trueText,c)
             vim._cursor.moveTo(vim._cursor.lineEnd)
         }
         return{

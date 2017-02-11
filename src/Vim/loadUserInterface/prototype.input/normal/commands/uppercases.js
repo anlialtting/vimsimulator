@@ -1,4 +1,4 @@
-module.import('insertAt.js').then(insertAt=>{
+module.repository.insertAt.then(insertAt=>{
     function A(vim){
         vim._mode='insert'
         vim._cursor.moveToEOL()
