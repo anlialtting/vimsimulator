@@ -13,33 +13,31 @@
             `${moduleNode}/string-width.js`
         )
 }
+var
+    loadUserInterface=  module.shareImport('Vim/loadUserInterface.js'),
+    loadSyntacticSugar= module.shareImport('Vim/loadSyntacticSugar.js'),
+    colors=             module.get('Vim/colors.css'),
+    createCursor=       module.shareImport('Vim/createCursor.js'),
+    rc=                 module.shareImport('Vim/rc.js')
 Promise.all([
-    module.repository.EventEmmiter,
-    module.get('Vim/colors.css'),
-    module.shareImport('Vim/createCursor.js'),
-    module.shareImport('Vim/rc.js'),
-    module.shareImport('Vim/loadSyntacticSugar.js'),
+    module.shareImport('Vim/prototype._welcomeText.js'),
+    module.shareImport('Vim/prototype._write.js'),
+    module.shareImport('Vim/prototype._edit.js'),
+    module.shareImport('Vim/StyleManager.js'),
     module.shareImport('Vim/UndoBranchManager.js'),
     module.get('Vim/style.css'),
     module.shareImport('Vim/prototype._mode.js'),
     module.shareImport('Vim/defaultOptions.js'),
-    module.shareImport('Vim/StyleManager.js'),
-    module.shareImport('Vim/prototype._welcomeText.js'),
-    module.shareImport('Vim/prototype._write.js'),
-    module.shareImport('Vim/loadUserInterface.js'),
-    module.shareImport('Vim/prototype._edit.js'),
-]).then(modules=>{
+]).then(async modules=>{
     let
-        EventEmmiter=           modules[0],
-        colors=                 modules[1],
-        createCursor=           modules[2],
-        rc=                     modules[3],
-        loadSyntacticSugar=     modules[4],
-        UndoBranchManager=      modules[5],
-        style=                  modules[6],
-        defaultOptions=         modules[8],
-        StyleManager=           modules[9],
-        loadUserInterface=      modules[12]
+        EventEmmiter=           await module.repository.EventEmmiter,
+        StyleManager=           modules[3],
+        UndoBranchManager=      modules[4],
+        style=                  modules[5],
+        defaultOptions=         modules[7]
+    colors=         await colors
+    createCursor=   await createCursor
+    rc=             await rc
     function Vim(read,write){
         EventEmmiter.call(this)
         this._values={
@@ -63,7 +61,7 @@ Promise.all([
         rc(this)
     }
     Object.setPrototypeOf(Vim.prototype,EventEmmiter.prototype)
-    Object.defineProperty(Vim.prototype,'_mode',modules[7])
+    Object.defineProperty(Vim.prototype,'_mode',modules[6])
     Vim.prototype._quit=function(){
         this.emit('quit')
     }
@@ -87,10 +85,10 @@ Promise.all([
     Vim.prototype._read=function(path){
         return this.read&&this.read(path)
     }
-    Vim.prototype._write=modules[11]
-    Vim.prototype._edit=modules[13]
-    Vim.prototype._welcomeText=modules[10]
-    loadUserInterface(Vim.prototype)
-    loadSyntacticSugar(Vim.prototype)
+    Vim.prototype._write=modules[1]
+    Vim.prototype._edit=modules[2]
+    Vim.prototype._welcomeText=modules[0]
+    ;(await loadUserInterface)(Vim.prototype)
+    ;(await loadSyntacticSugar)(Vim.prototype)
     return Vim
 })

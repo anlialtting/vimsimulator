@@ -17,7 +17,7 @@ Promise.all([
             localStorage.webvimVimrc=vim.text
     })
     vim.pollute
-    vim.text=testdata.longText
+    //vim.text=testdata.longText
     let vimViewDiv=createTestDiv(vim)
     document.head.appendChild(style)
     document.body.appendChild(vimViewDiv)

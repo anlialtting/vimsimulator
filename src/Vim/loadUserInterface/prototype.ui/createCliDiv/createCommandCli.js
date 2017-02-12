@@ -1,8 +1,5 @@
-Promise.all([
-    module.repository.Cli
-]).then(modules=>{
-    let
-        Cli=            modules[0]
+(async()=>{
+    let Cli=await module.repository.Cli
     function createCommandDiv(ui){
         let vim=ui._vim
         let cli=new Cli
@@ -26,12 +23,12 @@ Promise.all([
                 g('-- VISUAL BLOCK --')
             }else if(vim.mode=='cmdline'){
                 update(cli)
-                vim.on('view',listener)
+                ui.on('update',listener)
                 function listener(){
                     if(vim.mode=='cmdline')
                         update(cli)
                     else
-                        vim.removeListener('view',listener)
+                        ui.removeListener('update',listener)
                 }
             }
             function g(s){
@@ -59,4 +56,4 @@ Promise.all([
         }
     }
     return createCommandDiv
-})
+})()
