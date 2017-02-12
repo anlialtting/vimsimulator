@@ -21,8 +21,14 @@ Promise.all([
         this._vim.on('view',()=>this._update())
     }
     Object.setPrototypeOf(Ui.prototype,EventEmmiter.prototype)
+    Object.defineProperty(Ui.prototype,'_fontSize',{set(v){
+        this._values._fontSize=v
+        this._values._fontWidth=measureWidth(this._fontSize)
+    },get(){
+        return this._values._fontSize
+    }})
     Object.defineProperty(Ui.prototype,'_fontWidth',{get(){
-        return measureWidth(this._fontSize)
+        return this._values._fontWidth
     }})
     Ui.prototype._update=function(){
         this.emit('update')
@@ -65,6 +71,8 @@ Promise.all([
         return n
     }
     return{get(){
-        return new Ui(this)
+        let ui=new Ui(this)
+        this._uis.push(ui)
+        return ui
     }}
 })

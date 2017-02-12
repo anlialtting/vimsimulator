@@ -59,6 +59,7 @@ Promise.all([
         this._styleManager.appendChild(document.createTextNode(colors))
         this.read=read
         this.write=write
+        this._uis=[]
         rc(this)
     }
     Object.setPrototypeOf(Vim.prototype,EventEmmiter.prototype)
@@ -88,14 +89,6 @@ Promise.all([
     }
     Vim.prototype._write=modules[11]
     Vim.prototype._edit=modules[13]
-    Object.defineProperty(Vim.prototype,'_mainUi',{get(){
-        if(!this._values._mainUi){
-            this._values._mainUi=this.ui
-            this._values._mainUi.width=80
-            this._values._mainUi.height=24
-        }
-        return this._values._mainUi
-    }})
     Vim.prototype._welcomeText=modules[10]
     loadUserInterface(Vim.prototype)
     loadSyntacticSugar(Vim.prototype)
