@@ -56,7 +56,7 @@ Promise.all([
             let c=cursorCli(ui,text,cursor)
             cli.appendChild(c)
             cli.appendChild({
-                child:ui._cursor,
+                child:ui._cursorSymbol,
                 r:c.r,
                 c:c.c,
             })

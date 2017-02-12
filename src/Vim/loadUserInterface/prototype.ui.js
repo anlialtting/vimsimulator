@@ -16,7 +16,7 @@ Promise.all([
         this._fontSize=13
         this._wrapMethod='greedy'
         this._refreshMinTime=16
-        this._cursor=Symbol()
+        this._cursorSymbol=Symbol()
         this.node=createViewNode(this)
         this._vim.on('view',()=>this._update())
     }
