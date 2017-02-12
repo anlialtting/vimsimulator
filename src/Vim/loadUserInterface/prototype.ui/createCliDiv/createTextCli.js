@@ -20,7 +20,7 @@ Promise.all([
             build(
                 cli,
                 ui,
-                ui._vim._text||'\n',
+                ui._vim._trueText,
                 ui._vim._cursor,
                 document.activeElement==ui._inputTag&&
                     ui._vim.mode!='cmdline',

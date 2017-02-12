@@ -3,16 +3,13 @@ Promise.all([
 ]).then(modules=>{
     let
         Cli=            modules[0]
-    function createCommandDiv(vim){
+    function createCommandDiv(ui){
+        let vim=ui._vim
         let cli=new Cli
-        f(cli)
-        vim.on('view',changed=>{
-            if(changed.indexOf('mode')<0)
-                return
-            f(cli)
-        })
+        f()
+        ui.on('modeChange',f)
         return cli
-        function f(cli){
+        function f(){
             if(vim.mode=='normal'){
                 cli.clear()
                 cli.appendChild(vim._modeData.status!=undefined?

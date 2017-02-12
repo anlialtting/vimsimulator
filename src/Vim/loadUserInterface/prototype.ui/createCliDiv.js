@@ -20,7 +20,7 @@ Promise.all([
             cliView=cli.view,
             currentR,
             currentWelcomeText
-        ui._commandCli=createCommandCli(vim)
+        ui._commandCli=createCommandCli(ui)
         cliView.fontSize=ui._fontSize
         update()
         ui.on('update',update)
