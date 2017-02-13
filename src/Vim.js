@@ -72,7 +72,8 @@ Promise.all([
             if(/[^\n]$/.test(val))
                 val+='\n'
             this._values.text=val
-            this._viewChanged.text=true
+            this._viewChanged.text=this._viewChanged.text||[]
+            this._viewChanged.text.push(val)
         },get(){
             return this._values.text
         }
@@ -92,6 +93,14 @@ Promise.all([
     Vim.prototype._write=modules[1]
     Vim.prototype._edit=modules[2]
     Vim.prototype._welcomeText=modules[0]
+    Object.defineProperty(Vim.prototype,'_mainUi',{get(){
+        if(!this._values._mainUi){
+            this._values._mainUi=this.ui
+            this._values._mainUi.width=80
+            this._values._mainUi.height=24
+        }
+        return this._values._mainUi
+    }})
     ;(await loadUserInterface)(Vim.prototype)
     ;(await loadSyntacticSugar)(Vim.prototype)
     return Vim
