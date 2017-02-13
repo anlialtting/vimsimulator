@@ -6,34 +6,8 @@ Promise.all([
         commands=   modules[0],
         ascii=      modules[1]
     return(vim,val)=>{
-        if(typeof val=='object'){
-            if(val.ctrlKey){
-                if(val.key=='r')
-                    val=String.fromCharCode(17)+'r'
-            }else switch(val.key){
-                case 'ArrowLeft':
-                    val='h'
-                    break
-                case 'ArrowRight':
-                    val='l'
-                    break
-                case 'ArrowDown':
-                    val='j'
-                    break
-                case 'ArrowUp':
-                    val='k'
-                    break
-                case 'Backspace':
-                    val=ascii.bs
-                    break
-                case 'Enter':
-                    val=ascii.cr
-                    break
-                case 'Delete':
-                    val=ascii.del
-                    break
-            }
-        }
+        if(typeof val=='object')
+            val=object(vim,val)
         if(!('command' in vim._modeData))
             vim._modeData.command=''
         vim._modeData.command+=val
@@ -56,6 +30,28 @@ Promise.all([
             vim._modeData.command=''
         }
         vim._ui()
+    }
+    function object(vim,val){
+        if(val.ctrlKey){
+            if(val.key=='r')
+                return String.fromCharCode(17)+'r'
+        }else switch(val.key){
+            case 'ArrowLeft':
+                return 'h'
+                break
+            case 'ArrowRight':
+                return 'l'
+            case 'ArrowDown':
+                return 'j'
+            case 'ArrowUp':
+                return 'k'
+            case 'Backspace':
+                return ascii.bs
+            case 'Enter':
+                return ascii.cr
+            case 'Delete':
+                return ascii.del
+        }
     }
     function tryCommand(vim,cmd,arg){
         if(cmd=='')
