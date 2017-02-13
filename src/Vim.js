@@ -20,26 +20,26 @@ var
     loadSyntacticSugar= module.shareImport('Vim/loadSyntacticSugar.js'),
     colors=             module.get('Vim/colors.css'),
     createCursor=       module.shareImport('Vim/createCursor.js'),
-    rc=                 module.shareImport('Vim/rc.js')
+    rc=                 module.shareImport('Vim/rc.js'),
+    defaultOptions=     module.shareImport('Vim/defaultOptions.js'),
+    StyleManager=       module.shareImport('Vim/StyleManager.js'),
+    UndoBranchManager=  module.shareImport('Vim/UndoBranchManager.js'),
+    style=              module.get('Vim/style.css')
+    EventEmmiter=       module.repository.npm.events
 Promise.all([
     module.shareImport('Vim/prototype._welcomeText.js'),
     module.shareImport('Vim/prototype._write.js'),
     module.shareImport('Vim/prototype._edit.js'),
-    module.shareImport('Vim/StyleManager.js'),
-    module.shareImport('Vim/UndoBranchManager.js'),
-    module.get('Vim/style.css'),
     module.shareImport('Vim/prototype._mode.js'),
-    module.shareImport('Vim/defaultOptions.js'),
 ]).then(async modules=>{
-    let
-        EventEmmiter=           await module.repository.npm.events,
-        StyleManager=           modules[3],
-        UndoBranchManager=      modules[4],
-        style=                  modules[5],
-        defaultOptions=         modules[7]
-    colors=         await colors
-    createCursor=   await createCursor
-    rc=             await rc
+    EventEmmiter=       await EventEmmiter
+    StyleManager=       await StyleManager
+    UndoBranchManager=  await UndoBranchManager
+    style=              await style
+    colors=             await colors
+    createCursor=       await createCursor
+    rc=                 await rc
+    defaultOptions=     await defaultOptions
     function Vim(read,write){
         EventEmmiter.call(this)
         this._values={
@@ -63,7 +63,7 @@ Promise.all([
         rc(this)
     }
     Object.setPrototypeOf(Vim.prototype,EventEmmiter.prototype)
-    Object.defineProperty(Vim.prototype,'_mode',modules[6])
+    Object.defineProperty(Vim.prototype,'_mode',modules[3])
     Vim.prototype._quit=function(){
         this.emit('quit')
     }
