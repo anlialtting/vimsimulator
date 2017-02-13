@@ -69,6 +69,9 @@ Promise.all([
     Ui.prototype.focus=function(){
         this._inputTag.focus()
     }
+    Object.defineProperty(Ui.prototype,'free',{get(){
+        this._vim.removeUi(this)
+    }})
     function createViewNode(ui){
         let n=createCliDiv(ui)
         n.classList.add('webvim')
@@ -79,7 +82,7 @@ Promise.all([
     }
     return{get(){
         let ui=new Ui(this)
-        this._uis.push(ui)
+        this._uis.add(ui)
         return ui
     }}
 })

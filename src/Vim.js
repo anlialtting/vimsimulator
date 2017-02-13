@@ -59,7 +59,7 @@ Promise.all([
         this._styleManager.appendChild(document.createTextNode(colors))
         this.read=read
         this.write=write
-        this._uis=[]
+        this._uis=new Set
         rc(this)
     }
     Object.setPrototypeOf(Vim.prototype,EventEmmiter.prototype)
@@ -81,7 +81,7 @@ Promise.all([
         return this._values.text||'\n'
     }})
     Vim.prototype._ui=function(){
-        this._uis.map(ui=>
+        this._uis.forEach(ui=>
             ui._updateByVim(this._viewChanged)
         )
         this._viewChanged={}
