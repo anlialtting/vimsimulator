@@ -1,5 +1,5 @@
 Promise.all([
-    module.repository.EventEmmiter,
+    module.repository.npm.events,
     module.repository.stringWidth,
     module.shareImport('Cli/View.js'),
 ]).then(modules=>{

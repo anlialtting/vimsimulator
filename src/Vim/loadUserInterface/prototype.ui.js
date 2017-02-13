@@ -3,7 +3,7 @@ module.repository.measureWidth=
 Promise.all([
     module.shareImport('prototype.ui/createCliDiv.js'),
     module.repository.measureWidth,
-    module.repository.EventEmmiter,
+    module.repository.npm.events,
 ]).then(modules=>{
     let
         createCliDiv=       modules[0],
@@ -18,16 +18,6 @@ Promise.all([
         this._refreshMinTime=16
         this._cursorSymbol=Symbol()
         this.node=createViewNode(this)
-        this._vim.on('ui',changed=>{
-            this._update()
-            for(let v in changed){
-                switch(v){
-                    case 'mode':
-                        this.emit('modeChange')
-                        break
-                }
-            }
-        })
     }
     Object.setPrototypeOf(Ui.prototype,EventEmmiter.prototype)
     Object.defineProperty(Ui.prototype,'_fontSize',{set(v){
@@ -41,6 +31,14 @@ Promise.all([
     }})
     Ui.prototype._update=function(){
         this.emit('update')
+    }
+    Ui.prototype._updateByVim=function(changed){
+        this._update()
+        for(let v in changed)switch(v){
+            case 'mode':
+                this.emit('modeChange')
+                break
+        }
     }
     Object.defineProperty(Ui.prototype,'_wrapMethod',{set(val){
         this._values.wrapMethod=val

@@ -2,16 +2,18 @@
     let moduleNode=`https://cdn.rawgit.com/anliting/module/${
         '0e94e04505484aaf3b367423b36cf426a4242006'
     }/node`
-    if(!module.repository.EventEmmiter)
-        module.repository.EventEmmiter=module.importByPath(
-            `${moduleNode}/events.js`
-        )
     if(!module.repository.npm)
         module.repository.npm={}
     if(!module.repository.npm.stringWidth)
         module.repository.npm.stringWidth=module.importByPath(
             `${moduleNode}/string-width.js`
         )
+    if(!module.repository.npm.events)
+        module.repository.npm.events=module.importByPath(
+            `${moduleNode}/events.js`
+        )
+    if(!module.repository.EventEmmiter)
+        module.repository.EventEmmiter=module.repository.npm.events
 }
 var
     loadUserInterface=  module.shareImport('Vim/loadUserInterface.js'),
@@ -30,7 +32,7 @@ Promise.all([
     module.shareImport('Vim/defaultOptions.js'),
 ]).then(async modules=>{
     let
-        EventEmmiter=           await module.repository.EventEmmiter,
+        EventEmmiter=           await module.repository.npm.events,
         StyleManager=           modules[3],
         UndoBranchManager=      modules[4],
         style=                  modules[5],
@@ -79,7 +81,9 @@ Promise.all([
         return this._values.text||'\n'
     }})
     Vim.prototype._ui=function(){
-        this.emit('ui',this._viewChanged)
+        this._uis.map(ui=>
+            ui._updateByVim(this._viewChanged)
+        )
         this._viewChanged={}
     }
     Vim.prototype._read=function(path){
