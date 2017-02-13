@@ -55,7 +55,7 @@ Promise.all([
         }else{
             vim._modeData.command=''
         }
-        vim._view()
+        vim._ui()
     }
     function tryCommand(vim,cmd,arg){
         if(cmd=='')

@@ -25,7 +25,7 @@ Promise.all([
                 this._welcomeText=undefined
                 this._undoBranchManager.clear()
                 this._undoBranchManager.push(this._text)
-                this._view()
+                this._ui()
             },get(){
                 return this._text
             }

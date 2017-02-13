@@ -68,6 +68,6 @@ function main(vim,val){
 }
 ((vim,val)=>{
     let r=main(vim,val)
-    vim._view()
+    vim._ui()
     return r
 })

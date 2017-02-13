@@ -1,7 +1,7 @@
 (`\
-                  Web Vim
+                     Web Vim
 
-Thanks Bram Moolenaar for the original Vim!
+Thanks Bram Moolenaar et al. for the original Vim!
 
-          type :q<Enter> to exit            
+             type :q<Enter> to exit            
 `)

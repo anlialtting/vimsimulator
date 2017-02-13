@@ -78,8 +78,8 @@ Promise.all([
     Object.defineProperty(Vim.prototype,'_trueText',{get(){
         return this._values.text||'\n'
     }})
-    Vim.prototype._view=function(){
-        this.emit('view',Object.keys(this._viewChanged))
+    Vim.prototype._ui=function(){
+        this.emit('ui',this._viewChanged)
         this._viewChanged={}
     }
     Vim.prototype._read=function(path){

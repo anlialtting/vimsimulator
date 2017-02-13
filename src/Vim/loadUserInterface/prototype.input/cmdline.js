@@ -117,6 +117,6 @@ function set(vim,cmd){
 }
 ((vim,val)=>{
     let r=main(vim,val)
-    vim._view()
+    vim._ui()
     return r
 })

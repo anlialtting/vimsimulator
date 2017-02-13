@@ -68,6 +68,6 @@ Promise.all([
     }
     return(vim,val)=>{
         main(vim,val)
-        vim._view()
+        vim._ui()
     }
 })

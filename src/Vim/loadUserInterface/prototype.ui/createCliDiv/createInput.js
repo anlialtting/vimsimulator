@@ -11,7 +11,7 @@ Promise.all([
         textarea.style.height=`${ui._fontSize+2}px`
         let composing=false
         textarea.addEventListener('blur',()=>{
-            vim._view()
+            vim._ui()
         })
         textarea.addEventListener('compositionstart',e=>{
             composing=true
@@ -22,7 +22,7 @@ Promise.all([
             f()
         })
         textarea.addEventListener('focus',()=>{
-            vim._view()
+            vim._ui()
         })
         textarea.addEventListener('input',()=>{
             f()
@@ -53,7 +53,7 @@ Promise.all([
         function f(){
             if(composing){
                 vim.imInput=textarea.value
-                vim._view()
+                vim._ui()
             }else{
                 vim.input=textarea.value
                 textarea.value=''

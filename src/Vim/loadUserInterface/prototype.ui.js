@@ -18,15 +18,15 @@ Promise.all([
         this._refreshMinTime=16
         this._cursorSymbol=Symbol()
         this.node=createViewNode(this)
-        this._vim.on('view',changed=>{
+        this._vim.on('ui',changed=>{
             this._update()
-            changed.map(v=>{
+            for(let v in changed){
                 switch(v){
                     case 'mode':
                         this.emit('modeChange')
                         break
                 }
-            })
+            }
         })
     }
     Object.setPrototypeOf(Ui.prototype,EventEmmiter.prototype)
