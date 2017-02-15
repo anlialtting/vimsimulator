@@ -4,7 +4,12 @@ Promise.all([
     let
         wrap=       modules[0]
     function uiText(ui,targetWidth,vc){
-        let res=wrap(ui,ui._wrapMethodData.text.string,targetWidth,vc)
+        let res=wrap(
+            ui._vim._options.list,
+            ui._wrapMethodData.text.string,
+            targetWidth,
+            vc.abs
+        )
         if(ui.height){
             checkScroll(ui,res.cursorViewRow)
             res.res=cut(ui,res.res)
@@ -22,7 +27,7 @@ function checkScroll(ui,cursorViewRow){
 function cut(ui,res){
     let s=ui._wrapMethodData._scroll
     return res.map(l=>{
-        if(l.endRow<=s||s+ui.height-1<=l.startRow)
+        if(l.startRow+l.rows.length<=s||s+ui.height-1<=l.startRow)
             return
         l.rows=l.rows.map((r,i)=>{
             if(!(s<=l.startRow+i&&l.startRow+i<s+ui.height-1))

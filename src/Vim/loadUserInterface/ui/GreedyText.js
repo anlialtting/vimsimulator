@@ -12,10 +12,7 @@ Object.defineProperty(GreedyText.prototype,'string',{get(){
     return this.lines.map(l=>l.string+'\n').join('')
 }})
 GreedyText.prototype.uiText=function(start,end){
-    return{
-        start:null,
-        rows:null,
-    }
+    return []
 }
 GreedyText.prototype.row=function(pos){
     return 0

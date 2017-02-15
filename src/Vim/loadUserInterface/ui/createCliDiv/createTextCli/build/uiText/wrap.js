@@ -3,63 +3,65 @@ var
     lfDoc={
         child:'$',
         style:color4i
-    }
-Promise.all([
-    module.shareImport('wrap/line.js'),
-    module.repository.stringWidth,
-]).then(modules=>{
-    let
-        line=       modules[0],
-        stringWidth=modules[1]
+    },
+    line=module.shareImport('wrap/line.js')
+;(async modules=>{
+    let stringWidth=await module.repository.stringWidth
+    line=await line
     function width(c){
         return c=='\n'?1:stringWidth(c)
     }
-    function wrap(ui,text,targetWidth,vc){
+    function wrap(list,text,targetWidth,cursor){
         let
             charCount=0,
-            viewRowsCount=0,
-            cursorViewRow,
-            list=ui._vim._options.list
+            rowsCount=0
         let res=line.lines(text).map((l,j)=>{
-            let length=l.length+1
             l+='\n'
             let res={
-                index:j
+                index:j,
+                start:charCount,
+                startRow:rowsCount,
+                rows:targetWidth&&l.length?
+                    wrapLine(list,l,targetWidth)
+                :
+                    rawLine(l),
             }
-            res.start=charCount
-            res.startRow=viewRowsCount
-            if(targetWidth&&l.length){
-                res.rows=[]
-                for(let i=0;i<l.length;){
-                    let start=i,end=calcEnd(i,l,targetWidth)
-                    res.rows.push({
-                        start,
-                        end,
-                        string:substring(list,l,start,end)
-                    })
-                    if(j==vc.r&&start<=vc.c&&vc.c<end)
-                        cursorViewRow=viewRowsCount
-                    viewRowsCount++
-                    i=end
-                }
-            }else{
-                if(j==vc.r)
-                    cursorViewRow=viewRowsCount
-                res.rows=[{
-                    start:0,
-                    end:l.length,
-                    string:l
-                }]
-                viewRowsCount++
-            }
-            res.endRow=viewRowsCount
-            charCount+=length
+            charCount+=l.length
+            rowsCount+=res.rows.length
             return res
         })
         return{
             res,
-            cursorViewRow
+            cursorViewRow:calcRow(res,cursor)
         }
+    }
+    function wrapLine(list,l,targetWidth){
+        let rows=[]
+        for(let i=0;i<l.length;){
+            let start=i,end=calcEnd(i,l,targetWidth)
+            rows.push({
+                start,
+                end,
+                string:substring(list,l,start,end)
+            })
+            i=end
+        }
+        return rows
+    }
+    function rawLine(l){
+        return[{
+            start:0,
+            end:l.length,
+            string:l
+        }]
+    }
+    function calcRow(txt,pos){
+        let res
+        txt.map(l=>l.rows.map((r,i)=>{
+            if(l.start+r.start<=pos&&pos<l.start+r.end)
+                res=l.startRow+i
+        }))
+        return res
     }
     function calcEnd(i,l,targetWidth){
         for(
@@ -73,9 +75,9 @@ Promise.all([
         let a=[]
         for(;start!=end;start++){
             let c=s[start]
-            a.push(c=='\n'?list?lfDoc:'\n':c)
+            a.push(c=='\n'?list?Object.create(lfDoc):'\n':c)
         }
         return a
     }
     return wrap
-})
+})()
