@@ -1,21 +1,7 @@
-module.repository.measureWidth=
-    module.shareImport('ui/measureWidth.js')
-function GreedyText(){
-    this.lines=[]
-}
-Object.defineProperty(GreedyText.prototype,'update',{set(val){
-    if(typeof val=='string'){
-        val=val.split('\n')
-        val.pop()
-        this.lines=val
-    }
-}})
-Object.defineProperty(GreedyText.prototype,'string',{get(){
-    let a=this.lines.slice()
-    a.push('')
-    return a.join('\n')
-}})
-var EventEmmiter=module.repository.npm.events
+module.repository.measureWidth=module.shareImport('ui/measureWidth.js')
+var
+    EventEmmiter=module.repository.npm.events,
+    GreedyText=module.shareImport('ui/GreedyText.js')
 Promise.all([
     module.shareImport('ui/createCliDiv.js'),
     module.repository.measureWidth,
@@ -23,7 +9,8 @@ Promise.all([
     let
         createCliDiv=       modules[0],
         measureWidth=       modules[1]
-    EventEmmiter=       await EventEmmiter
+    EventEmmiter=await EventEmmiter
+    GreedyText=await GreedyText
     function Ui(vim){
         EventEmmiter.call(this)
         this._values={}
