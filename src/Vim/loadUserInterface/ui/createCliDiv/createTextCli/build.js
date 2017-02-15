@@ -13,7 +13,7 @@ Promise.all([
 ]).then(modules=>{
     let
         Cli=                    modules[0],
-        uiText=               modules[1],
+        uiText=                 modules[1],
         createTextContentCli=   modules[2]
     function build(cli,ui,showCursor,showNumber){
         let 
