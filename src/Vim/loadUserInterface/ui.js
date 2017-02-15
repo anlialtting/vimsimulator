@@ -1,5 +1,18 @@
 module.repository.measureWidth=
-    module.shareImport('ui/measureWidth.js'),
+    module.shareImport('ui/measureWidth.js')
+function GreedyText(){
+    this.lines=[]
+}
+Object.defineProperty(GreedyText.prototype,'update',{set(val){
+    val=val.split('\n')
+    val.pop()
+    this.lines=val
+}})
+Object.defineProperty(GreedyText.prototype,'string',{get(){
+    let a=this.lines.slice()
+    a.push('')
+    return a.join('\n')
+}})
 Promise.all([
     module.shareImport('ui/createCliDiv.js'),
     module.repository.measureWidth,
@@ -33,18 +46,30 @@ Promise.all([
         this.emit('update')
     }
     Ui.prototype._updateByVim=function(changed){
-        this._update()
-        for(let v in changed)switch(v){
-            case 'mode':
-                this.emit('modeChange')
-                break
+        for(let k in changed){let v=changed[k]
+            switch(k){
+                case 'mode':
+                    this.emit('modeChange')
+                    break
+                case 'text':
+                    if(this._wrapMethod=='greedy'){
+                        v.map(u=>
+                            //this._wrapMethodData.text.update=u
+                            this._wrapMethodData.text.update=this._vim._trueText
+                        )
+                    }
+            }
         }
+        this._update()
     }
     Object.defineProperty(Ui.prototype,'_wrapMethod',{set(val){
         this._values.wrapMethod=val
         if(this._values.wrapMethod=='greedy'){
+            let text=new GreedyText
+            text.update=this._vim._trueText
             this._wrapMethodData={
                 _scroll:0,
+                text,
             }
         }else if(this._values.wrapMethod=='fixed'){
             this._wrapMethodData={
