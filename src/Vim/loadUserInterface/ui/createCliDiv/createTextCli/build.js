@@ -15,13 +15,14 @@ Promise.all([
         Cli=                    modules[0],
         viewText=               modules[1],
         createTextContentCli=   modules[2]
-    function build(cli,ui,text,cursor,showCursor,showNumber){
+    function build(cli,ui,showCursor,showNumber){
+        let 
+            cursor=ui._vim._cursor
         let numberWidth=Math.max(3,Math.floor(
             Math.log(ui._vim._cursor._countOfRows)/Math.log(10)
         )+1)
         text=viewText(
             ui,
-            text,
             showNumber?ui.width-(numberWidth+1):ui.width,
             cursor
         )

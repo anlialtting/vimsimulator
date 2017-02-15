@@ -3,7 +3,9 @@ Promise.all([
 ]).then(modules=>{
     let
         wrap=       modules[0]
-    function uiText(ui,text,targetWidth,vc){
+    function uiText(ui,targetWidth,vc){
+        let
+            text=ui._wrapMethodData.text.string
         let res=wrap(ui,text,targetWidth,vc)
         if(ui.height){
             checkScroll(ui,res.cursorViewRow)
