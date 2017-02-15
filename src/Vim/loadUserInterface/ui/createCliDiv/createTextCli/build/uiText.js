@@ -1,5 +1,5 @@
 Promise.all([
-    module.shareImport('viewText/wrap.js'),
+    module.shareImport('uiText/wrap.js'),
 ]).then(modules=>{
     let
         wrap=       modules[0]

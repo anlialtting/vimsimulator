@@ -17,7 +17,6 @@ Promise.all([
             composing=true
         })
         textarea.addEventListener('compositionend',e=>{
-            vim.imInput=''
             composing=false
             f()
         })
@@ -52,7 +51,6 @@ Promise.all([
         return textarea
         function f(){
             if(composing){
-                vim.imInput=textarea.value
                 vim._ui()
             }else{
                 vim.input=textarea.value

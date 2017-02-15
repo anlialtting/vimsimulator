@@ -8,12 +8,12 @@ var
     }
 Promise.all([
     module.repository.Cli,
-    module.shareImport('build/viewText.js'),
+    module.shareImport('build/uiText.js'),
     module.shareImport('createTextContentCli.js'),
 ]).then(modules=>{
     let
         Cli=                    modules[0],
-        viewText=               modules[1],
+        uiText=               modules[1],
         createTextContentCli=   modules[2]
     function build(cli,ui,showCursor,showNumber){
         let 
@@ -21,7 +21,7 @@ Promise.all([
         let numberWidth=Math.max(3,Math.floor(
             Math.log(ui._vim._cursor._countOfRows)/Math.log(10)
         )+1)
-        text=viewText(
+        text=uiText(
             ui,
             showNumber?ui.width-(numberWidth+1):ui.width,
             cursor

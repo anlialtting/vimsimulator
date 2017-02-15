@@ -79,9 +79,3 @@ Promise.all([
     }
     return wrap
 })
-/*if(j==vc.r&&ui._vim.imInput){
-    l=
-        l.substring(0,vc.c)+
-        ui._vim.imInput+
-        l.substring(vc.c)
-}*/
