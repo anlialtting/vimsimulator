@@ -4,24 +4,26 @@ function GreedyText(){
     this.lines=[]
 }
 Object.defineProperty(GreedyText.prototype,'update',{set(val){
-    val=val.split('\n')
-    val.pop()
-    this.lines=val
+    if(typeof val=='string'){
+        val=val.split('\n')
+        val.pop()
+        this.lines=val
+    }
 }})
 Object.defineProperty(GreedyText.prototype,'string',{get(){
     let a=this.lines.slice()
     a.push('')
     return a.join('\n')
 }})
+var EventEmmiter=module.repository.npm.events
 Promise.all([
     module.shareImport('ui/createCliDiv.js'),
     module.repository.measureWidth,
-    module.repository.npm.events,
-]).then(modules=>{
+]).then(async modules=>{
     let
         createCliDiv=       modules[0],
-        measureWidth=       modules[1],
-        EventEmmiter=       modules[2]
+        measureWidth=       modules[1]
+    EventEmmiter=       await EventEmmiter
     function Ui(vim){
         EventEmmiter.call(this)
         this._values={}
@@ -55,7 +57,8 @@ Promise.all([
                     if(this._wrapMethod=='greedy'){
                         v.map(u=>
                             //this._wrapMethodData.text.update=u
-                            this._wrapMethodData.text.update=this._vim._trueText
+                            this._wrapMethodData.text.update=
+                                this._vim._trueText
                         )
                     }
             }
