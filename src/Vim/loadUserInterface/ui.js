@@ -1,4 +1,6 @@
 module.repository.measureWidth=module.shareImport('ui/measureWidth.js')
+module.repository.stringWidth=
+    module.shareImport('ui/stringWidth.js')
 var
     EventEmmiter=module.repository.npm.events,
     GreedyText=module.shareImport('ui/GreedyText.js')

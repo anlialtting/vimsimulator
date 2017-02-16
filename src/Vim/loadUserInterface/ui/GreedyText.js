@@ -24,4 +24,26 @@ GreedyText.prototype.row=function(pos){
 function Line(val){
     this.string=val
 }
-GreedyText
+var wrapLine=module.shareImport('GreedyText/wrapLine.js')
+;(async()=>{
+    wrapLine=await wrapLine
+    GreedyText.prototype.wrap=function(list,targetWidth){
+        let
+            charCount=0,
+            rowsCount=0
+        this.lines.map((l,j)=>{
+            l=l.string+'\n'
+            let rows=wrapLine(list,l,targetWidth||Infinity)
+            let res={
+                index:j,
+                start:charCount,
+                startRow:rowsCount,
+                rows,
+            }
+            charCount+=l.length
+            rowsCount+=rows.length
+            return this.lines[j].wrapped=res
+        })
+    }
+    return GreedyText
+})()

@@ -25,38 +25,16 @@ function cut(ui,res){
         return l
     }).filter(l=>l!=undefined)
 }
-var wrapLine=module.shareImport('uiText/wrap.js')
-;(async()=>{
-    wrapLine=await wrapLine
-    function uiText(ui,targetWidth,vc){
-        let res=wrap(
-            ui._vim._options.list,
-            ui._wrapMethodData.text,
-            targetWidth
-        )
-        if(ui.height){
-            checkScroll(ui,calcRow(res,vc.abs))
-            res=cut(ui,res)
-        }
-        return res
+function uiText(ui,targetWidth,vc){
+    ui._wrapMethodData.text.wrap(
+        ui._vim._options.list,
+        targetWidth
+    )
+    let res=ui._wrapMethodData.text.lines.map(l=>l.wrapped)
+    if(ui.height){
+        checkScroll(ui,calcRow(res,vc.abs))
+        res=cut(ui,res)
     }
-    function wrap(list,text,targetWidth){
-        let
-            charCount=0,
-            rowsCount=0
-        return text.lines.map((l,j)=>{
-            l=l.string+'\n'
-            let rows=wrapLine(list,l,targetWidth||Infinity)
-            let res={
-                index:j,
-                start:charCount,
-                startRow:rowsCount,
-                rows,
-            }
-            charCount+=l.length
-            rowsCount+=rows.length
-            return res
-        })
-    }
-    return uiText
-})()
+    return res
+}
+uiText
