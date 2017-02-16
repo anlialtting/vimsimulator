@@ -25,13 +25,13 @@ function cut(ui,res){
         return l
     }).filter(l=>l!=undefined)
 }
-var wrap=module.shareImport('uiText/wrap.js')
+var wrapLine=module.shareImport('uiText/wrap.js')
 ;(async()=>{
-    wrap=await wrap
+    wrapLine=await wrapLine
     function uiText(ui,targetWidth,vc){
         let res=wrap(
             ui._vim._options.list,
-            ui._wrapMethodData.text.string,
+            ui._wrapMethodData.text,
             targetWidth
         )
         if(ui.height){
@@ -39,6 +39,24 @@ var wrap=module.shareImport('uiText/wrap.js')
             res=cut(ui,res)
         }
         return res
+    }
+    function wrap(list,text,targetWidth){
+        let
+            charCount=0,
+            rowsCount=0
+        return text.lines.map((l,j)=>{
+            l=l.string+'\n'
+            let rows=wrapLine(list,l,targetWidth||Infinity)
+            let res={
+                index:j,
+                start:charCount,
+                startRow:rowsCount,
+                rows,
+            }
+            charCount+=l.length
+            rowsCount+=rows.length
+            return res
+        })
     }
     return uiText
 })()

@@ -17,6 +17,10 @@ GreedyText.prototype.uiText=function(start,end){
 GreedyText.prototype.row=function(pos){
     return 0
 }
+/*
+    A line should not include EOL,
+    since it has already been seperated from the others.
+*/
 function Line(val){
     this.string=val
 }

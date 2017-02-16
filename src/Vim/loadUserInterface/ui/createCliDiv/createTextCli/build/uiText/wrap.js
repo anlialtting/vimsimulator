@@ -3,31 +3,11 @@ var
     lfDoc={
         child:'$',
         style:color4i
-    },
-    line=module.shareImport('wrap/line.js')
+    }
 ;(async modules=>{
     let stringWidth=await module.repository.stringWidth
-    line=await line
     function width(c){
         return c=='\n'?1:stringWidth(c)
-    }
-    function wrap(list,text,targetWidth){
-        let
-            charCount=0,
-            rowsCount=0
-        return line.lines(text).map((l,j)=>{
-            l+='\n'
-            let rows=wrapLine(list,l,targetWidth||Infinity)
-            let res={
-                index:j,
-                start:charCount,
-                startRow:rowsCount,
-                rows,
-            }
-            charCount+=l.length
-            rowsCount+=rows.length
-            return res
-        })
     }
     function wrapLine(list,l,targetWidth){
         let rows=[]
@@ -58,5 +38,5 @@ var
         }
         return a
     }
-    return wrap
+    return wrapLine
 })()
