@@ -11,29 +11,23 @@ var
     function width(c){
         return c=='\n'?1:stringWidth(c)
     }
-    function wrap(list,text,targetWidth,cursor){
+    function wrap(list,text,targetWidth){
         let
             charCount=0,
             rowsCount=0
-        let res=line.lines(text).map((l,j)=>{
+        return line.lines(text).map((l,j)=>{
             l+='\n'
+            let rows=wrapLine(list,l,targetWidth||Infinity)
             let res={
                 index:j,
                 start:charCount,
                 startRow:rowsCount,
-                rows:targetWidth&&l.length?
-                    wrapLine(list,l,targetWidth)
-                :
-                    rawLine(l),
+                rows,
             }
             charCount+=l.length
-            rowsCount+=res.rows.length
+            rowsCount+=rows.length
             return res
         })
-        return{
-            res,
-            cursorViewRow:calcRow(res,cursor)
-        }
     }
     function wrapLine(list,l,targetWidth){
         let rows=[]
@@ -47,21 +41,6 @@ var
             i=end
         }
         return rows
-    }
-    function rawLine(l){
-        return[{
-            start:0,
-            end:l.length,
-            string:l
-        }]
-    }
-    function calcRow(txt,pos){
-        let res
-        txt.map(l=>l.rows.map((r,i)=>{
-            if(l.start+r.start<=pos&&pos<l.start+r.end)
-                res=l.startRow+i
-        }))
-        return res
     }
     function calcEnd(i,l,targetWidth){
         for(

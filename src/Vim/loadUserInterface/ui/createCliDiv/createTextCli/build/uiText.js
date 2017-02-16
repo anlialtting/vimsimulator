@@ -1,3 +1,11 @@
+function calcRow(txt,pos){
+    let res
+    txt.map(l=>l.rows.map((r,i)=>{
+        if(l.start+r.start<=pos&&pos<l.start+r.end)
+            res=l.startRow+i
+    }))
+    return res
+}
 function checkScroll(ui,cursorViewRow){
     if(ui._wrapMethodData._scroll+ui.height-1<=cursorViewRow)
         ui._wrapMethodData._scroll=cursorViewRow-(ui.height-1)+1
@@ -17,23 +25,20 @@ function cut(ui,res){
         return l
     }).filter(l=>l!=undefined)
 }
-Promise.all([
-    module.shareImport('uiText/wrap.js'),
-]).then(modules=>{
-    let
-        wrap=       modules[0]
+var wrap=module.shareImport('uiText/wrap.js')
+;(async()=>{
+    wrap=await wrap
     function uiText(ui,targetWidth,vc){
         let res=wrap(
             ui._vim._options.list,
             ui._wrapMethodData.text.string,
-            targetWidth,
-            vc.abs
+            targetWidth
         )
         if(ui.height){
-            checkScroll(ui,res.cursorViewRow)
-            res.res=cut(ui,res.res)
+            checkScroll(ui,calcRow(res,vc.abs))
+            res=cut(ui,res)
         }
-        return res.res
+        return res
     }
     return uiText
-})
+})()
