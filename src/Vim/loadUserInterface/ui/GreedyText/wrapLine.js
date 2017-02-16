@@ -4,6 +4,14 @@ var
         child:'$',
         style:color4i
     }
+function substring(list,s,start,end){
+    let a=[]
+    for(;start!=end;start++){
+        let c=s[start]
+        a.push(c=='\n'?list?Object.create(lfDoc):'\n':c)
+    }
+    return a
+}
 ;(async modules=>{
     let stringWidth=await module.repository.stringWidth
     function width(c){
@@ -29,14 +37,6 @@ var
             rowWidth+=w,i++
         );
         return i
-    }
-    function substring(list,s,start,end){
-        let a=[]
-        for(;start!=end;start++){
-            let c=s[start]
-            a.push(c=='\n'?list?Object.create(lfDoc):'\n':c)
-        }
-        return a
     }
     return wrapLine
 })()

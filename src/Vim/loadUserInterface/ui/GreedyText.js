@@ -12,14 +12,34 @@ Object.defineProperty(GreedyText.prototype,'string',{get(){
     return this.lines.map(l=>l.string+'\n').join('')
 }})
 GreedyText.prototype.uiText=function(start,end){
-    return []
+    let res=this.lines.map(l=>l.wrapped)
+    return start==undefined?res:cut(res)
+    function cut(res){
+        return res.map(l=>{
+            if(l.startRow+l.rows.length<=start||end<=l.startRow)
+                return
+            l.rows=l.rows.map((r,i)=>
+                inRange(l.startRow+i)&&r
+            ).filter(r=>r)
+            return l
+        }).filter(l=>l!=undefined)
+    }
+    function inRange(i){
+        return start<=i&&i<end
+    }
 }
 GreedyText.prototype.row=function(pos){
-    return 0
+    let res
+    this.wrap()
+    this.lines.map(l=>l.wrapped).map(l=>l.rows.map((r,i)=>{
+        if(l.start+r.start<=pos&&pos<l.start+r.end)
+            res=l.startRow+i
+    }))
+    return res
 }
 /*
-    A line should not include EOL,
-    since it has already been seperated from the others.
+    A line should not include EOL, since it has already been seperated
+    from the others.
 */
 function Line(val){
     this.string=val

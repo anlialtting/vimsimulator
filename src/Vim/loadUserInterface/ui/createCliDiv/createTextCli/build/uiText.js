@@ -1,40 +1,19 @@
-function calcRow(txt,pos){
-    let res
-    txt.map(l=>l.rows.map((r,i)=>{
-        if(l.start+r.start<=pos&&pos<l.start+r.end)
-            res=l.startRow+i
-    }))
-    return res
-}
 function checkScroll(ui,cursorViewRow){
     if(ui._wrapMethodData._scroll+ui.height-1<=cursorViewRow)
         ui._wrapMethodData._scroll=cursorViewRow-(ui.height-1)+1
     if(cursorViewRow<ui._wrapMethodData._scroll)
         ui._wrapMethodData._scroll=cursorViewRow
 }
-function cut(ui,res){
-    let s=ui._wrapMethodData._scroll
-    return res.map(l=>{
-        if(l.startRow+l.rows.length<=s||s+ui.height-1<=l.startRow)
-            return
-        l.rows=l.rows.map((r,i)=>{
-            if(!(s<=l.startRow+i&&l.startRow+i<s+ui.height-1))
-                return
-            return r
-        }).filter(r=>r!=undefined)
-        return l
-    }).filter(l=>l!=undefined)
-}
 function uiText(ui,targetWidth,vc){
-    ui._wrapMethodData.text.wrap(
-        ui._vim._options.list,
-        targetWidth
-    )
-    let res=ui._wrapMethodData.text.lines.map(l=>l.wrapped)
+    let
+        txt=ui._wrapMethodData.text,
+        scroll=ui._wrapMethodData._scroll
+    txt.wrap(ui._vim._options.list,targetWidth)
     if(ui.height){
-        checkScroll(ui,calcRow(res,vc.abs))
-        res=cut(ui,res)
+        checkScroll(ui,txt.row(vc.abs))
+        return txt.uiText(scroll,scroll+ui.height-1)
+    }else{
+        return txt.uiText()
     }
-    return res
 }
 uiText
