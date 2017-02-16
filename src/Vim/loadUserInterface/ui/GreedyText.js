@@ -32,17 +32,17 @@ var wrapLine=module.shareImport('GreedyText/wrapLine.js')
             charCount=0,
             rowsCount=0
         this.lines.map((l,j)=>{
-            l=l.string+'\n'
-            let rows=wrapLine(list,l,targetWidth||Infinity)
-            let res={
+            let s=l.string+'\n'
+            if(!l.rows)
+                l.rows=wrapLine(list,s,targetWidth||Infinity)
+            l.wrapped={
                 index:j,
                 start:charCount,
                 startRow:rowsCount,
-                rows,
+                rows:l.rows,
             }
-            charCount+=l.length
-            rowsCount+=rows.length
-            this.lines[j].wrapped=res
+            charCount+=s.length
+            rowsCount+=l.rows.length
         })
     }
     return GreedyText
