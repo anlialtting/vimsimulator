@@ -42,7 +42,7 @@ var wrapLine=module.shareImport('GreedyText/wrapLine.js')
             }
             charCount+=l.length
             rowsCount+=rows.length
-            return this.lines[j].wrapped=res
+            this.lines[j].wrapped=res
         })
     }
     return GreedyText
