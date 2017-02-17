@@ -19,17 +19,18 @@ module.repository.insertAt.then(insertAt=>{
         }
     }
     function p(vim,cmd,arg){
-        if(!vim._registers['"'])
+        let reg=vim._registers['"']
+        if(!reg)
             return{
                 acceptable:true,
                 complete:true,
             }
-        let s=vim._registers['"'].string.repeat(arg||1)
-        if(vim._registers['"'].mode=='string'){
+        let s=reg.string.repeat(arg||1)
+        if(reg.mode=='string'){
             let c=vim._cursor.abs
             vim._text=insertAt(s,vim._trueText,c+1)
             vim._cursor.moveTo(c+s.length)
-        }else if(vim._registers['"'].mode=='line'){
+        }else if(reg.mode=='line'){
             let c=vim._cursor.lineEnd
             vim._text=insertAt(s,vim._trueText,c)
             vim._cursor.moveTo(vim._cursor.lineEnd)
