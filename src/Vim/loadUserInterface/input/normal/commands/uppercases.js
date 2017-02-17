@@ -7,21 +7,7 @@ function A(vim){
     }
 }
 function D(vim,cmd,arg){
-    let
-        a=vim._cursor.abs,
-        b=vim._cursor.lineEnd-1,
-        txt=vim._trueText
-    vim._registers['"']={
-        mode:'string',
-        string:txt.substring(a,b),
-    }
-    vim._text=txt.substring(0,a)+txt.substring(b)
-    vim._cursor.moveTo(a)
-    vim._cursor.moveTo(vim._cursor.abs)
-    return{
-        acceptable:true,
-        complete:true,
-    }
+    return{function:'D'}
 }
 function G(vim,cmd,arg){
     arg=arg||vim._cursor._countOfRows

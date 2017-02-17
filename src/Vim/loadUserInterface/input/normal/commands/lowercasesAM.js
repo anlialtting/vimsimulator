@@ -10,24 +10,10 @@ function d(vim,cmd,arg){
     if(cmd=='')
         return{acceptable:true}
     if(cmd=='d'){
-        if(vim._text){
-            arg=arg||1
-            arg=Math.min(vim._cursor._countOfRows-vim._cursor.r,arg)
-            let
-                txt=vim._trueText,
-                a=vim._cursor.line(vim._cursor.r),
-                b=vim._cursor.line(vim._cursor.r+arg)
-            vim._registers['"']={
-                mode:'line',
-                string:txt.substring(a,b),
-            }
-            vim._text=txt.substring(0,a)+txt.substring(b)
-            vim._cursor.moveTo(vim._cursor.lineStart)
-        }
         return{
-            acceptable:true,
-            complete:true,
-            changed:true,
+            function:'dd',
+            count:arg||1,
+            register:'"',
         }
     }
 }
