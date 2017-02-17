@@ -1,10 +1,7 @@
-Promise.all([
-    module.repository.visualRange,
-    module.repository.shift,
-]).then(modules=>{
+(async()=>{
     let
-        visualRange=modules[0],
-        shift=modules[1]
+        visualRange=await module.repository.visualRange,
+        shift=await module.repository.shift
     function main(vim,val){
         if(typeof val=='string'){
             if(val=='d'){
@@ -15,6 +12,7 @@ Promise.all([
                     c=vim._text.substring(r.e)
                 vim._text=a+c
                 vim._registers['"']={mode:'string',string:b}
+                vim._cursor.moveTo(r.s)
                 vim._mode='normal'
                 return
             }
@@ -32,6 +30,7 @@ Promise.all([
                     mode:'string',
                     string:vim._text.substring(r.s,r.e),
                 }
+                vim._cursor.moveTo(r.s)
                 vim._mode='normal'
                 return
             }
@@ -70,4 +69,4 @@ Promise.all([
         main(vim,val)
         vim._ui()
     }
-})
+})()

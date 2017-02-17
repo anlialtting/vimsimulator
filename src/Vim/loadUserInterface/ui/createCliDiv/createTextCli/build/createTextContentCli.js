@@ -77,7 +77,7 @@ Promise.all([
                 if(
                     l.index==vc.r&&(
                         !ui.width||
-                        row.start<=vc.c&&vc.c<row.end
+                        row.start<=vc.c&&vc.c<row.start+row.string.length
                     )
                 ){
                     let viewC=ui.width?vc.c-row.start:vc.c

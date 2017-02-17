@@ -52,11 +52,11 @@ Promise.all([
                     break
                 case 'text':
                     if(this._wrapMethod=='greedy'){
-                        v.map(u=>
-                            //this._wrapMethodData.text.update=u
-                            this._wrapMethodData.text.update=
-                                this._vim._trueText
-                        )
+                        /*v.map(u=>
+                            this._wrapMethodData.text.update=u
+                        )*/
+                        this._wrapMethodData.text.update=
+                            this._vim._trueText
                     }
                     break
                 case 'options':

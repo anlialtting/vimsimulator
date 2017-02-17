@@ -9,7 +9,7 @@ var
 Promise.all([
     module.repository.Cli,
     module.shareImport('build/uiText.js'),
-    module.shareImport('createTextContentCli.js'),
+    module.shareImport('build/createTextContentCli.js'),
 ]).then(modules=>{
     let
         Cli=                    modules[0],
@@ -26,7 +26,13 @@ Promise.all([
             showNumber?ui.width-(numberWidth+1):ui.width,
             cursor
         )
-        let res=createTextContentCli(ui,text,cursor,showCursor)
+        let res
+        try{
+            res=createTextContentCli(ui,text,cursor,showCursor)
+        }catch(e){
+            console.log(text,cursor)
+            throw e
+        }
         if(showNumber){
             cli.appendChild(number(text,numberWidth))
             cli.appendChild({
