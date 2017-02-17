@@ -18,9 +18,7 @@ function o(vim,cmd,arg){
     }
 }
 function p(vim,cmd,arg){
-    return{
-        function:'putAfter',
-    }
+    return{function:'p'}
 }
 function r(vim,cmd,arg){
     if(cmd=='')

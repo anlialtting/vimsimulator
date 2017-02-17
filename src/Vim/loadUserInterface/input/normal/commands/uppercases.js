@@ -54,9 +54,7 @@ function O(vim,cmd,arg){
     }
 }
 function P(vim,cmd,arg){
-    return{
-        function:'putBefore',
-    }
+    return{function:'P'}
 }
 function X(vim,cmd,arg){
     let
