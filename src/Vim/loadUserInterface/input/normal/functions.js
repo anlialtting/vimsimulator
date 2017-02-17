@@ -49,20 +49,20 @@ var
         return docs.acc
     }
     function dd(vim,doc){
-        if(vim._text){
-            let arg=doc.count
-            arg=Math.min(vim._cursor._countOfRows-vim._cursor.r,arg)
-            let
-                txt=vim._trueText,
-                a=vim._cursor.line(vim._cursor.r),
-                b=vim._cursor.line(vim._cursor.r+arg)
-            vim._registers[doc.register]={
-                mode:'line',
-                string:txt.substring(a,b),
-            }
-            vim._text=txt.substring(0,a)+txt.substring(b)
-            vim._cursor.moveTo(vim._cursor.lineStart)
+        if(!vim._text)
+            return docs.ac
+        let arg=doc.count
+        arg=Math.min(vim._cursor._countOfRows-vim._cursor.r,arg)
+        let
+            txt=vim._trueText,
+            a=vim._cursor.line(vim._cursor.r),
+            b=vim._cursor.line(vim._cursor.r+arg)
+        vim._registers[doc.register]={
+            mode:'line',
+            string:txt.substring(a,b),
         }
+        vim._text=txt.substring(0,a)+txt.substring(b)
+        vim._cursor.moveTo(vim._cursor.lineStart)
         return docs.acc
     }
     function p(vim,doc){
