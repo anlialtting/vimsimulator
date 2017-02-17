@@ -16,7 +16,8 @@ Promise.all([
         if(p=='~/.vimrc')
             localStorage.webvimVimrc=vim.text
     })
-    vim.pollute
+    vim.polluteStyle
+    vim.polluteCopy
     //vim.text=testdata.longTextMultiline
     //vim.text=testdata.htmlDoc
     let vimViewDiv=createTestDiv(vim)

@@ -91,6 +91,11 @@ var
         this._viewChanged.options=this._viewChanged.options||{}
         this._viewChanged.options[key]=null
     }
+    Vim.prototype._setRegister=function(key,value){
+        this._registers[key]=value
+        if(key=='+')
+            this.copy&&this.copy(value.string)
+    }
     Object.defineProperty(Vim.prototype,'_mainUi',{get(){
         if(!this._values._mainUi){
             this._values._mainUi=this.ui

@@ -8,7 +8,12 @@ Promise.all([
         uppercases=     modules[0],
         lowercasesAM=   modules[1],
         lowercasesNZ=   modules[2],
-        shift=          modules[3]
+        shift=          modules[3],
+        docs={
+            a:{
+                acceptable:true
+            },
+        }
     function lt(vim,cmd,arg){
         if(cmd=='')
             return{acceptable:true}
@@ -87,6 +92,25 @@ Promise.all([
             }
         }
     }
+    function quotationMark(vim,cmd,arg){
+        if(cmd=='')
+            return docs.a
+        let register=cmd[0]
+        cmd=cmd.substring(1)
+        if(cmd=='')
+            return docs.a
+        let count=arg||1
+        if(cmd=='P')
+            return{function:'P',register,count}
+        if(cmd=='p')
+            return{function:'p',register,count}
+        if(cmd=='d'||cmd=='y')
+            return docs.a
+        if(cmd=='dd')
+            return{function:'dd',register,count}
+        if(cmd=='yy')
+            return{function:'yy',register,count}
+    }
     let commands={
         A:uppercases.A,
         D:uppercases.D,
@@ -118,6 +142,7 @@ Promise.all([
         '/':slash,
         '^':caret,
         '$':dollarSign,
+        '"':quotationMark,
     }
     commands[String.fromCharCode(17)]=ctrl
     return commands

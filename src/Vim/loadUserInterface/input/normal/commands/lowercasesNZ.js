@@ -21,7 +21,7 @@ function p(vim,cmd,arg){
     return{
         function:'p',
         count:arg||1,
-        register:vim._registers['"'],
+        register:'"',
     }
 }
 function r(vim,cmd,arg){

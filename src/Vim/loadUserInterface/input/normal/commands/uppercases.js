@@ -43,7 +43,7 @@ function P(vim,cmd,arg){
     return{
         function:'P',
         count:arg||1,
-        register:vim._registers['"'],
+        register:'"',
     }
 }
 function X(vim,cmd,arg){

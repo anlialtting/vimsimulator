@@ -28,17 +28,17 @@ var
             a=vim._cursor.abs,
             b=vim._cursor.lineEnd-1,
             txt=vim._trueText
-        vim._registers['"']={
+        vim._setRegister('"',{
             mode:'string',
             string:txt.substring(a,b),
-        }
+        })
         vim._text=txt.substring(0,a)+txt.substring(b)
         vim._cursor.moveTo(a)
         vim._cursor.moveTo(vim._cursor.abs)
         return docs.acc
     }
     function P(vim,doc){
-        let reg=doc.register
+        let reg=vim._registers[doc.register]
         if(!reg)
             return docs.ac
         let s=reg.string.repeat(doc.count)
@@ -57,16 +57,16 @@ var
             txt=vim._trueText,
             a=vim._cursor.line(vim._cursor.r),
             b=vim._cursor.line(vim._cursor.r+arg)
-        vim._registers[doc.register]={
+        vim._setRegister(doc.register,{
             mode:'line',
             string:txt.substring(a,b),
-        }
+        })
         vim._text=txt.substring(0,a)+txt.substring(b)
         vim._cursor.moveTo(vim._cursor.lineStart)
         return docs.acc
     }
     function p(vim,doc){
-        let reg=doc.register
+        let reg=vim._registers[doc.register]
         if(!reg)
             return docs.ac
         let s=reg.string.repeat(doc.count)

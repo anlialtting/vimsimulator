@@ -9,9 +9,23 @@
         this._mainUi.width=val
     }})
     Object.defineProperty(o,'pollute',{get(){
+        this.polluteStyle
+        this.polluteCopy
+    }})
+    Object.defineProperty(o,'polluteStyle',{get(){
         document.head.appendChild(this.style)
         this.once('quit',()=>{
             document.head.removeChild(this.style)
         })
+    }})
+    Object.defineProperty(o,'polluteCopy',{get(){
+        this.copy=s=>{
+            let n=document.createElement('textarea')
+            n.value=s
+            document.body.appendChild(n)
+            n.select()
+            document.execCommand('copy',true,null)
+            document.body.removeChild(n)
+        }
     }})
 })
