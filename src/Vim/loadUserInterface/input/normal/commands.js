@@ -1,5 +1,3 @@
-module.repository.insertAt=
-    module.shareImport('commands/insertAt.js')
 Promise.all([
     module.shareImport('commands/uppercases.js'),
     module.shareImport('commands/lowercasesAM.js'),

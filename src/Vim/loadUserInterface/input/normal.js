@@ -1,10 +1,12 @@
+var functions=module.shareImport('normal/functions.js')
 Promise.all([
     module.shareImport('normal/commands.js'),
     module.shareImport('normal/ascii.js'),
-]).then(modules=>{
+]).then(async modules=>{
     let
         commands=   modules[0],
         ascii=      modules[1]
+    functions=await functions
     return(vim,val)=>{
         if(typeof val=='object')
             val=object(vim,val)
@@ -19,6 +21,8 @@ Promise.all([
             cmd=cmd.substring(arg.toString().length)
         }
         let res=tryCommand(vim,cmd,arg)||{}
+        if(res.function!=undefined&&res.function in functions)
+            res=functions[res.function](vim,cmd,arg)
         if(res.acceptable){
             if(res.complete){
                 if(res.changed)
