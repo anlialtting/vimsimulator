@@ -1,6 +1,14 @@
 module.repository.measureWidth=module.shareImport('ui/measureWidth.js')
 module.repository.stringWidth=
     module.shareImport('ui/stringWidth.js')
+function optionChange(ui,options){
+    for(let k of options)switch(k){
+        case 'list':
+            if(ui._wrapMethod=='greedy')
+                ui._wrapMethodData.text.update=ui._vim._trueText
+            break
+    }
+}
 var
     EventEmmiter=module.repository.npm.events,
     GreedyText=module.shareImport('ui/GreedyText.js')
@@ -50,6 +58,10 @@ Promise.all([
                                 this._vim._trueText
                         )
                     }
+                    break
+                case 'options':
+                    optionChange(this,Object.keys(v))
+                    break
             }
         }
         this._update()

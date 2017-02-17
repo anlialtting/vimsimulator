@@ -86,6 +86,11 @@ var
     Vim.prototype._write=proto[1]
     Vim.prototype._edit=proto[2]
     Vim.prototype._welcomeText=proto[0]
+    Vim.prototype._setOption=function(key,value){
+        this._options[key]=value
+        this._viewChanged.options=this._viewChanged.options||{}
+        this._viewChanged.options[key]=null
+    }
     Object.defineProperty(Vim.prototype,'_mainUi',{get(){
         if(!this._values._mainUi){
             this._values._mainUi=this.ui

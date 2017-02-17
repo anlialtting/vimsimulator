@@ -105,7 +105,7 @@ function set(vim,cmd){
             option=shortcut[option]
         if(toSet){
             if(option in vim._options)
-                vim._options[option]=value
+                vim._setOption(option,value)
         }else if(show){
             let v=vim._options[option]
             let res=`${v==false?'no':'  '}${option}`
