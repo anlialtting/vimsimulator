@@ -5,6 +5,8 @@ div.webvim.cli{
     line-height:1;
     color:var(--foreground-color);
     background-color:var(--background-color);
+    cursor:default;
+    user-select:none;
 }
 div.webvim.cli>div{
     position:absolute;
