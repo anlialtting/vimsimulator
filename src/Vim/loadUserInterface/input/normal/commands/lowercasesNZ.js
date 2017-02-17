@@ -18,7 +18,11 @@ function o(vim,cmd,arg){
     }
 }
 function p(vim,cmd,arg){
-    return{function:'p'}
+    return{
+        function:'p',
+        count:arg||1,
+        register:vim._registers['"'],
+    }
 }
 function r(vim,cmd,arg){
     if(cmd=='')

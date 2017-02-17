@@ -54,7 +54,11 @@ function O(vim,cmd,arg){
     }
 }
 function P(vim,cmd,arg){
-    return{function:'P'}
+    return{
+        function:'P',
+        count:arg||1,
+        register:vim._registers['"'],
+    }
 }
 function X(vim,cmd,arg){
     let

@@ -1,13 +1,13 @@
 (async()=>{
     let insertAt=await module.shareImport('functions/insertAt.js')
-    function P(vim,cmd,arg){
-        let reg=vim._registers['"']
+    function P(vim,doc){
+        let reg=doc.register
         if(!reg)
             return{
                 acceptable:true,
                 complete:true,
             }
-        let s=reg.string.repeat(arg||1)
+        let s=reg.string.repeat(doc.count)
         if(reg.mode=='string'){
             let c=vim._cursor.abs
             vim._text=insertAt(s,vim._trueText,c)
@@ -23,14 +23,14 @@
             changed:true,
         }
     }
-    function p(vim,cmd,arg){
-        let reg=vim._registers['"']
+    function p(vim,doc){
+        let reg=doc.register
         if(!reg)
             return{
                 acceptable:true,
                 complete:true,
             }
-        let s=reg.string.repeat(arg||1)
+        let s=reg.string.repeat(doc.count)
         if(reg.mode=='string'){
             let c=vim._cursor.abs
             vim._text=insertAt(s,vim._trueText,c+1)

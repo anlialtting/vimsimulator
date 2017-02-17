@@ -22,7 +22,7 @@ Promise.all([
         }
         let res=tryCommand(vim,cmd,arg)||{}
         if(res.function!=undefined&&res.function in functions)
-            res=functions[res.function](vim,cmd,arg)
+            res=functions[res.function](vim,res)
         if(res.acceptable){
             if(res.complete){
                 if(res.changed)
