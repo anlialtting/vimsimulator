@@ -11,83 +11,70 @@ Promise.all([
             a:{
                 acceptable:true
             },
-        }
-    function lt(vim,cmd,arg){
-        if(cmd=='')
-            return{acceptable:true}
-        if(cmd=='<'){
-            arg||(arg=1)
-            shift.left(vim,vim._cursor.r,vim._cursor.r+arg)
-            return{
+            ac:{
+                acceptable:true,
+                complete:true,
+            }
+            acc:{
                 acceptable:true,
                 complete:true,
                 changed:true,
             }
+        }
+    function lt(vim,cmd,arg){
+        if(cmd=='')
+            return docs.a
+        if(cmd=='<'){
+            arg||(arg=1)
+            shift.left(vim,vim._cursor.r,vim._cursor.r+arg)
+            return docs.acc
         }
     }
     function gt(vim,cmd,arg){
         if(cmd=='')
-            return{acceptable:true}
+            return docs.a
         if(cmd=='>'){
             arg||(arg=1)
             shift.right(vim,vim._cursor.r,vim._cursor.r+arg)
-            return{
-                acceptable:true,
-                complete:true,
-                changed:true,
-            }
+            return docs.acc
         }
     }
     function dot(vim,cmd,arg){
-        return{
-            acceptable:true,
-            complete:true,
-        }
+        return docs.ac
     }
     function colon(vim){
         vim._mode='cmdline'
         vim._modeData.inputBuffer=':'
         vim._modeData.cursor.position=1
-        return{acceptable:true}
+        return docs.a
     }
     function slash(vim){
         vim._mode='cmdline'
         vim._modeData.inputBuffer='/'
         vim._modeData.cursor.position=1
-        return{acceptable:true}
+        return docs.a
     }
     function caret(vim){
         vim._cursor.moveTo(vim._cursor.lineStart)
-        return{
-            acceptable:true,
-            complete:true,
-        }
+        return docs.ac
     }
     function dollarSign(vim){
         vim._cursor.moveTo(Math.max(
             vim._cursor.lineStart,
             vim._cursor.lineEnd-2
         ))
-        return{
-            acceptable:true,
-            complete:true,
-        }
+        return docs.ac
     }
     function ctrl(vim,cmd){
         if(cmd=='')
-            return{
-                acceptable:true,
-            }
+            return docs.a
         if(cmd=='r'){
             if(vim._undoBranchManager.current.next!=undefined){
                 vim._undoBranchManager.current=
                     vim._undoBranchManager.current.next
                 vim._text=vim._undoBranchManager.current.text
             }
-            return{
-                acceptable:true,
-                complete:true,
-            }
+            return docs.ac
         }
     }
     function quotationMark(vim,cmd,arg){
