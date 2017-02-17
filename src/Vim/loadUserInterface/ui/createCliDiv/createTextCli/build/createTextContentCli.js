@@ -37,7 +37,11 @@ Promise.all([
                         let o=row.string[i]
                         if(typeof o=='string')
                             o={child:o}
-                        o=Object.create(o)
+                        else
+                            o={
+                                child:o.child,
+                                style:o.style,
+                            }
                         o.r=currentRowsCount
                         o.c=c
                         if(

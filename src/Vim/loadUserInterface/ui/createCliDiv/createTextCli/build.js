@@ -26,13 +26,7 @@ Promise.all([
             showNumber?ui.width-(numberWidth+1):ui.width,
             cursor
         )
-        let res
-        try{
-            res=createTextContentCli(ui,text,cursor,showCursor)
-        }catch(e){
-            console.log(text,cursor)
-            throw e
-        }
+        let res=createTextContentCli(ui,text,cursor,showCursor)
         if(showNumber){
             cli.appendChild(number(text,numberWidth))
             cli.appendChild({
