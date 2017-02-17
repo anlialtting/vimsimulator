@@ -37,6 +37,7 @@ Promise.all([
                         let o=row.string[i]
                         if(typeof o=='string')
                             o={child:o}
+                        o=Object.create(o)
                         o.r=currentRowsCount
                         o.c=c
                         if(
@@ -91,6 +92,7 @@ Promise.all([
         })
         if(typeof clientCursor.doc!='object')
             clientCursor.doc={child:clientCursor.doc}
+        clientCursor.doc=Object.create(clientCursor.doc)
         clientCursor.doc.child=clientCursor.doc.child||' '
         clientCursor.doc.r=clientCursor.row
         clientCursor.doc.c=clientCursor.col,
