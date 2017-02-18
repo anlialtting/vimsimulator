@@ -1,7 +1,10 @@
-(async()=>{
-    let
-        functions=  await module.shareImport('functions/functions.js'),
-        docs=       await module.repository.docs
+var
+    functions=  module.shareImport('functions/functions.js'),
+    motions=    module.shareImport('functions/motions.js')
+;(async()=>{
+    let docs=await module.repository.docs
+    functions=  await functions
+    motions=    await motions
     function gotoLine(vim,n){
         vim._cursor.moveTo(vim._cursor.line(n))
     }
@@ -120,6 +123,10 @@
         a,
         dd,
         gg,
+        h:motions.h,
+        j:motions.j,
+        k:motions.k,
+        l:motions.l,
         o,
         p,
         yy,

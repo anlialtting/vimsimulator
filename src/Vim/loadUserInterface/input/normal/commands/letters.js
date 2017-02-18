@@ -23,36 +23,32 @@
             }
     }
     function h(vim,cmd,arg){
-        arg=arg||1
-        if(vim._text)
-            while(arg--)
-                vim._cursor.moveLeft()
-        return docs.ac
+        return{
+            function:'h',
+            count:arg,
+        }
     }
     function i(vim,cmd,arg){
         vim._mode='insert'
         return docs.ac
     }
     function j(vim,cmd,arg){
-        arg=arg||1
-        if(vim._text)
-            while(arg--)
-                vim._cursor.moveDown()
-        return docs.ac
+        return{
+            function:'j',
+            count:arg,
+        }
     }
     function k(vim,cmd,arg){
-        arg=arg||1
-        if(vim._text)
-            while(arg--)
-                vim._cursor.moveUp()
-        return docs.ac
+        return{
+            function:'k',
+            count:arg,
+        }
     }
     function l(vim,cmd,arg){
-        arg=arg||1
-        if(vim._text)
-            while(arg--)
-                vim._cursor.moveRight()
-        return docs.ac
+        return{
+            function:'l',
+            count:arg,
+        }
     }
     function n(vim,cmd,arg){
         //vim.gotoNextMatch()
