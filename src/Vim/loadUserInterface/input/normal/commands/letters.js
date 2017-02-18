@@ -16,12 +16,11 @@
     function g(vim,cmd,arg){
         if(cmd=='')
             return docs.a
-        if(cmd=='g'){
-            arg=arg||1
-            arg=Math.min(vim._cursor._countOfRows,arg)
-            vim._cursor.moveTo(vim._cursor.line(arg-1))
-            return docs.ac
-        }
+        if(cmd=='g')
+            return{
+                function:'gg',
+                count:arg,
+            }
     }
     function h(vim,cmd,arg){
         arg=arg||1
@@ -122,10 +121,10 @@
         }
     }
     function G(vim,cmd,arg){
-        arg=arg||vim._cursor._countOfRows
-        arg=Math.min(vim._cursor._countOfRows,arg)
-        vim._cursor.moveTo(vim._cursor.line(arg-1))
-        return docs.ac
+        return{
+            function:'gg',
+            count:arg,
+        }
     }
     function I(vim,cmd,arg){
         vim._mode='insert'

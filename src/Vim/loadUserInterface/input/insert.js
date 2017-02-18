@@ -54,6 +54,7 @@ function object(vim,val){
         case 'Enter':
             return '\r'
         case 'Escape':
+            vim._undoBranchManager.push(vim._text)
             vim._mode='normal'
             return
         case 'Tab':
