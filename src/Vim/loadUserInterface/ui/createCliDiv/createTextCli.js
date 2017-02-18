@@ -8,7 +8,7 @@ var build=module.shareImport('createTextCli/build.js')
             updated=false
         f()
         ui.on('update',()=>updated=false)
-        setInterval(f,ui._refreshMinTime)
+        ui.on('_clock',f)
         return cli
         function f(){
             if(updated)

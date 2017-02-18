@@ -1,6 +1,5 @@
-module.repository.measureWidth=module.shareImport('ui/measureWidth.js')
-module.repository.stringWidth=
-    module.shareImport('ui/stringWidth.js')
+module.repository.measureWidth= module.shareImport('ui/measureWidth.js')
+module.repository.stringWidth=  module.shareImport('ui/stringWidth.js')
 function optionChange(ui,options){
     for(let k of options)switch(k){
         case 'list':
@@ -10,26 +9,25 @@ function optionChange(ui,options){
     }
 }
 var
-    EventEmmiter=module.repository.npm.events,
-    GreedyText=module.shareImport('ui/GreedyText.js')
-Promise.all([
-    module.shareImport('ui/createCliDiv.js'),
-    module.repository.measureWidth,
-]).then(async modules=>{
-    let
-        createCliDiv=       modules[0],
-        measureWidth=       modules[1]
+    EventEmmiter=   module.repository.npm.events,
+    GreedyText=     module.shareImport('ui/GreedyText.js'),
+    createCliDiv=   module.shareImport('ui/createCliDiv.js')
+;(async()=>{
+    let measureWidth=await module.repository.measureWidth
+    createCliDiv=await createCliDiv
     EventEmmiter=await EventEmmiter
     GreedyText=await GreedyText
     function Ui(vim){
         EventEmmiter.call(this)
-        this._values={}
+        this._values={
+            clockCycle:16,
+        }
         this._vim=vim
         this._fontSize=13
         this._wrapMethod='greedy'
-        this._refreshMinTime=16
         this._cursorSymbol=Symbol()
         this.node=createViewNode(this)
+        setUpClock(this)
     }
     Object.setPrototypeOf(Ui.prototype,EventEmmiter.prototype)
     Object.defineProperty(Ui.prototype,'_fontSize',{set(v){
@@ -99,6 +97,7 @@ Promise.all([
         this._inputTag.focus()
     }
     Object.defineProperty(Ui.prototype,'free',{get(){
+        tearDownClock(this)
         this._vim.removeUi(this)
     }})
     function createViewNode(ui){
@@ -109,9 +108,18 @@ Promise.all([
         )
         return n
     }
+    function setUpClock(ui){
+        ui._clockIntervalId=setInterval(()=>
+            ui.emit('_clock')
+        ,ui._values.clockCycle)
+    }
+    function tearDownClock(ui){
+        clearInterval(ui._clockIntervalId)
+        delete ui._clockIntervalId
+    }
     return{get(){
         let ui=new Ui(this)
         this._uis.add(ui)
         return ui
     }}
-})
+})()
