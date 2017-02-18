@@ -33,6 +33,15 @@
         vim._cursor.moveTo(vim._cursor.abs)
         return docs.acc
     }
+    function O(vim,doc){
+        let
+            c=vim._cursor.lineStart,
+            txt=vim._trueText
+        vim._mode='insert'
+        vim._text=txt.substring(0,c)+'\n'+txt.substring(c)
+        vim._cursor.moveTo(vim._cursor.lineStart)
+        return docs.acc
+    }
     function P(vim,doc){
         let reg=vim._registers[doc.register]
         if(!reg)
@@ -48,7 +57,6 @@
         let
             abs=vim._cursor.abs
             ls=vim._cursor.lineStart,
-            txt=vim._trueText,
             count=Math.min(abs-ls,Math.max(0,doc.count))
         deleteCharacterwise(vim,doc.register,abs-count,abs)
         return docs.acc
@@ -70,6 +78,14 @@
         yank(vim,doc.register,'line',txt.substring(a,b))
         vim._text=txt.substring(0,a)+txt.substring(b)
         vim._cursor.moveTo(vim._cursor.lineStart)
+        return docs.acc
+    }
+    function o(vim,doc){
+        vim._text||(vim._text='\n')
+        vim._mode='insert'
+        vim._cursor.moveTo(vim._cursor.lineEnd)
+        let c=vim._cursor.abs
+        vim._text=vim._text.substring(0,c)+'\n'+vim._text.substring(c)
         return docs.acc
     }
     function p(vim,doc){
@@ -98,17 +114,18 @@
         let
             abs=vim._cursor.abs
             le=vim._cursor.lineEnd,
-            txt=vim._trueText,
             count=Math.min(le-1-abs,Math.max(0,doc.count))
         deleteCharacterwise(vim,doc.register,abs,abs+count)
         return docs.acc
     }
     return{
         D,
+        O,
         P,
         X,
         a,
         dd,
+        o,
         p,
         yy,
         x,

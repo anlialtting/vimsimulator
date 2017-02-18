@@ -60,12 +60,7 @@
         return docs.ac
     }
     function o(vim,cmd,arg){
-        vim._text||(vim._text='\n')
-        vim._mode='insert'
-        vim._cursor.moveTo(vim._cursor.lineEnd)
-        let c=vim._cursor.abs
-        vim._text=vim._text.substring(0,c)+'\n'+vim._text.substring(c)
-        return docs.acc
+        return{function:'o'}
     }
     function p(vim,cmd,arg){
         return{
@@ -114,5 +109,45 @@
                 register:'"',
             }
     }
-    return({a,d,g,h,i,j,k,l,n,o,p,r,u,v,x,y})
+    function A(vim){
+        vim._mode='insert'
+        vim._cursor.moveToEOL()
+        return docs.ac
+    }
+    function D(vim,cmd,arg){
+        return{
+            function:'D',
+            count:arg||1,
+            register:'"',
+        }
+    }
+    function G(vim,cmd,arg){
+        arg=arg||vim._cursor._countOfRows
+        arg=Math.min(vim._cursor._countOfRows,arg)
+        vim._cursor.moveTo(vim._cursor.line(arg-1))
+        return docs.ac
+    }
+    function I(vim,cmd,arg){
+        vim._mode='insert'
+        vim._cursor.moveTo(vim._cursor.lineStart)
+        return docs.ac
+    }
+    function O(vim,cmd,arg){
+        return{function:'O'}
+    }
+    function P(vim,cmd,arg){
+        return{
+            function:'P',
+            count:arg||1,
+            register:'"',
+        }
+    }
+    function X(vim,cmd,arg){
+        return{
+            function:'X',
+            count:arg||1,
+            register:'"'
+        }
+    }
+    return({A,D,G,I,O,P,X,a,d,g,h,i,j,k,l,n,o,p,r,u,v,x,y})
 })()
