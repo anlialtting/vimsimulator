@@ -1,17 +1,7 @@
-var
-    docs={
-        ac:{
-            acceptable:true,
-            complete:true,
-        },
-        acc:{
-            acceptable:true,
-            complete:true,
-            changed:true,
-        }
-    }
-;(async()=>{
-    let insertAt=await module.shareImport('functions/insertAt.js')
+(async()=>{
+    let
+        insertAt=   await module.shareImport('functions/insertAt.js'),
+        docs=       await module.repository.docs
     function put(vim,c,s){
         vim._text=insertAt(s,vim._trueText,c)
     }
@@ -26,12 +16,18 @@ var
     function yank(vim,r,m,s){
         vim._setRegister(r,{mode:m,string:s})
     }
+    function deleteCharacterwise(vim,r,a,b){
+        let txt=vim._trueText
+        vim._text=txt.substring(0,a)+txt.substring(b)
+        yank(vim,r,'string',txt.substring(a,b))
+        vim._cursor.moveTo(a)
+    }
     function D(vim,doc){
         let
             a=vim._cursor.abs,
             b=vim._cursor.lineEnd-1,
             txt=vim._trueText
-        yank(vim,'"','string',txt.substring(a,b))
+        yank(vim,doc.register,'string',txt.substring(a,b))
         vim._text=txt.substring(0,a)+txt.substring(b)
         vim._cursor.moveTo(a)
         vim._cursor.moveTo(vim._cursor.abs)
@@ -47,6 +43,20 @@ var
         else if(reg.mode=='line')
             putLinewise(vim,vim._cursor.lineStart,s)
         return docs.acc
+    }
+    function X(vim,doc){
+        let
+            abs=vim._cursor.abs
+            ls=vim._cursor.lineStart,
+            txt=vim._trueText,
+            count=Math.min(abs-ls,Math.max(0,doc.count))
+        deleteCharacterwise(vim,doc.register,abs-count,abs)
+        return docs.acc
+    }
+    function a(vim,doc){
+        vim._mode='insert'
+        vim._cursor.moveRight()
+        return docs.ac
     }
     function dd(vim,doc){
         if(!vim._text)
@@ -84,11 +94,23 @@ var
         yank(vim,doc.register,'line',vim._trueText.substring(a,b))
         return docs.ac
     }
+    function x(vim,doc){
+        let
+            abs=vim._cursor.abs
+            le=vim._cursor.lineEnd,
+            txt=vim._trueText,
+            count=Math.min(le-1-abs,Math.max(0,doc.count))
+        deleteCharacterwise(vim,doc.register,abs,abs+count)
+        return docs.acc
+    }
     return{
         D,
         P,
+        X,
+        a,
         dd,
         p,
         yy,
+        x,
     }
 })()

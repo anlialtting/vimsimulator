@@ -2,25 +2,12 @@ Promise.all([
     module.shareImport('commands/uppercases.js'),
     module.shareImport('commands/lowercases.js'),
     module.repository.shift,
-]).then(modules=>{
+]).then(async modules=>{
     let
         uppercases=     modules[0],
         lowercases=     modules[1],
         shift=          modules[2],
-        docs={
-            a:{
-                acceptable:true
-            },
-            ac:{
-                acceptable:true,
-                complete:true,
-            },
-            acc:{
-                acceptable:true,
-                complete:true,
-                changed:true,
-            }
-        }
+        docs=           await module.repository.docs
     function lt(vim,cmd,arg){
         if(cmd=='')
             return docs.a

@@ -1,3 +1,4 @@
+module.repository.docs=module.shareImport('normal/docs.js')
 var functions=module.shareImport('normal/functions.js')
 Promise.all([
     module.shareImport('normal/commands.js'),
