@@ -43,7 +43,6 @@ Promise.all([
         }else switch(val.key){
             case 'ArrowLeft':
                 return 'h'
-                break
             case 'ArrowRight':
                 return 'l'
             case 'ArrowDown':
@@ -57,6 +56,7 @@ Promise.all([
             case 'Delete':
                 return ascii.del
         }
+        return''
     }
     function tryCommand(vim,cmd,arg){
         if(cmd=='')
