@@ -40,6 +40,7 @@ Promise.all([
                         else
                             o={
                                 child:o.child,
+                                class:o.class,
                                 style:o.style,
                             }
                         o.r=currentRowsCount
@@ -99,11 +100,11 @@ Promise.all([
         clientCursor.doc=Object.create(clientCursor.doc)
         clientCursor.doc.child=clientCursor.doc.child||' '
         clientCursor.doc.r=clientCursor.row
-        clientCursor.doc.c=clientCursor.col,
-        clientCursor.doc.style={
-            backgroundColor:'var(--foreground-color)',
-            color:'var(--background-color)',
-        }
+        clientCursor.doc.c=clientCursor.col
+        if(clientCursor.doc.class)
+            clientCursor.doc.class=`${clientCursor.doc.class} cursor`
+        else
+            clientCursor.doc.class='cursor'
         return clientCursor.doc
     }
     return createTextContentCli

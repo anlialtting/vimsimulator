@@ -5,4 +5,15 @@ div.webvim{
     --background-color:black;
     --foreground-color:lightgray;
     --middle-color:gray;
+    --cursor-bg:var(--foreground-color);
+    --cursor-fg:var(--background-color);
+}
+div.webvim .color4i{
+    color:var(--color4i);
+    --cursor-bg:var(--color4i);
+    --cursor-fg:var(--background-color);
+}
+div.webvim .cursor{
+    background-color:var(--cursor-bg);
+    color:var(--cursor-fg);
 }

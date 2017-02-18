@@ -44,6 +44,7 @@ Promise.all([
                     child:chr,
                     r:child.r+r,
                     c:child.c+c,
+                    class:child.class,
                     style:child.style,
                 })
                 if(chr=='\n'){

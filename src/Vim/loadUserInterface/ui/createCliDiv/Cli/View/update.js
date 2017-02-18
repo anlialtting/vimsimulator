@@ -48,6 +48,8 @@ function reuseWrite(view,a,b){
     function notEqual(a,b){
         if(a.child!=b.child)
             return true
+        if(a.class!=b.class)
+            return true
         if(a.style!=b.style)
             return true
         return false
@@ -65,6 +67,7 @@ function write(view,doc,r,c){
         textContent=doc.child
     if(textContent=='\n')
         textContent=' '
+    div.className=doc.class||''
     if(doc.style){
         let span=document.createElement('span')
         for(let i in doc.style)

@@ -1,8 +1,7 @@
 var
-    color4i={color:'var(--color4i)'},
     lfDoc={
         child:'$',
-        style:color4i
+        class:'color4i',
     }
 function substring(list,s,start,end){
     let a=[]
