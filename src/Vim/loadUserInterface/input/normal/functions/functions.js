@@ -1,6 +1,7 @@
 (async()=>{
-    let
-        insertAt=   await module.shareImport('insertAt.js')
+    function insertAt(s,t,c){
+        return t.substring(0,c)+s+t.substring(c)
+    }
     function yank(vim,r,m,s){
         vim._setRegister(r,{mode:m,string:s})
     }
