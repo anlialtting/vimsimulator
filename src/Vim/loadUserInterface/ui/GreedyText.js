@@ -1,6 +1,10 @@
 function GreedyText(){
     this.lines=[]
 }
+Object.defineProperty(GreedyText.prototype,'countOfRows',{get(){
+    this.wrap()
+    return this.lines.map(l=>l.wrapped.rows.length).reduce((a,b)=>a+b)
+}})
 Object.defineProperty(GreedyText.prototype,'update',{set(val){
     if(typeof val=='string'){
         val=val.split('\n')

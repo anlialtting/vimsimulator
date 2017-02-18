@@ -1,4 +1,4 @@
-div.webvim{
+div.webvim.cli{
     --color3i:yellow;
     --color4:blue;
     --color4i:dodgerblue;
@@ -8,12 +8,12 @@ div.webvim{
     --cursor-bg:var(--foreground-color);
     --cursor-fg:var(--background-color);
 }
-div.webvim .color4i{
+div.webvim.cli .color4i{
     color:var(--color4i);
     --cursor-bg:var(--color4i);
     --cursor-fg:var(--background-color);
 }
-div.webvim .cursor{
+div.webvim.cli .cursor{
     background-color:var(--cursor-bg);
     color:var(--cursor-fg);
 }
