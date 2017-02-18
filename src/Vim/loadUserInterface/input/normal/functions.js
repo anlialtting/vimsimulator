@@ -16,7 +16,7 @@
         return docs.acc
     }
     function G(vim,doc){
-        gotoLine(Math.min(
+        gotoLine(vim,Math.min(
             vim._cursor._countOfRows,
             doc.count||vim._cursor._countOfRows
         )-1)
@@ -68,7 +68,7 @@
         return docs.acc
     }
     function gg(vim,doc){
-        gotoLine(Math.min(vim._cursor._countOfRows,doc.count||1)-1)
+        gotoLine(vim,Math.min(vim._cursor._countOfRows,doc.count||1)-1)
         return docs.ac
     }
     function o(vim,doc){

@@ -78,11 +78,9 @@
         return docs.acc
     }
     function u(vim,cmd,arg){
-        if(vim._undoBranchManager.current.previous!=undefined){
-            vim._undoBranchManager.current=
-                vim._undoBranchManager.current.previous
-            vim._text=vim._undoBranchManager.current.text
-        }
+        let s=vim._undoBranchManager.gotoPrevious()
+        if(s!=undefined)
+            vim._text=s
         return docs.ac
     }
     function v(vim,cmd,arg){
@@ -122,7 +120,7 @@
     }
     function G(vim,cmd,arg){
         return{
-            function:'gg',
+            function:'G',
             count:arg,
         }
     }

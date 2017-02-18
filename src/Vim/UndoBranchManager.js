@@ -14,6 +14,13 @@ UndoBranchManager.prototype.push=function(text){
     }
     this.current=b
 }
+UndoBranchManager.prototype.gotoPrevious=function(){
+    if(this.current.previous!=undefined){
+        let b=this.current.previous
+        this.current=b
+        return b.text
+    }
+}
 function UndoBranch(text){
     this.text=text
 }

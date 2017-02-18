@@ -55,7 +55,7 @@ var
         this._modeData={}
         this._cursor=createCursor(this)
         this._undoBranchManager=new UndoBranchManager
-        this._undoBranchManager.push('')
+        this._undoBranchManager.push(this._text)
         this._styleManager=new StyleManager
         this.style=this._styleManager.style
         this._styleManager.appendChild(document.createTextNode(style))
