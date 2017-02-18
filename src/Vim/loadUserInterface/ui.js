@@ -4,7 +4,7 @@ function optionChange(ui,options){
     for(let k of options)switch(k){
         case 'list':
             if(ui._wrapMethod=='greedy')
-                ui._wrapMethodData.text.update=ui._vim._trueText
+                ui._wrapMethodData.text.setOption('list',ui._vim._options[k])
             break
     }
 }
@@ -14,9 +14,9 @@ var
     createCliDiv=   module.shareImport('ui/createCliDiv.js')
 ;(async()=>{
     let measureWidth=await module.repository.measureWidth
-    createCliDiv=await createCliDiv
-    EventEmmiter=await EventEmmiter
-    GreedyText=await GreedyText
+    createCliDiv=   await createCliDiv
+    EventEmmiter=   await EventEmmiter
+    GreedyText=     await GreedyText
     function Ui(vim){
         EventEmmiter.call(this)
         this._values={
@@ -69,6 +69,7 @@ var
         if(this._values.wrapMethod=='greedy'){
             let text=new GreedyText
             text.update=this._vim._trueText
+            text.setOption('list',this._vim._options.list)
             this._wrapMethodData={
                 _scroll:0,
                 text,

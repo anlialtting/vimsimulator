@@ -6,7 +6,8 @@ function checkScroll(ui,cursorViewRow){
 }
 function uiText(ui,targetWidth,vc){
     let txt=ui._wrapMethodData.text
-    txt.wrap(ui._vim._options.list,targetWidth)
+    txt.width=targetWidth
+    txt.wrap()
     if(ui.height){
         checkScroll(ui,txt.row(vc.abs))
         let scroll=ui._wrapMethodData._scroll

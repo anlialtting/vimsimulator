@@ -1,4 +1,5 @@
 function GreedyText(){
+    this._options={}
     this.lines=[]
 }
 Object.defineProperty(GreedyText.prototype,'countOfRows',{get(){
@@ -41,6 +42,13 @@ GreedyText.prototype.row=function(pos){
     }))
     return res
 }
+GreedyText.prototype.setOption=function(key,val){
+    this._options[key]=val
+    if(key=='list')
+        this.lines.map(l=>{
+            delete l.rows
+        })
+}
 /*
     A line should not include EOL, since it has already been seperated
     from the others.
@@ -51,14 +59,14 @@ function Line(val){
 var wrapLine=module.shareImport('GreedyText/wrapLine.js')
 ;(async()=>{
     wrapLine=await wrapLine
-    GreedyText.prototype.wrap=function(list,targetWidth){
+    GreedyText.prototype.wrap=function(){
         let
             charCount=0,
             rowsCount=0
         this.lines.map((l,j)=>{
             let s=l.string+'\n'
             if(!l.rows)
-                l.rows=wrapLine(list,s,targetWidth||Infinity)
+                l.rows=wrapLine(this._options.list,s,this.width||Infinity)
             l.wrapped={
                 index:j,
                 start:charCount,
