@@ -8,6 +8,8 @@ function optionChange(ui,options){
                     'list',ui._vim._options[k]
                 )
             break
+        case 'number':
+            break
     }
 }
 var
@@ -22,10 +24,10 @@ var
             clockCycle:16,
         }
         this._vim=vim
-        this._fontSize=13
-        this._wrapMethod='greedy'
         this._width=80
         this._height=24
+        this._fontSize=13
+        this._wrapMethod='greedy'
         this._cursorSymbol=Symbol()
         this._viewNode=createViewNode(this)
         this.node=this._viewNode.node
@@ -91,6 +93,7 @@ var
         this._values.wrapMethod=val
         if(this._values.wrapMethod=='greedy'){
             let text=new GreedyText
+            text.width=this._textWidth
             text.update=this._vim._trueText
             text.setOption('list',this._vim._options.list)
             this._wrapMethodData={
