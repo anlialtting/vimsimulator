@@ -6,12 +6,9 @@ var build=module.shareImport('createTextCli/build.js')
         return new TextCli(ui)
     }
     function TextCli(ui){
-        let
-            cli=new Cli,
-            textCli=this
         this._ui=ui
         this._updated=false
-        this.cli=cli
+        this.cli=new Cli
         this.flush()
     }
     TextCli.prototype.update=function(){

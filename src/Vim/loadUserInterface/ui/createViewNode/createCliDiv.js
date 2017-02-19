@@ -11,7 +11,7 @@ Promise.all([
         createTextCli=      modules[2],
         createInput=        modules[3]
     function createCliDiv(ui){
-        return(new CliDiv(ui)).node
+        return new CliDiv(ui)
     }
     function CliDiv(ui){
         this._ui=ui
@@ -19,23 +19,17 @@ Promise.all([
         this._cli=new Cli
         this._cliView=this._cli.view
         this._ui._commandCli=createCommandCli(this._ui)
+        this._ui.on('modeChange',()=>this._ui._commandCli.update())
         this._cliView.fontSize=this._ui._fontSize
-        this._setupTextCli()
+        this._textCli=createTextCli(this._ui)
         this.update()
-        this._ui.on('update',()=>{
-            this._textCli.update()
-            this.update()
-        })
-        this._ui.on('_clock',()=>this._textCli.flush())
         let n=this._cliView.node
         this._ui._inputTag=createInput(this._ui)
         n.appendChild(this._ui._inputTag)
         this.node=n
     }
-    CliDiv.prototype._setupTextCli=function(){
-        this._textCli=createTextCli(this._ui)
-    }
     CliDiv.prototype.update=function(){
+        this._textCli.update()
         if(this._cliView.width!=this._ui._width)
             this._cliView.width=this._ui._width
         if(this._cliView.height!=this._ui._height)
@@ -53,16 +47,25 @@ Promise.all([
         this._cli.clear()
         this._cli.appendChild(this._textCli.cli)
         this._cli.appendChild({
-            child:this._ui._commandCli,
+            child:this._ui._commandCli.cli,
             r,
         })
-        if(this._vim._welcomeText&&50<=this._ui.width&&16<=this._ui.height){
+        if(
+            this._vim._welcomeText&&
+            50<=this._ui.width&&
+            16<=this._ui.height
+        ){
             let
                 r=Math.floor(
-                    (this._ui.height-this._vim._welcomeText.split('\n').length-1)/2
+                    (
+                        this._ui.height-
+                        this._vim._welcomeText.split('\n').length-1
+                    )/2
                 ),
                 c=Math.floor(
-                    (this._ui.width-this._vim._welcomeText.split('\n').map(
+                    (this._ui.width-this._vim._welcomeText.split(
+                        '\n'
+                    ).map(
                         s=>s.length
                     ).reduce(
                         (a,b)=>Math.max(a,b)
@@ -77,6 +80,9 @@ Promise.all([
         this._cli.flush()
         this._currentR=r
         this._currentWelcomeText=this._vim._welcomeText
+    }
+    CliDiv.prototype.flush=function(){
+        this._textCli.flush()
     }
     return createCliDiv
 })

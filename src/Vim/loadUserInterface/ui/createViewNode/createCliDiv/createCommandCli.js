@@ -1,33 +1,3 @@
-function f(ui,cli){
-    function inNvii(v){
-        return 0<=[
-            'normal',
-            'insert',
-            'visual',
-            'visual-block',
-        ].indexOf(v)
-    }
-    let vim=ui._vim
-    if(inNvii(vim.mode)){
-        update(ui,cli)
-        ui.on('update',listener)
-        function listener(){
-            if(inNvii(vim.mode))
-                update(ui,cli)
-            else
-                ui.removeListener('update',listener)
-        }
-    }else if(vim.mode=='cmdline'){
-        cmdlineUpdate(ui,cli)
-        ui.on('update',listener)
-        function listener(){
-            if(vim.mode=='cmdline')
-                cmdlineUpdate(ui,cli)
-            else
-                ui.removeListener('update',listener)
-        }
-    }
-}
 function update(ui,cli){
     let vim=ui._vim
     cli.clear()
@@ -86,11 +56,44 @@ function cmdlineUpdate(ui,cli){
 }
 ;(async()=>{
     let Cli=await module.repository.Cli
-    function createCommandDiv(ui){
-        let cli=new Cli
-        f(ui,cli)
-        ui.on('modeChange',()=>f(ui,cli))
-        return cli
+    function CommandCli(ui){
+        this._ui=ui
+        this.cli=new Cli
+        this.update()
     }
-    return createCommandDiv
+    function createCommandCli(ui){
+        return new CommandCli(ui)
+    }
+    CommandCli.prototype.update=function(){
+        let ui=this._ui,cli=this.cli
+        function inNvii(v){
+            return 0<=[
+                'normal',
+                'insert',
+                'visual',
+                'visual-block',
+            ].indexOf(v)
+        }
+        let vim=ui._vim
+        if(inNvii(vim.mode)){
+            update(ui,cli)
+            ui.on('update',listener)
+            function listener(){
+                if(inNvii(vim.mode))
+                    update(ui,cli)
+                else
+                    ui.removeListener('update',listener)
+            }
+        }else if(vim.mode=='cmdline'){
+            cmdlineUpdate(ui,cli)
+            ui.on('update',listener)
+            function listener(){
+                if(vim.mode=='cmdline')
+                    cmdlineUpdate(ui,cli)
+                else
+                    ui.removeListener('update',listener)
+            }
+        }
+    }
+    return createCommandCli
 })()
