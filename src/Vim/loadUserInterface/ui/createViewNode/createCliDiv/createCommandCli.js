@@ -65,7 +65,14 @@ function cmdlineUpdate(ui,cli){
         return new CommandCli(ui)
     }
     CommandCli.prototype.update=function(){
-        let ui=this._ui,cli=this.cli
+        let
+            ui=this._ui,
+            cli=this.cli
+            vim=ui._vim
+        if(inNvii(vim.mode))
+            update(ui,cli)
+        else if(vim.mode=='cmdline')
+            cmdlineUpdate(ui,cli)
         function inNvii(v){
             return 0<=[
                 'normal',
@@ -73,26 +80,6 @@ function cmdlineUpdate(ui,cli){
                 'visual',
                 'visual-block',
             ].indexOf(v)
-        }
-        let vim=ui._vim
-        if(inNvii(vim.mode)){
-            update(ui,cli)
-            ui.on('update',listener)
-            function listener(){
-                if(inNvii(vim.mode))
-                    update(ui,cli)
-                else
-                    ui.removeListener('update',listener)
-            }
-        }else if(vim.mode=='cmdline'){
-            cmdlineUpdate(ui,cli)
-            ui.on('update',listener)
-            function listener(){
-                if(vim.mode=='cmdline')
-                    cmdlineUpdate(ui,cli)
-                else
-                    ui.removeListener('update',listener)
-            }
         }
     }
     return createCommandCli

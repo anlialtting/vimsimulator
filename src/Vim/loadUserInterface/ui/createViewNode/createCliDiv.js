@@ -20,6 +20,7 @@ Promise.all([
         this._cliView=this._cli.view
         this._ui._commandCli=createCommandCli(this._ui)
         this._ui.on('modeChange',()=>this._ui._commandCli.update())
+        this._ui.on('update',()=>this._ui._commandCli.update())
         this._cliView.fontSize=this._ui._fontSize
         this._textCli=createTextCli(this._ui)
         this.update()
