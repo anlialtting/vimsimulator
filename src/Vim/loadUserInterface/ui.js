@@ -1,21 +1,9 @@
 module.repository.measureWidth= module.shareImport('ui/measureWidth.js')
 module.repository.stringWidth=  module.shareImport('ui/stringWidth.js')
-function optionChange(ui,options){
-    for(let k of options)switch(k){
-        case 'list':
-            if(ui._wrapMethod=='greedy')
-                ui._wrapMethodData.text.setOption(
-                    'list',ui._vim._options[k]
-                )
-            break
-        case 'number':
-            ui._wrapMethodData.text.width=ui._textWidth
-            break
-    }
-}
 var
     GreedyText=     module.shareImport('ui/GreedyText.js'),
-    createViewNode= module.shareImport('ui/createViewNode.js')
+    createViewNode= module.shareImport('ui/createViewNode.js'),
+    _updateByVim=   module.shareImport('ui/prototype._updateByVim.js')
 ;(async()=>{
     let measureWidth=await module.repository.measureWidth
     GreedyText=     await GreedyText
@@ -68,28 +56,7 @@ var
     Ui.prototype._update=function(){
         this._viewNode.update()
     }
-    Ui.prototype._updateByVim=function(changed){
-        for(let k in changed){let v=changed[k]
-            switch(k){
-                case 'mode':
-                    this._viewNode.modeChange()
-                    break
-                case 'text':
-                    if(this._wrapMethod=='greedy'){
-                        /*v.map(u=>
-                            this._wrapMethodData.text.update=u
-                        )*/
-                        this._wrapMethodData.text.update=
-                            this._vim._trueText
-                    }
-                    break
-                case 'options':
-                    optionChange(this,Object.keys(v))
-                    break
-            }
-        }
-        this._update()
-    }
+    Ui.prototype._updateByVim=await _updateByVim
     Object.defineProperty(Ui.prototype,'_wrapMethod',{set(val){
         this._values.wrapMethod=val
         if(this._values.wrapMethod=='greedy'){
