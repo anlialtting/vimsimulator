@@ -15,17 +15,19 @@ Promise.all([
         createTextContentCli=   modules[1]
     function build(cli,ui,showCursor,showNumber){
         let 
-            cursor=ui._vim._cursor,
-            width=ui._width
+            cursor= ui._vim._cursor,
+            width=  ui._width,
+            height= ui._height,
+            data=   ui._wrapMethodData,
+            txt=    data.text
         let numberWidth=Math.max(3,Math.floor(
             Math.log(cursor._countOfRows)/Math.log(10)
         )+1)
-        let text=uiText(
-            ui._wrapMethodData,
-            showNumber?width-(numberWidth+1):width,
-            cursor,
-            ui._height
-        )
+        let textWidth=showNumber?width-(numberWidth+1):width
+        txt.width=textWidth
+        txt.wrap()
+        checkScroll(txt.row(cursor.abs),height,data)
+        let text=uiText(data,textWidth,cursor,height)
         let res=createTextContentCli(
             text,
             cursor,
@@ -66,6 +68,12 @@ Promise.all([
         function pad(s){
             return ' '.repeat(numberWidth-s.length)+s
         }
+    }
+    function checkScroll(cursorViewRow,height,data){
+        if(data._scroll+height-1<=cursorViewRow)
+            data._scroll=cursorViewRow-(height-1)+1
+        if(cursorViewRow<data._scroll)
+            data._scroll=cursorViewRow
     }
     return build
 })
