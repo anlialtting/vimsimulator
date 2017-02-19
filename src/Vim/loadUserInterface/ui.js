@@ -4,7 +4,9 @@ function optionChange(ui,options){
     for(let k of options)switch(k){
         case 'list':
             if(ui._wrapMethod=='greedy')
-                ui._wrapMethodData.text.setOption('list',ui._vim._options[k])
+                ui._wrapMethodData.text.setOption(
+                    'list',ui._vim._options[k]
+                )
             break
     }
 }
