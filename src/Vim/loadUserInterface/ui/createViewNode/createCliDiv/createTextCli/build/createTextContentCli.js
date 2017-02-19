@@ -2,13 +2,11 @@
 var highlightStyle={backgroundColor:'var(--middle-color)'}
 Promise.all([
     module.repository.Cli,
-    module.repository.visualRange,
     module.repository.stringWidth,
 ]).then(modules=>{
     let
         Cli=            modules[0],
-        visualRange=    modules[1],
-        stringWidth=    modules[2]
+        stringWidth=    modules[1]
     function calcWidth(a){
         let x=0
         for(let i=0;i<a.length;i++){

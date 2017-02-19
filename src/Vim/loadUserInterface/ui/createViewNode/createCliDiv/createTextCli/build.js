@@ -12,7 +12,8 @@ Promise.all([
     let
         Cli=                    await module.repository.Cli,
         uiText=                 modules[0],
-        createTextContentCli=   modules[1]
+        createTextContentCli=   modules[1],
+    visualRange=await module.repository.visualRange
     function build(cli,ui,showCursor,showNumber){
         let 
             cursor= ui._vim._cursor,
