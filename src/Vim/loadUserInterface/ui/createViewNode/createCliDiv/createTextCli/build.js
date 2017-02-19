@@ -6,31 +6,31 @@ var
         color:'var(--color4i)'
     }
 Promise.all([
-    module.repository.Cli,
     module.shareImport('build/uiText.js'),
     module.shareImport('build/createTextContentCli.js'),
-]).then(modules=>{
+]).then(async modules=>{
     let
-        Cli=                    modules[0],
-        uiText=                 modules[1],
-        createTextContentCli=   modules[2]
+        Cli=                    await module.repository.Cli,
+        uiText=                 modules[0],
+        createTextContentCli=   modules[1]
     function build(cli,ui,showCursor,showNumber){
         let 
             cursor=ui._vim._cursor
         let numberWidth=Math.max(3,Math.floor(
             Math.log(ui._vim._cursor._countOfRows)/Math.log(10)
         )+1)
-        text=uiText(
+        let text=uiText(
             ui,
             showNumber?ui.width-(numberWidth+1):ui.width,
             cursor
         )
         let res=createTextContentCli(
-            ui,
             text,
             cursor,
             showCursor,
-            ui._vim._mode=='visual'&&visualRange(ui._vim)
+            ui._vim._mode=='visual'&&visualRange(ui._vim),
+            ui._cursorSymbol,
+            ui._width
         )
         if(showNumber){
             cli.appendChild(number(text,numberWidth))

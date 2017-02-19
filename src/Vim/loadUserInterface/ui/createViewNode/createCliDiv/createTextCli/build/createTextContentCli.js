@@ -9,7 +9,7 @@ Promise.all([
         Cli=            modules[0],
         visualRange=    modules[1],
         stringWidth=    modules[2]
-    function width(a){
+    function calcWidth(a){
         let x=0
         for(let i=0;i<a.length;i++){
             let v=a[i]
@@ -18,7 +18,7 @@ Promise.all([
         return x
     }
     function createTextContentCli(
-        ui,text,cursor,showCursor,highlightRange
+        text,cursor,showCursor,highlightRange,cursorSymbol,width
     ){
         let cli=new Cli,rowsCount
         {
@@ -32,7 +32,7 @@ Promise.all([
                     for(
                         let i=0,c=0;
                         i<row.string.length;
-                        c+=width(row.string[i++])
+                        c+=calcWidth(row.string[i++])
                     ){
                         let o=row.string[i]
                         if(typeof o=='string')
@@ -59,10 +59,10 @@ Promise.all([
             rowsCount=currentRowsCount
         }
         if(showCursor){
-            let c=cursorCli(ui,text,cursor)
+            let c=cursorCli(text,cursor,width)
             cli.appendChild(c)
             cli.appendChild({
-                child:ui._cursorSymbol,
+                child:cursorSymbol,
                 r:c.r,
                 c:c.c,
             })
@@ -72,7 +72,7 @@ Promise.all([
             rowsCount,
         }
     }
-    function cursorCli(ui,text,vc){
+    function cursorCli(text,vc,width){
         let currentRowsCount=0
         let clientCursor
         text.map(l=>{
@@ -80,15 +80,13 @@ Promise.all([
                 currentRowsCount++
             l.rows.map(row=>{
                 if(
-                    l.index==vc.r&&(
-                        !ui.width||
-                        row.start<=vc.c&&vc.c<row.start+row.string.length
-                    )
+                    l.index==vc.r&&
+                    row.start<=vc.c&&vc.c<row.start+row.string.length
                 ){
-                    let viewC=ui.width?vc.c-row.start:vc.c
+                    let viewC=width?vc.c-row.start:vc.c
                     clientCursor={
                         row:currentRowsCount,
-                        col:width(row.string.slice(0,viewC)),
+                        col:calcWidth(row.string.slice(0,viewC)),
                         doc:row.string[viewC],
                     }
                 }

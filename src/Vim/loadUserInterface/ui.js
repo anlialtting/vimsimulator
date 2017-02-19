@@ -27,6 +27,8 @@ var
         this._vim=vim
         this._fontSize=13
         this._wrapMethod='greedy'
+        this._width=80
+        this._height=24
         this._cursorSymbol=Symbol()
         this.node=createViewNode(this)
         setUpClock(this)
