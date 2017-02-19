@@ -17,13 +17,13 @@ Promise.all([
         }
         return x
     }
-    function createTextContentCli(ui,text,cursor,showCursor){
+    function createTextContentCli(
+        ui,text,cursor,showCursor,highlightRange
+    ){
         let cli=new Cli,rowsCount
         {
             let
-                currentRowsCount=0,
-                highlightRange=
-                    ui._vim._mode=='visual'&&visualRange(ui._vim)
+                currentRowsCount=0
             text.map(l=>{
                 if(!l.rows.length)
                     currentRowsCount++

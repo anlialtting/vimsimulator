@@ -1,4 +1,3 @@
-// chrome 56 bug: cannot be <code>let</code>
 var
     color3i={
         color:'var(--color3i)'
@@ -26,7 +25,13 @@ Promise.all([
             showNumber?ui.width-(numberWidth+1):ui.width,
             cursor
         )
-        let res=createTextContentCli(ui,text,cursor,showCursor)
+        let res=createTextContentCli(
+            ui,
+            text,
+            cursor,
+            showCursor,
+            ui._vim._mode=='visual'&&visualRange(ui._vim)
+        )
         if(showNumber){
             cli.appendChild(number(text,numberWidth))
             cli.appendChild({
