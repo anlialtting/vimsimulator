@@ -19,8 +19,6 @@ Promise.all([
         this._cli=new Cli
         this._cliView=this._cli.view
         this._ui._commandCli=createCommandCli(this._ui)
-        this._ui.on('modeChange',()=>this._ui._commandCli.update())
-        this._ui.on('update',()=>this._ui._commandCli.update())
         this._cliView.fontSize=this._ui._fontSize
         this._textCli=createTextCli(this._ui)
         this.update()
@@ -29,8 +27,12 @@ Promise.all([
         n.appendChild(this._ui._inputTag)
         this.node=n
     }
+    CliDiv.prototype.modeChange=function(){
+        this._ui._commandCli.update()
+    }
     CliDiv.prototype.update=function(){
         this._textCli.update()
+        this._ui._commandCli.update()
         if(this._cliView.width!=this._ui._width)
             this._cliView.width=this._ui._width
         if(this._cliView.height!=this._ui._height)

@@ -11,16 +11,13 @@ function optionChange(ui,options){
     }
 }
 var
-    EventEmmiter=   module.repository.npm.events,
     GreedyText=     module.shareImport('ui/GreedyText.js'),
     createViewNode= module.shareImport('ui/createViewNode.js')
 ;(async()=>{
     let measureWidth=await module.repository.measureWidth
-    EventEmmiter=   await EventEmmiter
     GreedyText=     await GreedyText
     createViewNode= await createViewNode
     function Ui(vim){
-        EventEmmiter.call(this)
         this._values={
             clockCycle:16,
         }
@@ -30,10 +27,10 @@ var
         this._width=80
         this._height=24
         this._cursorSymbol=Symbol()
-        this.node=createViewNode(this)
+        this._viewNode=createViewNode(this)
+        this.node=this._viewNode.node
         setUpClock(this)
     }
-    Object.setPrototypeOf(Ui.prototype,EventEmmiter.prototype)
     Object.defineProperty(Ui.prototype,'_fontSize',{set(v){
         this._values._fontSize=v
         this._values._fontWidth=measureWidth(this._fontSize)
@@ -44,13 +41,13 @@ var
         return this._values._fontWidth
     }})
     Ui.prototype._update=function(){
-        this.emit('update')
+        this._viewNode.update()
     }
     Ui.prototype._updateByVim=function(changed){
         for(let k in changed){let v=changed[k]
             switch(k){
                 case 'mode':
-                    this.emit('modeChange')
+                    this._viewNode.modeChange()
                     break
                 case 'text':
                     if(this._wrapMethod=='greedy'){
@@ -107,7 +104,7 @@ var
     }})
     function setUpClock(ui){
         ui._clockIntervalId=setInterval(()=>
-            ui.emit('_clock')
+            ui._viewNode.flush()
         ,ui._values.clockCycle)
     }
     function tearDownClock(ui){
