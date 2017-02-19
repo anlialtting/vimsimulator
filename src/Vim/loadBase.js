@@ -1,10 +1,10 @@
 var
     proto=Promise.all([
-        module.shareImport('prototype._welcomeText.js'),
-        module.shareImport('prototype._write.js'),
-        module.shareImport('prototype._edit.js'),
-        module.shareImport('prototype._mode.js'),
-        module.shareImport('prototype._text.js'),
+        module.shareImport('loadBase/prototype._welcomeText.js'),
+        module.shareImport('loadBase/prototype._write.js'),
+        module.shareImport('loadBase/prototype._edit.js'),
+        module.shareImport('loadBase/prototype._mode.js'),
+        module.shareImport('loadBase/prototype._text.js'),
     ])
 ;(async()=>{
     proto=await proto

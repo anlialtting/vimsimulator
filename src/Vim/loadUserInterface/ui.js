@@ -11,12 +11,12 @@ function optionChange(ui,options){
 var
     EventEmmiter=   module.repository.npm.events,
     GreedyText=     module.shareImport('ui/GreedyText.js'),
-    createCliDiv=   module.shareImport('ui/createCliDiv.js')
+    createViewNode= module.shareImport('ui/createViewNode.js')
 ;(async()=>{
     let measureWidth=await module.repository.measureWidth
-    createCliDiv=   await createCliDiv
     EventEmmiter=   await EventEmmiter
     GreedyText=     await GreedyText
+    createViewNode= await createViewNode
     function Ui(vim){
         EventEmmiter.call(this)
         this._values={
@@ -101,14 +101,6 @@ var
         tearDownClock(this)
         this._vim.removeUi(this)
     }})
-    function createViewNode(ui){
-        let n=createCliDiv(ui)
-        n.classList.add('webvim')
-        n.addEventListener('click',()=>
-            ui._vim.focus()
-        )
-        return n
-    }
     function setUpClock(ui){
         ui._clockIntervalId=setInterval(()=>
             ui.emit('_clock')
