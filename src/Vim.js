@@ -1,5 +1,5 @@
 {
-    let moduleNode=`https://cdn.rawgit.com/anliting/module/${
+    var moduleNode=`https://cdn.rawgit.com/anliting/module/${
         '0e94e04505484aaf3b367423b36cf426a4242006'
     }/node`
     if(!module.repository.npm)
@@ -12,10 +12,9 @@
         module.repository.npm.events=module.importByPath(
             `${moduleNode}/events.js`
         )
-    if(!module.repository.EventEmmiter)
-        module.repository.EventEmmiter=module.repository.npm.events
 }
 var
+    loadBase=           module.shareImport('Vim/loadBase.js'),
     loadUserInterface=  module.shareImport('Vim/loadUserInterface.js'),
     loadSyntacticSugar= module.shareImport('Vim/loadSyntacticSugar.js'),
     colors=             module.get('Vim/colors.css'),
@@ -25,14 +24,7 @@ var
     StyleManager=       module.shareImport('Vim/StyleManager.js'),
     UndoBranchManager=  module.shareImport('Vim/UndoBranchManager.js'),
     style=              module.get('Vim/style.css'),
-    EventEmmiter=       module.repository.npm.events,
-    proto=Promise.all([
-        module.shareImport('Vim/prototype._welcomeText.js'),
-        module.shareImport('Vim/prototype._write.js'),
-        module.shareImport('Vim/prototype._edit.js'),
-        module.shareImport('Vim/prototype._mode.js'),
-        module.shareImport('Vim/prototype._text.js'),
-    ])
+    EventEmmiter=       module.repository.npm.events
 ;(async()=>{
     EventEmmiter=       await EventEmmiter
     StyleManager=       await StyleManager
@@ -42,7 +34,6 @@ var
     createCursor=       await createCursor
     rc=                 await rc
     defaultOptions=     await defaultOptions
-    proto=              await proto
     function Vim(read,write){
         EventEmmiter.call(this)
         this._values={
@@ -66,11 +57,9 @@ var
         rc(this)
     }
     Object.setPrototypeOf(Vim.prototype,EventEmmiter.prototype)
-    Object.defineProperty(Vim.prototype,'_mode',proto[3])
     Vim.prototype._quit=function(){
         this.emit('quit')
     }
-    Object.defineProperty(Vim.prototype,'_text',proto[4])
     Object.defineProperty(Vim.prototype,'_trueText',{get(){
         return this._values.text||'\n'
     }})
@@ -83,27 +72,7 @@ var
     Vim.prototype._read=function(path){
         return this.read&&this.read(path)
     }
-    Vim.prototype._write=proto[1]
-    Vim.prototype._edit=proto[2]
-    Vim.prototype._welcomeText=proto[0]
-    Vim.prototype._setOption=function(key,value){
-        this._options[key]=value
-        this._viewChanged.options=this._viewChanged.options||{}
-        this._viewChanged.options[key]=null
-    }
-    Vim.prototype._setRegister=function(key,value){
-        this._registers[key]=value
-        if(key=='+')
-            this.copy&&this.copy(value.string)
-    }
-    Object.defineProperty(Vim.prototype,'_mainUi',{get(){
-        if(!this._values._mainUi){
-            this._values._mainUi=this.ui
-            this._values._mainUi.width=80
-            this._values._mainUi.height=24
-        }
-        return this._values._mainUi
-    }})
+    ;(await loadBase)(Vim.prototype)
     ;(await loadUserInterface)(Vim.prototype)
     ;(await loadSyntacticSugar)(Vim.prototype)
     return Vim
