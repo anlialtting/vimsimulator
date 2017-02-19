@@ -1,5 +1,5 @@
 ({
-    fullScreen:('a'.repeat(80)+'\n').repeat(23),
+    fullScreen:('a'.repeat(79)+'\n').repeat(23),
     htmlDoc:`<!doctype html>
 <html>
     <head>

@@ -18,10 +18,10 @@ Promise.all([
     })
     vim.polluteStyle
     vim.polluteCopy
-    vim.text=testdata.fullScreen
+    //vim.text=testdata.fullScreen
     //vim.text=testdata.htmlDoc
     //vim.text=testdata.longText
-    //vim.text=testdata.longTextMultiline
+    vim.text=testdata.longTextMultiline
     let vimViewDiv=createTestDiv(vim)
     document.head.appendChild(style)
     document.body.appendChild(vimViewDiv)

@@ -33,7 +33,8 @@ function update(ui,cli){
             return 'Top'
         if(bot)
             return 'Bot'
-        return`${Math.floor(100*s/(cr-(h-1))).toString()}%`
+        let n=Math.floor(100*s/(cr-(h-1))).toString()
+        return`${' '.repeat(2-n.length)}${n}%`
     }
     function g(s){
         cli.appendChild({child:s,style:{fontWeight:'bold'}})

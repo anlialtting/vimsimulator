@@ -13,6 +13,15 @@ Object.defineProperty(GreedyText.prototype,'update',{set(val){
         this.lines=val.map(val=>new Line(val))
     }
 }})
+Object.defineProperty(GreedyText.prototype,'width',{set(val){
+    if(this._width!=val)
+        this.lines.map(l=>{
+            delete l.rows
+        })
+    this._width=val
+},get(){
+    return this._width
+}})
 Object.defineProperty(GreedyText.prototype,'string',{get(){
     return this.lines.map(l=>l.string+'\n').join('')
 }})

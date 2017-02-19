@@ -9,6 +9,7 @@ function optionChange(ui,options){
                 )
             break
         case 'number':
+            ui._wrapMethodData.text.width=ui._textWidth
             break
     }
 }
