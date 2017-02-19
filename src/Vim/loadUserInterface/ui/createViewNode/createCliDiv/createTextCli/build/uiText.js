@@ -1,19 +1,16 @@
-function checkScroll(ui,cursorViewRow){
-    if(ui._wrapMethodData._scroll+ui.height-1<=cursorViewRow)
-        ui._wrapMethodData._scroll=cursorViewRow-(ui.height-1)+1
-    if(cursorViewRow<ui._wrapMethodData._scroll)
-        ui._wrapMethodData._scroll=cursorViewRow
+function checkScroll(cursorViewRow,height,data){
+    if(data._scroll+height-1<=cursorViewRow)
+        data._scroll=cursorViewRow-(height-1)+1
+    if(cursorViewRow<data._scroll)
+        data._scroll=cursorViewRow
 }
-function uiText(ui,targetWidth,vc){
-    let txt=ui._wrapMethodData.text
+function uiText(data,targetWidth,vc,height){
+    let
+        txt=data.text
     txt.width=targetWidth
     txt.wrap()
-    if(ui.height){
-        checkScroll(ui,txt.row(vc.abs))
-        let scroll=ui._wrapMethodData._scroll
-        return txt.uiText(scroll,scroll+ui.height-1)
-    }else{
-        return txt.uiText()
-    }
+    checkScroll(txt.row(vc.abs),height,data)
+    let scroll=data._scroll
+    return txt.uiText(scroll,scroll+height-1)
 }
 uiText

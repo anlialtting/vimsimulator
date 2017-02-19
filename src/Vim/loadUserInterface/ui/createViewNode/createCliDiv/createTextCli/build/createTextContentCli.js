@@ -18,7 +18,12 @@ Promise.all([
         return x
     }
     function createTextContentCli(
-        text,cursor,showCursor,highlightRange,cursorSymbol,width
+        text,
+        cursor,
+        showCursor,
+        highlightRange,
+        cursorSymbol,
+        width
     ){
         let cli=new Cli,rowsCount
         {

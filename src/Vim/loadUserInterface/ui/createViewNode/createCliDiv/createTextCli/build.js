@@ -15,14 +15,16 @@ Promise.all([
         createTextContentCli=   modules[1]
     function build(cli,ui,showCursor,showNumber){
         let 
-            cursor=ui._vim._cursor
+            cursor=ui._vim._cursor,
+            width=ui._width
         let numberWidth=Math.max(3,Math.floor(
-            Math.log(ui._vim._cursor._countOfRows)/Math.log(10)
+            Math.log(cursor._countOfRows)/Math.log(10)
         )+1)
         let text=uiText(
-            ui,
-            showNumber?ui.width-(numberWidth+1):ui.width,
-            cursor
+            ui._wrapMethodData,
+            showNumber?width-(numberWidth+1):width,
+            cursor,
+            ui._height
         )
         let res=createTextContentCli(
             text,
@@ -30,7 +32,7 @@ Promise.all([
             showCursor,
             ui._vim._mode=='visual'&&visualRange(ui._vim),
             ui._cursorSymbol,
-            ui._width
+            width
         )
         if(showNumber){
             cli.appendChild(number(text,numberWidth))
