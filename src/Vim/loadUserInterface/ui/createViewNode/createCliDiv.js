@@ -31,6 +31,10 @@ Promise.all([
         this._ui._commandCli.update()
     }
     CliDiv.prototype.update=function(){
+        let ui=this._ui
+        ui._wrapMethodData.text.width=ui._textWidth
+        ui._wrapMethodData.text.wrap()
+        ui._checkScroll()
         this._textCli.update()
         this._ui._commandCli.update()
         if(this._cliView.width!=this._ui._width)

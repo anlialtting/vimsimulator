@@ -20,13 +20,8 @@ Promise.all([
             height= ui._height,
             data=   ui._wrapMethodData,
             txt=    data.text
-        let numberWidth=Math.max(3,Math.floor(
-            Math.log(cursor._countOfRows)/Math.log(10)
-        )+1)
-        let textWidth=showNumber?width-(numberWidth+1):width
-        txt.width=textWidth
-        txt.wrap()
-        checkScroll(txt.row(cursor.abs),height,data)
+        let numberWidth=ui._numberWidth
+        let textWidth=ui._textWidth
         let text=uiText(data,textWidth,cursor,height)
         let res=createTextContentCli(
             text,
@@ -68,12 +63,6 @@ Promise.all([
         function pad(s){
             return ' '.repeat(numberWidth-s.length)+s
         }
-    }
-    function checkScroll(cursorViewRow,height,data){
-        if(data._scroll+height-1<=cursorViewRow)
-            data._scroll=cursorViewRow-(height-1)+1
-        if(cursorViewRow<data._scroll)
-            data._scroll=cursorViewRow
     }
     return build
 })

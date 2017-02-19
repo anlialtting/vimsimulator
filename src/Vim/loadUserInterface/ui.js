@@ -40,6 +40,28 @@ var
     Object.defineProperty(Ui.prototype,'_fontWidth',{get(){
         return this._values._fontWidth
     }})
+    Object.defineProperty(Ui.prototype,'_numberWidth',{get(){
+        return Math.max(3,Math.floor(
+            Math.log(this._vim._cursor._countOfRows)/Math.log(10)
+        )+1)
+    }})
+    Object.defineProperty(Ui.prototype,'_textWidth',{get(){
+        return this._vim._options.number?
+            this._width-(this._numberWidth+1)
+        :
+            this._width
+    }})
+    Ui.prototype._checkScroll=function(){
+        let
+            height=         this._height,
+            data=           this._wrapMethodData,
+            txt=            data.text,
+            cursorViewRow=  txt.row(this._vim._cursor.abs)
+        if(data._scroll+height-1<=cursorViewRow)
+            data._scroll=cursorViewRow-(height-1)+1
+        if(cursorViewRow<data._scroll)
+            data._scroll=cursorViewRow
+    }
     Ui.prototype._update=function(){
         this._viewNode.update()
     }
