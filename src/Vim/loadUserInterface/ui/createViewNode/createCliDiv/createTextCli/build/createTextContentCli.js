@@ -1,4 +1,3 @@
-// chrome 56 bug: cannot be <code>let</code>
 var highlightStyle={backgroundColor:'var(--middle-color)'}
 Promise.all([
     module.repository.Cli,

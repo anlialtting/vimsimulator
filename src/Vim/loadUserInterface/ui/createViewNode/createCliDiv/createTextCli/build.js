@@ -4,16 +4,14 @@ var
     },
     color4i={
         color:'var(--color4i)'
-    }
-Promise.all([
-    module.shareImport('build/uiText.js'),
-    module.shareImport('build/createTextContentCli.js'),
-]).then(async modules=>{
+    },
+    createTextContentCli=
+        module.shareImport('build/createTextContentCli.js')
+;(async()=>{
     let
         Cli=                    await module.repository.Cli,
-        uiText=                 modules[0],
-        createTextContentCli=   modules[1],
-    visualRange=await module.repository.visualRange
+        visualRange=            await module.repository.visualRange
+    createTextContentCli=await createTextContentCli
     function build(cli,ui,showCursor,showNumber){
         let 
             cursor= ui._vim._cursor,
@@ -23,7 +21,7 @@ Promise.all([
             txt=    data.text
         let numberWidth=ui._numberWidth
         let textWidth=ui._textWidth
-        let text=uiText(data,textWidth,cursor,height)
+        let text=data.text.uiText(data._scroll,data._scroll+height-1)
         let res=createTextContentCli(
             text,
             cursor,
@@ -66,4 +64,4 @@ Promise.all([
         }
     }
     return build
-})
+})()
