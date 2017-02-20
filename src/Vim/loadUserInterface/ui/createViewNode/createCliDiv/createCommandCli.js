@@ -15,6 +15,13 @@ function update(ui,cli){
         g('-- VISUAL BLOCK --')
     }
     cli.appendChild({
+        child:cursor(
+            ui._vim._cursor.r,
+            ui._vim._cursor.c
+        ),
+        c:ui.width-18
+    })
+    cli.appendChild({
         child:scroll(
             ui._wrapMethodData._scroll,
             ui._wrapMethodData.text.countOfRows,
@@ -23,6 +30,9 @@ function update(ui,cli){
         c:ui.width-4
     })
     cli.flush()
+    function cursor(r,c){
+        return `${r+1},${c+1}`
+    }
     function scroll(s,cr,h){
         let
             top=s==0,
