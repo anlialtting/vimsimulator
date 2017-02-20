@@ -1,11 +1,8 @@
 var highlightStyle={backgroundColor:'var(--middle-color)'}
-Promise.all([
-    module.repository.Cli,
-    module.repository.stringWidth,
-]).then(modules=>{
+;(async()=>{
     let
-        Cli=            modules[0],
-        stringWidth=    modules[1]
+        Cli=            await module.repository.Cli,
+        stringWidth=    await module.repository.stringWidth
     function calcWidth(a){
         let x=0
         for(let i=0;i<a.length;i++){
@@ -108,4 +105,4 @@ Promise.all([
         return clientCursor.doc
     }
     return createTextContentCli
-})
+})()
