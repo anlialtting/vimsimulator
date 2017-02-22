@@ -11,7 +11,7 @@ function optionChange(ui,options){
             break
     }
 }
-(function(changed){
+;(function(changed){
     for(let k in changed){let v=changed[k]
         switch(k){
             case 'mode':

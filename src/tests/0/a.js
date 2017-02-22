@@ -1,14 +1,13 @@
 module.rootScript.parentNode.removeChild(module.rootScript)
 module.debug=true
-Promise.all([
-    module.shareImport('../Vim.js'),
-    module.styleByPath('vim.css'),
-    module.shareImport('testdata.js'),
-]).then(modules=>{
-    let
-        Vim=modules[0],
-        style=modules[1],
-        testdata=modules[2]
+var
+    style=module.styleByPath('../a.css'),
+    testdata=module.shareImport('testdata.js'),
+    Vim=module.shareImport('../../Vim.js')
+;(async()=>{
+    Vim=await Vim
+    testdata=await testdata
+    style=await style
     let vim=new Vim(p=>{
         if(p=='~/.vimrc')
             return localStorage.webvimVimrc
@@ -21,7 +20,7 @@ Promise.all([
     //vim.text=testdata.fullScreen
     //vim.text=testdata.htmlDoc
     //vim.text=testdata.longText
-    //vim.text=testdata.longTextMultiline
+    vim.text=testdata.longTextMultiline
     let vimViewDiv=createTestDiv(vim)
     document.head.appendChild(style)
     document.body.appendChild(vimViewDiv)
@@ -30,7 +29,7 @@ Promise.all([
         document.body.removeChild(vimViewDiv)
     })
     vim.focus()
-})
+})()
 function createTestDiv(vim){
     let div=document.createElement('div')
     div.className='test'
