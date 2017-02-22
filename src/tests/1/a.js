@@ -1,16 +1,27 @@
-;(async()=>document.head.appendChild(await module.style('a.css')))()
+var measureWidth=
+    module.shareImport('../../Vim/loadUserInterface/ui/measureWidth.js')
+//;(async()=>document.head.appendChild(await module.style('a.css')))()
 ;(async()=>document.head.appendChild(await module.style('../a.css')))()
 ;(async()=>{
+    console.log=s=>
+        document.body.appendChild(document.createTextNode(s))
+    measureWidth=await measureWidth
     let w=80,h=24
     let fontSize=13
-    let cv=document.createElement('canvas')
-    cv.width=fontSize/2*w
-    cv.height=fontSize*h
-    let ctx=cv.getContext('2d')
-    ctx.fillStyle='lightgray'
-    ctx.font=`${fontSize}px monospace`
-    timeTest()
+    let fontWidth=measureWidth(fontSize)
+    let cv,ctx
+    [cv,ctx]=init()
     document.body.appendChild(div())
+    timeTest()
+    function init(){
+        let cv=document.createElement('canvas')
+        cv.width=fontWidth*w
+        cv.height=fontSize*h
+        let ctx=cv.getContext('2d')
+        ctx.font=`${fontSize}px monospace`
+        ctx.textBaseline='top'
+        return[cv,ctx]
+    }
     function div(){
         let div=document.createElement('div')
         div.className='test'
@@ -18,26 +29,25 @@
         return div
     }
     async function timeTest(){
-        let n=100
+        let n=20
         let start=new Date
         for(let i=0;i<n;i++){
-            let s=String.fromCharCode(97+Math.floor(Math.random()*26))
-            s=(s.repeat(w)+'\n').repeat(h)
-            draw(s)
+            draw()
             await new Promise(setTimeout)
         }
-        let cycle=(new Date-start)/n
-        console.log(`${1e3/cycle}fps`)
+        console.log(`${1e3/((new Date-start)/n)}fps`)
     }
-    function draw(s){
+    function draw(){
         ctx.clearRect(0,0,cv.width,cv.height)
-        let x=0,y=0
-        for(let i=0;i<s.length;i++){
-            if(s[i]!='\n'){
-                ctx.fillText(s[i],fontSize/2*x,fontSize*(y+1))
-                x++
-            }else
-                x=0,y++
+        for(let x=0;x<w;x++)
+            for(let y=0;y<h;y++){
+                let s=randomLetter()
+                ctx.fillText(s,fontWidth*x,fontSize*y)
+            }
+        function randomLetter(){
+            return String.fromCharCode(
+                97+Math.floor(Math.random()*26)
+            )
         }
     }
 })()
