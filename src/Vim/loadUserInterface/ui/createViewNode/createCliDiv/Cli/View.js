@@ -17,17 +17,16 @@ Promise.all([
         this.node.className='cli'
         this.symbols={}
         update(this)
-        this._cli.on('view',this._listener=()=>update(this))
     }
     Object.defineProperty(View.prototype,'width',{set(val){
         this._width=val
-        update(this)
+        this.update
     },get(){
         return this._width
     }})
     Object.defineProperty(View.prototype,'height',{set(val){
         this._height=val
-        update(this)
+        this.update
     },get(){
         return this._height
     }})
@@ -35,6 +34,9 @@ Promise.all([
         this._fontSize=val
         this._fontWidth=measureWidth(this._fontSize)
         this.node.style.fontSize=`${this._fontSize}px`
+        this.update
+    }})
+    Object.defineProperty(View.prototype,'update',{set(val){
         update(this)
     }})
     View.prototype.free=function(){

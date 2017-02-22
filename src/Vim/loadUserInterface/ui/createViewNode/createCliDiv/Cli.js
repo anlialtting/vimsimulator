@@ -1,19 +1,20 @@
+var
+    View=module.shareImport('Cli/View.js')
 Promise.all([
-    module.repository.npm.events,
-    module.repository.stringWidth,
-    module.shareImport('Cli/View.js'),
-]).then(modules=>{
+]).then(async  modules=>{
     let
-        EventEmmiter=   modules[0],
-        width=          modules[1],
-        View=           modules[2]
+        EventEmmiter=   await module.repository.npm.events,
+        width=          await module.repository.stringWidth
+    View=await View
     function Cli(){
         EventEmmiter.call(this)
         this._children=[]
     }
     Object.setPrototypeOf(Cli.prototype,EventEmmiter.prototype)
     Object.defineProperty(Cli.prototype,'view',{get(){
-        return new View(this)
+        let view=new View(this)
+        this.on('view',()=>view.update)
+        return view
     }})
     Cli.prototype.clear=function(){
         this._flushed=false
