@@ -19,11 +19,15 @@ function optionChange(ui,options){
                 break
             case 'text':
                 if(this._wrapMethod=='greedy'){
-                    v.map(u=>
-                        this._wrapMethodData.text.update=u
-                    )
-                    /*this._wrapMethodData.text.update=
-                        this._vim._trueText*/
+                    if(this._sync&&this._vim._text!='')
+                        v.map(u=>
+                            this._wrapMethodData.text.update=u
+                        )
+                    else
+                        this._wrapMethodData.text.update=
+                            this._vim._trueText
+                    this._sync=
+                        this._vim._text==this._wrapMethodData.text.string
                 }
                 break
             case 'options':

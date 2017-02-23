@@ -65,6 +65,8 @@ var load=[
         this.emit('quit')
     }
     Object.defineProperty(Vim.prototype,'_trueText',{set(val){
+        if(this._text=='')
+            this._text='\n'
         this._text=val
     },get(){
         return this._values.text||'\n'
