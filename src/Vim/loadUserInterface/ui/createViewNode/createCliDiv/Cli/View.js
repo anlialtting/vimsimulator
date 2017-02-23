@@ -1,10 +1,11 @@
-Promise.all([
-    module.shareImport('View/update.js'),
-    module.repository.measureWidth,
-]).then(modules=>{
-    let
-        update=modules[0],
-        measureWidth=modules[1]
+(async()=>{
+    let[
+        update,
+        measureWidth,
+    ]=await Promise.all([
+        module.shareImport('View/update.js'),
+        module.repository.measureWidth,
+    ])
     function View(cli){
         this._cli=cli
         this._fontSize=13
@@ -43,4 +44,4 @@ Promise.all([
         this._cli.removeListener('view',this._listener)
     }
     return View
-})
+})()

@@ -1,5 +1,5 @@
 module.import('lc.js').then(lc=>{
-    return(function(p){
+    return function(p){
         let read=this.read(p)
         this._registers['%']=p
         if(read==undefined){
@@ -9,5 +9,5 @@ module.import('lc.js').then(lc=>{
             this.text=read
             return `"${p}" ${lc(read)}`
         }
-    })
+    }
 })

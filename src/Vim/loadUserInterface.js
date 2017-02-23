@@ -1,5 +1,5 @@
 module.repository.visualRange=
-    module.shareImport('loadUserInterface/visualRange.js'),
+    module.shareImport('loadUserInterface/visualRange.js')
 Promise.all([
     module.shareImport('loadUserInterface/input.js'),
     module.shareImport('loadUserInterface/ui.js'),

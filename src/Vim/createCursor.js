@@ -1,8 +1,6 @@
-Promise.all([
-    module.shareImport('createCursor/VimCursor.js'),
-]).then(modules=>{
+(async()=>{
     let
-        VimCursor=              modules[0]
+        VimCursor=await module.shareImport('createCursor/VimCursor.js')
     function createCursor(vim){
         let cursor=new VimCursor
         Object.defineProperty(cursor,'text',{get(){
@@ -14,4 +12,4 @@ Promise.all([
         return cursor
     }
     return createCursor
-})
+})()

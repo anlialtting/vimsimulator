@@ -1,8 +1,5 @@
-Promise.all([
-    module.repository.measureWidth,
-]).then(modules=>{
-    let
-        measureWidth=   modules[0]
+(async()=>{
+    let measureWidth=await module.repository.measureWidth
     return(ui=>{
         let vim=ui._vim
         let textarea=document.createElement('textarea')
@@ -62,4 +59,4 @@ Promise.all([
             textarea.style.width=`${width}px`
         }
     })
-})
+})()

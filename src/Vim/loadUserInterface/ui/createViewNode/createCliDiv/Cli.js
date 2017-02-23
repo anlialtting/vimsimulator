@@ -1,7 +1,6 @@
 var
     View=module.shareImport('Cli/View.js')
-Promise.all([
-]).then(async  modules=>{
+;(async()=>{
     let
         EventEmmiter=   await module.repository.npm.events,
         width=          await module.repository.stringWidth
@@ -59,4 +58,4 @@ Promise.all([
             this._children.push(child)
     }
     return Cli
-})
+})()

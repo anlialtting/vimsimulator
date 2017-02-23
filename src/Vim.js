@@ -13,27 +13,31 @@
             `${moduleNode}/events.js`
         )
 }
-var
-    loadBase=           module.shareImport('Vim/loadBase.js'),
-    loadUserInterface=  module.shareImport('Vim/loadUserInterface.js'),
-    loadSyntacticSugar= module.shareImport('Vim/loadSyntacticSugar.js'),
-    colors=             module.get('Vim/colors.css'),
-    createCursor=       module.shareImport('Vim/createCursor.js'),
-    rc=                 module.shareImport('Vim/rc.js'),
-    defaultOptions=     module.shareImport('Vim/defaultOptions.js'),
-    StyleManager=       module.shareImport('Vim/StyleManager.js'),
-    UndoBranchManager=  module.shareImport('Vim/UndoBranchManager.js'),
-    style=              module.get('Vim/style.css'),
-    EventEmmiter=       module.repository.npm.events
+var load=[
+    module.shareImport('Vim/loadBase.js'),
+    module.shareImport('Vim/loadUserInterface.js'),
+    module.shareImport('Vim/loadSyntacticSugar.js')
+]
 ;(async()=>{
-    EventEmmiter=       await EventEmmiter
-    StyleManager=       await StyleManager
-    UndoBranchManager=  await UndoBranchManager
-    style=              await style
-    colors=             await colors
-    createCursor=       await createCursor
-    rc=                 await rc
-    defaultOptions=     await defaultOptions
+    let[
+        colors,
+        createCursor,
+        rc,
+        defaultOptions,
+        StyleManager,
+        UndoBranchManager,
+        style,
+        EventEmmiter,
+    ]=await Promise.all([
+        module.get('Vim/colors.css'),
+        module.shareImport('Vim/createCursor.js'),
+        module.shareImport('Vim/rc.js'),
+        module.shareImport('Vim/defaultOptions.js'),
+        module.shareImport('Vim/StyleManager.js'),
+        module.shareImport('Vim/UndoBranchManager.js'),
+        module.get('Vim/style.css'),
+        module.repository.npm.events
+    ])
     function Vim(read,write){
         EventEmmiter.call(this)
         this._values={
@@ -72,8 +76,6 @@ var
     Vim.prototype._read=function(path){
         return this.read&&this.read(path)
     }
-    ;(await loadBase)(Vim.prototype)
-    ;(await loadUserInterface)(Vim.prototype)
-    ;(await loadSyntacticSugar)(Vim.prototype)
+    ;(await Promise.all(load)).map(f=>f(Vim.prototype))
     return Vim
 })()

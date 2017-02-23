@@ -65,9 +65,8 @@ GreedyText.prototype.setOption=function(key,val){
 function Line(val){
     this.string=val
 }
-var wrapLine=module.shareImport('GreedyText/wrapLine.js')
 ;(async()=>{
-    wrapLine=await wrapLine
+    let wrapLine=await module.shareImport('GreedyText/wrapLine.js')
     GreedyText.prototype.wrap=function(){
         let
             charCount=0,

@@ -1,15 +1,16 @@
 module.repository.Cli=module.shareImport('createCliDiv/Cli.js')
-Promise.all([
-    module.shareImport('createCliDiv/createCommandCli.js'),
-    module.repository.Cli,
-    module.shareImport('createCliDiv/createTextCli.js'),
-    module.shareImport('createCliDiv/createInput.js'),
-]).then(modules=>{
-    let
-        createCommandCli=   modules[0],
-        Cli=                modules[1],
-        createTextCli=      modules[2],
-        createInput=        modules[3]
+;(async()=>{
+    let[
+        createCommandCli,
+        Cli,
+        createTextCli,
+        createInput,
+    ]=await Promise.all([
+        module.shareImport('createCliDiv/createCommandCli.js'),
+        module.repository.Cli,
+        module.shareImport('createCliDiv/createTextCli.js'),
+        module.shareImport('createCliDiv/createInput.js'),
+    ])
     function createCliDiv(ui){
         return new CliDiv(ui)
     }
@@ -92,4 +93,4 @@ Promise.all([
         this._textCli.flush()
     }
     return createCliDiv
-})
+})()

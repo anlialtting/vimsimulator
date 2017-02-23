@@ -1,4 +1,4 @@
-function rc(vim){
+(vim=>{
     let vimrc=vim._read('~/.vimrc')
     if(vimrc==undefined)
         return
@@ -11,5 +11,4 @@ function rc(vim){
         vim.input=c
         vim.input={key:'Enter'}
     })
-}
-rc
+})

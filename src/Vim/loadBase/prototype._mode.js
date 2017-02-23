@@ -1,7 +1,5 @@
-Promise.all([
-    module.shareImport('prototype._mode/Cursor.js'),
-]).then(modules=>{
-    let Cursor=modules[0]
+(async()=>{
+    let Cursor=await module.shareImport('prototype._mode/Cursor.js')
     return{
         set(val){
             this._viewChanged.mode=true
@@ -28,4 +26,4 @@ Promise.all([
             return this._values.mode
         }
     }
-})
+})()

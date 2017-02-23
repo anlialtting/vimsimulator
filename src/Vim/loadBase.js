@@ -1,11 +1,10 @@
-var
-    proto=Promise.all([
-        module.shareImport('loadBase/prototype._welcomeText.js'),
-        module.shareImport('loadBase/prototype._write.js'),
-        module.shareImport('loadBase/prototype._edit.js'),
-        module.shareImport('loadBase/prototype._mode.js'),
-        module.shareImport('loadBase/prototype._text.js'),
-    ])
+var proto=Promise.all([
+    module.shareImport('loadBase/prototype._welcomeText.js'),
+    module.shareImport('loadBase/prototype._write.js'),
+    module.shareImport('loadBase/prototype._edit.js'),
+    module.shareImport('loadBase/prototype._mode.js'),
+    module.shareImport('loadBase/prototype._text.js'),
+])
 ;(async()=>{
     proto=await proto
     return o=>{

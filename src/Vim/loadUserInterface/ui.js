@@ -1,13 +1,16 @@
 module.repository.measureWidth= module.shareImport('ui/measureWidth.js')
 module.repository.stringWidth=  module.shareImport('ui/stringWidth.js')
-var
-    GreedyText=     module.shareImport('ui/GreedyText.js'),
-    createViewNode= module.shareImport('ui/createViewNode.js'),
-    _updateByVim=   module.shareImport('ui/prototype._updateByVim.js')
+var _updateByVim=module.shareImport('ui/prototype._updateByVim.js')
 ;(async()=>{
-    let measureWidth=await module.repository.measureWidth
-    GreedyText=     await GreedyText
-    createViewNode= await createViewNode
+    let[
+        measureWidth,
+        GreedyText,
+        createViewNode,
+    ]=await Promise.all([
+        module.repository.measureWidth,
+        module.shareImport('ui/GreedyText.js'),
+        module.shareImport('ui/createViewNode.js'),
+    ])
     function Ui(vim){
         this._values={
             clockCycle:16,
