@@ -22,10 +22,15 @@
         this.copy=s=>{
             let n=document.createElement('textarea')
             n.value=s
+            n.style.position='fixed'
+            let e=document.activeElement
             document.body.appendChild(n)
             n.select()
+            console.log(document.queryCommandEnabled('copy'))
             document.execCommand('copy',true,null)
             document.body.removeChild(n)
+            if(e)
+                e.focus()
         }
     }})
 })
