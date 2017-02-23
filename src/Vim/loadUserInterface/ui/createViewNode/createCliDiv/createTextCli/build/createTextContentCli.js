@@ -59,12 +59,14 @@ var highlightStyle={backgroundColor:'var(--middle-color)'}
         }
         if(showCursor){
             let c=cursorCli(text,cursor,width)
-            cli.appendChild(c)
-            cli.appendChild({
-                child:cursorSymbol,
-                r:c.r,
-                c:c.c,
-            })
+            if(c){
+                cli.appendChild(c)
+                cli.appendChild({
+                    child:cursorSymbol,
+                    r:c.r,
+                    c:c.c,
+                })
+            }
         }
         return{
             textCli:cli,
@@ -92,6 +94,8 @@ var highlightStyle={backgroundColor:'var(--middle-color)'}
                 currentRowsCount++
             })
         })
+        if(!clientCursor)
+            return
         if(typeof clientCursor.doc!='object')
             clientCursor.doc={child:clientCursor.doc}
         clientCursor.doc=Object.create(clientCursor.doc)

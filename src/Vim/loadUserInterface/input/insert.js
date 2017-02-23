@@ -2,11 +2,13 @@ function main(vim,val){
     if(typeof val=='object')
         val=object(vim,val)
     if(typeof val=='string'){
-        let
-            txt=vim._trueText,
-            abs=vim._cursor.abs
+        let abs=vim._cursor.abs
         val=val.replace(/\r/,'\n')
-        vim._text=txt.substring(0,abs)+val+txt.substring(abs)
+        vim._trueText={
+            function:'insert',
+            position:abs,
+            string:val,
+        }
         vim._cursor.moveTo(abs+val.length)
     }
 }
@@ -31,12 +33,14 @@ function object(vim,val){
             return
         case 'Backspace':
             {
-                let
-                    txt=vim._trueText,
-                    abs=vim._cursor.abs
+                let abs=vim._cursor.abs
                 if(abs==0)
                     return
-                vim._text=txt.substring(0,abs-1)+txt.substring(abs),
+                vim._text={
+                    function:'delete',
+                    start:abs-1,
+                    end:abs,
+                }
                 vim._cursor.moveTo(abs-1)
             }
             return
@@ -47,7 +51,11 @@ function object(vim,val){
                     abs=vim._cursor.abs
                 if(abs+1==txt.length)
                     return
-                vim._text=txt.substring(0,abs)+txt.substring(abs+1)
+                vim._text={
+                    function:'delete',
+                    start:abs,
+                    end:abs+1,
+                }
                 vim._cursor.moveTo(abs)
             }
             return
@@ -59,16 +67,18 @@ function object(vim,val){
             return
         case 'Tab':
             {
-                let
-                    txt=vim._trueText,
-                    abs=vim._cursor.abs
-                vim._text=txt.substring(0,abs)+'\t'+txt.substring(abs)
+                let abs=vim._cursor.abs
+                vim._text={
+                    function:'insert',
+                    position:abs,
+                    string:'\t',
+                }
                 vim._cursor.moveTo(abs+1)
             }
             return
     }
 }
-((vim,val)=>{
+;((vim,val)=>{
     let r=main(vim,val)
     vim._ui()
     return r

@@ -2,15 +2,48 @@ function GreedyText(){
     this._options={}
     this.lines=[]
 }
+GreedyText.prototype._char=function(n){
+    return this.lines.slice(0,n).map(v=>v.string.length+1).reduce(
+        (a,b)=>a+b,0
+    )
+}
+GreedyText.prototype._line=function(n){
+    let i=0,s=0
+    while(i<this.lines.length&&s+this.lines[i].string.length+1<=n)
+        s+=this.lines[i++].string.length+1
+    return i
+}
 Object.defineProperty(GreedyText.prototype,'countOfRows',{get(){
     this.wrap()
-    return this.lines.map(l=>l.wrapped.rows.length).reduce((a,b)=>a+b)
+    return this.lines.map(l=>l.wrapped.rows.length).reduce((a,b)=>a+b,0)
 }})
 Object.defineProperty(GreedyText.prototype,'update',{set(val){
     if(typeof val=='string'){
         val=val.split('\n')
         val.pop()
         this.lines=val.map(val=>new Line(val))
+    }else if(typeof val=='object'){
+        let removeAdd=(s,e,a)=>{
+            a=a.split('\n')
+            a.pop()
+            a=a.map(v=>new Line(v))
+            a.unshift(s,e-s)
+            ;[].splice.apply(this.lines,a)
+        }
+        if(val.function=='insert'){
+            let l=this._line(val.position)
+            let p=val.position-this._char(l)
+            let s=this.lines[l].string+'\n'
+            s=s.substring(0,p)+val.string+s.substring(p)
+            removeAdd(l,l+1,s)
+        }else if(val.function=='delete'){
+            let sl=this._line(val.start),el=this._line(val.end)+2
+            let lc=this._char(sl)
+            let start=val.start-lc,end=val.end-lc
+            let s=this.lines.slice(sl,el).map(v=>v.string).join('\n')+'\n'
+            s=s.substring(0,start)+s.substring(end)
+            removeAdd(sl,el,s)
+        }
     }
 }})
 Object.defineProperty(GreedyText.prototype,'width',{set(val){

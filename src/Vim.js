@@ -64,7 +64,9 @@ var load=[
     Vim.prototype._quit=function(){
         this.emit('quit')
     }
-    Object.defineProperty(Vim.prototype,'_trueText',{get(){
+    Object.defineProperty(Vim.prototype,'_trueText',{set(val){
+        this._text=val
+    },get(){
         return this._values.text||'\n'
     }})
     Vim.prototype._ui=function(){
