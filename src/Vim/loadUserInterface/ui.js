@@ -50,7 +50,8 @@ var _updateByVim=module.shareImport('ui/prototype._updateByVim.js')
             height=         this._height,
             data=           this._wrapMethodData,
             txt=            data.text,
-            cursorViewRow=  txt.row(this._vim._trueCursor.abs)
+            c=              this._vim._trueCursor,
+            cursorViewRow=  txt.row(c._countOfCols==0?c.line(c.r):c.abs)
         if(data._scroll+height-1<=cursorViewRow)
             data._scroll=cursorViewRow-(height-1)+1
         if(cursorViewRow<data._scroll)

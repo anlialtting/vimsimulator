@@ -21,7 +21,8 @@
                 )
             }
             this._values.mode=val
-            this._cursor.moveTo(abs)
+            if(abs)
+                this._cursor.moveTo(abs)
         },get(){
             return this._values.mode
         }

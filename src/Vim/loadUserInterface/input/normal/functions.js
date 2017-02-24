@@ -15,7 +15,8 @@ var
             vim._trueCursor.abs,
             vim._trueCursor.lineEnd-1
         )
-        vim._trueCursor.moveTo(vim._trueCursor.abs)
+        if(vim._trueCursor.abs)
+            vim._trueCursor.moveTo(vim._trueCursor.abs)
         return docs.acc
     }
     function G(vim,doc){

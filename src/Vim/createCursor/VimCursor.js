@@ -57,6 +57,8 @@ Cursor.prototype.moveDown=function(){
 // end 1
 // start 1a
 Object.defineProperty(Cursor.prototype,'abs',{get(){
+    if(this.r==-1||this.c==-1)
+        return
     return this.text.split('\n').slice(0,this.r).join('').length+
         this.r+
         this.c
@@ -64,6 +66,10 @@ Object.defineProperty(Cursor.prototype,'abs',{get(){
 // end 1a
 // start 1b
 Cursor.prototype.moveTo=function(n){
+    if(
+        n==undefined
+    )
+        throw Error()
     this._y=this.text.substring(0,n).split('\n').length-1
     this._x=n-(
         this.text.split('\n').slice(0,this.r).join('').length+this.r
@@ -75,7 +81,8 @@ Object.defineProperty(Cursor.prototype,'lineStart',{get(){
     return this.text.substring(0,this.abs).lastIndexOf('\n')+1
 }})
 Object.defineProperty(Cursor.prototype,'lineEnd',{get(){
-    return this.abs+this.text.substring(this.abs).indexOf('\n')+1
+    let a=this.abs
+    return a+this.text.substring(a).indexOf('\n')+1
 }})
 // end 1c
 // start 2
