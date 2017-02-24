@@ -30,7 +30,7 @@ function availableCols(c){
         c.mode=='normal'||
         c.mode=='cmdline'
     )
-        return Math.max(1,c._countOfCols)
+        return c._countOfCols
     if(
         c.mode=='visual'||
         c.mode=='insert'

@@ -58,7 +58,12 @@ var highlightStyle={backgroundColor:'var(--middle-color)'}
             rowsCount=currentRowsCount
         }
         if(showCursor){
-            let c=cursorCli(text,cursor,width)
+            let c
+            c=cursor
+            c=cursorCli(text,{
+                r:c.r,
+                c:c.c==-1?0:c.c
+            },width)
             if(c){
                 cli.appendChild(c)
                 cli.appendChild({
