@@ -56,20 +56,15 @@ Cursor.prototype.moveDown=function(){
 }
 // end 1
 // start 1a
+Object.defineProperty(Cursor.prototype,'onChar',{get(){
+    return 0<=this.r&&0<=this.c
+}})
 Object.defineProperty(Cursor.prototype,'abs',{get(){
-    if(this.r==-1||this.c==-1)
-        return
-    return this.text.split('\n').slice(0,this.r).join('').length+
-        this.r+
-        this.c
+    return(0<=this.r?this.line(this.r):0)+(0<=this.c?this.c:0)
 }})
 // end 1a
 // start 1b
 Cursor.prototype.moveTo=function(n){
-    if(
-        n==undefined
-    )
-        throw Error()
     this._y=this.text.substring(0,n).split('\n').length-1
     this._x=n-(
         this.text.split('\n').slice(0,this.r).join('').length+this.r

@@ -45,6 +45,7 @@ var
     function X(vim,doc){
         let
             abs=vim._trueCursor.abs
+        let
             ls=vim._trueCursor.lineStart,
             count=Math.min(abs-ls,Math.max(0,doc.count))
         functions.deleteCharacterwise(vim,doc.register,abs-count,abs)
@@ -109,7 +110,7 @@ var
     }
     function x(vim,doc){
         let
-            abs=vim._trueCursor.abs
+            abs=vim._trueCursor.abs,
             le=vim._trueCursor.lineEnd,
             count=Math.min(le-1-abs,Math.max(0,doc.count))
         functions.deleteCharacterwise(vim,doc.register,abs,abs+count)
