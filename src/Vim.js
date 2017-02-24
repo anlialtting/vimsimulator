@@ -48,9 +48,10 @@ var load=[
         this._text=''
         this._registers={}
         this._modeData={}
-        let a=createCursor(this)
-        this._cursor=a[0]
-        this._trueCursor=a[1]
+        {let a=createCursor(this)
+            this._cursor=a[0]
+            this._trueCursor=a[1]
+        }
         this._undoBranchManager=new UndoBranchManager
         this._undoBranchManager.push(this._text)
         this._styleManager=new StyleManager
