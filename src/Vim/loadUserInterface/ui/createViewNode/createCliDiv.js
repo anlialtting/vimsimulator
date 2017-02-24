@@ -46,7 +46,7 @@ module.repository.Cli=module.shareImport('createCliDiv/Cli.js')
             this._ui._inputTag.style.top=`${c.r*this._ui._fontSize}px`
             this._ui._inputTag.style.left=`${c.c*this._ui._fontWidth}px`
         }}
-        let r=this._ui._height-1||this._vim._cursor._countOfRows||1
+        let r=this._ui._height-1
         if(
             this._currentR==r&&
             this._currentWelcomeText==this._vim._welcomeText

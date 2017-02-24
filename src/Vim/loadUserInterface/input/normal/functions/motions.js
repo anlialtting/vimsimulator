@@ -3,25 +3,25 @@
     function h(vim,doc){
         let count=doc.count||1
         while(count--)
-            vim._cursor.moveLeft()
+            vim._trueCursor.moveLeft()
         return docs.ac
     }
     function j(vim,doc){
         let count=doc.count||1
         while(count--)
-            vim._cursor.moveDown()
+            vim._trueCursor.moveDown()
         return docs.ac
     }
     function k(vim,doc){
         let count=doc.count||1
         while(count--)
-            vim._cursor.moveUp()
+            vim._trueCursor.moveUp()
         return docs.ac
     }
     function l(vim,doc){
         let count=doc.count||1
         while(count--)
-            vim._cursor.moveRight()
+            vim._trueCursor.moveRight()
         return docs.ac
     }
     return({h,j,k,l})

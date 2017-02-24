@@ -12,31 +12,31 @@
                     c=vim._text.substring(r.e)
                 vim._text=a+c
                 vim._registers['"']={mode:'string',string:b}
-                vim._cursor.moveTo(r.s)
+                vim._trueCursor.moveTo(r.s)
                 vim._mode='normal'
                 return
             }
             if(val=='h')
-                return vim._cursor.moveLeft()
+                return vim._trueCursor.moveLeft()
             if(val=='j')
-                return vim._cursor.moveDown()
+                return vim._trueCursor.moveDown()
             if(val=='k')
-                return vim._cursor.moveUp()
+                return vim._trueCursor.moveUp()
             if(val=='l')
-                return vim._cursor.moveRight()
+                return vim._trueCursor.moveRight()
             if(val=='y'){
                 let r=visualRange(vim)
                 vim._registers['"']={
                     mode:'string',
                     string:vim._text.substring(r.s,r.e),
                 }
-                vim._cursor.moveTo(r.s)
+                vim._trueCursor.moveTo(r.s)
                 vim._mode='normal'
                 return
             }
             if(val=='<'){
                 let r=visualRange(vim)
-                let cursor=Object.create(vim._cursor)
+                let cursor=Object.create(vim._trueCursor)
                 cursor.moveTo(r.s)
                 let s=cursor.r
                 cursor.moveTo(r.e)
@@ -47,7 +47,7 @@
             }
             if(val=='>'){
                 let r=visualRange(vim)
-                let cursor=Object.create(vim._cursor)
+                let cursor=Object.create(vim._trueCursor)
                 cursor.moveTo(r.s)
                 let s=cursor.r
                 cursor.moveTo(r.e)

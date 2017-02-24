@@ -11,7 +11,7 @@ Promise.all([
             return docs.a
         if(cmd=='<'){
             arg||(arg=1)
-            shift.left(vim,vim._cursor.r,vim._cursor.r+arg)
+            shift.left(vim,vim._trueCursor.r,vim._trueCursor.r+arg)
             return docs.acc
         }
     }
@@ -20,7 +20,7 @@ Promise.all([
             return docs.a
         if(cmd=='>'){
             arg||(arg=1)
-            shift.right(vim,vim._cursor.r,vim._cursor.r+arg)
+            shift.right(vim,vim._trueCursor.r,vim._trueCursor.r+arg)
             return docs.acc
         }
     }
@@ -40,13 +40,13 @@ Promise.all([
         return docs.a
     }
     function caret(vim){
-        vim._cursor.moveTo(vim._cursor.lineStart)
+        vim._trueCursor.moveTo(vim._trueCursor.lineStart)
         return docs.ac
     }
     function dollarSign(vim){
-        vim._cursor.moveTo(Math.max(
-            vim._cursor.lineStart,
-            vim._cursor.lineEnd-2
+        vim._trueCursor.moveTo(Math.max(
+            vim._trueCursor.lineStart,
+            vim._trueCursor.lineEnd-2
         ))
         return docs.ac
     }

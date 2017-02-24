@@ -11,11 +11,11 @@
     }
     function putCharacterwise(vim,c,s){
         put(vim,c,s)
-        vim._cursor.moveTo(c+s.length-1)
+        vim._trueCursor.moveTo(c+s.length-1)
     }
     function putLinewise(vim,c,s){
         put(vim,c,s)
-        vim._cursor.moveTo(c)
+        vim._trueCursor.moveTo(c)
     }
     function deleteCharacterwise(vim,r,a,b){
         yank(vim,r,'string',vim._trueText.substring(a,b))
@@ -24,7 +24,7 @@
             start:a,
             end:b,
         }
-        vim._cursor.moveTo(a)
+        vim._trueCursor.moveTo(a)
     }
     function deleteLinewise(vim,r,a,b){
         yank(vim,r,'line',vim._trueText.substring(a,b))

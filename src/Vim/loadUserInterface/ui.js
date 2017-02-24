@@ -36,7 +36,7 @@ var _updateByVim=module.shareImport('ui/prototype._updateByVim.js')
     }})
     Object.defineProperty(Ui.prototype,'_numberWidth',{get(){
         return Math.max(3,Math.floor(
-            Math.log(this._vim._cursor._countOfRows)/Math.log(10)
+            Math.log(this._vim._trueCursor._countOfRows)/Math.log(10)
         )+1)
     }})
     Object.defineProperty(Ui.prototype,'_textWidth',{get(){
@@ -50,7 +50,7 @@ var _updateByVim=module.shareImport('ui/prototype._updateByVim.js')
             height=         this._height,
             data=           this._wrapMethodData,
             txt=            data.text,
-            cursorViewRow=  txt.row(this._vim._cursor.abs)
+            cursorViewRow=  txt.row(this._vim._trueCursor.abs)
         if(data._scroll+height-1<=cursorViewRow)
             data._scroll=cursorViewRow-(height-1)+1
         if(cursorViewRow<data._scroll)

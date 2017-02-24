@@ -68,7 +68,7 @@
         if(cmd=='')
             return docs.a
         if(vim._text){
-            let c=vim._cursor.abs
+            let c=vim._trueCursor.abs
             vim._text=vim._text.substring(0,c)+cmd+vim._text.substring(c+1)
         }
         return docs.acc
@@ -80,9 +80,9 @@
         return docs.ac
     }
     function v(vim,cmd,arg){
-        let c=vim._cursor.abs
+        let c=vim._trueCursor.abs
         vim._mode='visual'
-        vim._cursor.moveTo(c)
+        vim._trueCursor.moveTo(c)
         return docs.ac
     }
     function x(vim,cmd,arg){
@@ -104,7 +104,7 @@
     }
     function A(vim){
         vim._mode='insert'
-        vim._cursor.moveToEOL()
+        vim._trueCursor.moveToEOL()
         return docs.ac
     }
     function D(vim,cmd,arg){
@@ -122,7 +122,7 @@
     }
     function I(vim,cmd,arg){
         vim._mode='insert'
-        vim._cursor.moveTo(vim._cursor.lineStart)
+        vim._trueCursor.moveTo(vim._trueCursor.lineStart)
         return docs.ac
     }
     function O(vim,cmd,arg){

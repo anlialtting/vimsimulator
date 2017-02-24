@@ -1,5 +1,5 @@
 function shift(vim,s,e,count){
-    let cursor=Object.create(vim._cursor)
+    let cursor=Object.create(vim._trueCursor)
     for(;s!=e;s++){
         cursor.r=s
         let

@@ -36,7 +36,7 @@ Object.defineProperty(GreedyText.prototype,'update',{set(val){
         if(val.function=='insert'){
             let l=this._line(val.position)
             let p=val.position-this._char(l)
-            let s=this.lines[l].string+'\n'
+            let s=(this.lines[l]?this.lines[l].string+'\n':'')
             s=s.substring(0,p)+val.string+s.substring(p)
             removeAdd(l,l+1,s)
         }else if(val.function=='delete'){

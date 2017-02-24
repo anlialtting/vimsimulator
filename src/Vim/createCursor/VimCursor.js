@@ -7,7 +7,21 @@ Object.defineProperty(Cursor.prototype,'_countOfRows',{get(){
     return this.text.split('\n').length-1
 }})
 Object.defineProperty(Cursor.prototype,'_countOfCols',{get(){
-    return this.text.split('\n')[this.r].length
+    return this.text?this.text.split('\n')[this.r].length:0
+}})
+Object.defineProperty(Cursor.prototype,'_exotic',{get(){
+    let c=Object.create(this)
+    Object.defineProperty(c,'_x',{set:val=>
+        this._x=val
+    ,get:()=>
+        this._x
+    })
+    Object.defineProperty(c,'_y',{set:val=>
+        this._y=val
+    ,get:()=>
+        this._y
+    })
+    return c
 }})
 Object.defineProperty(Cursor.prototype,'r',{set(val){
     this._y=val

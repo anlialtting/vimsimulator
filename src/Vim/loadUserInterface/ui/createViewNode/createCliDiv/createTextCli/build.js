@@ -14,7 +14,7 @@ var
     createTextContentCli=await createTextContentCli
     function build(cli,ui,showCursor,showNumber){
         let 
-            cursor= ui._vim._cursor,
+            cursor= ui._vim._trueCursor,
             width=  ui._width,
             height= ui._height,
             data=   ui._wrapMethodData,
