@@ -61,25 +61,6 @@ var load=[
         rc(this)
     }
     Object.setPrototypeOf(Vim.prototype,EventEmmiter.prototype)
-    Vim.prototype._quit=function(){
-        this.emit('quit')
-    }
-    Object.defineProperty(Vim.prototype,'_trueText',{set(val){
-        if(this._text=='')
-            this._text='\n'
-        this._text=val
-    },get(){
-        return this._values.text||'\n'
-    }})
-    Vim.prototype._ui=function(){
-        this._uis.forEach(ui=>
-            ui._updateByVim(this._viewChanged)
-        )
-        this._viewChanged={}
-    }
-    Vim.prototype._read=function(path){
-        return this.read&&this.read(path)
-    }
     ;(await Promise.all(load)).map(f=>f(Vim.prototype))
     return Vim
 })()

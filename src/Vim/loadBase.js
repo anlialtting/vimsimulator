@@ -8,6 +8,25 @@ var proto=Promise.all([
 ;(async()=>{
     proto=await proto
     return o=>{
+        o._quit=function(){
+            this.emit('quit')
+        }
+        Object.defineProperty(o,'_trueText',{set(val){
+            if(this._text=='')
+                this._text='\n'
+            this._text=val
+        },get(){
+            return this._values.text||'\n'
+        }})
+        o._ui=function(){
+            this._uis.forEach(ui=>
+                ui._updateByVim(this._viewChanged)
+            )
+            this._viewChanged={}
+        }
+        o._read=function(path){
+            return this.read&&this.read(path)
+        }
         Object.defineProperty(o,'_mode',proto[3])
         Object.defineProperty(o,'_text',proto[4])
         o._write=proto[1]
