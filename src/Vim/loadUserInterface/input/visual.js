@@ -7,10 +7,12 @@
             if(val=='d'){
                 let
                     r=visualRange(vim),
-                    a=vim._text.substring(0,r.s),
-                    b=vim._text.substring(r.s,r.e),
-                    c=vim._text.substring(r.e)
-                vim._text=a+c
+                    b=vim._text.substring(r.s,r.e)
+                vim._text={
+                    function:'delete',
+                    start:r.s,
+                    end:r.e,
+                }
                 vim._registers['"']={mode:'string',string:b}
                 vim._trueCursor.moveTo(r.s)
                 vim._mode='normal'

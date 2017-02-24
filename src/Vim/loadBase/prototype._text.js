@@ -14,6 +14,19 @@
                     this._values.text=
                         txt.substring(0,val.start)+
                         txt.substring(val.end)
+                else if(val.function=='replace'){
+                    this._text={
+                        function:'delete',
+                        start:val.start,
+                        end:val.end,
+                    }
+                    this._text={
+                        function:'insert',
+                        position:val.start,
+                        string:val.string,
+                    }
+                    return
+                }
             }
             this._viewChanged.text=this._viewChanged.text||[]
             this._viewChanged.text.push(val)

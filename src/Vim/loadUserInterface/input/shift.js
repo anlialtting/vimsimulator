@@ -3,23 +3,23 @@ function shift(vim,s,e,count){
     for(;s!=e;s++){
         cursor.r=s
         let
-            txt=vim._trueText,
             a=cursor.lineStart,
             b=cursor.lineEnd,
-            m=txt.substring(a,b).match(/^([\t ]*)([\S\s]*)/)
-        vim._text=
-            txt.substring(0,a)+
-            padding(vim,count(m[1]))+
-            m[2]+
-            txt.substring(b)
+            m=vim._trueText.substring(a,b).match(/^([\t ]*)([\S\s]*)/)
+        vim._text={
+            function:'replace',
+            start:a,
+            end:b,
+            string:padding(vim._options,count(m[1]))+m[2],
+        }
     }
 }
-function padding(vim,n){
+function padding(o,n){
     let
-        a=Math.floor(n/vim._options.tabstop),
-        b=n-a*vim._options.tabstop
+        a=Math.floor(n/o.tabstop),
+        b=n-a*o.tabstop
     return(
-        vim._options.expandtab?' '.repeat(vim._options.tabstop):'\t'
+        o.expandtab?' '.repeat(o.tabstop):'\t'
     ).repeat(a)+' '.repeat(b)
 }
 function countPadding(vim,s){

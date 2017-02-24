@@ -57,7 +57,7 @@ Cursor.prototype.moveDown=function(){
 // end 1
 // start 1a
 Object.defineProperty(Cursor.prototype,'onChar',{get(){
-    return 0<=this.r&&0<=this.c
+    return 0<=this.c
 }})
 Object.defineProperty(Cursor.prototype,'abs',{get(){
     return(0<=this.r?this.line(this.r):0)+(0<=this.c?this.c:0)

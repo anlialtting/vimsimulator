@@ -44,8 +44,7 @@ var
     }
     function X(vim,doc){
         let
-            abs=vim._trueCursor.abs
-        let
+            abs=vim._trueCursor.abs,
             ls=vim._trueCursor.lineStart,
             count=Math.min(abs-ls,Math.max(0,doc.count))
         functions.deleteCharacterwise(vim,doc.register,abs-count,abs)
@@ -57,19 +56,17 @@ var
         return docs.ac
     }
     function dd(vim,doc){
-        if(!vim._text)
+        let c=vim._cursor
+        if(c.r<0)
             return docs.ac
-        let count=Math.min(
-            vim._trueCursor._countOfRows-vim._trueCursor.r,
-            doc.count
-        )
+        let count=Math.min(c._countOfRows-c.r,doc.count)
         functions.deleteLinewise(
             vim,
             doc.register,
-            vim._trueCursor.line(vim._trueCursor.r),
-            vim._trueCursor.line(vim._trueCursor.r+count)
+            c.line(c.r),
+            c.line(c.r+count)
         )
-        vim._trueCursor.moveTo(vim._trueCursor.lineStart)
+        c.moveTo(c.lineStart)
         return docs.acc
     }
     function gg(vim,doc){
@@ -93,19 +90,15 @@ var
         return docs.acc
     }
     function yy(vim,doc){
-        if(!vim._text)
+        let c=vim._cursor
+        if(c.r<0)
             return docs.ac
         let arg=doc.count
-        arg=Math.min(vim._trueCursor._countOfRows-vim._trueCursor.r,arg)
+        arg=Math.min(c._countOfRows-c.r,arg)
         let
-            a=vim._trueCursor.line(vim._trueCursor.r),
-            b=vim._trueCursor.line(vim._trueCursor.r+arg)
-        functions.yank(
-            vim,
-            doc.register,
-            'line',
-            vim._trueText.substring(a,b)
-        )
+            a=c.line(c.r),
+            b=c.line(c.r+arg)
+        functions.yank(vim,doc.register,'line',c.substring(a,b))
         return docs.ac
     }
     function x(vim,doc){
