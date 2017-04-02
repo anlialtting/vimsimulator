@@ -1,17 +1,20 @@
-var
+let
     color3i={
         color:'var(--color3i)'
     },
     color4i={
         color:'var(--color4i)'
-    },
-    createTextContentCli=
-        module.shareImport('build/createTextContentCli.js')
+    }
 ;(async()=>{
-    let
-        Cli=                    await module.repository.Cli,
-        visualRange=            await module.repository.visualRange
-    createTextContentCli=await createTextContentCli
+    let[
+        Cli,
+        visualRange,
+        createTextContentCli,
+    ]=await Promise.all([
+        module.repository.Cli,
+        module.repository.visualRange,
+        module.shareImport('build/createTextContentCli.js'),
+    ])
     function build(cli,ui,showCursor,showNumber){
         let 
             cursor= ui._vim._trueCursor,

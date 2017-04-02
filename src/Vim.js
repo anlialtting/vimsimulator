@@ -1,5 +1,5 @@
 {
-    var moduleNode=`https://cdn.rawgit.com/anliting/module/${
+    let moduleNode=`https://cdn.rawgit.com/anliting/module/${
         '0e94e04505484aaf3b367423b36cf426a4242006'
     }/node`
     if(!module.repository.npm)
@@ -13,10 +13,10 @@
             `${moduleNode}/events.js`
         )
 }
-var load=[
+let load=[
     module.shareImport('Vim/loadBase.js'),
     module.shareImport('Vim/loadUserInterface.js'),
-    module.shareImport('Vim/loadSyntacticSugar.js')
+    module.shareImport('Vim/loadSyntacticSugar.js'),
 ]
 ;(async()=>{
     let[

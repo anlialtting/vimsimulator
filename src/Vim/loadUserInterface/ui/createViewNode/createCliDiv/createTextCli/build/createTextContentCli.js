@@ -1,4 +1,4 @@
-var highlightStyle={backgroundColor:'var(--middle-color)'}
+let highlightStyle={backgroundColor:'var(--middle-color)'}
 ;(async()=>{
     let
         Cli=            await module.repository.Cli,

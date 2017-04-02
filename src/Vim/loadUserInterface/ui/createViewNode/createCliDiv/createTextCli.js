@@ -1,7 +1,11 @@
-var build=module.shareImport('createTextCli/build.js')
 ;(async()=>{
-    let Cli=await module.repository.Cli
-    build=await build
+    let[
+        Cli,
+        build,
+    ]=await Promise.all([
+        module.repository.Cli,
+        module.shareImport('createTextCli/build.js'),
+    ])
     function createTextCli(ui){
         return new TextCli(ui)
     }

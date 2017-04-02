@@ -1,4 +1,4 @@
-var proto=Promise.all([
+let proto=Promise.all([
     module.shareImport('loadBase/prototype._welcomeText.js'),
     module.shareImport('loadBase/prototype._write.js'),
     module.shareImport('loadBase/prototype._edit.js'),

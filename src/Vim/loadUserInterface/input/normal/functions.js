@@ -1,4 +1,4 @@
-var
+let
     functions=  module.shareImport('functions/functions.js'),
     motions=    module.shareImport('functions/motions.js')
 ;(async()=>{

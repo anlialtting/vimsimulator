@@ -1,4 +1,4 @@
-var shortcut={
+let shortcut={
     nu:'number',
 }
 function main(vim,val){

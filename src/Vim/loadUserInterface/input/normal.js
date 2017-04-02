@@ -1,12 +1,13 @@
 module.repository.docs=module.shareImport('normal/docs.js')
-var functions=module.shareImport('normal/functions.js')
-Promise.all([
-    module.shareImport('normal/commands.js'),
-    module.shareImport('normal/ascii.js'),
-]).then(async modules=>{
-    let
-        commands=   modules[0],
-        ascii=      modules[1]
+let functions=module.shareImport('normal/functions.js')
+;(async modules=>{
+    let[
+        commands,
+        ascii,
+    ]=await Promise.all([
+        module.shareImport('normal/commands.js'),
+        module.shareImport('normal/ascii.js'),
+    ])
     functions=await functions
     return(vim,val)=>{
         if(typeof val=='object')

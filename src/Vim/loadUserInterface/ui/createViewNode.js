@@ -1,7 +1,9 @@
-var
-    createCliDiv=   module.shareImport('createViewNode/createCliDiv.js')
 ;(async()=>{
-    createCliDiv=   await createCliDiv
+    let[
+        createCliDiv,
+    ]=await Promise.all([
+        module.shareImport('createViewNode/createCliDiv.js'),
+    ])
     function createViewNode(ui){
         let cliDiv=createCliDiv(ui)
         let n=cliDiv.node

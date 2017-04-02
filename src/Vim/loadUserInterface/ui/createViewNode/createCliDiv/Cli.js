@@ -1,4 +1,4 @@
-var
+let
     View=module.shareImport('Cli/View.js')
 ;(async()=>{
     let

@@ -1,4 +1,4 @@
-var
+let
     lfDoc={
         child:'$',
         class:'color4i',
