@@ -65,4 +65,4 @@ let functions=module.shareImport('normal/functions.js')
         if(cmd[0] in commands)
             return commands[cmd[0]](vim,cmd.substring(1),arg)
     }
-})
+})()

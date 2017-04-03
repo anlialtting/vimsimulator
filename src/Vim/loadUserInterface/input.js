@@ -1,4 +1,4 @@
-module.repository.shift=module.shareImport('input/shift.js'),
+module.repository.shift=module.shareImport('input/shift.js')
 Promise.all([
     module.shareImport('input/normal.js'),
     module.shareImport('input/insert.js'),
