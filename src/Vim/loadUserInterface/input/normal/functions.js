@@ -98,7 +98,12 @@ let
         let
             a=c.line(c.r),
             b=c.line(c.r+arg)
-        functions.yank(vim,doc.register,'line',c.substring(a,b))
+        functions.yank(
+            vim,
+            doc.register,
+            'line',
+            vim._trueText.substring(a,b)
+        )
         return docs.ac
     }
     function x(vim,doc){
