@@ -6,7 +6,7 @@ module.debug=true
         testdata,
         style,
     ]=await Promise.all([
-        module.shareImport('../../Vim.js'),
+        module.shareImport('../../Vim.static.js'),
         module.shareImport('testdata.js'),
         module.styleByPath('../a.css'),
     ])
