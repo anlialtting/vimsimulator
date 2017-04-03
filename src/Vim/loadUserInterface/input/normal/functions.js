@@ -1,10 +1,13 @@
-let
-    functions=  module.shareImport('functions/functions.js'),
-    motions=    module.shareImport('functions/motions.js')
 ;(async()=>{
-    let docs=await module.repository.docs
-    functions=  await functions
-    motions=    await motions
+    let[
+        docs,
+        functions,
+        motions,
+    ]=await Promise.all([
+        module.repository.docs,
+        module.shareImport('functions/functions.js'),
+        module.shareImport('functions/motions.js'),
+    ])
     function gotoLine(vim,n){
         vim._trueCursor.moveTo(vim._trueCursor.line(n))
     }
