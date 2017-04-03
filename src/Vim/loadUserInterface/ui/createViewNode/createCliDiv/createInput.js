@@ -1,9 +1,14 @@
 (async()=>{
-    let measureWidth=await module.repository.measureWidth
+    let[
+        measureWidth,
+        dom,
+    ]=await Promise.all([
+        module.repository.measureWidth,
+        module.repository.althea.dom,
+    ])
     return(ui=>{
         let vim=ui._vim
-        let textarea=document.createElement('textarea')
-        textarea.className='input'
+        let textarea=dom('textarea',{className:'input'})
         textarea.style.fontSize=`${ui._fontSize}px`
         textarea.style.height=`${ui._fontSize+2}px`
         let composing=false

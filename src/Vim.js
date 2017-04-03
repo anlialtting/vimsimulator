@@ -1,3 +1,4 @@
+let altheaRepoUrl='https://cdn.rawgit.com/anliting/althea/d5f39e46838d68edbb43877d3fba0c44f3a88c7a/src/AltheaServer/HttpServer/files/lib/repository.js'
 {
     let moduleNode=`https://cdn.rawgit.com/anliting/module/${
         '0e94e04505484aaf3b367423b36cf426a4242006'
@@ -13,12 +14,15 @@
             `${moduleNode}/events.js`
         )
 }
-let load=[
-    module.shareImport('Vim/loadBase.js'),
-    module.shareImport('Vim/loadUserInterface.js'),
-    module.shareImport('Vim/loadSyntacticSugar.js'),
-]
 ;(async()=>{
+    if(!module.repository.althea)
+        module.repository.althea=
+            (await module.importByPath(altheaRepoUrl,{mode:1})).althea
+    let load=[
+        module.shareImport('Vim/loadBase.js'),
+        module.shareImport('Vim/loadUserInterface.js'),
+        module.shareImport('Vim/loadSyntacticSugar.js'),
+    ]
     let[
         colors,
         createCursor,

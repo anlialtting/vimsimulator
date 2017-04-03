@@ -2,9 +2,11 @@
     let[
         update,
         measureWidth,
+        dom,
     ]=await Promise.all([
         module.shareImport('View/update.js'),
         module.repository.measureWidth,
+        module.repository.althea.dom,
     ])
     function View(cli){
         this._cli=cli
@@ -14,7 +16,7 @@
         this._listeners=[]
         this._previousArray={}
         this._fontWidth=measureWidth(this._fontSize)
-        this.node=document.createElement('div')
+        this.node=dom('div')
         this.node.className='cli'
         this.symbols={}
         update(this)
