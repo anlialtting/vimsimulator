@@ -142,5 +142,5 @@
             register:'"'
         }
     }
-    return({A,D,G,I,O,P,X,a,d,g,h,i,j,k,l,n,o,p,r,u,v,x,y})
+    return{A,D,G,I,O,P,X,a,d,g,h,i,j,k,l,n,o,p,r,u,v,x,y}
 })()

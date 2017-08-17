@@ -1,7 +1,11 @@
 (async()=>{
-    let
-        visualRange=await module.repository.visualRange,
-        shift=await module.repository.shift
+    let[
+        visualRange,
+        shift,
+    ]=await Promise.all([
+        module.repository.visualRange,
+        module.repository.shift,
+    ])
     function main(vim,val){
         if(typeof val=='string'){
             if(val=='d'){

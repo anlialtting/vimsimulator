@@ -1,11 +1,13 @@
-Promise.all([
-    module.shareImport('commands/letters.js'),
-    module.repository.shift,
-]).then(async modules=>{
-    let
-        letters=        modules[0],
-        shift=          modules[1],
-        docs=           await module.repository.docs
+(async()=>{
+    let[
+        letters,
+        shift,
+        docs,
+    ]=await Promise.all([
+        module.shareImport('commands/letters.js'),
+        module.repository.shift,
+        module.repository.docs,
+    ])
     function lt(vim,cmd,arg){
         if(cmd=='')
             return docs.a
@@ -81,30 +83,7 @@ Promise.all([
         if(cmd=='yy')
             return{function:'yy',register,count}
     }
-    let commands={
-        A:letters.A,
-        D:letters.D,
-        G:letters.G,
-        I:letters.I,
-        O:letters.O,
-        P:letters.P,
-        X:letters.X,
-        a:letters.a,
-        d:letters.d,
-        g:letters.g,
-        h:letters.h,
-        i:letters.i,
-        j:letters.j,
-        k:letters.k,
-        l:letters.l,
-        n:letters.n,
-        o:letters.o,
-        p:letters.p,
-        r:letters.r,
-        u:letters.u,
-        v:letters.v,
-        x:letters.x,
-        y:letters.y,
+    let commands=Object.assign({
         '<':lt,
         '>':gt,
         '.':dot,
@@ -113,7 +92,7 @@ Promise.all([
         '^':caret,
         '$':dollarSign,
         '"':quotationMark,
-    }
+    },letters)
     commands[String.fromCharCode(17)]=ctrl
     return commands
-})
+})()

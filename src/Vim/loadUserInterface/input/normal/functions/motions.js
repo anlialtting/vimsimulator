@@ -24,5 +24,5 @@
             vim._trueCursor.moveRight()
         return docs.ac
     }
-    return({h,j,k,l})
+    return{h,j,k,l}
 })()

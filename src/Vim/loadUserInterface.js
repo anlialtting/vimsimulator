@@ -1,9 +1,13 @@
 module.repository.visualRange=
     module.shareImport('loadUserInterface/visualRange.js')
-Promise.all([
-    module.shareImport('loadUserInterface/input.js'),
-    module.shareImport('loadUserInterface/ui.js'),
-]).then(modules=>{
+;(async()=>{
+    let[
+        input,
+        ui,
+    ]=await Promise.all([
+        module.shareImport('loadUserInterface/input.js'),
+        module.shareImport('loadUserInterface/ui.js'),
+    ])
     return o=>{
         Object.defineProperty(o,'cursor',{get(){
             return this._cursor.abs
@@ -25,7 +29,7 @@ Promise.all([
         o.focus=function(){
             this._mainUi.focus()
         }
-        Object.defineProperty(o,'input',modules[0])
-        Object.defineProperty(o,'ui',modules[1])
+        Object.defineProperty(o,'input',input)
+        Object.defineProperty(o,'ui',ui)
     }
-})
+})()

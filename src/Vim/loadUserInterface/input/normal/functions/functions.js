@@ -1,4 +1,4 @@
-(async()=>{
+;(async()=>{
     function yank(vim,r,m,s){
         vim._setRegister(r,{mode:m,string:s})
     }
