@@ -12,9 +12,7 @@ let _updateByVim=module.shareImport('ui/prototype._updateByVim.js')
         module.shareImport('ui/createViewNode.js'),
     ])
     function Ui(vim){
-        this._values={
-            clockCycle:16,
-        }
+        this._values={}
         this._vim=vim
         this._width=80
         this._height=24
@@ -100,13 +98,15 @@ let _updateByVim=module.shareImport('ui/prototype._updateByVim.js')
         this._vim.removeUi(this)
     }})
     function setUpClock(ui){
-        ui._clockIntervalId=setInterval(()=>
+        let f=()=>{
+            ui._animationFrame=requestAnimationFrame(f)
             ui._viewNode.flush()
-        ,ui._values.clockCycle)
+        }
+        ui._animationFrame=requestAnimationFrame(f)
     }
     function tearDownClock(ui){
-        clearInterval(ui._clockIntervalId)
-        delete ui._clockIntervalId
+        cancelAnimationFrame(ui._animationFrame)
+        delete ui._animationFrame
     }
     return{get(){
         let ui=new Ui(this)
