@@ -1,4 +1,4 @@
-({
+export default{
     set(val){
         let set=val=>{
             if(typeof val=='string'){
@@ -40,4 +40,4 @@
     },get(){
         return this._values.text
     }
-})
+}

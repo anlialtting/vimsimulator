@@ -85,4 +85,4 @@ Cursor.prototype.moveToEOL=function(){
     this.moveTo(this.lineEnd-1)
 }
 // end 2
-Cursor
+export default Cursor

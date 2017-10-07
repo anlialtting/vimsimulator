@@ -19,7 +19,7 @@ let altheaRepoUrl='https://gitcdn.link/cdn/anliting/althea/d5f39e46838d68edbb438
         module.repository.althea=
             (await module.importByPath(altheaRepoUrl,{mode:1})).althea
     let load=[
-        module.shareImport('Vim/loadBase.js'),
+        module.module('Vim/loadBase.js'),
         module.shareImport('Vim/loadUserInterface.js'),
         module.shareImport('Vim/loadSyntacticSugar.js'),
     ]
@@ -34,7 +34,7 @@ let altheaRepoUrl='https://gitcdn.link/cdn/anliting/althea/d5f39e46838d68edbb438
         EventEmmiter,
     ]=await Promise.all([
         module.get('Vim/colors.css'),
-        module.shareImport('Vim/createCursor.js'),
+        module.module('Vim/createCursor.js'),
         module.shareImport('Vim/rc.js'),
         module.shareImport('Vim/defaultOptions.js'),
         module.shareImport('Vim/StyleManager.js'),

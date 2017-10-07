@@ -28,4 +28,4 @@ Object.defineProperty(Cursor.prototype,'position',{set(v){
 },get(){
     return this._position
 }})
-Cursor
+export default Cursor
