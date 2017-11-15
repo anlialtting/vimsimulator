@@ -78,8 +78,8 @@ function object(vim,val){
             return
     }
 }
-;((vim,val)=>{
+export default(vim,val)=>{
     let r=main(vim,val)
     vim._ui()
     return r
-})
+}

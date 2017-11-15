@@ -1,11 +1,11 @@
 module.repository.visualRange=
-    module.shareImport('loadUserInterface/visualRange.js')
+    module.module('loadUserInterface/visualRange.js')
 ;(async()=>{
     let[
         input,
         ui,
     ]=await Promise.all([
-        module.shareImport('loadUserInterface/input.js'),
+        module.module('loadUserInterface/input.js'),
         module.shareImport('loadUserInterface/ui.js'),
     ])
     return o=>{

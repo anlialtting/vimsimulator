@@ -34,7 +34,7 @@ function left(vim,s,e){
 function right(vim,s,e){
     shift(vim,s,e,m=>countPadding(vim,m)+vim._options.shiftwidth)
 }
-({
+export default{
     left,
     right
-})
+}

@@ -1,8 +1,12 @@
 let highlightStyle={backgroundColor:'var(--middle-color)'}
 ;(async()=>{
-    let
-        Cli=            await module.repository.Cli,
-        stringWidth=    await module.repository.stringWidth
+    let[
+        Cli,
+        stringWidth,
+    ]=await Promise.all([
+        module.repository.Cli,
+        module.repository.stringWidth,
+    ])
     function calcWidth(a){
         let x=0
         for(let i=0;i<a.length;i++){

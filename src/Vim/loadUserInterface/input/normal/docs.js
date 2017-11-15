@@ -1,4 +1,4 @@
-({
+export default{
     a:{
         acceptable:true
     },
@@ -11,4 +11,4 @@
         complete:true,
         changed:true,
     }
-})
+}

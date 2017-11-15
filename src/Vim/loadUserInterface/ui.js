@@ -1,4 +1,4 @@
-module.repository.measureWidth= module.shareImport('ui/measureWidth.js')
+module.repository.measureWidth= module.module('ui/measureWidth.js')
 module.repository.stringWidth=  module.shareImport('ui/stringWidth.js')
 let _updateByVim=module.shareImport('ui/prototype._updateByVim.js')
 ;(async()=>{
