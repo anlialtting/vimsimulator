@@ -1,15 +1,16 @@
 module.repository.measureWidth= module.module('ui/measureWidth.js')
-module.repository.stringWidth=  module.shareImport('ui/stringWidth.js')
-let _updateByVim=module.shareImport('ui/prototype._updateByVim.js')
+module.repository.stringWidth=  module.module('ui/stringWidth.js')
 ;(async()=>{
     let[
         measureWidth,
         GreedyText,
         createViewNode,
+        _updateByVim,
     ]=await Promise.all([
         module.repository.measureWidth,
-        module.shareImport('ui/GreedyText.js'),
+        module.module('ui/GreedyText.js'),
         module.shareImport('ui/createViewNode.js'),
+        module.shareImport('ui/prototype._updateByVim.js'),
     ])
     function Ui(vim){
         this._values={}
@@ -58,7 +59,7 @@ let _updateByVim=module.shareImport('ui/prototype._updateByVim.js')
     Ui.prototype._update=function(){
         this._viewNode.update()
     }
-    Ui.prototype._updateByVim=await _updateByVim
+    Ui.prototype._updateByVim=_updateByVim
     Object.defineProperty(Ui.prototype,'_wrapMethod',{set(val){
         this._values.wrapMethod=val
         if(this._values.wrapMethod=='greedy'){

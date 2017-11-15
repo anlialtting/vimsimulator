@@ -1,4 +1,6 @@
-module.repository.npm.stringWidth.then(npmStringWidth=>{
+import npmStringWidthPromise from '../../stringWidth.js'
+export default(async()=>{
+    let npmStringWidth=await npmStringWidthPromise
     function charWidth(c){
         if(c=='\t')
             return 8
@@ -11,4 +13,4 @@ module.repository.npm.stringWidth.then(npmStringWidth=>{
         return res
     }
     return stringWidth
-})
+})()

@@ -4,7 +4,7 @@
         measureWidth,
         dom,
     ]=await Promise.all([
-        module.shareImport('View/update.js'),
+        module.module('./View/update.js'),
         module.repository.measureWidth,
         module.repository.althea.dom,
     ])

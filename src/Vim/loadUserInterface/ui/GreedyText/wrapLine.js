@@ -1,3 +1,4 @@
+import stringWidthPromise from '../stringWidth.js'
 let
     lfDoc={
         child:'$',
@@ -11,8 +12,8 @@ function substring(list,s,start,end){
     }
     return a
 }
-;(async modules=>{
-    let stringWidth=await module.repository.stringWidth
+export default(async()=>{
+    let stringWidth=await stringWidthPromise
     function width(c){
         return c=='\n'?1:stringWidth(c)
     }

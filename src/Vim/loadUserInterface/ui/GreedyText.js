@@ -1,3 +1,4 @@
+import wrapLinePromise from './GreedyText/wrapLine.js'
 function GreedyText(){
     this._options={}
     this.lines=[]
@@ -98,8 +99,8 @@ GreedyText.prototype.setOption=function(key,val){
 function Line(val){
     this.string=val
 }
-;(async()=>{
-    let wrapLine=await module.shareImport('GreedyText/wrapLine.js')
+export default(async()=>{
+    let wrapLine=await wrapLinePromise
     GreedyText.prototype.wrap=function(){
         let
             charCount=0,
