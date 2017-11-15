@@ -1,10 +1,12 @@
-;(async()=>{
+import CliPromise from './Cli.js'
+import buildPromise from './createTextCli/build.js'
+export default(async()=>{
     let[
         Cli,
         build,
     ]=await Promise.all([
-        module.module('./Cli.js'),
-        module.shareImport('createTextCli/build.js'),
+        CliPromise,
+        buildPromise,
     ])
     function createTextCli(ui){
         return new TextCli(ui)

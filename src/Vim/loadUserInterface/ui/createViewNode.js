@@ -1,8 +1,9 @@
-;(async()=>{
+import createCliDivPromise from './createViewNode/createCliDiv.js'
+export default(async()=>{
     let[
         createCliDiv,
     ]=await Promise.all([
-        module.shareImport('createViewNode/createCliDiv.js'),
+        createCliDivPromise,
     ])
     function createViewNode(ui){
         let cliDiv=createCliDiv(ui)

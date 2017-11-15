@@ -5,15 +5,16 @@ let
     color4i={
         color:'var(--color4i)'
     }
-;(async()=>{
+import CliPromise from '../Cli.js'
+import visualRange from '../../../../visualRange.js'
+import createTextContentCliPromise from './build/createTextContentCli.js'
+export default(async()=>{
     let[
         Cli,
-        visualRange,
         createTextContentCli,
     ]=await Promise.all([
-        module.module('../Cli.js'),
-        module.module('../../../../visualRange.js'),
-        module.module('./build/createTextContentCli.js'),
+        CliPromise,
+        createTextContentCliPromise,
     ])
     function build(cli,ui,showCursor,showNumber){
         let 

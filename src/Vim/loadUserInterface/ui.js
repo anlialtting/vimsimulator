@@ -7,7 +7,7 @@
     ]=await Promise.all([
         module.module('ui/measureWidth.js'),
         module.module('ui/GreedyText.js'),
-        module.shareImport('ui/createViewNode.js'),
+        module.module('ui/createViewNode.js'),
         module.shareImport('ui/prototype._updateByVim.js'),
     ])
     function Ui(vim){

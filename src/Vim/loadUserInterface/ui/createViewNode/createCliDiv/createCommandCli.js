@@ -1,3 +1,4 @@
+import CliPromise from './Cli.js'
 function update(ui,cli){
     let vim=ui._vim
     cli.clear()
@@ -65,8 +66,8 @@ function cmdlineUpdate(ui,cli){
     })
     cli.flush()
 }
-;(async()=>{
-    let Cli=await module.module('./Cli.js')
+export default(async()=>{
+    let Cli=await CliPromise
     function CommandCli(ui){
         this._ui=ui
         this.cli=new Cli
@@ -78,7 +79,7 @@ function cmdlineUpdate(ui,cli){
     CommandCli.prototype.update=function(){
         let
             ui=this._ui,
-            cli=this.cli
+            cli=this.cli,
             vim=ui._vim
         if(inNvii(vim.mode))
             update(ui,cli)

@@ -1,14 +1,16 @@
-;(async()=>{
+import createCommandCliPromise from './createCliDiv/createCommandCli.js'
+import CliPromise from './createCliDiv/Cli.js'
+import createTextCliPromise from './createCliDiv/createTextCli.js'
+import createInput from './createCliDiv/createInput.js'
+export default(async()=>{
     let[
         createCommandCli,
         Cli,
         createTextCli,
-        createInput,
     ]=await Promise.all([
-        module.shareImport('createCliDiv/createCommandCli.js'),
-        module.module('createCliDiv/Cli.js'),
-        module.shareImport('createCliDiv/createTextCli.js'),
-        module.shareImport('createCliDiv/createInput.js'),
+        createCommandCliPromise,
+        CliPromise,
+        createTextCliPromise,
     ])
     function createCliDiv(ui){
         return new CliDiv(ui)
