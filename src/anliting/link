@@ -1,1 +1,0 @@
-node $linker Vim.js Vim > Vim.static.js
