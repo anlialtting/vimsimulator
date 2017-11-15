@@ -3,7 +3,7 @@
         Cli,
         build,
     ]=await Promise.all([
-        module.repository.Cli,
+        module.module('./Cli.js'),
         module.shareImport('createTextCli/build.js'),
     ])
     function createTextCli(ui){

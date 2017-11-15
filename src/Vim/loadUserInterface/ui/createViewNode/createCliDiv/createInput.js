@@ -3,7 +3,7 @@
         measureWidth,
         dom,
     ]=await Promise.all([
-        module.repository.measureWidth,
+        module.module('../../measureWidth.js'),
         module.repository.althea.dom,
     ])
     return(ui=>{

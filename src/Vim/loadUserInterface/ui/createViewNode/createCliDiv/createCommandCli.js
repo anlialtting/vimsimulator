@@ -66,7 +66,7 @@ function cmdlineUpdate(ui,cli){
     cli.flush()
 }
 ;(async()=>{
-    let Cli=await module.repository.Cli
+    let Cli=await module.module('./Cli.js')
     function CommandCli(ui){
         this._ui=ui
         this.cli=new Cli

@@ -1,5 +1,3 @@
-module.repository.measureWidth= module.module('ui/measureWidth.js')
-module.repository.stringWidth=  module.module('ui/stringWidth.js')
 ;(async()=>{
     let[
         measureWidth,
@@ -7,7 +5,7 @@ module.repository.stringWidth=  module.module('ui/stringWidth.js')
         createViewNode,
         _updateByVim,
     ]=await Promise.all([
-        module.repository.measureWidth,
+        module.module('ui/measureWidth.js'),
         module.module('ui/GreedyText.js'),
         module.shareImport('ui/createViewNode.js'),
         module.shareImport('ui/prototype._updateByVim.js'),

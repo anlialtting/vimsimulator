@@ -1,11 +1,13 @@
+import CliPromise from '../../Cli.js'
+import stringWidthPromise from '../../../../stringWidth.js'
 let highlightStyle={backgroundColor:'var(--middle-color)'}
-;(async()=>{
+export default(async()=>{
     let[
         Cli,
         stringWidth,
     ]=await Promise.all([
-        module.repository.Cli,
-        module.repository.stringWidth,
+        CliPromise,
+        stringWidthPromise,
     ])
     function calcWidth(a){
         let x=0

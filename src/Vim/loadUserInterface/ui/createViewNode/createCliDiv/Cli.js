@@ -1,10 +1,10 @@
-let
-    View=module.shareImport('Cli/View.js')
-;(async()=>{
+import View from './Cli/View.js'
+import EventEmmiterPromise from '../../../../events.js'
+import widthPromise from '../../stringWidth.js'
+export default(async()=>{
     let
-        EventEmmiter=   await module.repository.npm.events,
-        width=          await module.repository.stringWidth
-    View=await View
+        EventEmmiter=   await EventEmmiterPromise,
+        width=          await widthPromise
     function Cli(){
         EventEmmiter.call(this)
         this._children=[]

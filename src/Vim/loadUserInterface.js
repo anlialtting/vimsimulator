@@ -1,5 +1,3 @@
-module.repository.visualRange=
-    module.module('loadUserInterface/visualRange.js')
 ;(async()=>{
     let[
         input,

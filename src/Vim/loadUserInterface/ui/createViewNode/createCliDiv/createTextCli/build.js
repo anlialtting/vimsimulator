@@ -11,9 +11,9 @@ let
         visualRange,
         createTextContentCli,
     ]=await Promise.all([
-        module.repository.Cli,
-        module.repository.visualRange,
-        module.shareImport('build/createTextContentCli.js'),
+        module.module('../Cli.js'),
+        module.module('../../../../visualRange.js'),
+        module.module('./build/createTextContentCli.js'),
     ])
     function build(cli,ui,showCursor,showNumber){
         let 

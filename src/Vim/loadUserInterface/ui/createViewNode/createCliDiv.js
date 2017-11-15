@@ -1,4 +1,3 @@
-module.repository.Cli=module.shareImport('createCliDiv/Cli.js')
 ;(async()=>{
     let[
         createCommandCli,
@@ -7,7 +6,7 @@ module.repository.Cli=module.shareImport('createCliDiv/Cli.js')
         createInput,
     ]=await Promise.all([
         module.shareImport('createCliDiv/createCommandCli.js'),
-        module.repository.Cli,
+        module.module('createCliDiv/Cli.js'),
         module.shareImport('createCliDiv/createTextCli.js'),
         module.shareImport('createCliDiv/createInput.js'),
     ])
