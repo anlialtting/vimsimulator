@@ -1,26 +1,11 @@
 let altheaRepoUrl='https://gitcdn.link/cdn/anliting/althea/d5f39e46838d68edbb43877d3fba0c44f3a88c7a/src/AltheaServer/HttpServer/files/lib/repository.js'
-{
-    let moduleNode=`https://gitcdn.link/cdn/anliting/module/${
-        '0e94e04505484aaf3b367423b36cf426a4242006'
-    }/node`
-    if(!module.repository.npm)
-        module.repository.npm={}
-    if(!module.repository.npm.stringWidth)
-        module.repository.npm.stringWidth=module.importByPath(
-            `${moduleNode}/string-width.js`
-        )
-    if(!module.repository.npm.events)
-        module.repository.npm.events=module.importByPath(
-            `${moduleNode}/events.js`
-        )
-}
 ;(async()=>{
     if(!module.repository.althea)
         module.repository.althea=
             (await module.importByPath(altheaRepoUrl,{mode:1})).althea
     let load=[
         module.module('Vim/loadBase.js'),
-        module.shareImport('Vim/loadUserInterface.js'),
+        module.module('Vim/loadUserInterface.js'),
         module.shareImport('Vim/loadSyntacticSugar.js'),
     ]
     let[
@@ -40,7 +25,7 @@ let altheaRepoUrl='https://gitcdn.link/cdn/anliting/althea/d5f39e46838d68edbb438
         module.shareImport('Vim/StyleManager.js'),
         module.shareImport('Vim/UndoBranchManager.js'),
         module.get('Vim/style.css'),
-        module.repository.npm.events
+        module.module('./Vim/events.js'),
     ])
     function Vim(read,write){
         EventEmmiter.call(this)

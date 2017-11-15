@@ -11,7 +11,7 @@ function optionChange(ui,options){
             break
     }
 }
-;(function(changed){
+export default function(changed){
     for(let k in changed){let v=changed[k]
         switch(k){
             case 'mode':
@@ -36,4 +36,4 @@ function optionChange(ui,options){
         }
     }
     this._update()
-})
+}

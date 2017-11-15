@@ -1,14 +1,14 @@
-;(async()=>{
+import measureWidth from './ui/measureWidth.js'
+import GreedyTextPromise from './ui/GreedyText.js'
+import createViewNodePromise from './ui/createViewNode.js'
+import _updateByVim from './ui/prototype._updateByVim.js'
+export default(async()=>{
     let[
-        measureWidth,
-        GreedyText,
         createViewNode,
-        _updateByVim,
+        GreedyText,
     ]=await Promise.all([
-        module.module('ui/measureWidth.js'),
-        module.module('ui/GreedyText.js'),
-        module.module('ui/createViewNode.js'),
-        module.shareImport('ui/prototype._updateByVim.js'),
+        createViewNodePromise,
+        GreedyTextPromise,
     ])
     function Ui(vim){
         this._values={}

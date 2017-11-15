@@ -1,10 +1,10 @@
-;(async()=>{
+import input from './loadUserInterface/input.js'
+import uiPromise from './loadUserInterface/ui.js'
+export default(async()=>{
     let[
-        input,
         ui,
     ]=await Promise.all([
-        module.module('loadUserInterface/input.js'),
-        module.shareImport('loadUserInterface/ui.js'),
+        uiPromise,
     ])
     return o=>{
         Object.defineProperty(o,'cursor',{get(){
