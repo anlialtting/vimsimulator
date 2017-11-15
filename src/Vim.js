@@ -1,27 +1,24 @@
-;(async()=>{
+import loadBase from './Vim/loadBase.js'
+import loadUserInterface from './Vim/loadUserInterface.js'
+import loadSyntacticSugarPromise from './Vim/loadSyntacticSugar.js'
+import colorsStyle from './Vim/colorsStyle.js'
+import createCursor from './Vim/createCursor.js'
+import rc from './Vim/rc.js'
+import defaultOptions from './Vim/defaultOptions.js'
+import StyleManager from './Vim/StyleManager.js'
+import UndoBranchManager from './Vim/UndoBranchManager.js'
+import style from './Vim/style.js'
+import EventEmmiterPromise from './Vim/events.js'
+export default(async()=>{
     let load=[
-        module.module('Vim/loadBase.js'),
-        module.module('Vim/loadUserInterface.js'),
-        module.module('Vim/loadSyntacticSugar.js'),
+        loadBase,
+        loadUserInterface,
+        await loadSyntacticSugarPromise,
     ]
     let[
-        colors,
-        createCursor,
-        rc,
-        defaultOptions,
-        StyleManager,
-        UndoBranchManager,
-        style,
         EventEmmiter,
     ]=await Promise.all([
-        module.module('./Vim/colorsStyle.js'),
-        module.module('./Vim/createCursor.js'),
-        module.module('./Vim/rc.js'),
-        module.module('./Vim/defaultOptions.js'),
-        module.module('./Vim/StyleManager.js'),
-        module.module('./Vim/UndoBranchManager.js'),
-        module.module('./Vim/style.js'),
-        module.module('./Vim/events.js'),
+        EventEmmiterPromise,
     ])
     function Vim(read,write){
         EventEmmiter.call(this)
@@ -42,7 +39,7 @@
         this._styleManager=new StyleManager
         this.style=this._styleManager.style
         this._styleManager.appendChild(document.createTextNode(style))
-        this._styleManager.appendChild(document.createTextNode(colors))
+        this._styleManager.appendChild(document.createTextNode(colorsStyle))
         this.read=read
         this.write=write
         this._uis=new Set
