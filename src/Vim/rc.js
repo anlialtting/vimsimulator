@@ -1,4 +1,4 @@
-(vim=>{
+export default vim=>{
     let vimrc=vim._read('~/.vimrc')
     if(vimrc==undefined)
         return
@@ -11,4 +11,4 @@
         vim.input=c
         vim.input={key:'Enter'}
     })
-})
+}

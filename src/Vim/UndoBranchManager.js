@@ -24,4 +24,4 @@ UndoBranchManager.prototype.gotoPrevious=function(){
 function UndoBranch(text){
     this.text=text
 }
-UndoBranchManager
+export default UndoBranchManager

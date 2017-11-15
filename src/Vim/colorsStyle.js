@@ -1,4 +1,4 @@
-div.webvim.cli{
+export default`div.webvim.cli{
     --color3i:yellow;
     --color4:blue;
     --color4i:dodgerblue;
@@ -17,3 +17,4 @@ div.webvim.cli .cursor{
     background-color:var(--cursor-bg);
     color:var(--cursor-fg);
 }
+`

@@ -1,12 +1,8 @@
-let altheaRepoUrl='https://gitcdn.link/cdn/anliting/althea/d5f39e46838d68edbb43877d3fba0c44f3a88c7a/src/AltheaServer/HttpServer/files/lib/repository.js'
 ;(async()=>{
-    if(!module.repository.althea)
-        module.repository.althea=
-            (await module.importByPath(altheaRepoUrl,{mode:1})).althea
     let load=[
         module.module('Vim/loadBase.js'),
         module.module('Vim/loadUserInterface.js'),
-        module.shareImport('Vim/loadSyntacticSugar.js'),
+        module.module('Vim/loadSyntacticSugar.js'),
     ]
     let[
         colors,
@@ -18,13 +14,13 @@ let altheaRepoUrl='https://gitcdn.link/cdn/anliting/althea/d5f39e46838d68edbb438
         style,
         EventEmmiter,
     ]=await Promise.all([
-        module.get('Vim/colors.css'),
-        module.module('Vim/createCursor.js'),
-        module.shareImport('Vim/rc.js'),
-        module.shareImport('Vim/defaultOptions.js'),
-        module.shareImport('Vim/StyleManager.js'),
-        module.shareImport('Vim/UndoBranchManager.js'),
-        module.get('Vim/style.css'),
+        module.module('./Vim/colorsStyle.js'),
+        module.module('./Vim/createCursor.js'),
+        module.module('./Vim/rc.js'),
+        module.module('./Vim/defaultOptions.js'),
+        module.module('./Vim/StyleManager.js'),
+        module.module('./Vim/UndoBranchManager.js'),
+        module.module('./Vim/style.js'),
         module.module('./Vim/events.js'),
     ])
     function Vim(read,write){

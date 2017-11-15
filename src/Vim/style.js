@@ -1,4 +1,4 @@
-div.webvim.cli{
+export default`div.webvim.cli{
     position:relative;
     font-family:monospace;
     white-space:pre;
@@ -24,3 +24,4 @@ div.webvim.cli>textarea.input{
     background-color:var(--foreground-color);
     z-index:1;
 }
+`
