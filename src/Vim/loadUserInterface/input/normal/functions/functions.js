@@ -16,7 +16,7 @@ function putLinewise(vim,c,s){
     put(vim,c,s)
     vim._trueCursor.moveTo(c)
 }
-function delete_(a,b){
+function delete_(vim,a,b){
     vim._trueText={
         function:'delete',
         start:a,
@@ -25,12 +25,12 @@ function delete_(a,b){
 }
 function deleteCharacterwise(vim,r,a,b){
     yank(vim,r,'string',vim._trueText.substring(a,b))
-    delete_(a,b)
+    delete_(vim,a,b)
     vim._trueCursor.moveTo(a)
 }
 function deleteLinewise(vim,r,a,b){
     yank(vim,r,'line',vim._trueText.substring(a,b))
-    delete_(a,b)
+    delete_(vim,a,b)
 }
 export default{
     yank,
