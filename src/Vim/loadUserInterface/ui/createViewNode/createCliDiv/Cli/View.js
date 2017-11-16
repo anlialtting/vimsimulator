@@ -36,6 +36,5 @@ Object.defineProperty(View.prototype,'update',{set(val){
     update(this)
 }})
 View.prototype.free=function(){
-    this._cli.removeListener('view',this._listener)
 }
 export default View

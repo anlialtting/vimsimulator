@@ -7,7 +7,7 @@ module.debug=true
         style,
     ]=await Promise.all([
         module.module('../../Vim.js'),
-        module.shareImport('testdata.js'),
+        module.module('./testdata.js'),
         module.styleByPath('../a.css'),
     ])
     let vim=new Vim(p=>{
