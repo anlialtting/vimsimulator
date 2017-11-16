@@ -1,10 +1,8 @@
 import View from './Cli/View.js'
-import EventEmmiterPromise from '../../../../events.js'
+import EventEmmiter from 'https://gitcdn.link/cdn/anliting/simple.js/eae977ecf2a856ecb072259aa63b003d186ba618/src/simple/EventEmmiter.js'
 import widthPromise from '../../stringWidth.js'
 export default(async()=>{
-    let
-        EventEmmiter=   await EventEmmiterPromise,
-        width=          await widthPromise
+    let width=await widthPromise
     function Cli(){
         EventEmmiter.call(this)
         this._children=[]

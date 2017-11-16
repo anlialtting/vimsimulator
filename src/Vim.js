@@ -8,18 +8,13 @@ import defaultOptions from './Vim/defaultOptions.js'
 import StyleManager from './Vim/StyleManager.js'
 import UndoBranchManager from './Vim/UndoBranchManager.js'
 import style from './Vim/style.js'
-import EventEmmiterPromise from './Vim/events.js'
+import EventEmmiter from 'https://gitcdn.link/cdn/anliting/simple.js/eae977ecf2a856ecb072259aa63b003d186ba618/src/simple/EventEmmiter.js'
 export default(async()=>{
     let load=[
         loadBase,
         loadUserInterface,
         await loadSyntacticSugarPromise,
     ]
-    let[
-        EventEmmiter,
-    ]=await Promise.all([
-        EventEmmiterPromise,
-    ])
     function Vim(read,write){
         EventEmmiter.call(this)
         this._values={

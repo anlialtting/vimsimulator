@@ -1,5 +1,6 @@
 import moduleLoader from 'https://cdn.rawgit.com/anliting/module/533c10b65a8b71c14de16f5ed99e466ddf8a2bae/src/esm/moduleLoader.js';
 import dom from 'https://cdn.rawgit.com/anliting/althea/ea16c0d91285a61063e9251ad1387b7cf4732a39/src/AltheaServer/HttpServer/files/lib/dom.js';
+import EventEmmiter from 'https://gitcdn.link/cdn/anliting/simple.js/eae977ecf2a856ecb072259aa63b003d186ba618/src/simple/EventEmmiter.js';
 
 var _welcomeText = `\
                      Web Vim
@@ -1222,7 +1223,7 @@ function update$1(view){
     if(view._height)
         view.node.style.height=`${view._height*view._fontSize}px`;
     view._listeners.map(doc=>
-        doc.cli.removeListener('view',doc.listener)
+        doc.cli.off('view',doc.listener)
     );
     view._listeners=[];
     {
@@ -1341,21 +1342,10 @@ Object.defineProperty(View.prototype,'update',{set(val){
     update$1(this);
 }});
 View.prototype.free=function(){
-    this._cli.removeListener('view',this._listener);
 };
 
-let moduleNode$1=`https://gitcdn.link/cdn/anliting/module/${
-    '0e94e04505484aaf3b367423b36cf426a4242006'
-}/node`;
-var EventEmmiterPromise = (async()=>{
-    let module=anlitingModule||(await moduleLoader());
-    return module.importByPath(`${moduleNode$1}/events.js`)
-})();
-
 var CliPromise = (async()=>{
-    let
-        EventEmmiter=   await EventEmmiterPromise,
-        width=          await stringWidthPromise;
+    let width=await stringWidthPromise;
     function Cli(){
         EventEmmiter.call(this);
         this._children=[];
@@ -2337,11 +2327,6 @@ var Vim = (async()=>{
         loadUserInterface,
         await loadSyntacticSugarPromise,
     ];
-    let[
-        EventEmmiter,
-    ]=await Promise.all([
-        EventEmmiterPromise,
-    ]);
     function Vim(read,write){
         EventEmmiter.call(this);
         this._values={
