@@ -1,4 +1,4 @@
-import dom from 'https://cdn.rawgit.com/anliting/althea/ea16c0d91285a61063e9251ad1387b7cf4732a39/src/AltheaServer/HttpServer/files/lib/dom.js'
+import{dom}from 'https://gitcdn.link/cdn/anliting/simple.js/3b5e122ded93bb9a5a7d5099ac645f1e1614a89b/src/simple.static.js'
 function update(view){
     if(view._width)
         view.node.style.width=`${view._width*view._fontWidth}px`
