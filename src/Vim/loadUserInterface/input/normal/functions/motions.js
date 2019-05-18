@@ -23,4 +23,16 @@ function l(vim,doc){
         vim._trueCursor.moveRight()
     return docs.ac
 }
-export default{h,j,k,l}
+function w(vim,doc){
+    let count=doc.count||1
+    while(count--)
+        vim._trueCursor.moveWordRight()
+    return docs.ac
+}
+function W(vim,doc){
+    let count=doc.count||1
+    while(count--)
+        vim._trueCursor.moveGeneralWordRight()
+    return docs.ac
+}
+export default{h,j,k,l,w,W}

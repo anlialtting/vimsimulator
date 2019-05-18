@@ -49,6 +49,18 @@ function l(vim,cmd,arg){
         count:arg,
     }
 }
+function w(vim,cmd,arg){
+    return{
+        function:'w',
+        count:arg,
+    }
+}
+function W(vim,cmd,arg){
+    return{
+        function:'W',
+        count:arg,
+    }
+}
 function n(vim,cmd,arg){
     //vim.gotoNextMatch()
     return docs.ac
@@ -141,4 +153,4 @@ function X(vim,cmd,arg){
         register:'"'
     }
 }
-export default{A,D,G,I,O,P,X,a,d,g,h,i,j,k,l,n,o,p,r,u,v,x,y}
+export default{A,D,G,I,O,P,X,a,d,g,h,i,j,k,l,n,o,p,r,u,v,w,W,x,y}
