@@ -85,7 +85,7 @@ Cursor.prototype.moveToEOL=function(){
     this.moveTo(this.lineEnd-1)
 }
 // end 2
-// start 2a; github.com/b04902012
+// start 2a; start github.com/b04902012
 {
     function charType(text,a){
         if(text[a]==='\n'&&(!a||text[a-1]==='\n'))
@@ -128,5 +128,5 @@ Cursor.prototype.moveToEOL=function(){
         this.moveTo(a)
     }
 }
-// end 2a; github.com/b04902012
+// end 2a; end github.com/b04902012
 export default Cursor
