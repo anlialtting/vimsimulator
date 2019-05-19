@@ -125,6 +125,8 @@ export default{
     l:motions.l,
     o,
     p,
+    w:motions.w,
+    W:motions.W,
     yy,
     x,
 }

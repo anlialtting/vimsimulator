@@ -80,9 +80,51 @@ Object.defineProperty(Cursor.prototype,'lineEnd',{get(){
     return a+this.text.substring(a).indexOf('\n')+1
 }})
 // end 1c
-// start 2
+// start 2a
 Cursor.prototype.moveToEOL=function(){
     this.moveTo(this.lineEnd-1)
 }
-// end 2
+// end 2a
+//start 2b
+function charType(text,a){
+    if(text[a]==='\n'&&(!a||text[a-1]==='\n'))
+        return "EmptyLine"
+    if(/^\s$/.test(text[a]))
+        return "WhiteSpace"
+    if(/^\w$/.test(text[a]))
+        return "AlphaNumeric"
+    if(/^[\x00-\x7F]*$/.test(text[a]))
+        return "ASCII"
+    return "NonASCII"
+}
+Cursor.prototype.moveWordRight=function(){
+    let a=this.abs
+    let t=charType(this.text,a)
+    let b=false
+    while(a<this.text.length-1&&
+      [(b||t),"WhiteSpace"].includes(charType(this.text,a))
+    ){
+        b=b||(charType(this.text,a)==="WhiteSpace")
+        a++
+        if(charType(this.text,a)==="EmptyLine")break
+    }
+    return this.moveTo(a)
+}
+Cursor.prototype.moveGeneralWordRight=function(){
+    let a=this.abs
+    let t=charType(this.text,a)
+    let b=false
+    while(a<this.text.length-1&&
+      (!b||charType(this.text,a)==="WhiteSpace")
+    ){
+        b=b||(charType(this.text,a)==="WhiteSpace")
+        a++
+        if(charType(this.text,a)==="EmptyLine")
+          break
+        if(t==="EmptyLine"&&charType(this.text,a)!=="WhiteSpace")
+          break
+    }
+    return this.moveTo(a)
+}
+//end 2b
 export default Cursor
