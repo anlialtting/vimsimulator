@@ -1,5 +1,5 @@
 import moduleLoader from 'https://cdn.rawgit.com/anliting/module/533c10b65a8b71c14de16f5ed99e466ddf8a2bae/src/esm/moduleLoader.js';
-import { EventEmmiter, dom } from 'https://gitcdn.link/cdn/anliting/simple.js/3b5e122ded93bb9a5a7d5099ac645f1e1614a89b/src/simple.static.js';
+import { dom, EventEmmiter } from 'https://gitcdn.link/cdn/anliting/simple.js/3b5e122ded93bb9a5a7d5099ac645f1e1614a89b/src/simple.static.js';
 
 var _welcomeText = `\
                      Web Vim
@@ -16,13 +16,13 @@ var lc = s=>{
     return `${l}L, ${c}C`
 };
 
-var _write = function(){
+function _write(){
     let p=this._registers['%'];
     this.write&&this.write(p);
     return `${p?`"${p}"`:'[Event-Only]'} ${lc(this._text)} written`
-};
+}
 
-var _edit = function(p){
+function _edit(p){
     let read=this.read(p);
     this._registers['%']=p;
     if(read==undefined){
@@ -32,7 +32,7 @@ var _edit = function(p){
         this.text=read;
         return `"${p}" ${lc(read)}`
     }
-};
+}
 
 function Cursor(set,get){
     this._position=0;
@@ -197,14 +197,60 @@ var docs = {
     }
 };
 
+function A(vim){
+    vim._mode='insert';
+    vim._trueCursor.moveToEOL();
+    return docs.ac
+}
+function D(vim,cmd,arg){
+    return {
+        function:'D',
+        count:arg||1,
+        register:'"',
+    }
+}
+function G(vim,cmd,arg){
+    return {
+        function:'G',
+        count:arg,
+    }
+}
+function I(vim,cmd,arg){
+    vim._mode='insert';
+    vim._trueCursor.moveTo(vim._trueCursor.lineStart);
+    return docs.ac
+}
+function O(vim,cmd,arg){
+    return {function:'O'}
+}
+function P(vim,cmd,arg){
+    return {
+        function:'P',
+        count:arg||1,
+        register:'"',
+    }
+}
+function W(vim,cmd,arg){
+    return {
+        function:'W',
+        count:arg,
+    }
+}
+function X(vim,cmd,arg){
+    return {
+        function:'X',
+        count:arg||1,
+        register:'"'
+    }
+}
 function a(vim,cmd,arg){
-    return{function:'a'}
+    return {function:'a'}
 }
 function d(vim,cmd,arg){
     if(cmd=='')
         return docs.a
     if(cmd=='d')
-        return{
+        return {
             function:'dd',
             count:arg||1,
             register:'"',
@@ -214,13 +260,13 @@ function g(vim,cmd,arg){
     if(cmd=='')
         return docs.a
     if(cmd=='g')
-        return{
+        return {
             function:'gg',
             count:arg,
         }
 }
 function h(vim,cmd,arg){
-    return{
+    return {
         function:'h',
         count:arg,
     }
@@ -230,19 +276,19 @@ function i(vim,cmd,arg){
     return docs.ac
 }
 function j(vim,cmd,arg){
-    return{
+    return {
         function:'j',
         count:arg,
     }
 }
 function k(vim,cmd,arg){
-    return{
+    return {
         function:'k',
         count:arg,
     }
 }
 function l(vim,cmd,arg){
-    return{
+    return {
         function:'l',
         count:arg,
     }
@@ -252,10 +298,10 @@ function n(vim,cmd,arg){
     return docs.ac
 }
 function o(vim,cmd,arg){
-    return{function:'o'}
+    return {function:'o'}
 }
 function p(vim,cmd,arg){
-    return{
+    return {
         function:'p',
         count:arg||1,
         register:'"',
@@ -282,8 +328,14 @@ function v(vim,cmd,arg){
     vim._trueCursor.moveTo(c);
     return docs.ac
 }
+function w(vim,cmd,arg){
+    return {
+        function:'w',
+        count:arg,
+    }
+}
 function x(vim,cmd,arg){
-    return{
+    return {
         function:'x',
         count:arg||1,
         register:'"'
@@ -293,53 +345,13 @@ function y(vim,cmd,arg){
     if(cmd=='')
         return docs.a
     if(cmd=='y')
-        return{
+        return {
             function:'yy',
             count:arg||1,
             register:'"',
         }
 }
-function A(vim){
-    vim._mode='insert';
-    vim._trueCursor.moveToEOL();
-    return docs.ac
-}
-function D(vim,cmd,arg){
-    return{
-        function:'D',
-        count:arg||1,
-        register:'"',
-    }
-}
-function G(vim,cmd,arg){
-    return{
-        function:'G',
-        count:arg,
-    }
-}
-function I(vim,cmd,arg){
-    vim._mode='insert';
-    vim._trueCursor.moveTo(vim._trueCursor.lineStart);
-    return docs.ac
-}
-function O(vim,cmd,arg){
-    return{function:'O'}
-}
-function P(vim,cmd,arg){
-    return{
-        function:'P',
-        count:arg||1,
-        register:'"',
-    }
-}
-function X(vim,cmd,arg){
-    return{
-        function:'X',
-        count:arg||1,
-        register:'"'
-    }
-}
-var letters = {A,D,G,I,O,P,X,a,d,g,h,i,j,k,l,n,o,p,r,u,v,x,y};
+var letters = {A,D,G,I,O,P,W,X,a,d,g,h,i,j,k,l,n,o,p,r,u,v,w,x,y};
 
 function shift(vim,s,e,count){
     let cursor=Object.create(vim._trueCursor);
@@ -361,7 +373,7 @@ function padding(o,n){
     let
         a=Math.floor(n/o.tabstop),
         b=n-a*o.tabstop;
-    return(
+    return (
         o.expandtab?' '.repeat(o.tabstop):'\t'
     ).repeat(a)+' '.repeat(b)
 }
@@ -447,15 +459,15 @@ function quotationMark(vim,cmd,arg){
         return docs.a
     let count=arg||1;
     if(cmd=='P')
-        return{function:'P',register,count}
+        return {function:'P',register,count}
     if(cmd=='p')
-        return{function:'p',register,count}
+        return {function:'p',register,count}
     if(cmd=='d'||cmd=='y')
         return docs.a
     if(cmd=='dd')
-        return{function:'dd',register,count}
+        return {function:'dd',register,count}
     if(cmd=='yy')
-        return{function:'yy',register,count}
+        return {function:'yy',register,count}
 }
 let commands=Object.assign({
     '<':lt,
@@ -510,7 +522,7 @@ function deleteLinewise(vim,r,a,b){
     yank(vim,r,'line',vim._trueText.substring(a,b));
     delete_(vim,a,b);
 }
-var functions$1 = {
+var functions = {
     yank,
     putCharacterwise,
     putLinewise,
@@ -518,6 +530,12 @@ var functions$1 = {
     deleteLinewise,
 };
 
+function W$1(vim,doc){
+    let count=doc.count||1;
+    while(count--)
+        vim._trueCursor.moveGeneralWordRight();
+    return docs.ac
+}
 function h$1(vim,doc){
     let count=doc.count||1;
     while(count--)
@@ -542,13 +560,19 @@ function l$1(vim,doc){
         vim._trueCursor.moveRight();
     return docs.ac
 }
-var motions = {h: h$1,j: j$1,k: k$1,l: l$1};
+function w$1(vim,doc){
+    let count=doc.count||1;
+    while(count--)
+        vim._trueCursor.moveWordRight();
+    return docs.ac
+}
+var motions = {W: W$1,h: h$1,j: j$1,k: k$1,l: l$1,w: w$1,};
 
 function gotoLine(vim,n){
     vim._trueCursor.moveTo(vim._trueCursor.line(n));
 }
 function D$1(vim,doc){
-    functions$1.deleteCharacterwise(
+    functions.deleteCharacterwise(
         vim,
         doc.register,
         vim._trueCursor.abs,
@@ -566,7 +590,7 @@ function G$1(vim,doc){
     return docs.ac
 }
 function O$1(vim,doc){
-    functions$1.putLinewise(vim,vim._trueCursor.lineStart,'\n');
+    functions.putLinewise(vim,vim._trueCursor.lineStart,'\n');
     vim._mode='insert';
     return docs.acc
 }
@@ -576,9 +600,9 @@ function P$1(vim,doc){
         return docs.ac
     let s=reg.string.repeat(doc.count);
     if(reg.mode=='string')
-        functions$1.putCharacterwise(vim,vim._trueCursor.abs,s);
+        functions.putCharacterwise(vim,vim._trueCursor.abs,s);
     else if(reg.mode=='line')
-        functions$1.putLinewise(vim,vim._trueCursor.lineStart,s);
+        functions.putLinewise(vim,vim._trueCursor.lineStart,s);
     return docs.acc
 }
 function X$1(vim,doc){
@@ -586,7 +610,7 @@ function X$1(vim,doc){
         abs=vim._trueCursor.abs,
         ls=vim._trueCursor.lineStart,
         count=Math.min(abs-ls,Math.max(0,doc.count));
-    functions$1.deleteCharacterwise(vim,doc.register,abs-count,abs);
+    functions.deleteCharacterwise(vim,doc.register,abs-count,abs);
     return docs.acc
 }
 function a$1(vim,doc){
@@ -599,7 +623,7 @@ function dd(vim,doc){
     if(c.r<0)
         return docs.ac
     let count=Math.min(c._countOfRows-c.r,doc.count);
-    functions$1.deleteLinewise(
+    functions.deleteLinewise(
         vim,
         doc.register,
         c.line(c.r),
@@ -613,7 +637,7 @@ function gg(vim,doc){
     return docs.ac
 }
 function o$1(vim,doc){
-    functions$1.putLinewise(vim,vim._trueCursor.lineEnd,'\n');
+    functions.putLinewise(vim,vim._trueCursor.lineEnd,'\n');
     vim._mode='insert';
     return docs.acc
 }
@@ -623,9 +647,9 @@ function p$1(vim,doc){
         return docs.ac
     let s=reg.string.repeat(doc.count);
     if(reg.mode=='string')
-        functions$1.putCharacterwise(vim,vim._trueCursor.abs+1,s);
+        functions.putCharacterwise(vim,vim._trueCursor.abs+1,s);
     else if(reg.mode=='line')
-        functions$1.putLinewise(vim,vim._trueCursor.lineEnd,s);
+        functions.putLinewise(vim,vim._trueCursor.lineEnd,s);
     return docs.acc
 }
 function yy(vim,doc){
@@ -637,7 +661,7 @@ function yy(vim,doc){
     let
         a=c.line(c.r),
         b=c.line(c.r+arg);
-    functions$1.yank(
+    functions.yank(
         vim,
         doc.register,
         'line',
@@ -650,14 +674,15 @@ function x$1(vim,doc){
         abs=vim._trueCursor.abs,
         le=vim._trueCursor.lineEnd,
         count=Math.min(le-1-abs,Math.max(0,doc.count));
-    functions$1.deleteCharacterwise(vim,doc.register,abs,abs+count);
+    functions.deleteCharacterwise(vim,doc.register,abs,abs+count);
     return docs.acc
 }
-var functions = {
+var functions$1 = {
     D: D$1,
     G: G$1,
     O: O$1,
     P: P$1,
+    W:motions.W,
     X: X$1,
     a: a$1,
     dd,
@@ -668,6 +693,7 @@ var functions = {
     l:motions.l,
     o: o$1,
     p: p$1,
+    w:motions.w,
     yy,
     x: x$1,
 };
@@ -692,11 +718,11 @@ function object(vim,val){
         case 'Delete':
             return ascii.del
     }
-    return''
+    return ''
 }
 function tryCommand(vim,cmd,arg){
     if(cmd=='')
-        return{acceptable:true}
+        return {acceptable:true}
     if(cmd[0] in commands)
         return commands[cmd[0]](vim,cmd.substring(1),arg)
 }
@@ -714,8 +740,8 @@ var normal = (vim,val)=>{
         cmd=cmd.substring(arg.toString().length);
     }
     let res=tryCommand(vim,cmd,arg)||{};
-    if(res.function!=undefined&&res.function in functions)
-        res=functions[res.function](vim,res);
+    if(res.function!=undefined&&res.function in functions$1)
+        res=functions$1[res.function](vim,res);
     if(res.acceptable){
         if(res.complete){
             if(res.changed)
@@ -820,7 +846,7 @@ var visualRange = vim=>{
         c=vim._modeData.cursor,
         d=vim._trueCursor.abs;
     if(d<c)[c,d]=[d,c];
-    return{s:c,e:d+1}
+    return {s:c,e:d+1}
 };
 
 function main$1(vim,val){
@@ -953,8 +979,7 @@ function main$2(vim,val){
         }else if(/^w(?:rite)?$/.test(cmd)){
             status=vim._write();
         }
-    }else if(cmd[0]=='/'){
-    }
+    }else if(cmd[0]=='/');
     vim._mode='normal';
     if(status)
         vim._modeData.status=status;
@@ -1052,7 +1077,8 @@ var stringWidthPromise = (async()=>{
     return stringWidth
 })();
 
-let lfDoc={
+let
+    lfDoc={
         child:'$',
         class:'color4i',
     };
@@ -1086,7 +1112,7 @@ var wrapLinePromise = (async()=>{
         for(
             let rowWidth=0,w;
             i<l.length&&rowWidth+(w=width(l[i]))<=targetWidth;
-            rowWidth+=w, i++
+            rowWidth+=w,i++
         );
         return i
     }
@@ -1216,7 +1242,7 @@ var GreedyTextPromise = (async()=>{
     return GreedyText
 })();
 
-function update$1(view){
+function update(view){
     if(view._width)
         view.node.style.width=`${view._width*view._fontWidth}px`;
     if(view._height)
@@ -1245,7 +1271,7 @@ function dfs(view,cli,dr,dc,o){
         else
             dfs(view,c.child,tr,tc,o);
     });
-    let listener=()=>update$1(view);
+    let listener=()=>update(view);
     view._listeners.push({cli,listener});
     cli.on('view',listener);
     return o
@@ -1317,7 +1343,7 @@ function View(cli){
     this.node=dom('div');
     this.node.className='cli';
     this.symbols={};
-    update$1(this);
+    update(this);
 }
 Object.defineProperty(View.prototype,'width',{set(val){
     this._width=val;
@@ -1338,7 +1364,7 @@ Object.defineProperty(View.prototype,'fontSize',{set(val){
     this.update;
 }});
 Object.defineProperty(View.prototype,'update',{set(val){
-    update$1(this);
+    update(this);
 }});
 View.prototype.free=function(){
 };
@@ -1400,7 +1426,7 @@ var CliPromise = (async()=>{
     return Cli
 })();
 
-function update(ui,cli){
+function update$1(ui,cli){
     let vim=ui._vim;
     cli.clear();
     if(vim.mode=='normal'){
@@ -1446,7 +1472,7 @@ function update(ui,cli){
         if(bot)
             return 'Bot'
         let n=Math.floor(100*s/(cr-(h-1))).toString();
-        return`${' '.repeat(2-n.length)}${n}%`
+        return `${' '.repeat(2-n.length)}${n}%`
     }
     function g(s){
         cli.appendChild({child:s,style:{fontWeight:'bold'}});
@@ -1483,7 +1509,7 @@ var createCommandCliPromise = (async()=>{
             cli=this.cli,
             vim=ui._vim;
         if(inNvii(vim.mode))
-            update(ui,cli);
+            update$1(ui,cli);
         else if(vim.mode=='cmdline')
             cmdlineUpdate(ui,cli);
         function inNvii(v){
@@ -1577,7 +1603,7 @@ var createTextContentCliPromise = (async()=>{
                 });
             }
         }
-        return{
+        return {
             textCli:cli,
             rowsCount,
         }
@@ -1620,10 +1646,11 @@ var createTextContentCliPromise = (async()=>{
     return createTextContentCli
 })();
 
-let color3i={
+let
+    color3i={
         color:'var(--color3i)'
-    };
-let color4i={
+    },
+    color4i={
         color:'var(--color4i)'
     };
 var buildPromise = (async()=>{
@@ -1909,7 +1936,7 @@ function optionChange(ui,options){
             break
     }
 }
-var _updateByVim = function(changed){
+function _updateByVim(changed){
     for(let k in changed){let v=changed[k];
         switch(k){
             case 'mode':
@@ -1934,7 +1961,7 @@ var _updateByVim = function(changed){
         }
     }
     this._update();
-};
+}
 
 var uiPromise = (async()=>{
     let[
@@ -2041,7 +2068,7 @@ var uiPromise = (async()=>{
         cancelAnimationFrame(ui._animationFrame);
         delete ui._animationFrame;
     }
-    return{get(){
+    return {get(){
         let ui=new Ui(this);
         this._uis.add(ui);
         return ui
@@ -2136,29 +2163,29 @@ div.webvim.cli .cursor{
 }
 `;
 
-function Cursor$2(vim){
+function Cursor$1(vim){
     this._x=0;
     this._y=0;
 }
 // start 0
-Object.defineProperty(Cursor$2.prototype,'_countOfRows',{get(){
+Object.defineProperty(Cursor$1.prototype,'_countOfRows',{get(){
     return this.text.split('\n').length-1
 }});
-Object.defineProperty(Cursor$2.prototype,'_countOfCols',{get(){
+Object.defineProperty(Cursor$1.prototype,'_countOfCols',{get(){
     return this.text?this.text.split('\n')[this.r].length:0
 }});
-Object.defineProperty(Cursor$2.prototype,'_exotic',{get(){
+Object.defineProperty(Cursor$1.prototype,'_exotic',{get(){
     let c=Object.create(this);
     Object.defineProperty(c,'_x',{set:val=>this._x=val,get:()=>this._x});
     Object.defineProperty(c,'_y',{set:val=>this._y=val,get:()=>this._y});
     return c
 }});
-Object.defineProperty(Cursor$2.prototype,'r',{set(val){
+Object.defineProperty(Cursor$1.prototype,'r',{set(val){
     this._y=val;
 },get(){
     return Math.min(this._countOfRows-1,Math.max(0,this._y))
 }});
-Object.defineProperty(Cursor$2.prototype,'c',{set(val){
+Object.defineProperty(Cursor$1.prototype,'c',{set(val){
     this._x=val;
 },get(){
     return Math.min(availableCols(this)-1,Math.max(0,this._x))
@@ -2175,34 +2202,34 @@ function availableCols(c){
     )
         return c._countOfCols+1
 }
-Cursor$2.prototype.line=function(n){
+Cursor$1.prototype.line=function(n){
     return this.text.split('\n').slice(0,n).join('').length+n
 };
 // end 0
 // start 1
-Cursor$2.prototype.moveLeft=function(){
+Cursor$1.prototype.moveLeft=function(){
     this._x=Math.max(0,this.c-1);
 };
-Cursor$2.prototype.moveRight=function(){
+Cursor$1.prototype.moveRight=function(){
     this._x=Math.min(availableCols(this)-1,this.c+1);
 };
-Cursor$2.prototype.moveUp=function(){
+Cursor$1.prototype.moveUp=function(){
     this._y=Math.max(0,this._y-1);
 };
-Cursor$2.prototype.moveDown=function(){
+Cursor$1.prototype.moveDown=function(){
     this._y=Math.min(this._countOfRows-1,this._y+1);
 };
 // end 1
 // start 1a
-Object.defineProperty(Cursor$2.prototype,'onChar',{get(){
+Object.defineProperty(Cursor$1.prototype,'onChar',{get(){
     return 0<=this.c
 }});
-Object.defineProperty(Cursor$2.prototype,'abs',{get(){
-    return(0<=this.r?this.line(this.r):0)+(0<=this.c?this.c:0)
+Object.defineProperty(Cursor$1.prototype,'abs',{get(){
+    return (0<=this.r?this.line(this.r):0)+(0<=this.c?this.c:0)
 }});
 // end 1a
 // start 1b
-Cursor$2.prototype.moveTo=function(n){
+Cursor$1.prototype.moveTo=function(n){
     this._y=this.text.substring(0,n).split('\n').length-1;
     this._x=n-(
         this.text.split('\n').slice(0,this.r).join('').length+this.r
@@ -2210,21 +2237,65 @@ Cursor$2.prototype.moveTo=function(n){
 };
 // end 1b
 // start 1c
-Object.defineProperty(Cursor$2.prototype,'lineStart',{get(){
+Object.defineProperty(Cursor$1.prototype,'lineStart',{get(){
     return this.text.substring(0,this.abs).lastIndexOf('\n')+1
 }});
-Object.defineProperty(Cursor$2.prototype,'lineEnd',{get(){
+Object.defineProperty(Cursor$1.prototype,'lineEnd',{get(){
     let a=this.abs;
     return a+this.text.substring(a).indexOf('\n')+1
 }});
 // end 1c
 // start 2
-Cursor$2.prototype.moveToEOL=function(){
+Cursor$1.prototype.moveToEOL=function(){
     this.moveTo(this.lineEnd-1);
 };
+// end 2
+// start 2a; github.com/b04902012
+{
+    function charType(text,a){
+        if(text[a]==='\n'&&(!a||text[a-1]==='\n'))
+            return "EmptyLine"
+        if(/^\s$/.test(text[a]))
+            return "WhiteSpace"
+        if(/^\w$/.test(text[a]))
+            return "AlphaNumeric"
+        if(/^[\x00-\x7F]*$/.test(text[a]))
+            return "ASCII"
+        return "NonASCII"
+    }
+    Cursor$1.prototype.moveWordRight=function(){
+        let a=this.abs;
+        let t=charType(this.text,a);
+        let b=false;
+        while(a<this.text.length-1&&
+          [(b||t),"WhiteSpace"].includes(charType(this.text,a))
+        ){
+            b=b||(charType(this.text,a)==="WhiteSpace");
+            a++;
+            if(charType(this.text,a)==="EmptyLine")break
+        }
+        this.moveTo(a);
+    };
+    Cursor$1.prototype.moveGeneralWordRight=function(){
+        let a=this.abs;
+        let t=charType(this.text,a);
+        let b=false;
+        while(a<this.text.length-1&&
+          (!b||charType(this.text,a)==="WhiteSpace")
+        ){
+            b=b||(charType(this.text,a)==="WhiteSpace");
+            a++;
+            if(charType(this.text,a)==="EmptyLine")
+              break
+            if(t==="EmptyLine"&&charType(this.text,a)!=="WhiteSpace")
+              break
+        }
+        this.moveTo(a);
+    };
+}
 
 function createCursor(vim){
-    let cursor=new Cursor$2,trueCursor=cursor._exotic;
+    let cursor=new Cursor$1,trueCursor=cursor._exotic;
     Object.defineProperty(cursor,'text',{configurable:true,get(){
         return vim._text
     }});
@@ -2234,7 +2305,7 @@ function createCursor(vim){
     Object.defineProperty(trueCursor,'text',{get(){
         return vim._trueText
     }});
-    return[cursor,trueCursor]
+    return [cursor,trueCursor]
 }
 
 var rc = vim=>{

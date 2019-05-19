@@ -115,6 +115,7 @@ export default{
     G,
     O,
     P,
+    W:motions.W,
     X,
     a,
     dd,
@@ -126,7 +127,6 @@ export default{
     o,
     p,
     w:motions.w,
-    W:motions.W,
     yy,
     x,
 }

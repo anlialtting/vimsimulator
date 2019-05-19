@@ -1,4 +1,10 @@
 import docs from'../docs.js'
+function W(vim,doc){
+    let count=doc.count||1
+    while(count--)
+        vim._trueCursor.moveGeneralWordRight()
+    return docs.ac
+}
 function h(vim,doc){
     let count=doc.count||1
     while(count--)
@@ -29,10 +35,4 @@ function w(vim,doc){
         vim._trueCursor.moveWordRight()
     return docs.ac
 }
-function W(vim,doc){
-    let count=doc.count||1
-    while(count--)
-        vim._trueCursor.moveGeneralWordRight()
-    return docs.ac
-}
-export default{h,j,k,l,w,W}
+export default{W,h,j,k,l,w,}

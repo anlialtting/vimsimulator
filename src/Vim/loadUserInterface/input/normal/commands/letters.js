@@ -1,4 +1,50 @@
 import docs from '../docs.js'
+function A(vim){
+    vim._mode='insert'
+    vim._trueCursor.moveToEOL()
+    return docs.ac
+}
+function D(vim,cmd,arg){
+    return{
+        function:'D',
+        count:arg||1,
+        register:'"',
+    }
+}
+function G(vim,cmd,arg){
+    return{
+        function:'G',
+        count:arg,
+    }
+}
+function I(vim,cmd,arg){
+    vim._mode='insert'
+    vim._trueCursor.moveTo(vim._trueCursor.lineStart)
+    return docs.ac
+}
+function O(vim,cmd,arg){
+    return{function:'O'}
+}
+function P(vim,cmd,arg){
+    return{
+        function:'P',
+        count:arg||1,
+        register:'"',
+    }
+}
+function W(vim,cmd,arg){
+    return{
+        function:'W',
+        count:arg,
+    }
+}
+function X(vim,cmd,arg){
+    return{
+        function:'X',
+        count:arg||1,
+        register:'"'
+    }
+}
 function a(vim,cmd,arg){
     return{function:'a'}
 }
@@ -49,18 +95,6 @@ function l(vim,cmd,arg){
         count:arg,
     }
 }
-function w(vim,cmd,arg){
-    return{
-        function:'w',
-        count:arg,
-    }
-}
-function W(vim,cmd,arg){
-    return{
-        function:'W',
-        count:arg,
-    }
-}
 function n(vim,cmd,arg){
     //vim.gotoNextMatch()
     return docs.ac
@@ -96,6 +130,12 @@ function v(vim,cmd,arg){
     vim._trueCursor.moveTo(c)
     return docs.ac
 }
+function w(vim,cmd,arg){
+    return{
+        function:'w',
+        count:arg,
+    }
+}
 function x(vim,cmd,arg){
     return{
         function:'x',
@@ -113,44 +153,4 @@ function y(vim,cmd,arg){
             register:'"',
         }
 }
-function A(vim){
-    vim._mode='insert'
-    vim._trueCursor.moveToEOL()
-    return docs.ac
-}
-function D(vim,cmd,arg){
-    return{
-        function:'D',
-        count:arg||1,
-        register:'"',
-    }
-}
-function G(vim,cmd,arg){
-    return{
-        function:'G',
-        count:arg,
-    }
-}
-function I(vim,cmd,arg){
-    vim._mode='insert'
-    vim._trueCursor.moveTo(vim._trueCursor.lineStart)
-    return docs.ac
-}
-function O(vim,cmd,arg){
-    return{function:'O'}
-}
-function P(vim,cmd,arg){
-    return{
-        function:'P',
-        count:arg||1,
-        register:'"',
-    }
-}
-function X(vim,cmd,arg){
-    return{
-        function:'X',
-        count:arg||1,
-        register:'"'
-    }
-}
-export default{A,D,G,I,O,P,X,a,d,g,h,i,j,k,l,n,o,p,r,u,v,w,W,x,y}
+export default{A,D,G,I,O,P,W,X,a,d,g,h,i,j,k,l,n,o,p,r,u,v,w,x,y}
