@@ -1,7 +1,8 @@
-body>div.test{
+export default`body>div.test{
     position:fixed;
     left:50%;
     top:50%;
     transform:translate(-50%,-50%);
     width:min-content;
 }
+`

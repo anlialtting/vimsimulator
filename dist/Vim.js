@@ -5,8 +5,7 @@ Permission is hereby granted, free of charge, to any person obtaining a copy of 
 The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
 
 THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
-*/import moduleLoader from 'https://cdn.rawgit.com/anliting/module/533c10b65a8b71c14de16f5ed99e466ddf8a2bae/src/esm/moduleLoader.js';
-import { dom, EventEmmiter } from 'https://gitcdn.link/cdn/anliting/simple.js/3b5e122ded93bb9a5a7d5099ac645f1e1614a89b/src/simple.static.js';
+*/import { dom, EventEmmiter } from 'https://gitcdn.link/cdn/anliting/simple.js/3b5e122ded93bb9a5a7d5099ac645f1e1614a89b/src/simple.static.js';
 
 var _welcomeText = `\
                      Web Vim
@@ -1060,29 +1059,156 @@ var measureWidth = (size,s)=>{
     return ctx.measureText(s).width
 };
 
-let moduleNode=`https://gitcdn.link/cdn/anliting/module/${
-    '0e94e04505484aaf3b367423b36cf426a4242006'
-}/node`;
-var npmStringWidthPromise = (async()=>{
-    let module=await moduleLoader();
-    return module.importByPath(`${moduleNode}/string-width.js`)
-})();
+/*MIT License
 
-var stringWidthPromise = (async()=>{
-    let npmStringWidth=await npmStringWidthPromise;
-    function charWidth(c){
-        if(c=='\t')
-            return 8
-        return npmStringWidth(c)
-    }
-    function stringWidth(s){
-        let res=0;
-        for(let i=0;i<s.length;i++)
-            res+=charWidth(s[i]);
-        return res
-    }
-    return stringWidth
-})();
+Copyright (c) Sindre Sorhus <sindresorhus@gmail.com> (sindresorhus.com)
+
+Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.*/let a$2;
+(function(){function r(e,n,t){function o(i,f){if(!n[i]){if(!e[i]){var c="function"==typeof require&&require;if(!f&&c)return c(i,!0);if(u)return u(i,!0);var a=new Error("Cannot find module '"+i+"'");throw a.code="MODULE_NOT_FOUND",a}var p=n[i]={exports:{}};e[i][0].call(p.exports,function(r){var n=e[i][1][r];return o(n||r)},p,p.exports,r,e,n,t);}return n[i].exports}for(var u="function"==typeof require&&require,i=0;i<t.length;i++)o(t[i]);return o}return r})()({1:[function(require,module,exports){
+a$2=require('string-width');
+
+},{"string-width":5}],2:[function(require,module,exports){
+
+module.exports = options => {
+	options = Object.assign({
+		onlyFirst: false
+	}, options);
+
+	const pattern = [
+		'[\\u001B\\u009B][[\\]()#;?]*(?:(?:(?:[a-zA-Z\\d]*(?:;[-a-zA-Z\\d\\/#&.:=?%@~_]*)*)?\\u0007)',
+		'(?:(?:\\d{1,4}(?:;\\d{0,4})*)?[\\dA-PR-TZcf-ntqry=><~]))'
+	].join('|');
+
+	return new RegExp(pattern, options.onlyFirst ? undefined : 'g');
+};
+
+},{}],3:[function(require,module,exports){
+
+module.exports = function () {
+  // https://mths.be/emoji
+  return /\uD83C\uDFF4\uDB40\uDC67\uDB40\uDC62(?:\uDB40\uDC65\uDB40\uDC6E\uDB40\uDC67|\uDB40\uDC73\uDB40\uDC63\uDB40\uDC74|\uDB40\uDC77\uDB40\uDC6C\uDB40\uDC73)\uDB40\uDC7F|\uD83D\uDC68(?:\uD83C\uDFFC\u200D(?:\uD83E\uDD1D\u200D\uD83D\uDC68\uD83C\uDFFB|\uD83C[\uDF3E\uDF73\uDF93\uDFA4\uDFA8\uDFEB\uDFED]|\uD83D[\uDCBB\uDCBC\uDD27\uDD2C\uDE80\uDE92]|\uD83E[\uDDAF-\uDDB3\uDDBC\uDDBD])|\uD83C\uDFFF\u200D(?:\uD83E\uDD1D\u200D\uD83D\uDC68(?:\uD83C[\uDFFB-\uDFFE])|\uD83C[\uDF3E\uDF73\uDF93\uDFA4\uDFA8\uDFEB\uDFED]|\uD83D[\uDCBB\uDCBC\uDD27\uDD2C\uDE80\uDE92]|\uD83E[\uDDAF-\uDDB3\uDDBC\uDDBD])|\uD83C\uDFFE\u200D(?:\uD83E\uDD1D\u200D\uD83D\uDC68(?:\uD83C[\uDFFB-\uDFFD])|\uD83C[\uDF3E\uDF73\uDF93\uDFA4\uDFA8\uDFEB\uDFED]|\uD83D[\uDCBB\uDCBC\uDD27\uDD2C\uDE80\uDE92]|\uD83E[\uDDAF-\uDDB3\uDDBC\uDDBD])|\uD83C\uDFFD\u200D(?:\uD83E\uDD1D\u200D\uD83D\uDC68(?:\uD83C[\uDFFB\uDFFC])|\uD83C[\uDF3E\uDF73\uDF93\uDFA4\uDFA8\uDFEB\uDFED]|\uD83D[\uDCBB\uDCBC\uDD27\uDD2C\uDE80\uDE92]|\uD83E[\uDDAF-\uDDB3\uDDBC\uDDBD])|\u200D(?:\u2764\uFE0F\u200D(?:\uD83D\uDC8B\u200D)?\uD83D\uDC68|(?:\uD83D[\uDC68\uDC69])\u200D(?:\uD83D\uDC66\u200D\uD83D\uDC66|\uD83D\uDC67\u200D(?:\uD83D[\uDC66\uDC67]))|\uD83D\uDC66\u200D\uD83D\uDC66|\uD83D\uDC67\u200D(?:\uD83D[\uDC66\uDC67])|(?:\uD83D[\uDC68\uDC69])\u200D(?:\uD83D[\uDC66\uDC67])|[\u2695\u2696\u2708]\uFE0F|\uD83D[\uDC66\uDC67]|\uD83C[\uDF3E\uDF73\uDF93\uDFA4\uDFA8\uDFEB\uDFED]|\uD83D[\uDCBB\uDCBC\uDD27\uDD2C\uDE80\uDE92]|\uD83E[\uDDAF-\uDDB3\uDDBC\uDDBD])|(?:\uD83C\uDFFB\u200D[\u2695\u2696\u2708]|\uD83C\uDFFF\u200D[\u2695\u2696\u2708]|\uD83C\uDFFE\u200D[\u2695\u2696\u2708]|\uD83C\uDFFD\u200D[\u2695\u2696\u2708]|\uD83C\uDFFC\u200D[\u2695\u2696\u2708])\uFE0F|\uD83C\uDFFB\u200D(?:\uD83C[\uDF3E\uDF73\uDF93\uDFA4\uDFA8\uDFEB\uDFED]|\uD83D[\uDCBB\uDCBC\uDD27\uDD2C\uDE80\uDE92]|\uD83E[\uDDAF-\uDDB3\uDDBC\uDDBD])|\uD83C[\uDFFB-\uDFFF])|(?:\uD83E\uDDD1\uD83C\uDFFB\u200D\uD83E\uDD1D\u200D\uD83E\uDDD1|\uD83D\uDC69\uD83C\uDFFC\u200D\uD83E\uDD1D\u200D\uD83D\uDC69)\uD83C\uDFFB|\uD83E\uDDD1(?:\uD83C\uDFFF\u200D\uD83E\uDD1D\u200D\uD83E\uDDD1(?:\uD83C[\uDFFB-\uDFFF])|\u200D\uD83E\uDD1D\u200D\uD83E\uDDD1)|(?:\uD83E\uDDD1\uD83C\uDFFE\u200D\uD83E\uDD1D\u200D\uD83E\uDDD1|\uD83D\uDC69\uD83C\uDFFF\u200D\uD83E\uDD1D\u200D(?:\uD83D[\uDC68\uDC69]))(?:\uD83C[\uDFFB-\uDFFE])|(?:\uD83E\uDDD1\uD83C\uDFFC\u200D\uD83E\uDD1D\u200D\uD83E\uDDD1|\uD83D\uDC69\uD83C\uDFFD\u200D\uD83E\uDD1D\u200D\uD83D\uDC69)(?:\uD83C[\uDFFB\uDFFC])|\uD83D\uDC69(?:\uD83C\uDFFE\u200D(?:\uD83E\uDD1D\u200D\uD83D\uDC68(?:\uD83C[\uDFFB-\uDFFD\uDFFF])|\uD83C[\uDF3E\uDF73\uDF93\uDFA4\uDFA8\uDFEB\uDFED]|\uD83D[\uDCBB\uDCBC\uDD27\uDD2C\uDE80\uDE92]|\uD83E[\uDDAF-\uDDB3\uDDBC\uDDBD])|\uD83C\uDFFC\u200D(?:\uD83E\uDD1D\u200D\uD83D\uDC68(?:\uD83C[\uDFFB\uDFFD-\uDFFF])|\uD83C[\uDF3E\uDF73\uDF93\uDFA4\uDFA8\uDFEB\uDFED]|\uD83D[\uDCBB\uDCBC\uDD27\uDD2C\uDE80\uDE92]|\uD83E[\uDDAF-\uDDB3\uDDBC\uDDBD])|\uD83C\uDFFB\u200D(?:\uD83E\uDD1D\u200D\uD83D\uDC68(?:\uD83C[\uDFFC-\uDFFF])|\uD83C[\uDF3E\uDF73\uDF93\uDFA4\uDFA8\uDFEB\uDFED]|\uD83D[\uDCBB\uDCBC\uDD27\uDD2C\uDE80\uDE92]|\uD83E[\uDDAF-\uDDB3\uDDBC\uDDBD])|\uD83C\uDFFD\u200D(?:\uD83E\uDD1D\u200D\uD83D\uDC68(?:\uD83C[\uDFFB\uDFFC\uDFFE\uDFFF])|\uD83C[\uDF3E\uDF73\uDF93\uDFA4\uDFA8\uDFEB\uDFED]|\uD83D[\uDCBB\uDCBC\uDD27\uDD2C\uDE80\uDE92]|\uD83E[\uDDAF-\uDDB3\uDDBC\uDDBD])|\u200D(?:\u2764\uFE0F\u200D(?:\uD83D\uDC8B\u200D(?:\uD83D[\uDC68\uDC69])|\uD83D[\uDC68\uDC69])|\uD83C[\uDF3E\uDF73\uDF93\uDFA4\uDFA8\uDFEB\uDFED]|\uD83D[\uDCBB\uDCBC\uDD27\uDD2C\uDE80\uDE92]|\uD83E[\uDDAF-\uDDB3\uDDBC\uDDBD])|\uD83C\uDFFF\u200D(?:\uD83C[\uDF3E\uDF73\uDF93\uDFA4\uDFA8\uDFEB\uDFED]|\uD83D[\uDCBB\uDCBC\uDD27\uDD2C\uDE80\uDE92]|\uD83E[\uDDAF-\uDDB3\uDDBC\uDDBD]))|\uD83D\uDC69\u200D\uD83D\uDC69\u200D(?:\uD83D\uDC66\u200D\uD83D\uDC66|\uD83D\uDC67\u200D(?:\uD83D[\uDC66\uDC67]))|(?:\uD83E\uDDD1\uD83C\uDFFD\u200D\uD83E\uDD1D\u200D\uD83E\uDDD1|\uD83D\uDC69\uD83C\uDFFE\u200D\uD83E\uDD1D\u200D\uD83D\uDC69)(?:\uD83C[\uDFFB-\uDFFD])|\uD83D\uDC69\u200D\uD83D\uDC66\u200D\uD83D\uDC66|\uD83D\uDC69\u200D\uD83D\uDC69\u200D(?:\uD83D[\uDC66\uDC67])|(?:\uD83D\uDC41\uFE0F\u200D\uD83D\uDDE8|\uD83D\uDC69(?:\uD83C\uDFFF\u200D[\u2695\u2696\u2708]|\uD83C\uDFFE\u200D[\u2695\u2696\u2708]|\uD83C\uDFFC\u200D[\u2695\u2696\u2708]|\uD83C\uDFFB\u200D[\u2695\u2696\u2708]|\uD83C\uDFFD\u200D[\u2695\u2696\u2708]|\u200D[\u2695\u2696\u2708])|(?:(?:\u26F9|\uD83C[\uDFCB\uDFCC]|\uD83D\uDD75)\uFE0F|\uD83D\uDC6F|\uD83E[\uDD3C\uDDDE\uDDDF])\u200D[\u2640\u2642]|(?:\u26F9|\uD83C[\uDFCB\uDFCC]|\uD83D\uDD75)(?:\uD83C[\uDFFB-\uDFFF])\u200D[\u2640\u2642]|(?:\uD83C[\uDFC3\uDFC4\uDFCA]|\uD83D[\uDC6E\uDC71\uDC73\uDC77\uDC81\uDC82\uDC86\uDC87\uDE45-\uDE47\uDE4B\uDE4D\uDE4E\uDEA3\uDEB4-\uDEB6]|\uD83E[\uDD26\uDD37-\uDD39\uDD3D\uDD3E\uDDB8\uDDB9\uDDCD-\uDDCF\uDDD6-\uDDDD])(?:(?:\uD83C[\uDFFB-\uDFFF])\u200D[\u2640\u2642]|\u200D[\u2640\u2642])|\uD83C\uDFF4\u200D\u2620)\uFE0F|\uD83D\uDC69\u200D\uD83D\uDC67\u200D(?:\uD83D[\uDC66\uDC67])|\uD83C\uDFF3\uFE0F\u200D\uD83C\uDF08|\uD83D\uDC15\u200D\uD83E\uDDBA|\uD83D\uDC69\u200D\uD83D\uDC66|\uD83D\uDC69\u200D\uD83D\uDC67|\uD83C\uDDFD\uD83C\uDDF0|\uD83C\uDDF4\uD83C\uDDF2|\uD83C\uDDF6\uD83C\uDDE6|[#\*0-9]\uFE0F\u20E3|\uD83C\uDDE7(?:\uD83C[\uDDE6\uDDE7\uDDE9-\uDDEF\uDDF1-\uDDF4\uDDF6-\uDDF9\uDDFB\uDDFC\uDDFE\uDDFF])|\uD83C\uDDF9(?:\uD83C[\uDDE6\uDDE8\uDDE9\uDDEB-\uDDED\uDDEF-\uDDF4\uDDF7\uDDF9\uDDFB\uDDFC\uDDFF])|\uD83C\uDDEA(?:\uD83C[\uDDE6\uDDE8\uDDEA\uDDEC\uDDED\uDDF7-\uDDFA])|\uD83E\uDDD1(?:\uD83C[\uDFFB-\uDFFF])|\uD83C\uDDF7(?:\uD83C[\uDDEA\uDDF4\uDDF8\uDDFA\uDDFC])|\uD83D\uDC69(?:\uD83C[\uDFFB-\uDFFF])|\uD83C\uDDF2(?:\uD83C[\uDDE6\uDDE8-\uDDED\uDDF0-\uDDFF])|\uD83C\uDDE6(?:\uD83C[\uDDE8-\uDDEC\uDDEE\uDDF1\uDDF2\uDDF4\uDDF6-\uDDFA\uDDFC\uDDFD\uDDFF])|\uD83C\uDDF0(?:\uD83C[\uDDEA\uDDEC-\uDDEE\uDDF2\uDDF3\uDDF5\uDDF7\uDDFC\uDDFE\uDDFF])|\uD83C\uDDED(?:\uD83C[\uDDF0\uDDF2\uDDF3\uDDF7\uDDF9\uDDFA])|\uD83C\uDDE9(?:\uD83C[\uDDEA\uDDEC\uDDEF\uDDF0\uDDF2\uDDF4\uDDFF])|\uD83C\uDDFE(?:\uD83C[\uDDEA\uDDF9])|\uD83C\uDDEC(?:\uD83C[\uDDE6\uDDE7\uDDE9-\uDDEE\uDDF1-\uDDF3\uDDF5-\uDDFA\uDDFC\uDDFE])|\uD83C\uDDF8(?:\uD83C[\uDDE6-\uDDEA\uDDEC-\uDDF4\uDDF7-\uDDF9\uDDFB\uDDFD-\uDDFF])|\uD83C\uDDEB(?:\uD83C[\uDDEE-\uDDF0\uDDF2\uDDF4\uDDF7])|\uD83C\uDDF5(?:\uD83C[\uDDE6\uDDEA-\uDDED\uDDF0-\uDDF3\uDDF7-\uDDF9\uDDFC\uDDFE])|\uD83C\uDDFB(?:\uD83C[\uDDE6\uDDE8\uDDEA\uDDEC\uDDEE\uDDF3\uDDFA])|\uD83C\uDDF3(?:\uD83C[\uDDE6\uDDE8\uDDEA-\uDDEC\uDDEE\uDDF1\uDDF4\uDDF5\uDDF7\uDDFA\uDDFF])|\uD83C\uDDE8(?:\uD83C[\uDDE6\uDDE8\uDDE9\uDDEB-\uDDEE\uDDF0-\uDDF5\uDDF7\uDDFA-\uDDFF])|\uD83C\uDDF1(?:\uD83C[\uDDE6-\uDDE8\uDDEE\uDDF0\uDDF7-\uDDFB\uDDFE])|\uD83C\uDDFF(?:\uD83C[\uDDE6\uDDF2\uDDFC])|\uD83C\uDDFC(?:\uD83C[\uDDEB\uDDF8])|\uD83C\uDDFA(?:\uD83C[\uDDE6\uDDEC\uDDF2\uDDF3\uDDF8\uDDFE\uDDFF])|\uD83C\uDDEE(?:\uD83C[\uDDE8-\uDDEA\uDDF1-\uDDF4\uDDF6-\uDDF9])|\uD83C\uDDEF(?:\uD83C[\uDDEA\uDDF2\uDDF4\uDDF5])|(?:\uD83C[\uDFC3\uDFC4\uDFCA]|\uD83D[\uDC6E\uDC71\uDC73\uDC77\uDC81\uDC82\uDC86\uDC87\uDE45-\uDE47\uDE4B\uDE4D\uDE4E\uDEA3\uDEB4-\uDEB6]|\uD83E[\uDD26\uDD37-\uDD39\uDD3D\uDD3E\uDDB8\uDDB9\uDDCD-\uDDCF\uDDD6-\uDDDD])(?:\uD83C[\uDFFB-\uDFFF])|(?:\u26F9|\uD83C[\uDFCB\uDFCC]|\uD83D\uDD75)(?:\uD83C[\uDFFB-\uDFFF])|(?:[\u261D\u270A-\u270D]|\uD83C[\uDF85\uDFC2\uDFC7]|\uD83D[\uDC42\uDC43\uDC46-\uDC50\uDC66\uDC67\uDC6B-\uDC6D\uDC70\uDC72\uDC74-\uDC76\uDC78\uDC7C\uDC83\uDC85\uDCAA\uDD74\uDD7A\uDD90\uDD95\uDD96\uDE4C\uDE4F\uDEC0\uDECC]|\uD83E[\uDD0F\uDD18-\uDD1C\uDD1E\uDD1F\uDD30-\uDD36\uDDB5\uDDB6\uDDBB\uDDD2-\uDDD5])(?:\uD83C[\uDFFB-\uDFFF])|(?:[\u231A\u231B\u23E9-\u23EC\u23F0\u23F3\u25FD\u25FE\u2614\u2615\u2648-\u2653\u267F\u2693\u26A1\u26AA\u26AB\u26BD\u26BE\u26C4\u26C5\u26CE\u26D4\u26EA\u26F2\u26F3\u26F5\u26FA\u26FD\u2705\u270A\u270B\u2728\u274C\u274E\u2753-\u2755\u2757\u2795-\u2797\u27B0\u27BF\u2B1B\u2B1C\u2B50\u2B55]|\uD83C[\uDC04\uDCCF\uDD8E\uDD91-\uDD9A\uDDE6-\uDDFF\uDE01\uDE1A\uDE2F\uDE32-\uDE36\uDE38-\uDE3A\uDE50\uDE51\uDF00-\uDF20\uDF2D-\uDF35\uDF37-\uDF7C\uDF7E-\uDF93\uDFA0-\uDFCA\uDFCF-\uDFD3\uDFE0-\uDFF0\uDFF4\uDFF8-\uDFFF]|\uD83D[\uDC00-\uDC3E\uDC40\uDC42-\uDCFC\uDCFF-\uDD3D\uDD4B-\uDD4E\uDD50-\uDD67\uDD7A\uDD95\uDD96\uDDA4\uDDFB-\uDE4F\uDE80-\uDEC5\uDECC\uDED0-\uDED2\uDED5\uDEEB\uDEEC\uDEF4-\uDEFA\uDFE0-\uDFEB]|\uD83E[\uDD0D-\uDD3A\uDD3C-\uDD45\uDD47-\uDD71\uDD73-\uDD76\uDD7A-\uDDA2\uDDA5-\uDDAA\uDDAE-\uDDCA\uDDCD-\uDDFF\uDE70-\uDE73\uDE78-\uDE7A\uDE80-\uDE82\uDE90-\uDE95])|(?:[#\*0-9\xA9\xAE\u203C\u2049\u2122\u2139\u2194-\u2199\u21A9\u21AA\u231A\u231B\u2328\u23CF\u23E9-\u23F3\u23F8-\u23FA\u24C2\u25AA\u25AB\u25B6\u25C0\u25FB-\u25FE\u2600-\u2604\u260E\u2611\u2614\u2615\u2618\u261D\u2620\u2622\u2623\u2626\u262A\u262E\u262F\u2638-\u263A\u2640\u2642\u2648-\u2653\u265F\u2660\u2663\u2665\u2666\u2668\u267B\u267E\u267F\u2692-\u2697\u2699\u269B\u269C\u26A0\u26A1\u26AA\u26AB\u26B0\u26B1\u26BD\u26BE\u26C4\u26C5\u26C8\u26CE\u26CF\u26D1\u26D3\u26D4\u26E9\u26EA\u26F0-\u26F5\u26F7-\u26FA\u26FD\u2702\u2705\u2708-\u270D\u270F\u2712\u2714\u2716\u271D\u2721\u2728\u2733\u2734\u2744\u2747\u274C\u274E\u2753-\u2755\u2757\u2763\u2764\u2795-\u2797\u27A1\u27B0\u27BF\u2934\u2935\u2B05-\u2B07\u2B1B\u2B1C\u2B50\u2B55\u3030\u303D\u3297\u3299]|\uD83C[\uDC04\uDCCF\uDD70\uDD71\uDD7E\uDD7F\uDD8E\uDD91-\uDD9A\uDDE6-\uDDFF\uDE01\uDE02\uDE1A\uDE2F\uDE32-\uDE3A\uDE50\uDE51\uDF00-\uDF21\uDF24-\uDF93\uDF96\uDF97\uDF99-\uDF9B\uDF9E-\uDFF0\uDFF3-\uDFF5\uDFF7-\uDFFF]|\uD83D[\uDC00-\uDCFD\uDCFF-\uDD3D\uDD49-\uDD4E\uDD50-\uDD67\uDD6F\uDD70\uDD73-\uDD7A\uDD87\uDD8A-\uDD8D\uDD90\uDD95\uDD96\uDDA4\uDDA5\uDDA8\uDDB1\uDDB2\uDDBC\uDDC2-\uDDC4\uDDD1-\uDDD3\uDDDC-\uDDDE\uDDE1\uDDE3\uDDE8\uDDEF\uDDF3\uDDFA-\uDE4F\uDE80-\uDEC5\uDECB-\uDED2\uDED5\uDEE0-\uDEE5\uDEE9\uDEEB\uDEEC\uDEF0\uDEF3-\uDEFA\uDFE0-\uDFEB]|\uD83E[\uDD0D-\uDD3A\uDD3C-\uDD45\uDD47-\uDD71\uDD73-\uDD76\uDD7A-\uDDA2\uDDA5-\uDDAA\uDDAE-\uDDCA\uDDCD-\uDDFF\uDE70-\uDE73\uDE78-\uDE7A\uDE80-\uDE82\uDE90-\uDE95])\uFE0F|(?:[\u261D\u26F9\u270A-\u270D]|\uD83C[\uDF85\uDFC2-\uDFC4\uDFC7\uDFCA-\uDFCC]|\uD83D[\uDC42\uDC43\uDC46-\uDC50\uDC66-\uDC78\uDC7C\uDC81-\uDC83\uDC85-\uDC87\uDC8F\uDC91\uDCAA\uDD74\uDD75\uDD7A\uDD90\uDD95\uDD96\uDE45-\uDE47\uDE4B-\uDE4F\uDEA3\uDEB4-\uDEB6\uDEC0\uDECC]|\uD83E[\uDD0F\uDD18-\uDD1F\uDD26\uDD30-\uDD39\uDD3C-\uDD3E\uDDB5\uDDB6\uDDB8\uDDB9\uDDBB\uDDCD-\uDDCF\uDDD1-\uDDDD])/g;
+};
+
+},{}],4:[function(require,module,exports){
+
+const isFullwidthCodePoint = codePoint => {
+	if (Number.isNaN(codePoint)) {
+		return false;
+	}
+
+	// Code points are derived from:
+	// http://www.unix.org/Public/UNIDATA/EastAsianWidth.txt
+	if (
+		codePoint >= 0x1100 && (
+			codePoint <= 0x115F || // Hangul Jamo
+			codePoint === 0x2329 || // LEFT-POINTING ANGLE BRACKET
+			codePoint === 0x232A || // RIGHT-POINTING ANGLE BRACKET
+			// CJK Radicals Supplement .. Enclosed CJK Letters and Months
+			(0x2E80 <= codePoint && codePoint <= 0x3247 && codePoint !== 0x303F) ||
+			// Enclosed CJK Letters and Months .. CJK Unified Ideographs Extension A
+			(0x3250 <= codePoint && codePoint <= 0x4DBF) ||
+			// CJK Unified Ideographs .. Yi Radicals
+			(0x4E00 <= codePoint && codePoint <= 0xA4C6) ||
+			// Hangul Jamo Extended-A
+			(0xA960 <= codePoint && codePoint <= 0xA97C) ||
+			// Hangul Syllables
+			(0xAC00 <= codePoint && codePoint <= 0xD7A3) ||
+			// CJK Compatibility Ideographs
+			(0xF900 <= codePoint && codePoint <= 0xFAFF) ||
+			// Vertical Forms
+			(0xFE10 <= codePoint && codePoint <= 0xFE19) ||
+			// CJK Compatibility Forms .. Small Form Variants
+			(0xFE30 <= codePoint && codePoint <= 0xFE6B) ||
+			// Halfwidth and Fullwidth Forms
+			(0xFF01 <= codePoint && codePoint <= 0xFF60) ||
+			(0xFFE0 <= codePoint && codePoint <= 0xFFE6) ||
+			// Kana Supplement
+			(0x1B000 <= codePoint && codePoint <= 0x1B001) ||
+			// Enclosed Ideographic Supplement
+			(0x1F200 <= codePoint && codePoint <= 0x1F251) ||
+			// CJK Unified Ideographs Extension B .. Tertiary Ideographic Plane
+			(0x20000 <= codePoint && codePoint <= 0x3FFFD)
+		)
+	) {
+		return true;
+	}
+
+	return false;
+};
+
+module.exports = isFullwidthCodePoint;
+module.exports.default = isFullwidthCodePoint;
+
+},{}],5:[function(require,module,exports){
+const stripAnsi = require('strip-ansi');
+const isFullwidthCodePoint = require('is-fullwidth-code-point');
+const emojiRegex = require('emoji-regex');
+
+const stringWidth = string => {
+	string = string.replace(emojiRegex(), '  ');
+
+	if (typeof string !== 'string' || string.length === 0) {
+		return 0;
+	}
+
+	string = stripAnsi(string);
+
+	let width = 0;
+
+	for (let i = 0; i < string.length; i++) {
+		const code = string.codePointAt(i);
+
+		// Ignore control characters
+		if (code <= 0x1F || (code >= 0x7F && code <= 0x9F)) {
+			continue;
+		}
+
+		// Ignore combining characters
+		if (code >= 0x300 && code <= 0x36F) {
+			continue;
+		}
+
+		// Surrogates
+		if (code > 0xFFFF) {
+			i++;
+		}
+
+		width += isFullwidthCodePoint(code) ? 2 : 1;
+	}
+
+	return width;
+};
+
+module.exports = stringWidth;
+// TODO: remove this in the next major version
+module.exports.default = stringWidth;
+
+},{"emoji-regex":3,"is-fullwidth-code-point":4,"strip-ansi":6}],6:[function(require,module,exports){
+const ansiRegex = require('ansi-regex');
+
+const stripAnsi = string => typeof string === 'string' ? string.replace(ansiRegex(), '') : string;
+
+module.exports = stripAnsi;
+module.exports.default = stripAnsi;
+
+},{"ansi-regex":2}]},{},[1]);
+var npmStringWidth = a$2;
+
+function charWidth(c){
+    if(c=='\t')
+        return 8
+    return npmStringWidth(c)
+}
+function stringWidth(s){
+    let res=0;
+    for(let i=0;i<s.length;i++)
+        res+=charWidth(s[i]);
+    return res
+}
 
 let
     lfDoc={
@@ -1097,34 +1223,30 @@ function substring(list,s,start,end){
     }
     return a
 }
-var wrapLinePromise = (async()=>{
-    let stringWidth=await stringWidthPromise;
-    function width(c){
-        return c=='\n'?1:stringWidth(c)
+function width(c){
+    return c=='\n'?1:stringWidth(c)
+}
+function wrapLine(list,l,targetWidth){
+    let rows=[];
+    for(let i=0;i<l.length;){
+        let start=i,end=calcEnd(i,l,targetWidth);
+        rows.push({
+            start,
+            end,
+            string:substring(list,l,start,end)
+        });
+        i=end;
     }
-    function wrapLine(list,l,targetWidth){
-        let rows=[];
-        for(let i=0;i<l.length;){
-            let start=i,end=calcEnd(i,l,targetWidth);
-            rows.push({
-                start,
-                end,
-                string:substring(list,l,start,end)
-            });
-            i=end;
-        }
-        return rows
-    }
-    function calcEnd(i,l,targetWidth){
-        for(
-            let rowWidth=0,w;
-            i<l.length&&rowWidth+(w=width(l[i]))<=targetWidth;
-            rowWidth+=w,i++
-        );
-        return i
-    }
-    return wrapLine
-})();
+    return rows
+}
+function calcEnd(i,l,targetWidth){
+    for(
+        let rowWidth=0,w;
+        i<l.length&&rowWidth+(w=width(l[i]))<=targetWidth;
+        rowWidth+=w,i++
+    );
+    return i
+}
 
 function GreedyText(){
     this._options={};
@@ -1226,28 +1348,24 @@ GreedyText.prototype.setOption=function(key,val){
 function Line(val){
     this.string=val;
 }
-var GreedyTextPromise = (async()=>{
-    let wrapLine=await wrapLinePromise;
-    GreedyText.prototype.wrap=function(){
-        let
-            charCount=0,
-            rowsCount=0;
-        this.lines.map((l,j)=>{
-            let s=l.string+'\n';
-            if(!l.rows)
-                l.rows=wrapLine(this._options.list,s,this.width||Infinity);
-            l.wrapped={
-                index:j,
-                start:charCount,
-                startRow:rowsCount,
-                rows:l.rows,
-            };
-            charCount+=s.length;
-            rowsCount+=l.rows.length;
-        });
-    };
-    return GreedyText
-})();
+GreedyText.prototype.wrap=function(){
+    let
+        charCount=0,
+        rowsCount=0;
+    this.lines.map((l,j)=>{
+        let s=l.string+'\n';
+        if(!l.rows)
+            l.rows=wrapLine(this._options.list,s,this.width||Infinity);
+        l.wrapped={
+            index:j,
+            start:charCount,
+            startRow:rowsCount,
+            rows:l.rows,
+        };
+        charCount+=s.length;
+        rowsCount+=l.rows.length;
+    });
+};
 
 function update(view){
     if(view._width)
@@ -1376,62 +1494,58 @@ Object.defineProperty(View.prototype,'update',{set(val){
 View.prototype.free=function(){
 };
 
-var CliPromise = (async()=>{
-    let width=await stringWidthPromise;
-    function Cli(){
-        EventEmmiter.call(this);
-        this._children=[];
-    }
-    Object.setPrototypeOf(Cli.prototype,EventEmmiter.prototype);
-    Object.defineProperty(Cli.prototype,'view',{get(){
-        let view=new View(this);
-        this.on('view',()=>view.update);
-        return view
-    }});
-    Cli.prototype.clear=function(){
-        this._flushed=false;
-        this._children=[];
-    };
-    Cli.prototype.flush=function(){
-        if(this._flushed)
-            return
-        this.emit('view');
-        this._flushed=true;
-    };
-    Cli.prototype.appendChild=function(child){
-        this._flushed=false;
-        if(
-            typeof child=='string'||
-            child instanceof Cli
-        )
-            child={child};
-        if(!('r' in child))
-            child.r=0;
-        if(!('c' in child))
-            child.c=0;
-        if(typeof child.child=='string'){
-            let r=0,c=0;
-            for(let i=0;i<child.child.length;i++){
-                let chr=child.child[i];
-                this._children.push({
-                    child:chr,
-                    r:child.r+r,
-                    c:child.c+c,
-                    class:child.class,
-                    style:child.style,
-                });
-                if(chr=='\n'){
-                    r++;
-                    c=0;
-                }else{
-                    c+=width(chr);
-                }
+function Cli(){
+    EventEmmiter.call(this);
+    this._children=[];
+}
+Object.setPrototypeOf(Cli.prototype,EventEmmiter.prototype);
+Object.defineProperty(Cli.prototype,'view',{get(){
+    let view=new View(this);
+    this.on('view',()=>view.update);
+    return view
+}});
+Cli.prototype.clear=function(){
+    this._flushed=false;
+    this._children=[];
+};
+Cli.prototype.flush=function(){
+    if(this._flushed)
+        return
+    this.emit('view');
+    this._flushed=true;
+};
+Cli.prototype.appendChild=function(child){
+    this._flushed=false;
+    if(
+        typeof child=='string'||
+        child instanceof Cli
+    )
+        child={child};
+    if(!('r' in child))
+        child.r=0;
+    if(!('c' in child))
+        child.c=0;
+    if(typeof child.child=='string'){
+        let r=0,c=0;
+        for(let i=0;i<child.child.length;i++){
+            let chr=child.child[i];
+            this._children.push({
+                child:chr,
+                r:child.r+r,
+                c:child.c+c,
+                class:child.class,
+                style:child.style,
+            });
+            if(chr=='\n'){
+                r++;
+                c=0;
+            }else{
+                c+=stringWidth(chr);
             }
-        }else
-            this._children.push(child);
-    };
-    return Cli
-})();
+        }
+    }else
+        this._children.push(child);
+};
 
 function update$1(ui,cli){
     let vim=ui._vim;
@@ -1500,158 +1614,144 @@ function cmdlineUpdate(ui,cli){
     });
     cli.flush();
 }
-var createCommandCliPromise = (async()=>{
-    let Cli=await CliPromise;
-    function CommandCli(ui){
-        this._ui=ui;
-        this.cli=new Cli;
-        this.update();
+function CommandCli(ui){
+    this._ui=ui;
+    this.cli=new Cli;
+    this.update();
+}
+function createCommandCli(ui){
+    return new CommandCli(ui)
+}
+CommandCli.prototype.update=function(){
+    let
+        ui=this._ui,
+        cli=this.cli,
+        vim=ui._vim;
+    if(inNvii(vim.mode))
+        update$1(ui,cli);
+    else if(vim.mode=='cmdline')
+        cmdlineUpdate(ui,cli);
+    function inNvii(v){
+        return 0<=[
+            'normal',
+            'insert',
+            'visual',
+            'visual-block',
+        ].indexOf(v)
     }
-    function createCommandCli(ui){
-        return new CommandCli(ui)
-    }
-    CommandCli.prototype.update=function(){
-        let
-            ui=this._ui,
-            cli=this.cli,
-            vim=ui._vim;
-        if(inNvii(vim.mode))
-            update$1(ui,cli);
-        else if(vim.mode=='cmdline')
-            cmdlineUpdate(ui,cli);
-        function inNvii(v){
-            return 0<=[
-                'normal',
-                'insert',
-                'visual',
-                'visual-block',
-            ].indexOf(v)
-        }
-    };
-    return createCommandCli
-})();
+};
 
 let highlightStyle={backgroundColor:'var(--middle-color)'};
-var createTextContentCliPromise = (async()=>{
-    let[
-        Cli,
-        stringWidth,
-    ]=await Promise.all([
-        CliPromise,
-        stringWidthPromise,
-    ]);
-    function calcWidth(a){
-        let x=0;
-        for(let i=0;i<a.length;i++){
-            let v=a[i];
-            x+=typeof v=='object'?stringWidth(v.child):stringWidth(v);
-        }
-        return x
+function calcWidth(a){
+    let x=0;
+    for(let i=0;i<a.length;i++){
+        let v=a[i];
+        x+=typeof v=='object'?stringWidth(v.child):stringWidth(v);
     }
-    function createTextContentCli(
-        text,
-        cursor,
-        showCursor,
-        highlightRange,
-        cursorSymbol,
-        width
-    ){
-        let cli=new Cli,rowsCount;
-        {
-            let
-                currentRowsCount=0;
-            text.map(l=>{
-                if(!l.rows.length)
-                    currentRowsCount++;
-                l.rows.map(row=>{
-                    let rowStart=l.start+row.start;
-                    for(
-                        let i=0,c=0;
-                        i<row.string.length;
-                        c+=calcWidth(row.string[i++])
-                    ){
-                        let o=row.string[i];
-                        if(typeof o=='string')
-                            o={child:o};
-                        else
-                            o={
-                                child:o.child,
-                                class:o.class,
-                                style:o.style,
-                            };
-                        o.r=currentRowsCount;
-                        o.c=c;
-                        if(
-                            highlightRange&&
-                            highlightRange.s<=rowStart+i&&
-                            rowStart+i<highlightRange.e
-                        )
-                            o.style=highlightStyle;
-                        cli.appendChild(o);
-                    }
-                    currentRowsCount++;
-                });
-            });
-            rowsCount=currentRowsCount;
-        }
-        if(showCursor){
-            let c;
-            c=cursor;
-            c=cursorCli(text,{
-                r:c.r,
-                c:c.c==-1?0:c.c
-            },width);
-            if(c){
-                cli.appendChild(c);
-                cli.appendChild({
-                    child:cursorSymbol,
-                    r:c.r,
-                    c:c.c,
-                });
-            }
-        }
-        return {
-            textCli:cli,
-            rowsCount,
-        }
-    }
-    function cursorCli(text,vc,width){
-        let currentRowsCount=0;
-        let clientCursor;
+    return x
+}
+function createTextContentCli(
+    text,
+    cursor,
+    showCursor,
+    highlightRange,
+    cursorSymbol,
+    width
+){
+    let cli=new Cli,rowsCount;
+    {
+        let
+            currentRowsCount=0;
         text.map(l=>{
             if(!l.rows.length)
                 currentRowsCount++;
             l.rows.map(row=>{
-                if(
-                    l.index==vc.r&&
-                    row.start<=vc.c&&vc.c<row.start+row.string.length
+                let rowStart=l.start+row.start;
+                for(
+                    let i=0,c=0;
+                    i<row.string.length;
+                    c+=calcWidth(row.string[i++])
                 ){
-                    let viewC=width?vc.c-row.start:vc.c;
-                    clientCursor={
-                        row:currentRowsCount,
-                        col:calcWidth(row.string.slice(0,viewC)),
-                        doc:row.string[viewC],
-                    };
+                    let o=row.string[i];
+                    if(typeof o=='string')
+                        o={child:o};
+                    else
+                        o={
+                            child:o.child,
+                            class:o.class,
+                            style:o.style,
+                        };
+                    o.r=currentRowsCount;
+                    o.c=c;
+                    if(
+                        highlightRange&&
+                        highlightRange.s<=rowStart+i&&
+                        rowStart+i<highlightRange.e
+                    )
+                        o.style=highlightStyle;
+                    cli.appendChild(o);
                 }
                 currentRowsCount++;
             });
         });
-        if(!clientCursor)
-            return
-        if(typeof clientCursor.doc!='object')
-            clientCursor.doc={child:clientCursor.doc};
-        clientCursor.doc=Object.create(clientCursor.doc);
-        clientCursor.doc.child=clientCursor.doc.child||' ';
-        clientCursor.doc.r=clientCursor.row;
-        clientCursor.doc.c=clientCursor.col;
-        if(clientCursor.doc.class)
-            clientCursor.doc.class=`${clientCursor.doc.class} cursor`;
-        else
-            clientCursor.doc.class='cursor';
-        return clientCursor.doc
+        rowsCount=currentRowsCount;
     }
-    return createTextContentCli
-})();
+    if(showCursor){
+        let c;
+        c=cursor;
+        c=cursorCli(text,{
+            r:c.r,
+            c:c.c==-1?0:c.c
+        },width);
+        if(c){
+            cli.appendChild(c);
+            cli.appendChild({
+                child:cursorSymbol,
+                r:c.r,
+                c:c.c,
+            });
+        }
+    }
+    return {
+        textCli:cli,
+        rowsCount,
+    }
+}
+function cursorCli(text,vc,width){
+    let currentRowsCount=0;
+    let clientCursor;
+    text.map(l=>{
+        if(!l.rows.length)
+            currentRowsCount++;
+        l.rows.map(row=>{
+            if(
+                l.index==vc.r&&
+                row.start<=vc.c&&vc.c<row.start+row.string.length
+            ){
+                let viewC=width?vc.c-row.start:vc.c;
+                clientCursor={
+                    row:currentRowsCount,
+                    col:calcWidth(row.string.slice(0,viewC)),
+                    doc:row.string[viewC],
+                };
+            }
+            currentRowsCount++;
+        });
+    });
+    if(!clientCursor)
+        return
+    if(typeof clientCursor.doc!='object')
+        clientCursor.doc={child:clientCursor.doc};
+    clientCursor.doc=Object.create(clientCursor.doc);
+    clientCursor.doc.child=clientCursor.doc.child||' ';
+    clientCursor.doc.r=clientCursor.row;
+    clientCursor.doc.c=clientCursor.col;
+    if(clientCursor.doc.class)
+        clientCursor.doc.class=`${clientCursor.doc.class} cursor`;
+    else
+        clientCursor.doc.class='cursor';
+    return clientCursor.doc
+}
 
 let
     color3i={
@@ -1660,104 +1760,84 @@ let
     color4i={
         color:'var(--color4i)'
     };
-var buildPromise = (async()=>{
-    let[
-        Cli,
-        createTextContentCli,
-    ]=await Promise.all([
-        CliPromise,
-        createTextContentCliPromise,
-    ]);
-    function build(cli,ui,showCursor,showNumber){
-        let 
-            cursor= ui._vim._trueCursor,
-            width=  ui._width,
-            height= ui._height,
-            data=   ui._wrapMethodData,
-            txt=    data.text;
-        let numberWidth=ui._numberWidth;
-        let textWidth=ui._textWidth;
-        let text=data.text.uiText(data._scroll,data._scroll+height-1);
-        let res=createTextContentCli(
-            text,
-            cursor,
-            showCursor,
-            ui._vim._mode=='visual'&&visualRange(ui._vim),
-            ui._cursorSymbol,
-            width
-        );
-        if(showNumber){
-            cli.appendChild(number(text,numberWidth));
-            cli.appendChild({
-                child:res.textCli,
-                c:numberWidth+1,
-            });
-        }else{
-            cli.appendChild(res.textCli);
-        }
-        for(let r=res.rowsCount;r<ui.height-1;r++)
-            cli.appendChild({
-                child:'~',
-                r,
-                style:color4i
-            });
-        return cli
-    }
-    function number(text,numberWidth){
-        let cli=new Cli;
-        let currentRowsCount=0;
-        text.map(l=>{
-            cli.appendChild({
-                child:pad((l.index+1).toString()),
-                r:currentRowsCount,
-                style:color3i
-            });
-            currentRowsCount+=l.rows.length||1;
+function build(cli,ui,showCursor,showNumber){
+    let 
+        cursor= ui._vim._trueCursor,
+        width=  ui._width,
+        height= ui._height,
+        data=   ui._wrapMethodData,
+        txt=    data.text;
+    let numberWidth=ui._numberWidth;
+    let textWidth=ui._textWidth;
+    let text=data.text.uiText(data._scroll,data._scroll+height-1);
+    let res=createTextContentCli(
+        text,
+        cursor,
+        showCursor,
+        ui._vim._mode=='visual'&&visualRange(ui._vim),
+        ui._cursorSymbol,
+        width
+    );
+    if(showNumber){
+        cli.appendChild(number(text,numberWidth));
+        cli.appendChild({
+            child:res.textCli,
+            c:numberWidth+1,
         });
-        return cli
-        function pad(s){
-            return ' '.repeat(numberWidth-s.length)+s
-        }
+    }else{
+        cli.appendChild(res.textCli);
     }
-    return build
-})();
+    for(let r=res.rowsCount;r<ui.height-1;r++)
+        cli.appendChild({
+            child:'~',
+            r,
+            style:color4i
+        });
+    return cli
+}
+function number(text,numberWidth){
+    let cli=new Cli;
+    let currentRowsCount=0;
+    text.map(l=>{
+        cli.appendChild({
+            child:pad((l.index+1).toString()),
+            r:currentRowsCount,
+            style:color3i
+        });
+        currentRowsCount+=l.rows.length||1;
+    });
+    return cli
+    function pad(s){
+        return ' '.repeat(numberWidth-s.length)+s
+    }
+}
 
-var createTextCliPromise = (async()=>{
-    let[
-        Cli,
-        build,
-    ]=await Promise.all([
-        CliPromise,
-        buildPromise,
-    ]);
-    function createTextCli(ui){
-        return new TextCli(ui)
-    }
-    function TextCli(ui){
-        this._ui=ui;
-        this._updated=false;
-        this.cli=new Cli;
-        this.flush();
-    }
-    TextCli.prototype.update=function(){
-        this._updated=false;
-    };
-    TextCli.prototype.flush=function(){
-        if(this._updated)
-            return
-        this.cli.clear();
-        build(
-            this.cli,
-            this._ui,
-            document.activeElement==this._ui._inputTag&&
-                this._ui._vim.mode!='cmdline',
-            this._ui._vim._options.number
-        );
-        this.cli.flush();
-        this._updated=true;
-    };
-    return createTextCli
-})();
+function createTextCli(ui){
+    return new TextCli(ui)
+}
+function TextCli(ui){
+    this._ui=ui;
+    this._updated=false;
+    this.cli=new Cli;
+    this.flush();
+}
+TextCli.prototype.update=function(){
+    this._updated=false;
+};
+TextCli.prototype.flush=function(){
+    if(this._updated)
+        return
+    this.cli.clear();
+    build(
+        this.cli,
+        this._ui,
+        document.activeElement==this._ui._inputTag&&
+            this._ui._vim.mode!='cmdline',
+        this._ui._vim._options.number
+    );
+    this.cli.flush();
+    this._updated=true;
+};
 
 var createInput = (ui=>{
     let vim=ui._vim;
@@ -1818,117 +1898,97 @@ var createInput = (ui=>{
     }
 });
 
-var createCliDivPromise = (async()=>{
-    let[
-        createCommandCli,
-        Cli,
-        createTextCli,
-    ]=await Promise.all([
-        createCommandCliPromise,
-        CliPromise,
-        createTextCliPromise,
-    ]);
-    function createCliDiv(ui){
-        return new CliDiv(ui)
-    }
-    function CliDiv(ui){
-        this._ui=ui;
-        this._vim=this._ui._vim;
-        this._cli=new Cli;
-        this._cliView=this._cli.view;
-        this._ui._commandCli=createCommandCli(this._ui);
-        this._cliView.fontSize=this._ui._fontSize;
-        this._textCli=createTextCli(this._ui);
-        this.update();
-        let n=this._cliView.node;
-        this._ui._inputTag=createInput(this._ui);
-        n.appendChild(this._ui._inputTag);
-        this.node=n;
-    }
-    CliDiv.prototype.modeChange=function(){
-        this._ui._commandCli.update();
-    };
-    CliDiv.prototype.update=function(){
-        let ui=this._ui;
-        ui._wrapMethodData.text.width=ui._textWidth;
-        ui._wrapMethodData.text.wrap();
-        ui._checkScroll();
-        this._textCli.update();
-        this._ui._commandCli.update();
-        if(this._cliView.width!=this._ui._width)
-            this._cliView.width=this._ui._width;
-        if(this._cliView.height!=this._ui._height)
-            this._cliView.height=this._ui._height;
-        {let c;if(c=this._cliView.symbols[this._ui._cursorSymbol]){
-            this._ui._inputTag.style.top=`${c.r*this._ui._fontSize}px`;
-            this._ui._inputTag.style.left=`${c.c*this._ui._fontWidth}px`;
-        }}
-        let r=this._ui._height-1;
-        if(
-            this._currentR==r&&
-            this._currentWelcomeText==this._vim._welcomeText
-        )
-            return
-        this._cli.clear();
-        this._cli.appendChild(this._textCli.cli);
+function createCliDiv(ui){
+    return new CliDiv(ui)
+}
+function CliDiv(ui){
+    this._ui=ui;
+    this._vim=this._ui._vim;
+    this._cli=new Cli;
+    this._cliView=this._cli.view;
+    this._ui._commandCli=createCommandCli(this._ui);
+    this._cliView.fontSize=this._ui._fontSize;
+    this._textCli=createTextCli(this._ui);
+    this.update();
+    let n=this._cliView.node;
+    this._ui._inputTag=createInput(this._ui);
+    n.appendChild(this._ui._inputTag);
+    this.node=n;
+}
+CliDiv.prototype.modeChange=function(){
+    this._ui._commandCli.update();
+};
+CliDiv.prototype.update=function(){
+    let ui=this._ui;
+    ui._wrapMethodData.text.width=ui._textWidth;
+    ui._wrapMethodData.text.wrap();
+    ui._checkScroll();
+    this._textCli.update();
+    this._ui._commandCli.update();
+    if(this._cliView.width!=this._ui._width)
+        this._cliView.width=this._ui._width;
+    if(this._cliView.height!=this._ui._height)
+        this._cliView.height=this._ui._height;
+    {let c;if(c=this._cliView.symbols[this._ui._cursorSymbol]){
+        this._ui._inputTag.style.top=`${c.r*this._ui._fontSize}px`;
+        this._ui._inputTag.style.left=`${c.c*this._ui._fontWidth}px`;
+    }}
+    let r=this._ui._height-1;
+    if(
+        this._currentR==r&&
+        this._currentWelcomeText==this._vim._welcomeText
+    )
+        return
+    this._cli.clear();
+    this._cli.appendChild(this._textCli.cli);
+    this._cli.appendChild({
+        child:this._ui._commandCli.cli,
+        r,
+    });
+    if(
+        this._vim._welcomeText&&
+        50<=this._ui.width&&
+        16<=this._ui.height
+    ){
+        let
+            r=Math.floor(
+                (
+                    this._ui.height-
+                    this._vim._welcomeText.split('\n').length-1
+                )/2
+            ),
+            c=Math.floor(
+                (this._ui.width-this._vim._welcomeText.split(
+                    '\n'
+                ).map(
+                    s=>s.length
+                ).reduce(
+                    (a,b)=>Math.max(a,b)
+                ))/2
+            );
         this._cli.appendChild({
-            child:this._ui._commandCli.cli,
+            child:this._vim._welcomeText,
             r,
+            c,
         });
-        if(
-            this._vim._welcomeText&&
-            50<=this._ui.width&&
-            16<=this._ui.height
-        ){
-            let
-                r=Math.floor(
-                    (
-                        this._ui.height-
-                        this._vim._welcomeText.split('\n').length-1
-                    )/2
-                ),
-                c=Math.floor(
-                    (this._ui.width-this._vim._welcomeText.split(
-                        '\n'
-                    ).map(
-                        s=>s.length
-                    ).reduce(
-                        (a,b)=>Math.max(a,b)
-                    ))/2
-                );
-            this._cli.appendChild({
-                child:this._vim._welcomeText,
-                r,
-                c,
-            });
-        }
-        this._cli.flush();
-        this._currentR=r;
-        this._currentWelcomeText=this._vim._welcomeText;
-    };
-    CliDiv.prototype.flush=function(){
-        this._textCli.flush();
-    };
-    return createCliDiv
-})();
-
-var createViewNodePromise = (async()=>{
-    let[
-        createCliDiv,
-    ]=await Promise.all([
-        createCliDivPromise,
-    ]);
-    function createViewNode(ui){
-        let cliDiv=createCliDiv(ui);
-        let n=cliDiv.node;
-        n.classList.add('webvim');
-        n.addEventListener('click',()=>
-            ui._vim.focus()
-        );
-        return cliDiv
     }
-    return createViewNode
-})();
+    this._cli.flush();
+    this._currentR=r;
+    this._currentWelcomeText=this._vim._welcomeText;
+};
+CliDiv.prototype.flush=function(){
+    this._textCli.flush();
+};
+
+function createViewNode(ui){
+    let cliDiv=createCliDiv(ui);
+    let n=cliDiv.node;
+    n.classList.add('webvim');
+    n.addEventListener('click',()=>
+        ui._vim.focus()
+    );
+    return cliDiv
+}
 
 function optionChange(ui,options){
     for(let k of options)switch(k){
@@ -1970,149 +2030,133 @@ function _updateByVim(changed){
     this._update();
 }
 
-var uiPromise = (async()=>{
-    let[
-        createViewNode,
-        GreedyText,
-    ]=await Promise.all([
-        createViewNodePromise,
-        GreedyTextPromise,
-    ]);
-    function Ui(vim){
-        this._values={};
-        this._vim=vim;
-        this._width=80;
-        this._height=24;
-        this._fontSize=13;
-        this._wrapMethod='greedy';
-        this._cursorSymbol=Symbol();
-        this._viewNode=createViewNode(this);
-        this.node=this._viewNode.node;
-        setUpClock(this);
-    }
-    Object.defineProperty(Ui.prototype,'_fontSize',{set(v){
-        this._values._fontSize=v;
-        this._values._fontWidth=measureWidth(this._fontSize);
-    },get(){
-        return this._values._fontSize
-    }});
-    Object.defineProperty(Ui.prototype,'_fontWidth',{get(){
-        return this._values._fontWidth
-    }});
-    Object.defineProperty(Ui.prototype,'_numberWidth',{get(){
-        return Math.max(3,Math.floor(
-            Math.log(this._vim._trueCursor._countOfRows)/Math.log(10)
-        )+1)
-    }});
-    Object.defineProperty(Ui.prototype,'_textWidth',{get(){
-        return this._vim._options.number?
-            this._width-(this._numberWidth+1)
-        :
-            this._width
-    }});
-    Ui.prototype._checkScroll=function(){
-        let
-            height=         this._height,
-            data=           this._wrapMethodData,
-            txt=            data.text,
-            c=              this._vim._trueCursor,
-            cursorViewRow=  txt.row(c._countOfCols==0?c.line(c.r):c.abs);
-        if(data._scroll+height-1<=cursorViewRow)
-            data._scroll=cursorViewRow-(height-1)+1;
-        if(cursorViewRow<data._scroll)
-            data._scroll=cursorViewRow;
-    };
-    Ui.prototype._update=function(){
-        this._viewNode.update();
-    };
-    Ui.prototype._updateByVim=_updateByVim;
-    Object.defineProperty(Ui.prototype,'_wrapMethod',{set(val){
-        this._values.wrapMethod=val;
-        if(this._values.wrapMethod=='greedy'){
-            let text=new GreedyText;
-            text.width=this._textWidth;
-            text.update=this._vim._trueText;
-            text.setOption('list',this._vim._options.list);
-            this._wrapMethodData={
-                _scroll:0,
-                text,
-            };
-        }else if(this._values.wrapMethod=='fixed'){
-            this._wrapMethodData={
-                _scroll:0,
-            };
-        }
-    },get(){
-        return this._values.wrapMethod
-    }});
-    Object.defineProperty(Ui.prototype,'width',{set(val){
-        this._width=val;
-        this._update();
-    },get(){
-        return this._width
-    }});
-    Object.defineProperty(Ui.prototype,'height',{set(val){
-        this._height=val;
-        this._update();
-    },get(){
-        return this._height
-    }});
-    Ui.prototype.focus=function(){
-        this._inputTag.focus();
-    };
-    Object.defineProperty(Ui.prototype,'free',{get(){
-        tearDownClock(this);
-        this._vim.removeUi(this);
-    }});
-    function setUpClock(ui){
-        let f=()=>{
-            ui._animationFrame=requestAnimationFrame(f);
-            ui._viewNode.flush();
+function Ui(vim){
+    this._values={};
+    this._vim=vim;
+    this._width=80;
+    this._height=24;
+    this._fontSize=13;
+    this._wrapMethod='greedy';
+    this._cursorSymbol=Symbol();
+    this._viewNode=createViewNode(this);
+    this.node=this._viewNode.node;
+    setUpClock(this);
+}
+Object.defineProperty(Ui.prototype,'_fontSize',{set(v){
+    this._values._fontSize=v;
+    this._values._fontWidth=measureWidth(this._fontSize);
+},get(){
+    return this._values._fontSize
+}});
+Object.defineProperty(Ui.prototype,'_fontWidth',{get(){
+    return this._values._fontWidth
+}});
+Object.defineProperty(Ui.prototype,'_numberWidth',{get(){
+    return Math.max(3,Math.floor(
+        Math.log(this._vim._trueCursor._countOfRows)/Math.log(10)
+    )+1)
+}});
+Object.defineProperty(Ui.prototype,'_textWidth',{get(){
+    return this._vim._options.number?
+        this._width-(this._numberWidth+1)
+    :
+        this._width
+}});
+Ui.prototype._checkScroll=function(){
+    let
+        height=         this._height,
+        data=           this._wrapMethodData,
+        txt=            data.text,
+        c=              this._vim._trueCursor,
+        cursorViewRow=  txt.row(c._countOfCols==0?c.line(c.r):c.abs);
+    if(data._scroll+height-1<=cursorViewRow)
+        data._scroll=cursorViewRow-(height-1)+1;
+    if(cursorViewRow<data._scroll)
+        data._scroll=cursorViewRow;
+};
+Ui.prototype._update=function(){
+    this._viewNode.update();
+};
+Ui.prototype._updateByVim=_updateByVim;
+Object.defineProperty(Ui.prototype,'_wrapMethod',{set(val){
+    this._values.wrapMethod=val;
+    if(this._values.wrapMethod=='greedy'){
+        let text=new GreedyText;
+        text.width=this._textWidth;
+        text.update=this._vim._trueText;
+        text.setOption('list',this._vim._options.list);
+        this._wrapMethodData={
+            _scroll:0,
+            text,
         };
+    }else if(this._values.wrapMethod=='fixed'){
+        this._wrapMethodData={
+            _scroll:0,
+        };
+    }
+},get(){
+    return this._values.wrapMethod
+}});
+Object.defineProperty(Ui.prototype,'width',{set(val){
+    this._width=val;
+    this._update();
+},get(){
+    return this._width
+}});
+Object.defineProperty(Ui.prototype,'height',{set(val){
+    this._height=val;
+    this._update();
+},get(){
+    return this._height
+}});
+Ui.prototype.focus=function(){
+    this._inputTag.focus();
+};
+Object.defineProperty(Ui.prototype,'free',{get(){
+    tearDownClock(this);
+    this._vim.removeUi(this);
+}});
+function setUpClock(ui){
+    let f=()=>{
         ui._animationFrame=requestAnimationFrame(f);
-    }
-    function tearDownClock(ui){
-        cancelAnimationFrame(ui._animationFrame);
-        delete ui._animationFrame;
-    }
-    return {get(){
-        let ui=new Ui(this);
-        this._uis.add(ui);
-        return ui
-    }}
-})();
+        ui._viewNode.flush();
+    };
+    ui._animationFrame=requestAnimationFrame(f);
+}
+function tearDownClock(ui){
+    cancelAnimationFrame(ui._animationFrame);
+    delete ui._animationFrame;
+}
+var ui = {get(){
+    let ui=new Ui(this);
+    this._uis.add(ui);
+    return ui
+}};
 
-var loadUserInterface = (async()=>{
-    let[
-        ui,
-    ]=await Promise.all([
-        uiPromise,
-    ]);
-    return o=>{
-        Object.defineProperty(o,'cursor',{get(){
-            return this._cursor.abs
-        }});
-        Object.defineProperty(o,'mode',{get(){
-            return this._mode
-        }});
-        Object.defineProperty(o,'text',{
-            set(val){
-                this._text=val;
-                this._welcomeText=undefined;
-                this._undoBranchManager.clear();
-                this._undoBranchManager.push(this._text);
-                this._ui();
-            },get(){
-                return this._text
-            }
-        });
-        o.focus=function(){
-            this._mainUi.focus();
-        };
-        Object.defineProperty(o,'input',input);
-        Object.defineProperty(o,'ui',ui);
-    }
-})();
+var loadUserInterface = o=>{
+    Object.defineProperty(o,'cursor',{get(){
+        return this._cursor.abs
+    }});
+    Object.defineProperty(o,'mode',{get(){
+        return this._mode
+    }});
+    Object.defineProperty(o,'text',{
+        set(val){
+            this._text=val;
+            this._welcomeText=undefined;
+            this._undoBranchManager.clear();
+            this._undoBranchManager.push(this._text);
+            this._ui();
+        },get(){
+            return this._text
+        }
+    });
+    o.focus=function(){
+        this._mainUi.focus();
+    };
+    Object.defineProperty(o,'input',input);
+    Object.defineProperty(o,'ui',ui);
+};
 
 var loadSyntacticSugar = o=>{
     Object.defineProperty(o,'node',{get(){
@@ -2400,40 +2444,37 @@ div.webvim.cli>textarea.input{
 }
 `;
 
-var Vim = (async()=>{
-    let load=[
-        loadBase,
-        loadUserInterface,
-        loadSyntacticSugar,
-    ];
-    function Vim(read,write){
-        EventEmmiter.call(this);
-        this._values={
-            mode:'normal'
-        };
-        this._options=Object.create(defaultOptions);
-        this._viewChanged=[];
-        this._text='';
-        this._registers={};
-        this._modeData={};
-        {let a=createCursor(this);
-            this._cursor=a[0];
-            this._trueCursor=a[1];
-        }
-        this._undoBranchManager=new UndoBranchManager;
-        this._undoBranchManager.push(this._text);
-        this._styleManager=new StyleManager;
-        this.style=this._styleManager.style;
-        this._styleManager.appendChild(document.createTextNode(style));
-        this._styleManager.appendChild(document.createTextNode(colorsStyle));
-        this.read=read;
-        this.write=write;
-        this._uis=new Set;
-        rc(this);
+let load=[
+    loadBase,
+    loadUserInterface,
+    loadSyntacticSugar,
+];
+function Vim(read,write){
+    EventEmmiter.call(this);
+    this._values={
+        mode:'normal'
+    };
+    this._options=Object.create(defaultOptions);
+    this._viewChanged=[];
+    this._text='';
+    this._registers={};
+    this._modeData={};
+    {let a=createCursor(this);
+        this._cursor=a[0];
+        this._trueCursor=a[1];
     }
-    Object.setPrototypeOf(Vim.prototype,EventEmmiter.prototype)
-    ;(await Promise.all(load)).map(f=>f(Vim.prototype));
-    return Vim
-})();
+    this._undoBranchManager=new UndoBranchManager;
+    this._undoBranchManager.push(this._text);
+    this._styleManager=new StyleManager;
+    this.style=this._styleManager.style;
+    this._styleManager.appendChild(document.createTextNode(style));
+    this._styleManager.appendChild(document.createTextNode(colorsStyle));
+    this.read=read;
+    this.write=write;
+    this._uis=new Set;
+    rc(this);
+}
+Object.setPrototypeOf(Vim.prototype,EventEmmiter.prototype);
+load.map(f=>f(Vim.prototype));
 
 export default Vim;

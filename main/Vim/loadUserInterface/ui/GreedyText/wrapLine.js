@@ -1,4 +1,4 @@
-import stringWidthPromise from '../stringWidth.js'
+import stringWidth from '../stringWidth.js'
 let
     lfDoc={
         child:'$',
@@ -12,31 +12,28 @@ function substring(list,s,start,end){
     }
     return a
 }
-export default(async()=>{
-    let stringWidth=await stringWidthPromise
-    function width(c){
-        return c=='\n'?1:stringWidth(c)
+function width(c){
+    return c=='\n'?1:stringWidth(c)
+}
+function wrapLine(list,l,targetWidth){
+    let rows=[]
+    for(let i=0;i<l.length;){
+        let start=i,end=calcEnd(i,l,targetWidth)
+        rows.push({
+            start,
+            end,
+            string:substring(list,l,start,end)
+        })
+        i=end
     }
-    function wrapLine(list,l,targetWidth){
-        let rows=[]
-        for(let i=0;i<l.length;){
-            let start=i,end=calcEnd(i,l,targetWidth)
-            rows.push({
-                start,
-                end,
-                string:substring(list,l,start,end)
-            })
-            i=end
-        }
-        return rows
-    }
-    function calcEnd(i,l,targetWidth){
-        for(
-            let rowWidth=0,w;
-            i<l.length&&rowWidth+(w=width(l[i]))<=targetWidth;
-            rowWidth+=w,i++
-        );
-        return i
-    }
-    return wrapLine
-})()
+    return rows
+}
+function calcEnd(i,l,targetWidth){
+    for(
+        let rowWidth=0,w;
+        i<l.length&&rowWidth+(w=width(l[i]))<=targetWidth;
+        rowWidth+=w,i++
+    );
+    return i
+}
+export default wrapLine

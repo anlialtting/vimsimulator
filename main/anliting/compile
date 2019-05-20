@@ -1,0 +1,5 @@
+echo "/*$(cat "$node_modules/string-width/license")*/let a;" > lib/string-width.js
+echo "a=require('string-width')" > tmp
+"$node_modules/browserify/bin/cmd.js" tmp >> lib/string-width.js
+rm tmp
+echo "export default a" >> lib/string-width.js

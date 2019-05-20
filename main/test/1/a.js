@@ -1,11 +1,13 @@
-var measureWidth=
-    module.shareImport('../../Vim/loadUserInterface/ui/measureWidth.js')
-//;(async()=>document.head.appendChild(await module.style('a.css')))()
-;(async()=>document.head.appendChild(await module.style('../a.css')))()
+import measureWidth from '../../Vim/loadUserInterface/ui/measureWidth.js'
+//import style from './style.js'
+import style from '../a.js'
+;(async()=>document.head.appendChild(Object.assign(
+    document.createElement('style'),
+    {textContent:style}
+)))()
 ;(async()=>{
     console.log=s=>
         document.body.appendChild(document.createTextNode(s))
-    measureWidth=await measureWidth
     let w=80,h=24
     let fontSize=13
     let fontWidth=measureWidth(fontSize)

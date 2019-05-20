@@ -1,4 +1,4 @@
-import wrapLinePromise from './GreedyText/wrapLine.js'
+import wrapLine from './GreedyText/wrapLine.js'
 function GreedyText(){
     this._options={}
     this.lines=[]
@@ -99,25 +99,22 @@ GreedyText.prototype.setOption=function(key,val){
 function Line(val){
     this.string=val
 }
-export default(async()=>{
-    let wrapLine=await wrapLinePromise
-    GreedyText.prototype.wrap=function(){
-        let
-            charCount=0,
-            rowsCount=0
-        this.lines.map((l,j)=>{
-            let s=l.string+'\n'
-            if(!l.rows)
-                l.rows=wrapLine(this._options.list,s,this.width||Infinity)
-            l.wrapped={
-                index:j,
-                start:charCount,
-                startRow:rowsCount,
-                rows:l.rows,
-            }
-            charCount+=s.length
-            rowsCount+=l.rows.length
-        })
-    }
-    return GreedyText
-})()
+GreedyText.prototype.wrap=function(){
+    let
+        charCount=0,
+        rowsCount=0
+    this.lines.map((l,j)=>{
+        let s=l.string+'\n'
+        if(!l.rows)
+            l.rows=wrapLine(this._options.list,s,this.width||Infinity)
+        l.wrapped={
+            index:j,
+            start:charCount,
+            startRow:rowsCount,
+            rows:l.rows,
+        }
+        charCount+=s.length
+        rowsCount+=l.rows.length
+    })
+}
+export default GreedyText

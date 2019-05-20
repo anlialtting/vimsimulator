@@ -1,4 +1,4 @@
-import CliPromise from './Cli.js'
+import Cli from './Cli.js'
 function update(ui,cli){
     let vim=ui._vim
     cli.clear()
@@ -66,33 +66,30 @@ function cmdlineUpdate(ui,cli){
     })
     cli.flush()
 }
-export default(async()=>{
-    let Cli=await CliPromise
-    function CommandCli(ui){
-        this._ui=ui
-        this.cli=new Cli
-        this.update()
+function CommandCli(ui){
+    this._ui=ui
+    this.cli=new Cli
+    this.update()
+}
+function createCommandCli(ui){
+    return new CommandCli(ui)
+}
+CommandCli.prototype.update=function(){
+    let
+        ui=this._ui,
+        cli=this.cli,
+        vim=ui._vim
+    if(inNvii(vim.mode))
+        update(ui,cli)
+    else if(vim.mode=='cmdline')
+        cmdlineUpdate(ui,cli)
+    function inNvii(v){
+        return 0<=[
+            'normal',
+            'insert',
+            'visual',
+            'visual-block',
+        ].indexOf(v)
     }
-    function createCommandCli(ui){
-        return new CommandCli(ui)
-    }
-    CommandCli.prototype.update=function(){
-        let
-            ui=this._ui,
-            cli=this.cli,
-            vim=ui._vim
-        if(inNvii(vim.mode))
-            update(ui,cli)
-        else if(vim.mode=='cmdline')
-            cmdlineUpdate(ui,cli)
-        function inNvii(v){
-            return 0<=[
-                'normal',
-                'insert',
-                'visual',
-                'visual-block',
-            ].indexOf(v)
-        }
-    }
-    return createCommandCli
-})()
+}
+export default createCommandCli
