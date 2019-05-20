@@ -68,26 +68,26 @@ function write(view,doc,r,c){
         textContent=doc.child
     if(textContent=='\n')
         textContent=' '
-    div.className=doc.class||''
-    if(doc.style){
-        let span=doe.span()
-        for(let i in doc.style)
-            span.style[i]=doc.style[i]
-        span.textContent=textContent
-        div.textContent=''
-        div.appendChild(span)
-    }else{
-        div.textContent=textContent
-    }
+    doe(div,
+        {className:doc.class||''},
+        doc.style?
+            doe.span(
+                {textContent},
+                n=>{doe(n.style,doc.style)}
+            )
+        :
+            {textContent}
+    )
     function getDiv(view,r,c){
         if(!(r in view._divs))
             view._divs[r]={}
         if(!(c in view._divs[r])){
-            let div=doe.div()
-            div.style.top=`${r*view._fontSize}px`
-            div.style.left=`${c*view._fontWidth}px`
-            view._divs[r][c]=div
-            view.node.appendChild(div)
+            doe(view.node,
+                view._divs[r][c]=doe.div(n=>{doe(n.style,{
+                    top:`${r*view._fontSize}px`,
+                    left:`${c*view._fontWidth}px`,
+                })})
+            )
         }
         return view._divs[r][c]
     }
