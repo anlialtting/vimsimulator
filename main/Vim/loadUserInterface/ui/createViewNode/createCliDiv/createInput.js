@@ -1,28 +1,28 @@
-import{dom}from 'https://gitcdn.link/cdn/anliting/simple.js/3b5e122ded93bb9a5a7d5099ac645f1e1614a89b/src/simple.static.js'
+import doe from'../../../../../../lib/doe.mjs'
 import measureWidth from '../../measureWidth.js'
-export default(ui=>{
-    let vim=ui._vim
-    let textarea=dom('textarea',{className:'input'})
-    textarea.style.fontSize=`${ui._fontSize}px`
-    textarea.style.height=`${ui._fontSize+2}px`
-    let composing=false
-    textarea.addEventListener('blur',()=>{
+export default ui=>doe.textarea({className:'input'},n=>{
+    n.style.fontSize=`${ui._fontSize}px`
+    n.style.height=`${ui._fontSize+2}px`
+    let
+        vim=ui._vim,
+        composing=false
+    n.addEventListener('blur',()=>{
         vim._ui()
     })
-    textarea.addEventListener('compositionstart',e=>{
+    n.addEventListener('compositionstart',e=>{
         composing=true
     })
-    textarea.addEventListener('compositionend',e=>{
+    n.addEventListener('compositionend',e=>{
         composing=false
         f()
     })
-    textarea.addEventListener('focus',()=>{
+    n.addEventListener('focus',()=>{
         vim._ui()
     })
-    textarea.addEventListener('input',()=>{
+    n.addEventListener('input',()=>{
         f()
     })
-    textarea.addEventListener('keydown',e=>{
+    n.addEventListener('keydown',e=>{
         if(composing||!(
             e.key=='ArrowLeft'||
             e.key=='ArrowRight'||
@@ -44,17 +44,16 @@ export default(ui=>{
         e.stopPropagation()
         vim.input=e
     })
-    return textarea
     function f(){
         if(composing){
             vim._ui()
         }else{
-            vim.input=textarea.value
-            textarea.value=''
+            vim.input=n.value
+            n.value=''
         }
-        let width=measureWidth(ui._fontSize,textarea.value)
+        let width=measureWidth(ui._fontSize,n.value)
         if(width)
             width+=2
-        textarea.style.width=`${width}px`
+        n.style.width=`${width}px`
     }
 })

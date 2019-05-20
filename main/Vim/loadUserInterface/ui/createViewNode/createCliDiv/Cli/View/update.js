@@ -1,4 +1,4 @@
-import{dom}from 'https://gitcdn.link/cdn/anliting/simple.js/3b5e122ded93bb9a5a7d5099ac645f1e1614a89b/src/simple.static.js'
+import doe from'../../../../../../../../lib/doe.mjs'
 function update(view){
     if(view._width)
         view.node.style.width=`${view._width*view._fontWidth}px`
@@ -70,7 +70,7 @@ function write(view,doc,r,c){
         textContent=' '
     div.className=doc.class||''
     if(doc.style){
-        let span=dom('span')
+        let span=doe.span()
         for(let i in doc.style)
             span.style[i]=doc.style[i]
         span.textContent=textContent
@@ -83,7 +83,7 @@ function write(view,doc,r,c){
         if(!(r in view._divs))
             view._divs[r]={}
         if(!(c in view._divs[r])){
-            let div=dom('div')
+            let div=doe.div()
             div.style.top=`${r*view._fontSize}px`
             div.style.left=`${c*view._fontWidth}px`
             view._divs[r][c]=div

@@ -1,4 +1,4 @@
-import{dom}from 'https://gitcdn.link/cdn/anliting/simple.js/3b5e122ded93bb9a5a7d5099ac645f1e1614a89b/src/simple.static.js'
+import doe from'../../lib/doe.mjs'
 export default o=>{
     Object.defineProperty(o,'node',{get(){
         return this._mainUi.node
@@ -14,20 +14,20 @@ export default o=>{
         this.polluteCopy
     }})
     Object.defineProperty(o,'polluteStyle',{get(){
-        document.head.appendChild(this.style)
+        doe.head(this.style)
         this.once('quit',()=>{
-            document.head.removeChild(this.style)
+            doe.head(1,this.style)
         })
     }})
     Object.defineProperty(o,'polluteCopy',{get(){
         this.copy=s=>{
-            let n=dom('textarea',{value:s})
-            n.style.position='fixed'
-            let e=document.activeElement
-            dom(document.body,n)
+            let e=document.activeElement,n
+            doe.body(n=doe.textarea({value:s},n=>{
+                n.style.position='fixed'
+            }))
             n.select()
             document.execCommand('copy',true,null)
-            document.body.removeChild(n)
+            doe.body(1,n)
             if(e)
                 e.focus()
         }

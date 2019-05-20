@@ -1,6 +1,6 @@
 import update from './View/update.js'
 import measureWidth from '../../../measureWidth.js'
-import{dom}from 'https://gitcdn.link/cdn/anliting/simple.js/3b5e122ded93bb9a5a7d5099ac645f1e1614a89b/src/simple.static.js'
+import doe from'../../../../../../../lib/doe.mjs'
 function View(cli){
     this._cli=cli
     this._fontSize=13
@@ -9,8 +9,7 @@ function View(cli){
     this._listeners=[]
     this._previousArray={}
     this._fontWidth=measureWidth(this._fontSize)
-    this.node=dom('div')
-    this.node.className='cli'
+    this.node=doe.div({className:'cli'})
     this.symbols={}
     update(this)
 }
