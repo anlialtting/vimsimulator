@@ -1,4 +1,11 @@
-import moduleLoader from 'https://cdn.rawgit.com/anliting/module/533c10b65a8b71c14de16f5ed99e466ddf8a2bae/src/esm/moduleLoader.js';
+/*© An-Li Ting (anliting.com)
+
+Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+*/import moduleLoader from 'https://cdn.rawgit.com/anliting/module/533c10b65a8b71c14de16f5ed99e466ddf8a2bae/src/esm/moduleLoader.js';
 import { dom, EventEmmiter } from 'https://gitcdn.link/cdn/anliting/simple.js/3b5e122ded93bb9a5a7d5099ac645f1e1614a89b/src/simple.static.js';
 
 var _welcomeText = `\
@@ -2107,7 +2114,7 @@ var loadUserInterface = (async()=>{
     }
 })();
 
-var loadSyntacticSugarPromise = o=>{
+var loadSyntacticSugar = o=>{
     Object.defineProperty(o,'node',{get(){
         return this._mainUi.node
     }});
@@ -2250,7 +2257,7 @@ Cursor$1.prototype.moveToEOL=function(){
     this.moveTo(this.lineEnd-1);
 };
 // end 2
-// start 2a; github.com/b04902012
+// start 2a; start github.com/b04902012
 {
     function charType(text,a){
         if(text[a]==='\n'&&(!a||text[a-1]==='\n'))
@@ -2397,7 +2404,7 @@ var Vim = (async()=>{
     let load=[
         loadBase,
         loadUserInterface,
-        await loadSyntacticSugarPromise,
+        loadSyntacticSugar,
     ];
     function Vim(read,write){
         EventEmmiter.call(this);

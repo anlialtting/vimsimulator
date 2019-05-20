@@ -1,6 +1,6 @@
 import loadBase from './Vim/loadBase.js'
 import loadUserInterface from './Vim/loadUserInterface.js'
-import loadSyntacticSugarPromise from './Vim/loadSyntacticSugar.js'
+import loadSyntacticSugar from './Vim/loadSyntacticSugar.js'
 import colorsStyle from './Vim/colorsStyle.js'
 import createCursor from './Vim/createCursor.js'
 import rc from './Vim/rc.js'
@@ -13,7 +13,7 @@ export default(async()=>{
     let load=[
         loadBase,
         loadUserInterface,
-        await loadSyntacticSugarPromise,
+        loadSyntacticSugar,
     ]
     function Vim(read,write){
         EventEmmiter.call(this)
