@@ -5,7 +5,7 @@ Permission is hereby granted, free of charge, to any person obtaining a copy of 
 The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
 
 THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
-*/import { dom, EventEmmiter } from 'https://gitcdn.link/cdn/anliting/simple.js/3b5e122ded93bb9a5a7d5099ac645f1e1614a89b/src/simple.static.js';
+*/import { EventEmmiter } from 'https://gitcdn.link/cdn/anliting/simple.js/3b5e122ded93bb9a5a7d5099ac645f1e1614a89b/src/simple.static.js';
 
 var _welcomeText = `\
                      Web Vim
@@ -1367,6 +1367,60 @@ GreedyText.prototype.wrap=function(){
     });
 };
 
+function doe(n){
+    let
+        state=0,
+        p={
+            function:f=>f(n),
+            number,
+            object,
+            string,
+        };
+    transform([...arguments].slice(1));
+    return n
+    function number(n){
+        state=n;
+    }
+    function object(o){
+        if(o instanceof Array)
+            array();
+        else if(o instanceof Node)
+            n[state?'removeChild':'appendChild'](o);
+        else if(('length' in o)||o[Symbol.iterator]){
+            o=Array.from(o);
+            array();
+        }else if(state)
+            Object.entries(o).map(([a,b])=>n.setAttribute(a,b));
+        else
+            Object.assign(n,o);
+        function array(){
+            o.map(transform);
+        }
+    }
+    function string(s){
+        n.appendChild(document.createTextNode(s));
+    }
+    function transform(t){
+        for(let q;q=p[typeof t];t=q(t));
+    }
+}
+let methods={
+    html(){
+        return doe(document.documentElement,...arguments)
+    },
+    head(){
+        return doe(document.head,...arguments)
+    },
+    body(){
+        return doe(document.body,...arguments)
+    },
+};
+var doe$1 = new Proxy(doe,{
+    get:(t,p)=>methods[p]||function(){
+        return doe(document.createElement(p),...arguments)
+    }
+});
+
 function update(view){
     if(view._width)
         view.node.style.width=`${view._width*view._fontWidth}px`;
@@ -1434,7 +1488,7 @@ function write(view,doc,r,c){
         textContent=' ';
     div.className=doc.class||'';
     if(doc.style){
-        let span=dom('span');
+        let span=doe$1.span();
         for(let i in doc.style)
             span.style[i]=doc.style[i];
         span.textContent=textContent;
@@ -1447,7 +1501,7 @@ function write(view,doc,r,c){
         if(!(r in view._divs))
             view._divs[r]={};
         if(!(c in view._divs[r])){
-            let div=dom('div');
+            let div=doe$1.div();
             div.style.top=`${r*view._fontSize}px`;
             div.style.left=`${c*view._fontWidth}px`;
             view._divs[r][c]=div;
@@ -1465,8 +1519,7 @@ function View(cli){
     this._listeners=[];
     this._previousArray={};
     this._fontWidth=measureWidth(this._fontSize);
-    this.node=dom('div');
-    this.node.className='cli';
+    this.node=doe$1.div({className:'cli'});
     this.symbols={};
     update(this);
 }
@@ -1839,29 +1892,29 @@ TextCli.prototype.flush=function(){
     this._updated=true;
 };
 
-var createInput = (ui=>{
-    let vim=ui._vim;
-    let textarea=dom('textarea',{className:'input'});
-    textarea.style.fontSize=`${ui._fontSize}px`;
-    textarea.style.height=`${ui._fontSize+2}px`;
-    let composing=false;
-    textarea.addEventListener('blur',()=>{
+var createInput = ui=>doe$1.textarea({className:'input'},n=>{
+    n.style.fontSize=`${ui._fontSize}px`;
+    n.style.height=`${ui._fontSize+2}px`;
+    let
+        vim=ui._vim,
+        composing=false;
+    n.addEventListener('blur',()=>{
         vim._ui();
     });
-    textarea.addEventListener('compositionstart',e=>{
+    n.addEventListener('compositionstart',e=>{
         composing=true;
     });
-    textarea.addEventListener('compositionend',e=>{
+    n.addEventListener('compositionend',e=>{
         composing=false;
         f();
     });
-    textarea.addEventListener('focus',()=>{
+    n.addEventListener('focus',()=>{
         vim._ui();
     });
-    textarea.addEventListener('input',()=>{
+    n.addEventListener('input',()=>{
         f();
     });
-    textarea.addEventListener('keydown',e=>{
+    n.addEventListener('keydown',e=>{
         if(composing||!(
             e.key=='ArrowLeft'||
             e.key=='ArrowRight'||
@@ -1883,18 +1936,17 @@ var createInput = (ui=>{
         e.stopPropagation();
         vim.input=e;
     });
-    return textarea
     function f(){
         if(composing){
             vim._ui();
         }else{
-            vim.input=textarea.value;
-            textarea.value='';
+            vim.input=n.value;
+            n.value='';
         }
-        let width=measureWidth(ui._fontSize,textarea.value);
+        let width=measureWidth(ui._fontSize,n.value);
         if(width)
             width+=2;
-        textarea.style.width=`${width}px`;
+        n.style.width=`${width}px`;
     }
 });
 
@@ -2173,20 +2225,20 @@ var loadSyntacticSugar = o=>{
         this.polluteCopy;
     }});
     Object.defineProperty(o,'polluteStyle',{get(){
-        document.head.appendChild(this.style);
+        doe$1.head(this.style);
         this.once('quit',()=>{
-            document.head.removeChild(this.style);
+            doe$1.head(1,this.style);
         });
     }});
     Object.defineProperty(o,'polluteCopy',{get(){
         this.copy=s=>{
-            let n=dom('textarea',{value:s});
-            n.style.position='fixed';
-            let e=document.activeElement;
-            dom(document.body,n);
+            let e=document.activeElement,n;
+            doe$1.body(n=doe$1.textarea({value:s},n=>{
+                n.style.position='fixed';
+            }));
             n.select();
             document.execCommand('copy',true,null);
-            document.body.removeChild(n);
+            doe$1.body(1,n);
             if(e)
                 e.focus();
         };
@@ -2383,10 +2435,10 @@ var defaultOptions = {
 };
 
 function StyleManager(){
-    this.style=dom.style();
+    this.style=doe$1.style();
 }
 StyleManager.prototype.appendChild=function(n){
-    dom(this.style,n);
+    doe$1(this.style,n);
 };
 
 function UndoBranchManager(){
