@@ -1486,26 +1486,29 @@ function write(view,doc,r,c){
         textContent=doc.child;
     if(textContent=='\n')
         textContent=' ';
-    div.className=doc.class||'';
-    if(doc.style){
-        let span=doe$1.span();
-        for(let i in doc.style)
-            span.style[i]=doc.style[i];
-        span.textContent=textContent;
-        div.textContent='';
-        div.appendChild(span);
-    }else{
-        div.textContent=textContent;
-    }
+    doe$1(div,
+        {className:doc.class||''},
+        doc.style?
+            [
+                {textContent:''},
+                doe$1.span(
+                    {textContent},
+                    n=>{doe$1(n.style,doc.style);}
+                )
+            ]
+        :
+            {textContent}
+    );
     function getDiv(view,r,c){
         if(!(r in view._divs))
             view._divs[r]={};
         if(!(c in view._divs[r])){
-            let div=doe$1.div();
-            div.style.top=`${r*view._fontSize}px`;
-            div.style.left=`${c*view._fontWidth}px`;
-            view._divs[r][c]=div;
-            view.node.appendChild(div);
+            doe$1(view.node,
+                view._divs[r][c]=doe$1.div(n=>{doe$1(n.style,{
+                    top:`${r*view._fontSize}px`,
+                    left:`${c*view._fontWidth}px`,
+                });})
+            );
         }
         return view._divs[r][c]
     }
@@ -2353,8 +2356,9 @@ Cursor$1.prototype.moveToEOL=function(){
     this.moveTo(this.lineEnd-1);
 };
 // end 2
-// start 2a; start github.com/b04902012
+// start 2a
 {
+    // start github.com/b04902012
     function charType(text,a){
         if(text[a]==='\n'&&(!a||text[a-1]==='\n'))
             return "EmptyLine"
@@ -2366,33 +2370,64 @@ Cursor$1.prototype.moveToEOL=function(){
             return "ASCII"
         return "NonASCII"
     }
-    Cursor$1.prototype.moveWordRight=function(){
-        let a=this.abs;
-        let t=charType(this.text,a);
-        let b=false;
+    /*Cursor.prototype.moveWordRight=function(){
+        let a=this.abs
+        let t=charType(this.text,a)
+        let b=false
         while(a<this.text.length-1&&
           [(b||t),"WhiteSpace"].includes(charType(this.text,a))
         ){
-            b=b||(charType(this.text,a)==="WhiteSpace");
-            a++;
+            b=b||(charType(this.text,a)==="WhiteSpace")
+            a++
             if(charType(this.text,a)==="EmptyLine")break
         }
-        this.moveTo(a);
-    };
-    Cursor$1.prototype.moveGeneralWordRight=function(){
-        let a=this.abs;
-        let t=charType(this.text,a);
-        let b=false;
+        this.moveTo(a)
+    }
+    Cursor.prototype.moveGeneralWordRight=function(){
+        let a=this.abs
+        let t=charType(this.text,a)
+        let b=false
         while(a<this.text.length-1&&
           (!b||charType(this.text,a)==="WhiteSpace")
         ){
-            b=b||(charType(this.text,a)==="WhiteSpace");
-            a++;
+            b=b||(charType(this.text,a)==="WhiteSpace")
+            a++
             if(charType(this.text,a)==="EmptyLine")
               break
             if(t==="EmptyLine"&&charType(this.text,a)!=="WhiteSpace")
               break
         }
+        this.moveTo(a)
+    }*/
+    // end github.com/b04902012
+    Cursor$1.prototype.moveWordRight=function(){
+        let a=this.abs,t=charType(this.text,a);
+        if(t=='EmptyLine'){
+            if(a+1<this.text.length)
+                a++;
+        }else
+            for(;
+                a+1<this.text.length&&
+                t==charType(this.text,a)
+            ;)
+                a++;
+        for(;a+1<this.text.length&&'WhiteSpace'==charType(this.text,a);)
+            a++;
+        this.moveTo(a);
+    };
+    Cursor$1.prototype.moveGeneralWordRight=function(){
+        let a=this.abs,t=charType(this.text,a);
+        if(t=='EmptyLine'){
+            if(a+1<this.text.length)
+                a++;
+        }else
+            for(;
+                a+1<this.text.length&&
+                !['EmptyLine','WhiteSpace'].includes(charType(this.text,a))
+            ;)
+                a++;
+        for(;a+1<this.text.length&&'WhiteSpace'==charType(this.text,a);)
+            a++;
         this.moveTo(a);
     };
 }

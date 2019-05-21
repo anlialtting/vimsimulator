@@ -71,10 +71,13 @@ function write(view,doc,r,c){
     doe(div,
         {className:doc.class||''},
         doc.style?
-            doe.span(
-                {textContent},
-                n=>{doe(n.style,doc.style)}
-            )
+            [
+                {textContent:''},
+                doe.span(
+                    {textContent},
+                    n=>{doe(n.style,doc.style)}
+                )
+            ]
         :
             {textContent}
     )

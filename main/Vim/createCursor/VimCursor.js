@@ -85,8 +85,9 @@ Cursor.prototype.moveToEOL=function(){
     this.moveTo(this.lineEnd-1)
 }
 // end 2
-// start 2a; start github.com/b04902012
+// start 2a
 {
+    // start github.com/b04902012
     function charType(text,a){
         if(text[a]==='\n'&&(!a||text[a-1]==='\n'))
             return "EmptyLine"
@@ -98,7 +99,7 @@ Cursor.prototype.moveToEOL=function(){
             return "ASCII"
         return "NonASCII"
     }
-    Cursor.prototype.moveWordRight=function(){
+    /*Cursor.prototype.moveWordRight=function(){
         let a=this.abs
         let t=charType(this.text,a)
         let b=false
@@ -126,7 +127,38 @@ Cursor.prototype.moveToEOL=function(){
               break
         }
         this.moveTo(a)
+    }*/
+    // end github.com/b04902012
+    Cursor.prototype.moveWordRight=function(){
+        let a=this.abs,t=charType(this.text,a)
+        if(t=='EmptyLine'){
+            if(a+1<this.text.length)
+                a++
+        }else
+            for(;
+                a+1<this.text.length&&
+                t==charType(this.text,a)
+            ;)
+                a++
+        for(;a+1<this.text.length&&'WhiteSpace'==charType(this.text,a);)
+            a++
+        this.moveTo(a)
+    }
+    Cursor.prototype.moveGeneralWordRight=function(){
+        let a=this.abs,t=charType(this.text,a)
+        if(t=='EmptyLine'){
+            if(a+1<this.text.length)
+                a++
+        }else
+            for(;
+                a+1<this.text.length&&
+                !['EmptyLine','WhiteSpace'].includes(charType(this.text,a))
+            ;)
+                a++
+        for(;a+1<this.text.length&&'WhiteSpace'==charType(this.text,a);)
+            a++
+        this.moveTo(a)
     }
 }
-// end 2a; end github.com/b04902012
+// end 2a
 export default Cursor
