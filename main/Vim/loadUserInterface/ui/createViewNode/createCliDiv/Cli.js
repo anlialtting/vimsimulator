@@ -1,6 +1,6 @@
 import View from './Cli/View.js'
-import{EventEmmiter}from 'https://gitcdn.link/cdn/anliting/simple.js/3b5e122ded93bb9a5a7d5099ac645f1e1614a89b/src/simple.static.js'
 import width from '../../stringWidth.js'
+import EventEmmiter from '../../../../../../lib/EventEmmiter.js'
 function Cli(){
     EventEmmiter.call(this)
     this._children=[]

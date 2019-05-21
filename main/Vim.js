@@ -8,7 +8,7 @@ import defaultOptions from './Vim/defaultOptions.js'
 import StyleManager from './Vim/StyleManager.js'
 import UndoBranchManager from './Vim/UndoBranchManager.js'
 import style from './Vim/style.js'
-import{EventEmmiter}from 'https://gitcdn.link/cdn/anliting/simple.js/3b5e122ded93bb9a5a7d5099ac645f1e1614a89b/src/simple.static.js'
+import EventEmmiter from'../lib/EventEmmiter.js'
 let load=[
     loadBase,
     loadUserInterface,

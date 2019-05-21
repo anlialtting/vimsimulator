@@ -1,4 +1,5 @@
 import doe from'../../../../../../../../lib/doe.mjs'
+import stringWidth from'../../../../stringWidth.js'
 function update(view){
     if(view._width)
         view.node.style.width=`${view._width*view._fontWidth}px`
@@ -38,9 +39,9 @@ function reuseWrite(view,a,b){
     for(let r in a)
         for(let c in a[r])
             if(r in b&&c in b[r]&&notEqual(a[r][c],b[r][c]))
-                write(view,a[r][c]||'',r,c)
+                write(view,a[r][c]||{child:''},r,c)
     inNotIn(a,b,(r,c)=>write(view,a[r][c],r,c))
-    inNotIn(b,a,(r,c)=>write(view,'',r,c))
+    inNotIn(b,a,(r,c)=>write(view,{child:''},r,c))
     return o
     function set(r,c){
         o[r]||(o[r]={})
@@ -73,7 +74,7 @@ function write(view,doc,r,c){
         doc.style?
             [
                 {textContent:''},
-                doe.span(
+                doe.div(
                     {textContent},
                     n=>{doe(n.style,doc.style)}
                 )
@@ -81,6 +82,7 @@ function write(view,doc,r,c){
         :
             {textContent}
     )
+    div.style.width=`${stringWidth(textContent)*view._fontWidth}px`
     function getDiv(view,r,c){
         if(!(r in view._divs))
             view._divs[r]={}
@@ -89,6 +91,7 @@ function write(view,doc,r,c){
                 view._divs[r][c]=doe.div(n=>{doe(n.style,{
                     top:`${r*view._fontSize}px`,
                     left:`${c*view._fontWidth}px`,
+                    textAlign:'center',
                 })})
             )
         }

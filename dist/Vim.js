@@ -5,9 +5,7 @@ Permission is hereby granted, free of charge, to any person obtaining a copy of 
 The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
 
 THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
-*/import { EventEmmiter } from 'https://gitcdn.link/cdn/anliting/simple.js/3b5e122ded93bb9a5a7d5099ac645f1e1614a89b/src/simple.static.js';
-
-var _welcomeText = `\
+*/var _welcomeText = `\
                      Web Vim
 
 Thanks Bram Moolenaar et al. for the original Vim!
@@ -1460,9 +1458,9 @@ function reuseWrite(view,a,b){
     for(let r in a)
         for(let c in a[r])
             if(r in b&&c in b[r]&&notEqual(a[r][c],b[r][c]))
-                write(view,a[r][c]||'',r,c);
+                write(view,a[r][c]||{child:''},r,c);
     inNotIn(a,b,(r,c)=>write(view,a[r][c],r,c));
-    inNotIn(b,a,(r,c)=>write(view,'',r,c));
+    inNotIn(b,a,(r,c)=>write(view,{child:''},r,c));
     return o
     function notEqual(a,b){
         if(a.child!=b.child)
@@ -1491,7 +1489,7 @@ function write(view,doc,r,c){
         doc.style?
             [
                 {textContent:''},
-                doe$1.span(
+                doe$1.div(
                     {textContent},
                     n=>{doe$1(n.style,doc.style);}
                 )
@@ -1499,6 +1497,7 @@ function write(view,doc,r,c){
         :
             {textContent}
     );
+    div.style.width=`${stringWidth(textContent)*view._fontWidth}px`;
     function getDiv(view,r,c){
         if(!(r in view._divs))
             view._divs[r]={};
@@ -1507,6 +1506,7 @@ function write(view,doc,r,c){
                 view._divs[r][c]=doe$1.div(n=>{doe$1(n.style,{
                     top:`${r*view._fontSize}px`,
                     left:`${c*view._fontWidth}px`,
+                    textAlign:'center',
                 });})
             );
         }
@@ -1548,6 +1548,39 @@ Object.defineProperty(View.prototype,'update',{set(val){
     update(this);
 }});
 View.prototype.free=function(){
+};
+
+function EventEmmiter(){
+    this._listeners={};
+}
+EventEmmiter.prototype._keyExist=function(key){
+    return key in this._listeners
+};
+EventEmmiter.prototype._ensureKeyExist=function(key){
+    if(!(key in this._listeners))
+        this._listeners[key]=new Map;
+};
+EventEmmiter.prototype.emit=function(key,event){
+    if(!this._keyExist(key))
+        return
+    for(let[listener,doc]of[...this._listeners[key].entries()]){
+        if(doc.once)
+            this.off(key,listener);
+        listener(event);
+    }
+};
+EventEmmiter.prototype.off=function(key,listener){
+    if(!this._keyExist(key))
+        return
+    this._listeners[key].delete(listener);
+};
+EventEmmiter.prototype.on=function(key,listener){
+    this._ensureKeyExist(key);
+    this._listeners[key].set(listener,{once:false});
+};
+EventEmmiter.prototype.once=function(key,listener){
+    this._ensureKeyExist(key);
+    this._listeners[key].set(listener,{once:true});
 };
 
 function Cli(){
