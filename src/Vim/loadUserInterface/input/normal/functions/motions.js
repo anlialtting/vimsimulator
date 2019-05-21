@@ -23,16 +23,40 @@ function l(vim,doc){
         vim._trueCursor.moveRight()
     return docs.ac
 }
+function b(vim,doc){
+    let count=doc.count||1
+    while(count--)
+        vim._trueCursor.moveToPreviousWordBegin()
+    return docs.ac
+}
+function B(vim,doc){
+    let count=doc.count||1
+    while(count--)
+        vim._trueCursor.moveToPreviousGeneralWordBegin()
+    return docs.ac
+}
+function e(vim,doc){
+    let count=doc.count||1
+    while(count--)
+        vim._trueCursor.moveToNextWordEnd()
+    return docs.ac
+}
+function E(vim,doc){
+    let count=doc.count||1
+    while(count--)
+        vim._trueCursor.moveToNextGeneralWordEnd()
+    return docs.ac
+}
 function w(vim,doc){
     let count=doc.count||1
     while(count--)
-        vim._trueCursor.moveWordRight()
+        vim._trueCursor.moveToNextWordBegin()
     return docs.ac
 }
 function W(vim,doc){
     let count=doc.count||1
     while(count--)
-        vim._trueCursor.moveGeneralWordRight()
+        vim._trueCursor.moveToNextGeneralWordBegin()
     return docs.ac
 }
-export default{h,j,k,l,w,W}
+export default{b,B,e,E,h,j,k,l,w,W}

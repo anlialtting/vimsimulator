@@ -97,33 +97,62 @@ function charType(text,a){
         return "ASCII"
     return "NonASCII"
 }
-Cursor.prototype.moveWordRight=function(){
-    let a=this.abs
-    let t=charType(this.text,a)
-    let b=false
-    while(a<this.text.length-1&&
-      [(b||t),"WhiteSpace"].includes(charType(this.text,a))
-    ){
-        b=b||(charType(this.text,a)==="WhiteSpace")
-        a++
-        if(charType(this.text,a)==="EmptyLine")break
-    }
+function isWordBegin(text,a,general){
+    if(!a)return true
+    if(charType(text,a)==="EmptyLine")return true
+    if(charType(text,a)==="WhiteSpace")return false
+    if(!general && charType(text,a) !== charType(text, a-1))return true
+    if(general && ["WhiteSpace", "EmptyLine"].includes(charType(text,a-1)))return true
+    return false
+}
+function isWordEnd(text,a,general){
+    if(a===text.length-1)return true
+    if(charType(text,a)==="EmptyLine")return true
+    if(charType(text,a)==="WhiteSpace")return false
+    if(!general && charType(text,a) !== charType(text, a+1))return true
+    if(general && ["WhiteSpace", "EmptyLine"].includes(charType(text,a+1)))return true
+    return false
+}
+Cursor.prototype.moveToNextWordBegin=function(){
+    let a=this.abs+1
+    if(a === this.text.length)
+      return this.moveTo(this.abs)
+    while(a<this.text.length-1 && !isWordBegin(this.text,a,false))a++
     return this.moveTo(a)
 }
-Cursor.prototype.moveGeneralWordRight=function(){
-    let a=this.abs
-    let t=charType(this.text,a)
-    let b=false
-    while(a<this.text.length-1&&
-      (!b||charType(this.text,a)==="WhiteSpace")
-    ){
-        b=b||(charType(this.text,a)==="WhiteSpace")
-        a++
-        if(charType(this.text,a)==="EmptyLine")
-          break
-        if(t==="EmptyLine"&&charType(this.text,a)!=="WhiteSpace")
-          break
-    }
+Cursor.prototype.moveToNextGeneralWordBegin=function(){
+    let a=this.abs+1
+    if(a === this.text.length)
+      return this.moveTo(this.abs)
+    while(a<this.text.length-1 && !isWordBegin(this.text,a,true))a++
+    return this.moveTo(a)
+}
+Cursor.prototype.moveToNextWordEnd=function(){
+    let a=this.abs+1
+    if(a === this.text.length)
+      return this.moveTo(this.abs)
+    while(a<this.text.length-1 && !isWordEnd(this.text,a,false))a++
+    return this.moveTo(a)
+}
+Cursor.prototype.moveToNextGeneralWordEnd=function(){
+    let a=this.abs+1
+    if(a === this.text.length)
+      return this.moveTo(this.abs)
+    while(a<this.text.length-1 && !isWordEnd(this.text,a,true))a++
+    return this.moveTo(a)
+}
+Cursor.prototype.moveToPreviousWordBegin=function(){
+    let a=this.abs-1
+    if(!a)
+      return this.moveTo(this.abs)
+    while(a>0 && !isWordBegin(this.text,a,false))a--
+    return this.moveTo(a)
+}
+Cursor.prototype.moveToPreviousGeneralWordBegin=function(){
+    let a=this.abs-1
+    if(!a)
+      return this.moveTo(this.abs)
+    while(a>0 && !isWordBegin(this.text,a,true))a--
     return this.moveTo(a)
 }
 //end 2b

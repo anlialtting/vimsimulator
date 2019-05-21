@@ -2,6 +2,18 @@ import docs from '../docs.js'
 function a(vim,cmd,arg){
     return{function:'a'}
 }
+function b(vim,cmd,arg){
+    return{
+        function:'b',
+        count:arg,
+    }
+}
+function B(vim,cmd,arg){
+    return{
+        function:'B',
+        count:arg,
+    }
+}
 function d(vim,cmd,arg){
     if(cmd=='')
         return docs.a
@@ -11,6 +23,18 @@ function d(vim,cmd,arg){
             count:arg||1,
             register:'"',
         }
+}
+function e(vim,cmd,arg){
+    return{
+        function:'e',
+        count:arg,
+    }
+}
+function E(vim,cmd,arg){
+    return{
+        function:'E',
+        count:arg,
+    }
 }
 function g(vim,cmd,arg){
     if(cmd=='')
@@ -153,4 +177,4 @@ function X(vim,cmd,arg){
         register:'"'
     }
 }
-export default{A,D,G,I,O,P,X,a,d,g,h,i,j,k,l,n,o,p,r,u,v,w,W,x,y}
+export default{A,B,D,E,G,I,O,P,X,a,b,d,e,g,h,i,j,k,l,n,o,p,r,u,v,w,W,x,y}
