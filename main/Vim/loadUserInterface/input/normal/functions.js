@@ -111,14 +111,18 @@ function x(vim,doc){
     return docs.acc
 }
 export default{
+    B:motions.B,
     D,
+    E:motions.E,
     G,
     O,
     P,
     W:motions.W,
     X,
     a,
+    b:motions.b,
     dd,
+    e:motions.e,
     gg,
     h:motions.h,
     j:motions.j,

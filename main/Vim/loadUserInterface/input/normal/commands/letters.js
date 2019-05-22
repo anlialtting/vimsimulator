@@ -4,11 +4,23 @@ function A(vim){
     vim._trueCursor.moveToEOL()
     return docs.ac
 }
+function B(vim,cmd,arg){
+    return{
+        function:'B',
+        count:arg,
+    }
+}
 function D(vim,cmd,arg){
     return{
         function:'D',
         count:arg||1,
         register:'"',
+    }
+}
+function E(vim,cmd,arg){
+    return{
+        function:'E',
+        count:arg,
     }
 }
 function G(vim,cmd,arg){
@@ -48,6 +60,12 @@ function X(vim,cmd,arg){
 function a(vim,cmd,arg){
     return{function:'a'}
 }
+function b(vim,cmd,arg){
+    return{
+        function:'b',
+        count:arg,
+    }
+}
 function d(vim,cmd,arg){
     if(cmd=='')
         return docs.a
@@ -57,6 +75,12 @@ function d(vim,cmd,arg){
             count:arg||1,
             register:'"',
         }
+}
+function e(vim,cmd,arg){
+    return{
+        function:'e',
+        count:arg,
+    }
 }
 function g(vim,cmd,arg){
     if(cmd=='')
@@ -153,4 +177,4 @@ function y(vim,cmd,arg){
             register:'"',
         }
 }
-export default{A,D,G,I,O,P,W,X,a,d,g,h,i,j,k,l,n,o,p,r,u,v,w,x,y}
+export default{A,B,D,E,G,I,O,P,W,X,a,b,d,e,g,h,i,j,k,l,n,o,p,r,u,v,w,x,y}
