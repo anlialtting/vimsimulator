@@ -206,11 +206,23 @@ function A(vim){
     vim._trueCursor.moveToEOL();
     return docs.ac
 }
+function B(vim,cmd,arg){
+    return {
+        function:'B',
+        count:arg,
+    }
+}
 function D(vim,cmd,arg){
     return {
         function:'D',
         count:arg||1,
         register:'"',
+    }
+}
+function E(vim,cmd,arg){
+    return {
+        function:'E',
+        count:arg,
     }
 }
 function G(vim,cmd,arg){
@@ -250,6 +262,12 @@ function X(vim,cmd,arg){
 function a(vim,cmd,arg){
     return {function:'a'}
 }
+function b(vim,cmd,arg){
+    return {
+        function:'b',
+        count:arg,
+    }
+}
 function d(vim,cmd,arg){
     if(cmd=='')
         return docs.a
@@ -259,6 +277,12 @@ function d(vim,cmd,arg){
             count:arg||1,
             register:'"',
         }
+}
+function e(vim,cmd,arg){
+    return {
+        function:'e',
+        count:arg,
+    }
 }
 function g(vim,cmd,arg){
     if(cmd=='')
@@ -355,7 +379,7 @@ function y(vim,cmd,arg){
             register:'"',
         }
 }
-var letters = {A,D,G,I,O,P,W,X,a,d,g,h,i,j,k,l,n,o,p,r,u,v,w,x,y};
+var letters = {A,B,D,E,G,I,O,P,W,X,a,b,d,e,g,h,i,j,k,l,n,o,p,r,u,v,w,x,y};
 
 function shift(vim,s,e,count){
     let cursor=Object.create(vim._trueCursor);
@@ -534,10 +558,34 @@ var functions = {
     deleteLinewise,
 };
 
+function B$1(vim,doc){
+    let count=doc.count||1;
+    while(count--)
+        vim._trueCursor.moveToPreviousGeneralWordBegin();
+    return docs.ac
+}
+function E$1(vim,doc){
+    let count=doc.count||1;
+    while(count--)
+        vim._trueCursor.moveToNextGeneralWordEnd();
+    return docs.ac
+}
 function W$1(vim,doc){
     let count=doc.count||1;
     while(count--)
-        vim._trueCursor.moveGeneralWordRight();
+        vim._trueCursor.moveToNextGeneralWordBegin();
+    return docs.ac
+}
+function b$1(vim,doc){
+    let count=doc.count||1;
+    while(count--)
+        vim._trueCursor.moveToPreviousWordBegin();
+    return docs.ac
+}
+function e$1(vim,doc){
+    let count=doc.count||1;
+    while(count--)
+        vim._trueCursor.moveToNextWordEnd();
     return docs.ac
 }
 function h$1(vim,doc){
@@ -567,10 +615,10 @@ function l$1(vim,doc){
 function w$1(vim,doc){
     let count=doc.count||1;
     while(count--)
-        vim._trueCursor.moveWordRight();
+        vim._trueCursor.moveToNextWordBegin();
     return docs.ac
 }
-var motions = {W: W$1,h: h$1,j: j$1,k: k$1,l: l$1,w: w$1,};
+var motions = {B: B$1,E: E$1,W: W$1,b: b$1,e: e$1,h: h$1,j: j$1,k: k$1,l: l$1,w: w$1,};
 
 function gotoLine(vim,n){
     vim._trueCursor.moveTo(vim._trueCursor.line(n));
@@ -682,14 +730,18 @@ function x$1(vim,doc){
     return docs.acc
 }
 var functions$1 = {
+    B:motions.B,
     D: D$1,
+    E:motions.E,
     G: G$1,
     O: O$1,
     P: P$1,
     W:motions.W,
     X: X$1,
     a: a$1,
+    b:motions.b,
     dd,
+    e:motions.e,
     gg,
     h:motions.h,
     j:motions.j,
@@ -1521,7 +1573,7 @@ function View(cli){
     this._divs={};
     this._listeners=[];
     this._previousArray={};
-    this._fontWidth=measureWidth(this._fontSize);
+    this._fontWidth=Math.ceil(measureWidth(this._fontSize));
     this.node=doe$1.div({className:'cli'});
     this.symbols={};
     update(this);
@@ -1540,7 +1592,7 @@ Object.defineProperty(View.prototype,'height',{set(val){
 }});
 Object.defineProperty(View.prototype,'fontSize',{set(val){
     this._fontSize=val;
-    this._fontWidth=measureWidth(this._fontSize);
+    this._fontWidth=Math.ceil(measureWidth(this._fontSize));
     this.node.style.fontSize=`${this._fontSize}px`;
     this.update;
 }});
@@ -2433,35 +2485,93 @@ Cursor$1.prototype.moveToEOL=function(){
         this.moveTo(a)
     }*/
     // end github.com/b04902012
-    Cursor$1.prototype.moveWordRight=function(){
-        let a=this.abs,t=charType(this.text,a);
+    /*Cursor.prototype.moveWordRight=function(){
+        let a=this.abs,t=charType(this.text,a)
         if(t=='EmptyLine'){
             if(a+1<this.text.length)
-                a++;
+                a++
         }else
             for(;
                 a+1<this.text.length&&
                 t==charType(this.text,a)
             ;)
-                a++;
+                a++
         for(;a+1<this.text.length&&'WhiteSpace'==charType(this.text,a);)
-            a++;
-        this.moveTo(a);
-    };
-    Cursor$1.prototype.moveGeneralWordRight=function(){
-        let a=this.abs,t=charType(this.text,a);
+            a++
+        this.moveTo(a)
+    }
+    Cursor.prototype.moveGeneralWordRight=function(){
+        let a=this.abs,t=charType(this.text,a)
         if(t=='EmptyLine'){
             if(a+1<this.text.length)
-                a++;
+                a++
         }else
             for(;
                 a+1<this.text.length&&
                 !['EmptyLine','WhiteSpace'].includes(charType(this.text,a))
             ;)
-                a++;
+                a++
         for(;a+1<this.text.length&&'WhiteSpace'==charType(this.text,a);)
-            a++;
-        this.moveTo(a);
+            a++
+        this.moveTo(a)
+    }*/
+    function isWordBegin(text,a,general){
+        if(!a)return true
+        if(charType(text,a)==="EmptyLine")return true
+        if(charType(text,a)==="WhiteSpace")return false
+        if(!general && charType(text,a) !== charType(text, a-1))return true
+        if(general && ["WhiteSpace", "EmptyLine"].includes(charType(text,a-1)))return true
+        return false
+    }
+    function isWordEnd(text,a,general){
+        if(a===text.length-1)return true
+        if(charType(text,a)==="EmptyLine")return true
+        if(charType(text,a)==="WhiteSpace")return false
+        if(!general && charType(text,a) !== charType(text, a+1))return true
+        if(general && ["WhiteSpace", "EmptyLine"].includes(charType(text,a+1)))return true
+        return false
+    }
+    Cursor$1.prototype.moveToNextWordBegin=function(){
+        let a=this.abs+1;
+        if(a === this.text.length)
+          return this.moveTo(this.abs)
+        while(a<this.text.length-1 && !isWordBegin(this.text,a,false))a++;
+        return this.moveTo(a)
+    };
+    Cursor$1.prototype.moveToNextGeneralWordBegin=function(){
+        let a=this.abs+1;
+        if(a === this.text.length)
+          return this.moveTo(this.abs)
+        while(a<this.text.length-1 && !isWordBegin(this.text,a,true))a++;
+        return this.moveTo(a)
+    };
+    Cursor$1.prototype.moveToNextWordEnd=function(){
+        let a=this.abs+1;
+        if(a === this.text.length)
+          return this.moveTo(this.abs)
+        while(a<this.text.length-1 && !isWordEnd(this.text,a,false))a++;
+        return this.moveTo(a)
+    };
+    Cursor$1.prototype.moveToNextGeneralWordEnd=function(){
+        let a=this.abs+1;
+        if(a === this.text.length)
+          return this.moveTo(this.abs)
+        while(a<this.text.length-1 && !isWordEnd(this.text,a,true))a++;
+        return this.moveTo(a)
+    };
+    Cursor$1.prototype.moveToPreviousWordBegin=function(){
+        let a=this.abs-1;
+        if(!a)
+          return this.moveTo(this.abs)
+        while(a>0 && !isWordBegin(this.text,a,false))a--;
+        return this.moveTo(a)
+    };
+    Cursor$1.prototype.moveToPreviousGeneralWordBegin=function(){
+        let a=this.abs-1;
+        if(!a)
+          return this.moveTo(this.abs)
+        while(a>0 && !isWordBegin(this.text,a,true))a--;
+        return this.moveTo(a)
     };
 }
 
