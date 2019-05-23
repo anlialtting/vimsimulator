@@ -5,7 +5,40 @@ Permission is hereby granted, free of charge, to any person obtaining a copy of 
 The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
 
 THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
-*/var _welcomeText = `\
+*/function EventEmmiter(){
+    this._listeners={};
+}
+EventEmmiter.prototype._keyExist=function(key){
+    return key in this._listeners
+};
+EventEmmiter.prototype._ensureKeyExist=function(key){
+    if(!(key in this._listeners))
+        this._listeners[key]=new Map;
+};
+EventEmmiter.prototype.emit=function(key,event){
+    if(!this._keyExist(key))
+        return
+    for(let[listener,doc]of[...this._listeners[key].entries()]){
+        if(doc.once)
+            this.off(key,listener);
+        listener(event);
+    }
+};
+EventEmmiter.prototype.off=function(key,listener){
+    if(!this._keyExist(key))
+        return
+    this._listeners[key].delete(listener);
+};
+EventEmmiter.prototype.on=function(key,listener){
+    this._ensureKeyExist(key);
+    this._listeners[key].set(listener,{once:false});
+};
+EventEmmiter.prototype.once=function(key,listener){
+    this._ensureKeyExist(key);
+    this._listeners[key].set(listener,{once:true});
+};
+
+var _welcomeText = `\
                      Web Vim
 
 Thanks Bram Moolenaar et al. for the original Vim!
@@ -1600,39 +1633,6 @@ Object.defineProperty(View.prototype,'update',{set(val){
     update(this);
 }});
 View.prototype.free=function(){
-};
-
-function EventEmmiter(){
-    this._listeners={};
-}
-EventEmmiter.prototype._keyExist=function(key){
-    return key in this._listeners
-};
-EventEmmiter.prototype._ensureKeyExist=function(key){
-    if(!(key in this._listeners))
-        this._listeners[key]=new Map;
-};
-EventEmmiter.prototype.emit=function(key,event){
-    if(!this._keyExist(key))
-        return
-    for(let[listener,doc]of[...this._listeners[key].entries()]){
-        if(doc.once)
-            this.off(key,listener);
-        listener(event);
-    }
-};
-EventEmmiter.prototype.off=function(key,listener){
-    if(!this._keyExist(key))
-        return
-    this._listeners[key].delete(listener);
-};
-EventEmmiter.prototype.on=function(key,listener){
-    this._ensureKeyExist(key);
-    this._listeners[key].set(listener,{once:false});
-};
-EventEmmiter.prototype.once=function(key,listener){
-    this._ensureKeyExist(key);
-    this._listeners[key].set(listener,{once:true});
 };
 
 function Cli(){
