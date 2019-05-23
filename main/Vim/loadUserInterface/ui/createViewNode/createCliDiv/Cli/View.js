@@ -8,7 +8,7 @@ function View(cli){
     this._divs={}
     this._listeners=[]
     this._previousArray={}
-    this._fontWidth=measureWidth(this._fontSize)
+    this._fontWidth=Math.ceil(measureWidth(this._fontSize))
     this.node=doe.div({className:'cli'})
     this.symbols={}
     update(this)
@@ -27,7 +27,7 @@ Object.defineProperty(View.prototype,'height',{set(val){
 }})
 Object.defineProperty(View.prototype,'fontSize',{set(val){
     this._fontSize=val
-    this._fontWidth=measureWidth(this._fontSize)
+    this._fontWidth=Math.ceil(measureWidth(this._fontSize))
     this.node.style.fontSize=`${this._fontSize}px`
     this.update
 }})
